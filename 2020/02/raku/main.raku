@@ -30,9 +30,7 @@ class PartTwoActions {
 }
 
 sub MAIN($file, Bool :$p2 = False) {
-    my $part-one-actions = PartOneActions.new;
-    my $part-two-actions = PartTwoActions.new;
-    my $actions = $p2 ?? $part-two-actions !! $part-one-actions;
+    my $actions = $p2 ?? PartTwoActions.new !! PartOneActions.new;
     say $file.IO.lines
           .map(-> $row { PasswordEntry.parse($row, :$actions).made })
           .grep(* == True)
