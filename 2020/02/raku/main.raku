@@ -1,7 +1,7 @@
 #!/usr/bin/env perl6
 
 grammar PasswordEntry {
-    token TOP { (<digit>+)'-'(<digit>+) <.ws> (<[a..z]>)':' <.ws> (<[a..z]>+)$ }
+    token TOP { ^(<digit>+)'-'(<digit>+) <.ws> (<[a..z]>)':' <.ws> (<[a..z]>+)$ }
 }
 
 class PartOneActions {
