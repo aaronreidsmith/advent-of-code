@@ -28,5 +28,7 @@ sub MAIN($file, Bool :$p2 = False) {
         (1, 7),
         (2, 1)
     ) !! ((1, 3),); # Need the comma to make it a list of lists
-    say [*] @traversals.map(-> ($i, $j) { traverse($file.IO.lines.map(-> $line { |$line.comb xx * }), $i, $j) });
+    say [*] @traversals.map(-> ($i-increment, $j-increment) {
+        traverse($file.IO.lines.map(-> $line { |$line.comb xx * }), $i-increment, $j-increment)
+    });
 }
