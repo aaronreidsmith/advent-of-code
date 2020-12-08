@@ -36,7 +36,7 @@ sub MAIN($file, Bool :$p2 = False) {
     my @cells = $file.IO.lines.map(-> $line {
         my ($operation, $value) = $line.split(' ');
         { :$operation, value => $value.Int, :!visited }
-    }).List;
+    });
     if $p2 {
         my @fixed-instructions = gather {
             for @cells.kv -> $index, %cell {
