@@ -14,9 +14,9 @@ sub find-invalid(@list, $window-start = 0, $window-size = 25) {
 sub find-contiguous-range(@list, $target, $start = 0, $end = 1) {
     my @range = @list[$start..$end];
     given @range.sum {
-        when $_ < $target  { find-contiguous-range(@list, $target, $start, $end + 1) }
-        when $_ == $target { @range }
-        when $_ > $target  { find-contiguous-range(@list, $target, $start + 1, $start + 2) }
+        when * < $target  { find-contiguous-range(@list, $target, $start, $end + 1) }
+        when * == $target { @range }
+        when * > $target  { find-contiguous-range(@list, $target, $start + 1, $start + 2) }
     }
 }
 
