@@ -8,7 +8,7 @@ sub find-differences(@joltage, $pointer = 0, @differences = ()) {
     } else {
         my $a = @joltage[$pointer];
         my $b = @joltage[$pointer + 1];
-        find-differences(@joltage, $pointer + 1, (|@differences, $b - $a))
+        find-differences(@joltage, $pointer + 1, (|@differences, $b - $a));
     }
 }
 
