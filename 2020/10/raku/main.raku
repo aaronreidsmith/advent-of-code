@@ -2,36 +2,36 @@
 
 use experimental :cached;
 
-sub find-differences(@joltage, $pointer = 0, @differences = ()) {
-    if $pointer == @joltage.elems - 1 {
+sub find-differences(@joltage-list, $pointer = 0, @differences = ()) {
+    if $pointer == @joltage-list.elems - 1 {
         @differences;
     } else {
-        my $a = @joltage[$pointer];
-        my $b = @joltage[$pointer + 1];
-        find-differences(@joltage, $pointer + 1, (|@differences, $b - $a));
+        my $a = @joltage-list[$pointer];
+        my $b = @joltage-list[$pointer + 1];
+        find-differences(@joltage-list, $pointer + 1, (|@differences, $b - $a));
     }
 }
 
-sub find-paths($current-joltage, @joltage) is cached {
+sub find-paths($current-joltage, @joltage-list) is cached {
     given $current-joltage {
-        when * == @joltage.max { 1 }
-        when * ∉ @joltage      { 0 }
+        when * == @joltage-list.max { 1 }
+        when * ∉ @joltage-list      { 0 }
         default {
-            find-paths($current-joltage + 1, @joltage) +
-            find-paths($current-joltage + 2, @joltage) +
-            find-paths($current-joltage + 3, @joltage);
+            find-paths($current-joltage + 1, @joltage-list) +
+            find-paths($current-joltage + 2, @joltage-list) +
+            find-paths($current-joltage + 3, @joltage-list);
         }
     }
 }
 
 sub MAIN($file, Bool :$p2 = False) {
-    my @input-joltage = $file.IO.lines.map(*.Int).sort;
-    my $device-joltage = @input-joltage.max + 3;
-    my @joltage = (0, |@input-joltage, $device-joltage);
+    my @adaptors = $file.IO.lines.map(*.Int).sort;
+    my $device-joltage = @adaptors.max + 3;
+    my @joltage-list = (0, |@adaptors, $device-joltage);
     if $p2 {
-        say find-paths(0, @joltage);
+        say find-paths(0, @joltage-list);
     } else {
-        my @differences = find-differences(@joltage);
+        my @differences = find-differences(@joltage-list);
         say @differences.grep(* == 1).elems * @differences.grep(* == 3).elems;
     }
 }
