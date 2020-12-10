@@ -1,4 +1,4 @@
-#!/usr/bin/env perl6
+#!/usr/bin/env raku
 
 sub accumulate(@instructions is copy, $pointer = 0, $accumulator = 0, $part-two = False) {
     if $part-two && $pointer == @instructions.elems {

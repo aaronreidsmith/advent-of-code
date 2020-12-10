@@ -1,4 +1,4 @@
-#!/usr/bin/env perl6
+#!/usr/bin/env raku
 
 sub part-one($group) {
     (set $group.subst("\n", '', :g).comb).elems;

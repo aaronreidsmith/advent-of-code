@@ -1,4 +1,4 @@
-#!/usr/bin/env perl6
+#!/usr/bin/env raku
 
 sub find-invalid(@list, $window-start = 0, $window-size = 25) {
     my $window-end = $window-start + $window-size - 1;
