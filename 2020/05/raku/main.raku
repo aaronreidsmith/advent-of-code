@@ -1,4 +1,4 @@
-#!/usr/bin/env perl6
+#!/usr/bin/env raku
 
 sub binary-search(@list, @possible-rows, $lower-symbol) {
     if @possible-rows.elems == 1 {

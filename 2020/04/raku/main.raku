@@ -1,4 +1,4 @@
-#!/usr/bin/env perl6
+#!/usr/bin/env raku
 
 sub is-valid(%credentials, $check-values) {
     my $passport-keys = set <byr iyr eyr hgt hcl ecl pid cid>;

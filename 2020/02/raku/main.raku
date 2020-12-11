@@ -1,4 +1,4 @@
-#!/usr/bin/env perl6
+#!/usr/bin/env raku
 
 grammar PasswordEntry {
     token TOP { ^(<digit>+)'-'(<digit>+) <.ws> (<[a..z]>)':' <.ws> (<[a..z]>+)$ }
