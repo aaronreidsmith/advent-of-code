@@ -1,6 +1,6 @@
 #!/usr/bin/env raku
 
-sub turn-ship($current-direction, $left-or-right, $degrees) {
+sub turn-ship($facing-direction, $turning-direction, $degrees) {
     my %turns = (
         N => { L => 'W', R => 'E' },
         E => { L => 'N', R => 'S' },
@@ -9,11 +9,11 @@ sub turn-ship($current-direction, $left-or-right, $degrees) {
     );
 
     if $degrees == 0 {
-        $current-direction;
+        $facing-direction;
     } else {
         my $new-degrees = $degrees - 90;
-        my $new-direction = %turns{$current-direction}{$left-or-right};
-        turn-ship($new-direction, $left-or-right, $new-degrees);
+        my $new-direction = %turns{$facing-direction}{$turning-direction};
+        turn-ship($new-direction, $turning-direction, $new-degrees);
     }
 }
 
@@ -31,52 +31,28 @@ sub traverse-part1(
         my $direction = @directions[$pointer].subst('F', $current-direction);
         given $direction {
             # Traversal directions
-            when /N(<digit>+)/ {
+            when /(N|E|S|W)(<digit>+)/ {
+                my @new-position = gather {
+                    given $/[0].Str {
+                        when 'N' { take ($i - $/[1].Int, $j) }
+                        when 'E' { take ($i, $j + $/[1].Int) }
+                        when 'S' { take ($i + $/[1].Int, $j) }
+                        when 'W' { take ($i, $j - $/[1].Int) }
+                    }
+                }.head;
                 traverse-part1(
                     @directions,
                     $new-pointer,
                     $current-direction,
-                    ($i - $/[0].Int, $j)
-                );
-            }
-            when /E(<digit>+)/ {
-                traverse-part1(
-                    @directions,
-                    $new-pointer,
-                    $current-direction,
-                    ($i, $j + $/[0].Int)
-                );
-            }
-            when /S(<digit>+)/ {
-                traverse-part1(
-                    @directions,
-                    $new-pointer,
-                    $current-direction,
-                    ($i + $/[0].Int, $j)
-                );
-            }
-            when /W(<digit>+)/ {
-                traverse-part1(
-                    @directions,
-                    $new-pointer,
-                    $current-direction,
-                    ($i, $j - $/[0].Int)
+                    @new-position
                 );
             }
             # Turning directions
-            when /L(<digit>+)/ {
+            when /(L|R)(<digit>+)/ {
                 traverse-part1(
                     @directions,
                     $new-pointer,
-                    turn-ship($current-direction, 'L', $/[0].Int),
-                    ($i, $j)
-                );
-            }
-            when /R(<digit>+)/ {
-                traverse-part1(
-                    @directions,
-                    $new-pointer,
-                    turn-ship($current-direction, 'R', $/[0].Int),
+                    turn-ship($current-direction, $/[0].Str, $/[1].Int),
                     ($i, $j)
                 );
             }
@@ -110,53 +86,29 @@ sub traverse-part2(
         my $new-pointer = $pointer + 1;
         given @directions[$pointer] {
             # Waypoint translation directions
-            when /N(<digit>+)/ {
+            when /(N|E|S|W)(<digit>)/ {
+                my @new-waypoint = gather {
+                    given $/[0].Str {
+                        when 'N' { take ($waypoint-i - $/[1].Int, $waypoint-j) }
+                        when 'E' { take ($waypoint-i, $waypoint-j + $/[1].Int) }
+                        when 'S' { take ($waypoint-i + $/[1].Int, $waypoint-j) }
+                        when 'W' { take ($waypoint-i, $waypoint-j - $/[1].Int) }
+                    }
+                }.head;
                 traverse-part2(
                     @directions,
                     $new-pointer,
                     @current-position,
-                    ($waypoint-i - $/[0].Int, $waypoint-j)
-                );
-            }
-            when /E(<digit>+)/ {
-                traverse-part2(
-                    @directions,
-                    $new-pointer,
-                    @current-position,
-                    ($waypoint-i, $waypoint-j + $/[0].Int)
-                );
-            }
-            when /S(<digit>+)/ {
-                traverse-part2(
-                    @directions,
-                    $new-pointer,
-                    @current-position,
-                    ($waypoint-i + $/[0].Int, $waypoint-j)
-                );
-            }
-            when /W(<digit>+)/ {
-                traverse-part2(
-                    @directions,
-                    $new-pointer,
-                    @current-position,
-                    ($waypoint-i, $waypoint-j - $/[0].Int)
+                    @new-waypoint
                 );
             }
             # Waypoint rotation directions
-            when /L(<digit>+)/ {
+            when /(L|R)(<digit>+)/ {
                 traverse-part2(
                     @directions,
                     $new-pointer,
                     @current-position,
-                    rotate-waypoint(@waypoint, 'L', $/[0].Int)
-                );
-            }
-            when /R(<digit>+)/ {
-                traverse-part2(
-                    @directions,
-                    $new-pointer,
-                    @current-position,
-                    rotate-waypoint(@waypoint, 'R', $/[0].Int)
+                    rotate-waypoint(@waypoint, $/[0].Str, $/[1].Int)
                 );
             }
             # Ship-moving direction
