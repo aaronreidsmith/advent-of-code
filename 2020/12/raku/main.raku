@@ -32,14 +32,12 @@ sub traverse-part1(
         given $direction {
             # Traversal directions
             when /(N|E|S|W)(<digit>+)/ {
-                my @new-position = gather {
-                    given $/[0].Str {
-                        when 'N' { take ($i - $/[1].Int, $j) }
-                        when 'E' { take ($i, $j + $/[1].Int) }
-                        when 'S' { take ($i + $/[1].Int, $j) }
-                        when 'W' { take ($i, $j - $/[1].Int) }
-                    }
-                }.head;
+                my @new-position = do given $/[0].Str {
+                    when 'N' { ($i - $/[1].Int, $j) }
+                    when 'E' { ($i, $j + $/[1].Int) }
+                    when 'S' { ($i + $/[1].Int, $j) }
+                    when 'W' { ($i, $j - $/[1].Int) }
+                };
                 traverse-part1(
                     @directions,
                     $new-pointer,
@@ -87,14 +85,12 @@ sub traverse-part2(
         given @directions[$pointer] {
             # Waypoint translation directions
             when /(N|E|S|W)(<digit>)/ {
-                my @new-waypoint = gather {
-                    given $/[0].Str {
-                        when 'N' { take ($waypoint-i - $/[1].Int, $waypoint-j) }
-                        when 'E' { take ($waypoint-i, $waypoint-j + $/[1].Int) }
-                        when 'S' { take ($waypoint-i + $/[1].Int, $waypoint-j) }
-                        when 'W' { take ($waypoint-i, $waypoint-j - $/[1].Int) }
-                    }
-                }.head;
+                my @new-waypoint = do given $/[0].Str {
+                    when 'N' { ($waypoint-i - $/[1].Int, $waypoint-j) }
+                    when 'E' { ($waypoint-i, $waypoint-j + $/[1].Int) }
+                    when 'S' { ($waypoint-i + $/[1].Int, $waypoint-j) }
+                    when 'W' { ($waypoint-i, $waypoint-j - $/[1].Int) }
+                };
                 traverse-part2(
                     @directions,
                     $new-pointer,
