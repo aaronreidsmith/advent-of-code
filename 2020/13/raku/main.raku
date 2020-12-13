@@ -17,9 +17,9 @@ sub MAIN($file, Bool :$p2 = False) {
         say @x.sum % $N;
     } else {
         my @buses = @input[1].split(',').grep(* ne 'x').map(*.Int);
-        my $departure-time = @input[0].Int;
+        my $arrival-time = @input[0].Int;
         say [*] @buses
-                .map(-> $id { ($id, $id - $departure-time % $id) })
+                .map(-> $id { ($id, $id - $arrival-time % $id) })
                 .min(*[1])
                 .flat;
     }
