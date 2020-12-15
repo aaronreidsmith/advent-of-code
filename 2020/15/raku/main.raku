@@ -5,11 +5,11 @@ sub play-game-recursive(%numbers, $turn, $number, $target-turn) {
     if $turn == $target-turn {
         $number;
     } else {
-        my $next-turn = %numbers{$number}:exists ?? $turn - %numbers{$number} !! 0;
+        my $next-number = %numbers{$number}:exists ?? $turn - %numbers{$number} !! 0;
         play-game-recursive(
             %(|%numbers, |($number => $turn)),
             $turn + 1,
-            $next-turn,
+            $next-number,
             $target-turn
         );
     }
