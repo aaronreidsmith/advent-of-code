@@ -2,7 +2,7 @@
 
 sub find-all-masks(@zipped, $pointer = 0, @prefix = ()) {
     if $pointer == @zipped.elems {
-        @prefix.join('').parse-base(2);
+        @prefix.join.parse-base(2);
     } else {
         my ($mask-digit, $digit) = @zipped[$pointer];
         given $mask-digit {
