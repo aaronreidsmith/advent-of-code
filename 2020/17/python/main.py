@@ -25,7 +25,7 @@ def conway_cubes(initial, dimensions):
             if space[cube] == ".":
                 continue
             for neighbor in neighbors(cube):
-                # We count active cubes with inactive neighbors so we can
+                # We count active cubes with active neighbors so we can
                 # activate/deactivate following as necessary in the next loop
                 active[neighbor] += 1 if neighbor != cube else 0
 
