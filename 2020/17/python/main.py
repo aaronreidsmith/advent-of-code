@@ -30,14 +30,10 @@ def conway_cubes(initial, dimensions):
                 active[n] += 1 if n != cube else 0
 
         for n, count in active.items():
-            if space[n] == "#":
-                if count in (2, 3):
-                    continue
-                else:
-                    space[n] = "."
-            elif space[n] == ".":
-                if count == 3:
-                    space[n] = "#"
+            if space[n] == "#" and count not in (2, 3):
+                space[n] = "."
+            elif space[n] == "." and count == 3:
+                space[n] = "#"
 
     return sum(state == "#" for state in space.values())
 
