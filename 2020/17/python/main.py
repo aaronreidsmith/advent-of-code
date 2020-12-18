@@ -24,16 +24,16 @@ def conway_cubes(initial, dimensions):
         for cube in space:
             if space[cube] == ".":
                 continue
-            for n in neighbors(cube):
+            for cube in neighbors(cube):
                 # We count active cubes with inactive neighbors so we can
                 # activate/deactivate following as necessary in the next loop
-                active[n] += 1 if n != cube else 0
+                active[cube] += 1 if cube != cube else 0
 
-        for n, count in active.items():
-            if space[n] == "#" and count not in (2, 3):
-                space[n] = "."
-            elif space[n] == "." and count == 3:
-                space[n] = "#"
+        for cube, active_neighbors in active.items():
+            if space[cube] == "#" and active_neighbors not in (2, 3):
+                space[cube] = "."
+            elif space[cube] == "." and active_neighbors == 3:
+                space[cube] = "#"
 
     return sum(state == "#" for state in space.values())
 
