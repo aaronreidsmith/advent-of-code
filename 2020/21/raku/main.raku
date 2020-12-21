@@ -17,12 +17,10 @@ sub MAIN($file, Bool :$p2 = False) {
     while %mapping.elems < $all-allergens.elems {
         for %candidates.kv -> $allergen, $ingredients {
             if $ingredients.keys.elems == 1 {
-                %mapping{$allergen} = $ingredients.keys.first;
+                %mapping{$allergen} = $ingredients.keys.head;
                 @mapped.push(%mapping{$allergen});
                 %candidates{$allergen}:delete;
             }
-        }
-        for %candidates.keys -> $allergen {
             %candidates{$allergen} ∖= @mapped;
         }
     }
