@@ -4,7 +4,7 @@ sub MAIN($file, Bool :$p2 = False) {
     my @rules = $file.IO.lines.map(-> $line {
         my ($ingredients-str, $allergens-str) = $line.split(' (contains ');
         my @ingredients = $ingredients-str.split(' ');
-        my @allergens = $allergens-str.substr(0, *- 1).split(', ');
+        my @allergens = $allergens-str.substr(0, *-1).split(', ');
         { :@ingredients, :@allergens };
     });
     my $all-allergens = @rules.map(-> %rule { |%rule<allergens> }).Set;
