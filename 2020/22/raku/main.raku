@@ -12,7 +12,7 @@ sub play-game(@player1, @player2) {
     } else {
         my $player1-card = @player1.head;
         my $player2-card = @player2.head;
-        if $player1-card - $player2-card > 0 {
+        if $player1-card > $player2-card {
             play-game(
                 (|@player1[1..*], $player1-card, $player2-card),
                 @player2[1..*]
