@@ -1,14 +1,12 @@
 #!/usr/bin/env raku
 
 sub adjacent($q, $r) {
-    (
     "{$q + 1}:$r",
     "$q:{$r + 1}",
     "{$q - 1}:{$r + 1}",
     "{$q - 1}:$r",
     "$q:{$r - 1}",
     "{$q + 1}:{$r - 1}"
-    );
 }
 
 sub MAIN($file, Bool :$p2 = False) {
