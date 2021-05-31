@@ -5,7 +5,7 @@ object Direction extends Enumeration {
   val NORTH, EAST, SOUTH, WEST = Value
 }
 
-object Main {
+object Day3 {
   import Direction._
 
   def main(args: Array[String]): Unit = {

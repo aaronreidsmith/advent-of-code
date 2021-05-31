@@ -3,7 +3,7 @@ import scala.io.Source
 
 case class Node(name: String, weight: Int, children: Seq[Node] = Seq(), childString: Option[String] = None)
 
-object Main {
+object Day7 {
   private val noChildren   = "^(.*) \\((\\d+)\\)$".r("name", "weight")
   private val withChildren = "^(.*) \\((\\d+)\\) -> (.*)$".r("name", "weight", "children")
 
@@ -19,6 +19,8 @@ object Main {
           name -> Node(name, weight.toInt, childString = Some(childString))
       }
       .toMap
+    input.close()
+
     val mappedNodes = allNodes.map {
       case (name, node) =>
         node.childString match {

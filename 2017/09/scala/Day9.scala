@@ -1,9 +1,12 @@
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Main {
+object Day9 {
   def main(args: Array[String]): Unit = {
-    val stream                = Source.fromFile(args.head).mkString
+    val input  = Source.fromFile(args.head)
+    val stream = input.mkString
+    input.close()
+
     val (score, garbageCount) = solution(stream)
     println(s"Part 1: $score")
     println(s"Part 2: $garbageCount")

@@ -1,10 +1,12 @@
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Main {
+object Day6 {
   def main(args: Array[String]): Unit = {
-    val input = args.head
-    val banks = Source.fromFile(input).mkString.split('\t').map(_.toInt).toList
+    val input = Source.fromFile(args.head)
+    val banks = input.mkString.split('\t').map(_.toInt).toList
+    input.close()
+
     val (infiniteState, part1) = partOne(banks)
     println(s"Part 1: $part1")
     println(s"Part 2: ${partTwo(infiniteState, infiniteState)}")

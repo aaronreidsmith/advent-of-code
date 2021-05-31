@@ -1,9 +1,11 @@
 import scala.io.Source
 
-object Main {
+object Day4 {
   def main(args: Array[String]): Unit = {
-    val input       = args.head
-    val passphrases = Source.fromFile(input).getLines()
+    val input       = Source.fromFile(args.head)
+    val passphrases = input.getLines()
+    input.close()
+
     val part1 = passphrases.filter { line =>
       val words = line.split(' ')
       words.distinct.length == words.length

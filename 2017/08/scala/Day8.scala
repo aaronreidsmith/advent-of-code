@@ -1,6 +1,6 @@
 import scala.io.Source
 
-object Main {
+object Day8 {
   private val instruction = "^(.*?) (inc|dec) (-?\\d+) if (.*?) (>|>=|<|<=|==|!=) (-?\\d+)$".r(
     "register",
     "direction",
@@ -11,8 +11,10 @@ object Main {
   )
 
   def main(args: Array[String]): Unit = {
+    val input = Source.fromFile(args.head)
+
     var maxSeen: Option[Int] = None
-    val instructions = Source.fromFile(args.head).getLines().foldLeft(Map.empty[String, Int]) {
+    val instructions = input.getLines().foldLeft(Map.empty[String, Int]) {
       case (acc, instruction(register, direction, amount, conditionRegister, operator, conditionValue)) =>
         val baseValue     = acc.getOrElse(register, 0)
         val registerValue = acc.getOrElse(conditionRegister, 0)
@@ -42,6 +44,7 @@ object Main {
           acc + (register -> baseValue)
         }
     }
+    input.close()
     println(s"Part 1: ${instructions.values.max}")
     println(s"Part 2: ${maxSeen.get}")
   }

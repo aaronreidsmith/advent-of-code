@@ -1,9 +1,11 @@
 import scala.io.Source
 
-object Main {
+object Day2 {
   def main(args: Array[String]): Unit = {
-    val input = args.head
-    val grid  = Source.fromFile(input).getLines()
+    val input = Source.fromFile(args.head)
+    val grid  = input.getLines()
+    input.close()
+
     val (part1, part2) = grid.foldLeft((0, 0)) {
       case ((part1Acc, part2Acc), line) =>
         val nums = line.split('\t').map(_.toInt)
