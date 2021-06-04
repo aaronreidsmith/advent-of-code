@@ -29,6 +29,6 @@ object Day17 {
       curr = 1 + (curr + stepCount) % i
       if (curr == 1) second = Some(i)
     }
-    second.get
+    second.getOrElse(-1)
   }
 }

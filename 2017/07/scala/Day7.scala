@@ -1,9 +1,9 @@
 import scala.annotation.tailrec
 import scala.io.Source
 
-case class Node(name: String, weight: Int, children: Seq[Node] = Seq(), childString: Option[String] = None)
-
 object Day7 {
+  private case class Node(name: String, weight: Int, children: Seq[Node] = Seq(), childString: Option[String] = None)
+
   private val noChildren   = "^(.*) \\((\\d+)\\)$".r("name", "weight")
   private val withChildren = "^(.*) \\((\\d+)\\) -> (.*)$".r("name", "weight", "children")
 

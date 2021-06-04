@@ -3,7 +3,7 @@ import scala.io.Source
 object Day2 {
   def main(args: Array[String]): Unit = {
     val input = Source.fromFile(args.head)
-    val grid  = input.getLines()
+    val grid  = input.getLines().toList
     input.close()
 
     val (part1, part2) = grid.foldLeft((0, 0)) {
@@ -12,7 +12,8 @@ object Day2 {
         val evenPair = nums
           .combinations(2)
           .collectFirst {
-            case Array(a, b) if a % b == 0 || b % a == 0 => if (a >= b) a / b else b / a
+            case Array(a, b) if a % b == 0 => a / b
+            case Array(a, b) if b % a == 0 => b / a
           }
           .get // Hate this, but it's not production code
         (part1Acc + (nums.max - nums.min), part2Acc + evenPair)

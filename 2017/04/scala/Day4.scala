@@ -3,13 +3,13 @@ import scala.io.Source
 object Day4 {
   def main(args: Array[String]): Unit = {
     val input       = Source.fromFile(args.head)
-    val passphrases = input.getLines()
+    val passphrases = input.getLines().toList
     input.close()
 
     val part1 = passphrases.filter { line =>
       val words = line.split(' ')
       words.distinct.length == words.length
-    }.toList // So we can use it again below
+    }
     println(s"Part 1: ${part1.size}")
 
     val part2 = part1.count { line =>
