@@ -72,20 +72,4 @@ object Day3 {
     (x - 1, y + 1),
     (x - 1, y - 1)
   )
-
-  // Start in second square for ease of algorithm
-//  private def part2(
-//      target: Int,
-//      x: Int = 1,
-//      y: Int = 0,
-//      currentNum: Int = 1,
-//      currentDirection: Direction = NORTH,
-//      grid: Map[(Int, Int), Int] = Map((0, 0) -> 1, (1, 0) -> 2)
-//  ): Int = {
-//    if (currentNum > target) {
-//      currentNum
-//    } else {
-//
-//    }
-//  }
 }

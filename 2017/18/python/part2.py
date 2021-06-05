@@ -68,4 +68,4 @@ def solve_p2(instr):
 
 if __name__ == '__main__':
     instructions = open(sys.argv[1]).readlines()
-    print(solve_p2(instructions))
+    print(f'Part 2: {solve_p2(instructions)}')
