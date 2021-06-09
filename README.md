@@ -1,9 +1,21 @@
 # Advent of Code
 
-My solutions to the [Advent of Code](https://adventofcode.com/)
+My solutions to the [Advent of Code](https://adventofcode.com/), in Scala, Raku, and Python.
 
-Solutions are in the following format:
+With the exception of Scala, solutions are stored in the following format:
 
 ```
-/<year>/<day-number>/<language>/
+src/main/language/<year>/<day-number>
+```
+
+Scala solutions are in:
+
+```
+src/main/scala/io/github/aaronreidsmith/year<year>
+```
+
+Input files, if they exist, are in:
+
+```
+src/main/resources/year/day<day>.txt
 ```
