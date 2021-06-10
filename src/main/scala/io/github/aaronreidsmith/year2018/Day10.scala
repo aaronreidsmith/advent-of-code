@@ -17,7 +17,23 @@ object Day10 {
     }
     input.close()
 
-    printGrid(points)
+    solution(points)
+  }
+
+  private def solution(points: List[Point]): Unit = {
+    var running       = true
+    var counter       = 1
+    var mutablePoints = points
+    while (running) {
+      mutablePoints = mutablePoints.map(_.next)
+      val yBound = mutablePoints.map(_.y).max - mutablePoints.map(_.y).min
+      if (yBound < 12) {
+        println(counter)
+        printGrid(mutablePoints)
+        running = false
+      }
+      counter += 1
+    }
   }
 
   private def printGrid(points: List[Point]): Unit = {
@@ -26,24 +42,18 @@ object Day10 {
       points.foldLeft((Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE)) {
         case ((currXMin, currXMax, currYMin, currYMax), point) =>
           val nextXMin = math.min(currXMin, point.x)
-          val nextXMax = math.min(currXMax, point.x)
+          val nextXMax = math.max(currXMax, point.x)
           val nextYMin = math.min(currYMin, point.y)
-          val nextYMax = math.min(currYMax, point.y)
+          val nextYMax = math.max(currYMax, point.y)
           (nextXMin, nextXMax, nextYMin, nextYMax)
       }
 
-    // Normalize everything to 0-based
-    val (xNormalized, newXMax) =
-      if (xMin < 0) (points.map(point => point.copy(x = point.x - xMin)), xMax - xMin) else (points, xMax)
-    val (normalized, newYMax) =
-      if (yMin < 0) (points.map(point => point.copy(y = point.y - yMin)), yMax - yMin) else (xNormalized, yMax)
-
-    val grid = Array.fill(newXMax)(Array.fill(newYMax)('.'))
-
-    normalized.foreach { point =>
-      grid(point.x)(point.y) = '#'
+    (yMin to yMax).foreach { y =>
+      (xMin to xMax).foreach { x =>
+        val char = if (points.exists(point => point.x == x && point.y == y)) '#' else ' '
+        print(char)
+      }
+      println()
     }
-
-    println(grid.map(_.mkString).mkString("\n"))
   }
 }
