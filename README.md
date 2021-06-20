@@ -11,11 +11,11 @@ src/main/language/<year>/<day-number>
 Scala solutions are in:
 
 ```
-src/main/scala/io/github/aaronreidsmith/year<year>
+src/main/scala/io/github/aaronreidsmith/<year>
 ```
 
 Input files, if they exist, are in:
 
 ```
-src/main/resources/year/day<day>.txt
+src/main/resources/<year>/<day>.txt
 ```
