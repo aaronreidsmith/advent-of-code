@@ -5,7 +5,7 @@ import scala.io.Source
 import scala.math.Ordered.orderingToOrdered
 
 // Adapted from https://git.io/Jn2WO. Works for part 2 but not part 1??? Had to use this for part 1:
-// https://www.reddit.com/r/adventofcode/comments/a6chwa/2018_day_15_solutions/ebtwcqr?utm_source=share&utm_medium=web2x&context=3
+// https://www.reddit.com/r/adventofcode/comments/a6chwa/2018_day_15_solutions/ebtwcqr
 object Day15 {
   private case class Point(row: Int, col: Int) extends Ordered[Point] {
     val position: (Int, Int) = (row, col)
@@ -42,6 +42,17 @@ object Day15 {
           (gridAcc :+ newGridEntries, entityAcc ++ newEntities)
       }
     input.close()
+
+    lazy val (part1, _) = solution()
+    println(s"Part 1: $part1")
+    lazy val part2 = LazyList
+      .from(4)
+      .map(attackPower => solution(elvesAttack = attackPower))
+      .collectFirst {
+        case (outcome, noElvesDied) if noElvesDied => outcome
+      }
+      .getOrElse(-1)
+    println(s"Part 2: $part2")
 
     @tailrec
     def solution(
@@ -165,16 +176,5 @@ object Day15 {
         }
       }
     }
-
-    val (part1, _) = solution()
-    println(s"Part 1: $part1")
-    val part2 = LazyList
-      .from(4)
-      .map(attackPower => solution(elvesAttack = attackPower))
-      .collectFirst {
-        case (outcome, noElvesDied) if noElvesDied => outcome
-      }
-      .getOrElse(-1)
-    println(s"Part 2: $part2")
   }
 }
