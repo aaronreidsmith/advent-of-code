@@ -80,7 +80,7 @@ object Day13 {
 
     @tailrec
     def part1(carts: Vector[Cart], pointer: Int = 0): String =
-      carts.groupBy(_.position).view.mapValues(_.length).collectFirst {
+      carts.groupBy(_.position).mapValues(_.length).collectFirst {
         case ((row, col), count) if count > 1 => s"$col,$row"
       } match {
         case Some(answer) => answer
@@ -130,7 +130,7 @@ object Day13 {
           }
         }
         val updatedCarts = carts.updated(pointer, turned)
-        val withCartsMarkedDead = updatedCarts.groupBy(_.position).view.mapValues(_.length).collectFirst {
+        val withCartsMarkedDead = updatedCarts.groupBy(_.position).mapValues(_.length).collectFirst {
           case (position, count) if count > 1 => position
         } match {
           case Some(position) =>

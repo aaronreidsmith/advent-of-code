@@ -45,7 +45,7 @@ object Day15 {
 
     lazy val (part1, _) = solution()
     println(s"Part 1: $part1")
-    lazy val part2 = LazyList
+    lazy val part2 = Stream
       .from(4)
       .map(attackPower => solution(elvesAttack = attackPower))
       .collectFirst {
@@ -122,7 +122,7 @@ object Day15 {
                     val walkable  = reachable.filter(canWalk)
                     acc ++ walkable.flatMap(distance(orientation, _))
                   }
-                  orientation -> distances.minOption
+                  orientation -> (if (distances.nonEmpty) Some(distances.min) else None)
                 }
                 .toMap
 

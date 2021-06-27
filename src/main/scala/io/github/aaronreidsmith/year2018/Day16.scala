@@ -100,13 +100,11 @@ object Day16 {
         val newOpCodeMap = acc.updated(opCode, opCodes)
 
         if (opCodes.size == 1) {
-          newOpCodeMap.view.mapValues(op => if (op == opCodes) op else op -- opCodes).toMap
+          newOpCodeMap.mapValues(op => if (op == opCodes) op else op -- opCodes)
         } else {
           newOpCodeMap
         }
       }
-      .view
       .mapValues(_.head)
-      .toMap
   }
 }
