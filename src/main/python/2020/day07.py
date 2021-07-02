@@ -10,11 +10,11 @@ class Bag:
 
     def contains_target(self, target, rules):
         rule = rules[self]
-        held_bags = [item[0] for item in rule.contents]
+        held_bags = [item[0] for item in rule.raw_contents]
         return any(bag == target or bag.contains_target(target, rules) for bag in held_bags)
 
     def get_contents(self, rules):
-        contents = rules[self].contents
+        contents = rules[self].raw_contents
         total_bags = 0
         for bag, quantity in contents:
             total_bags += quantity + (quantity * bag.get_contents(rules))
