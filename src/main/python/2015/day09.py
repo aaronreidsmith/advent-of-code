@@ -6,11 +6,11 @@ import sys
 import networkx as nx
 
 if __name__ == '__main__':
-    input = sys.argv[1]
+    input_file = sys.argv[1]
     graph = nx.Graph()
 
     # Build the graph
-    with open(input) as file:
+    with open(input_file) as file:
         for line in file:
             matches = re.match(r'^(.*) to (.*) = (\d+)$', line)
             start = matches.group(1)
@@ -23,9 +23,10 @@ if __name__ == '__main__':
         other_nodes = [n for n in graph.nodes if n != node]
         for other in other_nodes:
             # Only keep paths if they use all nodes
-            paths = [path for path in nx.all_simple_paths(graph, source=node, target=other) if len(path) == len(graph.nodes)]
+            paths = [
+                path for path in nx.all_simple_paths(graph, source=node, target=other) if len(path) == len(graph.nodes)
+            ]
             path_weights.extend([nx.path_weight(graph, path, 'weight') for path in paths])
 
     print(f'Part 1: {min(path_weights)}')
     print(f'Part 2: {max(path_weights)}')
-

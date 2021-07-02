@@ -4,11 +4,11 @@ import json
 import sys
 
 if __name__ == '__main__':
-    input = sys.argv[1]
+    input_file = sys.argv[1]
     chars = 0
     memory = 0
     re_encoded = 0
-    with open(input) as file:
+    with open(input_file) as file:
         for line in file:
             trimmed = line.strip()
             chars += len(trimmed)
