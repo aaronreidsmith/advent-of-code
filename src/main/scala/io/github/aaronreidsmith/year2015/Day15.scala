@@ -48,11 +48,7 @@ object Day15 {
 
     val part2 = ingredients.combinations(100).foldLeft(0) { (currentBest, combination) =>
       val cookie = Cookie(combination)
-      if (cookie.calories == 500) {
-        math.max(currentBest, cookie.score)
-      } else {
-        currentBest
-      }
+      if (cookie.calories == 500) math.max(currentBest, cookie.score) else currentBest
     }
     println(s"Part 2: $part2")
   }
