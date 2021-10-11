@@ -7,12 +7,10 @@ object Day09 extends IntCodeUtils {
   def main(args: Array[String]): Unit = {
     val instructions = makeInstructions("2019/day09.txt")
 
-    println("=== Part 1 ===")
-    val part1 = new IntCode(instructions, Some(1L))
-    part1.run()
+    val part1 = new IntCode(instructions, Seq(1L))
+    println(s"Part 1: ${part1.run().getOutputAsString}")
 
-    println("=== Part 2 ===")
-    val part2 = new IntCode(instructions, Some(2L))
-    part2.run()
+    val part2 = new IntCode(instructions, Seq(2L))
+    println(s"Part 2: ${part2.run().getOutputAsString}")
   }
 }
