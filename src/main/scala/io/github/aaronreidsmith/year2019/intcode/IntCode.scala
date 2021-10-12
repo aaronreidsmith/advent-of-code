@@ -16,7 +16,7 @@ class IntCode(initialInstructions: Map[Long, Long], initialInput: Seq[Long] = Se
   private var finished     = false
 
   def getRegisterValue(address: Long): Long = instructions(address)
-  def getOutput: List[Long]                 = output.toList
+  def getOutput: Vector[Long]               = output.toVector
   def getOutputAsString: String             = output.mkString("[", ", ", "]")
   def isFinished: Boolean                   = finished
 
