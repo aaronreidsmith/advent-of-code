@@ -1,6 +1,6 @@
 # Advent of Code
 
-My solutions to the [Advent of Code](https://adventofcode.com/), in Scala, Raku, and Python.
+My solutions to the [Advent of Code](https://adventofcode.com/).
 
 With the exception of Scala, solutions are stored in the following format:
 
