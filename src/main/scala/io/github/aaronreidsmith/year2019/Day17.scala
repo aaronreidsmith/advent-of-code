@@ -21,9 +21,11 @@ object Day17 extends IntCodeUtils {
 
   def main(args: Array[String]): Unit = {
     val instructions = makeInstructions("2019/day17.txt")
-    println(s"Part 1: ${part1(instructions, printGrid = true)}")
+    println(s"Part 1: ${part1(instructions)}")
+    println(s"Part 2: ${part2(instructions)}")
   }
 
+  // Run this with `printGrid = true` to visualize the grid
   private def part1(instructions: Map[Long, Long], printGrid: Boolean = false): Int = {
     val intCode = new IntCode(instructions)
     val grid = intCode.run().getOutput.foldLeft(List(List.empty[Char])) {
@@ -44,5 +46,28 @@ object Day17 extends IntCodeUtils {
       case (acc, (point, _)) if point.isIntersection(map) => acc + (point.row * point.col)
       case (acc, _)                                       => acc
     }
+  }
+
+  private def part2(instructions: Map[Long, Long]): Long = {
+    /* Did these all by hand based on output of `printGrid = true` in part 1
+     *
+     * Full routine: L,10,L,8,R,8,L,8,R,6,L,10,L,8,R,8,L,8,R,6,R,6,R,8,R,8,R,6,R,6,L,8,L,10,R,6,R,8,R,8,R,6,R,6,L,8,L,10,R,6,R,8,R,8,R,6,R,6,L,8,L,10,R,6,R,8,R,8,L,10,L,8,R,8,L,8,R,6
+     *
+     * Format:
+     *   Main Routine
+     *   Function A
+     *   Function B
+     *   Function C
+     *   Continuous Video? (y/n)
+     */
+    val input =
+      """A,A,B,C,B,C,B,C,B,A
+        |L,10,L,8,R,8,L,8,R,6
+        |R,6,R,8,R,8
+        |R,6,R,6,L,8,L,10
+        |n
+        |""".stripMargin.map(_.toLong)
+
+    new IntCode(instructions.updated(0L, 2L)).run(input).getOutput.last
   }
 }
