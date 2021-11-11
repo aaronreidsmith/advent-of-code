@@ -5,7 +5,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/).
 With the exception of Scala, solutions are stored in the following format:
 
 ```
-src/main/language/<year>/<day-number>
+src/main/<language>/<year>/<day-number>
 ```
 
 Scala solutions are in:
