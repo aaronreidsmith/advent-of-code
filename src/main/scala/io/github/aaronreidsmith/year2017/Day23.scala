@@ -5,10 +5,10 @@ import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
 object Day23 {
-  private val set = "^set (.*) (.*)$".r("register", "value")
-  private val sub = "^sub (.*) (.*)$".r("register", "value")
-  private val mul = "^mul (.*) (.*)$".r("register", "value")
-  private val jnz = "^jnz (.*) (.*)$".r("value", "offset")
+  private val set = "^set (.*) (.*)$".r
+  private val sub = "^sub (.*) (.*)$".r
+  private val mul = "^mul (.*) (.*)$".r
+  private val jnz = "^jnz (.*) (.*)$".r
 
   def main(args: Array[String]): Unit = {
     val input        = Source.fromResource("2017/day23.txt")

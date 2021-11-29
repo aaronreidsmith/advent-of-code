@@ -26,7 +26,7 @@ object Day15 {
 
   private def position(disc: Disc, dropTime: Int): Int = (disc.number + disc.initialPosition + dropTime) % disc.positions
 
-  private def waitTime(discs: List[Disc]): Int = Stream
+  private def waitTime(discs: List[Disc]): Int = LazyList
     .from(0)
     .find(t => discs.forall(disc => position(disc, t) == 0))
     .getOrElse(-1)

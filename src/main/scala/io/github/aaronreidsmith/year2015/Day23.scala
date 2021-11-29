@@ -4,12 +4,12 @@ import scala.annotation.tailrec
 import scala.io.Source
 
 object Day23 {
-  private val hlf = "^hlf (.*)$".r("reg")
-  private val tpl = "^tpl (.*)$".r("reg")
-  private val inc = "^inc (.*)$".r("reg")
-  private val jmp = "^jmp ([+-]\\d+)$".r("offset")
-  private val jie = "^jie (.*?), ([+-]\\d+)$".r("reg", "offset")
-  private val jio = "^jio (.*?), ([+-]\\d+)$".r("reg", "offset")
+  private val hlf = "^hlf (.*)$".r
+  private val tpl = "^tpl (.*)$".r
+  private val inc = "^inc (.*)$".r
+  private val jmp = "^jmp ([+-]\\d+)$".r
+  private val jie = "^jie (.*?), ([+-]\\d+)$".r
+  private val jio = "^jio (.*?), ([+-]\\d+)$".r
 
   protected[this] case class Computer(a: Int = 0, b: Int = 0)
 

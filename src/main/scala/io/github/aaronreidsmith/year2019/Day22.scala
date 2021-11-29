@@ -1,12 +1,11 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.util.FileUtils
-
 import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
+import scala.util.Using
 
-object Day22 extends FileUtils {
+object Day22 {
   private val dealIncrement = "^deal with increment (\\d+)$".r
   private val cut           = "^cut (-?\\d+)$".r
 
@@ -33,7 +32,7 @@ object Day22 extends FileUtils {
   }
 
   def main(args: Array[String]): Unit = {
-    val input = using(Source.fromResource("2019/day22.txt"))(_.getLines().toList)
+    val input = Using.resource(Source.fromResource("2019/day22.txt"))(_.getLines().toList)
     val part1 = input
       .foldLeft(Deck((0 until 10007).toVector)) { (acc, line) =>
         line match {

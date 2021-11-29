@@ -3,9 +3,9 @@ package io.github.aaronreidsmith.year2017
 import scala.io.Source
 
 object Day16 {
-  private val spin     = "^s(\\d+)$".r("amount")
-  private val exchange = "^x(\\d+)/(\\d+)$".r("position1", "position2")
-  private val partner  = "^p(.*)/(.*)$".r("char1", "char2")
+  private val spin     = "^s(\\d+)$".r
+  private val exchange = "^x(\\d+)/(\\d+)$".r
+  private val partner  = "^p(.*)/(.*)$".r
 
   private sealed trait Move {
     def apply(state: String): String
@@ -39,7 +39,7 @@ object Day16 {
     val part1        = dance(initialState)
     println(s"Part 1: $part1")
 
-    val infiniteDancing = Stream.iterate(initialState)(dance)
+    val infiniteDancing = LazyList.iterate(initialState)(dance)
     val period          = infiniteDancing.indexOf(initialState, 1)
     val part2           = infiniteDancing.drop(1000000000 % period).head
     println(s"Part 2: $part2")

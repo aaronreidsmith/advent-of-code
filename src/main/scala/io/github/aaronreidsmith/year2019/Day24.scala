@@ -1,14 +1,13 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.util.FileUtils
-
 import scala.annotation.tailrec
-import scala.io.Source
 import scala.collection.mutable
+import scala.io.Source
+import scala.util.Using
 
-object Day24 extends FileUtils {
+object Day24 {
   def main(args: Array[String]): Unit = {
-    val input = using(Source.fromResource("2019/day24.txt"))(_.getLines().toList)
+    val input = Using.resource(Source.fromResource("2019/day24.txt"))(_.getLines().toList)
 
     val part1 = {
       val seenStates = mutable.Set.empty[Map[(Int, Int), Boolean]]

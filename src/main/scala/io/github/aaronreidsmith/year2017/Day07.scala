@@ -6,8 +6,8 @@ import scala.io.Source
 object Day07 {
   private case class Node(name: String, weight: Int, children: Seq[Node] = Seq(), childString: Option[String] = None)
 
-  private val noChildren   = "^(.*) \\((\\d+)\\)$".r("name", "weight")
-  private val withChildren = "^(.*) \\((\\d+)\\) -> (.*)$".r("name", "weight", "children")
+  private val noChildren   = "^(.*) \\((\\d+)\\)$".r
+  private val withChildren = "^(.*) \\((\\d+)\\) -> (.*)$".r
 
   private var childNodes = Set.empty[String]
 

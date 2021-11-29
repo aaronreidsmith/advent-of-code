@@ -1,14 +1,13 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.util.FileUtils
-
 import scala.io.Source
+import scala.util.Using
 
-object Day08 extends FileUtils {
+object Day08 {
   def main(args: Array[String]): Unit = {
     val width           = 25
     val height          = 6
-    val flattenedLayers = using(Source.fromResource("2019/day08.txt"))(_.mkString).toSeq.grouped(width * height).toList
+    val flattenedLayers = Using.resource(Source.fromResource("2019/day08.txt"))(_.mkString).toSeq.grouped(width * height).toList
     val minZeroLayer    = flattenedLayers.minBy(_.count(_ == '0'))
     val part1           = minZeroLayer.count(_ == '1') * minZeroLayer.count(_ == '2')
     println(s"Part 1: $part1")

@@ -5,7 +5,7 @@ import scala.io.Source
 import scala.util.matching.Regex
 
 object Day19 {
-  private val rule = "^(.*?) => (.*?)$".r("original", "replacement")
+  private val rule = "^(.*?) => (.*?)$".r
 
   protected[this] case class Rule(original: String, replacement: String) {
     val regex: Regex  = original.r

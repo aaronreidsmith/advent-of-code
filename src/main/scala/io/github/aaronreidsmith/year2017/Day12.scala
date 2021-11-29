@@ -10,7 +10,7 @@ object Day12 {
   private implicit def immutableToMutable(map: Map[Int, List[Int]]): mutable.Map[Int, List[Int]] =
     mutable.Map(map.toSeq: _*)
 
-  private val pipeEntry = "^(\\d+) <-> (.*)".r("id", "neighbors")
+  private val pipeEntry = "^(\\d+) <-> (.*)".r
 
   def main(args: Array[String]): Unit = {
     val input = Source.fromResource("2017/day12.txt")

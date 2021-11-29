@@ -3,7 +3,7 @@ package io.github.aaronreidsmith.year2018
 import scala.io.Source
 
 object Day10 {
-  private val entry = "^position=<(.*),(.*)> velocity=<(.*),(.*)>$".r("x", "y", "xDelta", "yDelta")
+  private val entry = "^position=<(.*),(.*)> velocity=<(.*),(.*)>$".r
 
   private case class Point(x: Int, y: Int, xDelta: Int, yDelta: Int) {
     def next: Point = Point(x + xDelta, y + yDelta, xDelta, yDelta)

@@ -1,18 +1,17 @@
 package io.github.aaronreidsmith.year2017
 
 import scala.annotation.tailrec
-import scala.collection.immutable.Queue
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
 object Day18 {
-  private val snd = "^snd (.*)$".r("x")
-  private val set = "^set (.*) (.*)$".r("x", "y")
-  private val add = "^add (.*) (.*)$".r("x", "y")
-  private val mul = "^mul (.*) (.*)$".r("x", "y")
-  private val mod = "^mod (.*) (.*)$".r("x", "y")
-  private val rcv = "^rcv (.*)$".r("x")
-  private val jgz = "^jgz (.*) (.*)$".r("x", "y")
+  private val snd = "^snd (.*)$".r
+  private val set = "^set (.*) (.*)$".r
+  private val add = "^add (.*) (.*)$".r
+  private val mul = "^mul (.*) (.*)$".r
+  private val mod = "^mod (.*) (.*)$".r
+  private val rcv = "^rcv (.*)$".r
+  private val jgz = "^jgz (.*) (.*)$".r
 
   def main(args: Array[String]): Unit = {
     val input        = Source.fromResource("2017/day18.txt")

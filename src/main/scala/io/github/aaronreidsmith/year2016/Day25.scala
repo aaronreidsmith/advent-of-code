@@ -1,12 +1,10 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.util.FileUtils
-
 import scala.annotation.tailrec
 import scala.io.Source
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Success, Try, Using}
 
-object Day25 extends FileUtils {
+object Day25 {
   private val cpy = "^cpy (.*) (.*)$".r
   private val inc = "^inc (.*)$".r
   private val dec = "^dec (.*)$".r
@@ -27,8 +25,8 @@ object Day25 extends FileUtils {
   }
 
   def main(args: Array[String]): Unit = {
-    val instructions = using(Source.fromResource("2016/day25.txt"))(_.getLines().toVector)
-    val part1        = Stream.from(0).find(i => solution(instructions, Map("a" -> i, "b" -> 0, "c" -> 0, "d" -> 0))).get
+    val instructions = Using.resource(Source.fromResource("2016/day25.txt"))(_.getLines().toVector)
+    val part1        = LazyList.from(0).find(i => solution(instructions, Map("a" -> i, "b" -> 0, "c" -> 0, "d" -> 0))).get
     println(s"Part 1: $part1")
   }
 

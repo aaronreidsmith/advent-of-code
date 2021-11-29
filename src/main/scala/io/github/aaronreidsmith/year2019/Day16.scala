@@ -1,16 +1,15 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.util.FileUtils
-
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.math.Integral.Implicits._
+import scala.util.Using
 
-object Day16 extends FileUtils {
+object Day16 {
   private val basePattern = List(0, 1, 0, -1)
 
   def main(args: Array[String]): Unit = {
-    val input = using(Source.fromResource("2019/day16.txt"))(_.mkString.map(_.asDigit).toVector)
+    val input = Using.resource(Source.fromResource("2019/day16.txt"))(_.mkString.map(_.asDigit).toVector)
     println(s"Part 1: ${part1(input)}")
     println(s"Part 2: ${part2(input)}")
   }
@@ -40,7 +39,7 @@ object Day16 extends FileUtils {
 
   private def naiveFft(input: Vector[Int]): Vector[Int] = input.indices.foldLeft(Vector.empty[Int]) { (acc, index) =>
     val pattern         = basePattern.flatMap(entry => List.fill(index + 1)(entry))
-    val infinitePattern = Stream.continually(pattern.toStream).flatten.drop(1)
+    val infinitePattern = LazyList.continually(pattern.to(LazyList)).flatten.drop(1)
     acc :+ input
       .zip(infinitePattern)
       .foldLeft(0) { case (acc, (num, multiplier)) => acc + num * multiplier }

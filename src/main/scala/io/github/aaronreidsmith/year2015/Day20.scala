@@ -3,7 +3,7 @@ package io.github.aaronreidsmith.year2015
 object Day20 {
   def main(args: Array[String]): Unit = {
     val input = 34000000
-    val p1 = Stream
+    val p1 = LazyList
       .from(100000)
       .collectFirst {
         case houseNumber if part1(houseNumber) >= input => houseNumber
@@ -11,7 +11,7 @@ object Day20 {
       .get
     println(s"Part 1: $p1")
 
-    val p2 = Stream
+    val p2 = LazyList
       .from(100000)
       .collectFirst {
         case houseNumber if part2(houseNumber) >= input => houseNumber

@@ -1,12 +1,10 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.util.FileUtils
-
 import scala.annotation.tailrec
 import scala.io.Source
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Success, Try, Using}
 
-object Day19 extends FileUtils {
+object Day19 {
   private val addr = "^addr (\\d+) (\\d+) (\\d+)$".r
   private val addi = "^addi (\\d+) (\\d+) (\\d+)$".r
   private val mulr = "^mulr (\\d+) (\\d+) (\\d+)$".r
@@ -25,7 +23,7 @@ object Day19 extends FileUtils {
   private val eqrr = "^eqrr (\\d+) (\\d+) (\\d+)$".r
 
   def main(args: Array[String]): Unit = {
-    val input = using(Source.fromResource("2018/day19.txt"))(_.getLines().toVector)
+    val input = Using.resource(Source.fromResource("2018/day19.txt"))(_.getLines().toVector)
     println(s"Part 1: ${part1(input)}")
     println(s"Part 2: ${part2(input)}")
   }

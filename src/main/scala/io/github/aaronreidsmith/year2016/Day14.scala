@@ -13,7 +13,7 @@ object Day14 {
   }
 
   private def solution(salt: String, md5Generator: String => String): Int = {
-    val md5s = Stream.from(0).map(i => md5Generator(s"$salt$i"))
+    val md5s = LazyList.from(0).map(i => md5Generator(s"$salt$i"))
     md5s.zipWithIndex
       .collect {
         case (hash, index) if isKey(hash, md5s.slice(index + 1, index + 1001)) => index
@@ -22,7 +22,7 @@ object Day14 {
       .last
   }
 
-  private def isKey(hash: String, next1000: Stream[String]): Boolean = {
+  private def isKey(hash: String, next1000: LazyList[String]): Boolean = {
     val threeCharSlices = hash
       .sliding(3)
       .collectFirst {

@@ -46,7 +46,7 @@ object Square {
 case class Rule(input: Square[Char], output: Square[Char])
 
 object Day21 {
-  private val rule = "^(.*) => (.*)$".r("input", "output")
+  private val rule = "^(.*) => (.*)$".r
 
   def main(args: Array[String]): Unit = {
     val input = Source.fromResource("2017/day21.txt")
@@ -72,6 +72,7 @@ object Day21 {
       .map { row =>
         row
           .groupBy(identity)
+          .view
           .mapValues(_.length)
       }
       .foldLeft(0)((acc, counts) => acc + counts('#'))

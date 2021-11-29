@@ -16,7 +16,7 @@ object Day02 {
     lazy val ribbon: Int      = smallestPerimeter + volume
   }
 
-  private val box = "^(\\d+)x(\\d+)x(\\d+)$".r("width", "height", "length")
+  private val box = "^(\\d+)x(\\d+)x(\\d+)$".r
 
   def main(args: Array[String]): Unit = {
     val input = Source.fromResource("2015/day02.txt")

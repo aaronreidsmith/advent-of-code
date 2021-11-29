@@ -1,12 +1,11 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.util.FileUtils
-
 import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.io.Source
+import scala.util.Using
 
-object Day12 extends FileUtils {
+object Day12 {
   private case class Point(x: Int = 0, y: Int = 0, z: Int = 0) {
     def +(other: Point): Point = this.copy(x = this.x + other.x, y = this.y + other.y, z = this.z + other.z)
     def compare(other: Point): Point = {
@@ -17,7 +16,7 @@ object Day12 extends FileUtils {
     }
     def energy: Int = x.abs + y.abs + z.abs
   }
-  private case class Moon(position: Point, velocity: Point = Point(0, 0, 0)) {
+  private case class Moon(position: Point, velocity: Point = Point()) {
     def applyGravity(other: Moon): Moon = this.copy(velocity = this.velocity + this.position.compare(other.position))
     def applyVelocity: Moon             = this.copy(position = this.position + this.velocity)
     def kineticEnergy: Int              = velocity.energy
@@ -25,10 +24,10 @@ object Day12 extends FileUtils {
     def totalEnergy: Int                = potentialEnergy * kineticEnergy
   }
 
-  private val moonEntry = "^<x=\\s*(-?\\d+), y=\\s*(-?\\d+), z=\\s*(-?\\d+)>$".r("x", "y", "z")
+  private val moonEntry = "^<x=\\s*(-?\\d+), y=\\s*(-?\\d+), z=\\s*(-?\\d+)>$".r
 
   def main(args: Array[String]): Unit = {
-    val moons = using(Source.fromResource("2019/day12.txt")) { file =>
+    val moons = Using.resource(Source.fromResource("2019/day12.txt")) { file =>
       file.getLines().foldLeft(Vector.empty[Moon]) { (acc, line) =>
         line match {
           case moonEntry(x, y, z) => acc :+ Moon(Point(x.toInt, y.toInt, z.toInt))

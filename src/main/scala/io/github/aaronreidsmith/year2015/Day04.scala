@@ -6,7 +6,7 @@ import java.security.MessageDigest
 object Day04 {
   def main(args: Array[String]): Unit = {
     val input        = "yzbqklnj"
-    val infiniteList = Stream.from(1)
+    val infiniteList = LazyList.from(1)
 
     val part1 = infiniteList
       .collectFirst {

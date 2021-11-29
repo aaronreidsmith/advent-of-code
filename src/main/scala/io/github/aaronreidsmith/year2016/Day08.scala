@@ -4,9 +4,9 @@ import scala.annotation.tailrec
 import scala.io.Source
 
 object Day08 {
-  private val rect      = "^rect (\\d+)x(\\d+)$".r("width", "height")
-  private val rotateCol = "^rotate column x=(\\d+) by (\\d+)$".r("column", "amount")
-  private val rotateRow = "^rotate row y=(\\d+) by (\\d+)$".r("row", "amount")
+  private val rect      = "^rect (\\d+)x(\\d+)$".r
+  private val rotateCol = "^rotate column x=(\\d+) by (\\d+)$".r
+  private val rotateRow = "^rotate row y=(\\d+) by (\\d+)$".r
 
   def main(args: Array[String]): Unit = {
     val input        = Source.fromResource("2016/day08.txt")

@@ -22,7 +22,7 @@ class IntCode(initialInstructions: Map[Long, Long], initialInput: Seq[Long] = Se
 
   @tailrec
   final def run(additionalInput: Seq[Long] = Seq()): IntCode = {
-    inputQueue.enqueue(additionalInput: _*) // Add any additional input to the end of the queue
+    inputQueue.addAll(additionalInput) // Add any additional input to the end of the queue
     val parsedInstruction = ParsedInstruction(instructions(pointer))
     parsedInstruction.opcode match {
       // Add 2 args

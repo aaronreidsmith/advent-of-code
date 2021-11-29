@@ -2,7 +2,6 @@ package io.github.aaronreidsmith.year2016
 
 import java.math.BigInteger
 import java.security.MessageDigest
-
 import scala.annotation.tailrec
 
 object Day05 {
@@ -16,7 +15,7 @@ object Day05 {
 
   @tailrec
   private def part1(doorId: String, index: Int = 0, password: String = ""): String = {
-    val (nextChar, interestingIndex) = Stream
+    val (nextChar, interestingIndex) = LazyList
       .from(index)
       .collectFirst {
         case i if md5(s"$doorId$i").startsWith("00000") => (md5(s"$doorId$i").charAt(5), i)

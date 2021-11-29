@@ -15,7 +15,7 @@ object Day20 {
       .unzip
     input.close()
 
-    val sortedIntervals = (starts.sorted :+ 4294967296L, 0L :: ends.sorted).zipped
+    val sortedIntervals = (starts.sorted :+ 4294967296L).zip(0L :: ends.sorted)
 
     val part1 = sortedIntervals
       .find { case (start, end) => start > end + 1 }

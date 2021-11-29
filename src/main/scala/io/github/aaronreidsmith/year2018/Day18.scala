@@ -1,19 +1,18 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.util.FileUtils
-
 import scala.annotation.tailrec
-import scala.io.Source
 import scala.collection.mutable
+import scala.io.Source
+import scala.util.Using
 
-object Day18 extends FileUtils {
+object Day18 {
   private sealed trait Square
   private case object OpenGround extends Square
   private case object Trees      extends Square
   private case object Lumberyard extends Square
 
   def main(args: Array[String]): Unit = {
-    val input = using(Source.fromResource("2018/day18.txt")) { file =>
+    val input = Using.resource(Source.fromResource("2018/day18.txt")) { file =>
       val lines = file.getLines().toList
       for {
         (line, row) <- lines.zipWithIndex

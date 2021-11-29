@@ -4,9 +4,9 @@ import scala.annotation.tailrec
 import scala.io.Source
 
 object Day06 {
-  private val turnOn  = "^turn on (\\d+),(\\d+) through (\\d+),(\\d+)$".r("x1", "y1", "x2", "y2")
-  private val turnOff = "^turn off (\\d+),(\\d+) through (\\d+),(\\d+)$".r("x1", "y1", "x2", "y2")
-  private val toggle  = "^toggle (\\d+),(\\d+) through (\\d+),(\\d+)$".r("x1", "y1", "x2", "y2")
+  private val turnOn  = "^turn on (\\d+),(\\d+) through (\\d+),(\\d+)$".r
+  private val turnOff = "^turn off (\\d+),(\\d+) through (\\d+),(\\d+)$".r
+  private val toggle  = "^toggle (\\d+),(\\d+) through (\\d+),(\\d+)$".r
 
   def main(args: Array[String]): Unit = {
     val input        = Source.fromResource("2015/day06.txt")

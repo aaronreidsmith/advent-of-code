@@ -10,7 +10,7 @@ object Day13 {
   }
 
   implicit class FancyString(str: String) {
-    private val scanner = "^(\\d+): (\\d+)$".r("depth", "range")
+    private val scanner = "^(\\d+): (\\d+)$".r
 
     def toScanner: Scanner = str match {
       case scanner(depth, range) => Scanner(depth.toInt, range.toInt)
@@ -26,6 +26,6 @@ object Day13 {
     println(s"Part 1: ${scanners.map(_.severity).sum}")
 
     def isSafe(delay: Int): Boolean = scanners.forall(!_.detected(delay))
-    println(s"Part 2: ${Stream.from(0).find(isSafe).get}")
+    println(s"Part 2: ${LazyList.from(0).find(isSafe).get}")
   }
 }

@@ -45,7 +45,7 @@ object Day15 {
 
     lazy val (part1, _) = solution()
     println(s"Part 1: $part1")
-    lazy val part2 = Stream
+    lazy val part2 = LazyList
       .from(4)
       .map(attackPower => solution(elvesAttack = attackPower))
       .collectFirst {

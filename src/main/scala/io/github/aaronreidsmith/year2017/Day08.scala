@@ -3,14 +3,7 @@ package io.github.aaronreidsmith.year2017
 import scala.io.Source
 
 object Day08 {
-  private val instruction = "^(.*?) (inc|dec) (-?\\d+) if (.*?) (>|>=|<|<=|==|!=) (-?\\d+)$".r(
-    "register",
-    "direction",
-    "amount",
-    "conditionRegister",
-    "operator",
-    "conditionValue"
-  )
+  private val instruction = "^(.*?) (inc|dec) (-?\\d+) if (.*?) (>|>=|<|<=|==|!=) (-?\\d+)$".r
 
   def main(args: Array[String]): Unit = {
     val input = Source.fromResource("2017/day08.txt")

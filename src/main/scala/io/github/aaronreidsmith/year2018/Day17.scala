@@ -12,8 +12,8 @@ object Day17 {
   case object Settling extends WaterTile { override def toString: String = "/" }
   case object Settled  extends WaterTile { override def toString: String = "~" }
 
-  private val xEntry = "^x=(\\d+), y=(\\d+)..(\\d+)$".r("x", "yStart", "yEnd")
-  private val yEntry = "^y=(\\d+), x=(\\d+)..(\\d+)$".r("y", "xStart", "xEnd")
+  private val xEntry = "^x=(\\d+), y=(\\d+)..(\\d+)$".r
+  private val yEntry = "^y=(\\d+), x=(\\d+)..(\\d+)$".r
 
   def main(args: Array[String]): Unit = {
     val input = Source.fromResource("2018/day17.txt")

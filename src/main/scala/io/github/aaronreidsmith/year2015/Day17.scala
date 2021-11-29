@@ -1,7 +1,6 @@
 package io.github.aaronreidsmith.year2015
 
 import java.util.concurrent.atomic.AtomicInteger
-
 import scala.io.Source
 
 object Day17 {

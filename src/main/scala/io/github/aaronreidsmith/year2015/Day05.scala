@@ -13,8 +13,6 @@ object Day05 {
 
     val part2 = words.count(isNicePart2)
     println(s"part 2: $part2")
-
-//    println(isNicePart2("qjhvhtzxzqqjkmpb"))
   }
 
   private def isNicePart1(word: String): Boolean = {

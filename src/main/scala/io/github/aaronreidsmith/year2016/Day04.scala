@@ -4,7 +4,7 @@ import scala.annotation.tailrec
 import scala.io.Source
 
 object Day04 {
-  private val entry = "^([a-z-]+)-([0-9]+)\\[([a-z]+)]$".r("name", "sectorId", "checksum")
+  private val entry = "^([a-z-]+)-([0-9]+)\\[([a-z]+)]$".r
 
   def main(args: Array[String]): Unit = {
     val input      = Source.fromResource("2016/day04.txt")

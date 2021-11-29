@@ -10,7 +10,7 @@ object Day25 {
       val topRight = n * (n + 1) / 2
       topRight - inputRow
     }
-    val ticket = Stream.iterate(20151125L)(ticket => (ticket * 252533) % 33554393).drop(index).head
+    val ticket = LazyList.iterate(20151125L)(ticket => (ticket * 252533) % 33554393).drop(index).head
 
     println(s"Part 1: $ticket")
   }
