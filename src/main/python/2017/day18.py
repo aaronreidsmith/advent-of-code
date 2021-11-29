@@ -68,4 +68,5 @@ def solve_p2(instr):
 
 if __name__ == '__main__':
     instructions = open(sys.argv[1]).readlines()
+    # Part 1 in Scala
     print(f'Part 2: {solve_p2(instructions)}')

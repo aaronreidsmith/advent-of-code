@@ -20,6 +20,7 @@ object Day18 {
     input.close()
 
     println(s"Part 1: ${part1(instructions)}")
+    // Part 2 in Python
   }
 
   @tailrec
