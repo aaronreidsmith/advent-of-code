@@ -7,7 +7,7 @@ object Day07 {
   def main(args: Array[String]): Unit = {
     val input = Using.resource(Source.fromResource("2021/day07.txt"))(_.mkString.split(',').map(_.toInt).toSeq)
     println(s"Part 1: ${solution(input, part2 = false)}")
-    println(s"Part 1: ${solution(input, part2 = true)}")
+    println(s"Part 2: ${solution(input, part2 = true)}")
   }
 
   private def solution(crabs: Seq[Int], part2: Boolean): Int = (0 to crabs.max).foldLeft(Int.MaxValue) { (acc, n) =>
