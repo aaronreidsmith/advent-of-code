@@ -32,21 +32,20 @@ object Day09 {
     println(s"Part 1: $part1")
 
     @tailrec
-    def findBasin(currentBasin: Seq[(Int, Int)], checkedPositions: Seq[(Int, Int)]): Seq[(Int, Int)] = {
-      val (updatedBasin, updatedCheckedPositions) = currentBasin.foldLeft((currentBasin, checkedPositions)) {
-        case ((currentBasinAcc, checkedPositionsAcc), position) =>
-          val unseenNeighbors = position.neighbors.collect {
-            case neighbor if grid.get(neighbor).exists(_ < 9) && !checkedPositionsAcc.contains(neighbor) => neighbor
-          }
-          (currentBasinAcc ++ unseenNeighbors, checkedPositionsAcc ++ unseenNeighbors)
+    def findBasin(currentBasin: Seq[(Int, Int)]): Seq[(Int, Int)] = {
+      val updatedBasin = currentBasin.foldLeft(currentBasin) { (acc, position) =>
+        val unseenNeighbors = position.neighbors.collect {
+          case neighbor if grid.get(neighbor).exists(_ < 9) && !acc.contains(neighbor) => neighbor
+        }
+        acc ++ unseenNeighbors
       }
 
-      if (updatedBasin.size == currentBasin.size) currentBasin else findBasin(updatedBasin, updatedCheckedPositions)
+      if (updatedBasin.size == currentBasin.size) currentBasin else findBasin(updatedBasin)
     }
 
     val part2 = grid
       .collect {
-        case (position, height) if neighborsAreHigher(position, height) => findBasin(Seq(position), Seq(position)).size
+        case (position, height) if neighborsAreHigher(position, height) => findBasin(Seq(position)).size
       }
       .toSeq
       .sorted
