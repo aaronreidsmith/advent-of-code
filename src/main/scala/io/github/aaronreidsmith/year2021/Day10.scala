@@ -56,13 +56,13 @@ object Day10 {
       case None => stack.map(openingChar => mappings(openingChar)).mkString
     }
 
-    val scors = input
+    val scores = input
       .map(instruction => helper(instruction))
       .collect {
         case remaining if remaining.nonEmpty => remaining.foldLeft(0L)((acc, char) => acc * 5 + scoreMap(char))
       }
       .sorted
 
-    scors(scors.size / 2) // Take the middle score
+    scores(scores.size / 2) // Take the middle score
   }
 }
