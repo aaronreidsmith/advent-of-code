@@ -35,7 +35,7 @@ object Day04 {
       case (acc, square) if !square.hasBeenSeen => acc + square.value
       case (acc, _)                             => acc
     }
-    // Since we will continue plating the game, we can't store the board state when we win. Instead we store the values
+    // Since we will continue playing the game, we can't store the board state when we win. Instead we store the values
     // of a winning board so we can diff against it later (to find the final winner).
     def values: Set[Int] = grid.values.map(_.value).toSet
   }
