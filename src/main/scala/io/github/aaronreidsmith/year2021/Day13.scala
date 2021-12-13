@@ -43,34 +43,24 @@ object Day13 {
       }
       .toList
     println(s"Part 1: ${part1(grid, folds.head)}")
-    println("Part 2:")
-    part2(grid, folds)
+    println(s"Part 2:\n${part2(grid, folds)}")
   }
 
   def part1(grid: Set[(Int, Int)], fold: Fold): Int = grid.map(fold.mirror).size
 
-  def part2(grid: Set[(Int, Int)], folds: List[Fold]): Unit = {
+  def part2(grid: Set[(Int, Int)], folds: List[Fold]): String = {
     val folded = folds.foldLeft(grid)((acc, fold) => acc.map(fold.mirror))
     val maxX   = folded.map(_._1).max
     val maxY   = folded.map(_._2).max
-    val filledIn = {
-      for {
-        x <- 0 to maxX
-        y <- 0 to maxY
-      } yield { // Don't fully know why I have to swap X and Y in the map, but this works
-        (y, x) -> (if (folded.contains((x, y))) '#' else ' ')
-      }
-    }.toMap
-    var row = 0
-    filledIn.toSeq
-      .sortBy { case (position, _) => position }
-      .foreach {
-        case ((currRow, _), char) =>
-          if (currRow != row) {
-            row += 1
-            println()
+    (0 to maxY)
+      .foldLeft(Vector.empty[String]) { (acc, y) =>
+        acc :+ (0 to maxX)
+          .foldLeft(Vector.empty[Char]) { (innerAcc, x) =>
+            val char = if (folded.contains((x, y))) '#' else ' '
+            innerAcc :+ char
           }
-          print(char)
+          .mkString
       }
+      .mkString("\n")
   }
 }
