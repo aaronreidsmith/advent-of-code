@@ -19,19 +19,20 @@ object Day17 {
         yVelocity: Int,
         xPosition: Int = 0,
         yPosition: Int = 0,
-        seenHeights: Set[Int] = Set()
+        currentMaxHeight: Int = Int.MinValue
     ): Int = if (xVelocity <= 0 && !xRange.contains(xPosition)) { // Didn't make it far enough, or overshot
       Int.MinValue
     } else if (yPosition < yRange.min) { // Went too low
       Int.MinValue
     } else if (xRange.contains(xPosition) && yRange.contains(yPosition)) { // Hit the target
-      seenHeights.max
+      currentMaxHeight
     } else { // Still going up or still coming down
       val newXPosition = xPosition + xVelocity
       val newYPosition = yPosition + yVelocity
       val newXVelocity = (xVelocity - 1).max(0)
       val newYVelocity = yVelocity - 1
-      maxHeight(newXVelocity, newYVelocity, newXPosition, newYPosition, seenHeights + newYPosition)
+      val newMaxHeight = currentMaxHeight.max(newYPosition)
+      maxHeight(newXVelocity, newYVelocity, newXPosition, newYPosition, newMaxHeight)
     }
 
     val maxHeights = for {
