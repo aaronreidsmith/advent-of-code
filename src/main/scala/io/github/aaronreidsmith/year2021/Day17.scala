@@ -35,7 +35,7 @@ object Day17 {
     }
 
     val maxHeights = for {
-      xVelocity <- 0 to 1000
+      xVelocity <- 0 to xRange.max
       yVelocity <- yRange.min to 1000
     } yield maxHeight(xVelocity, yVelocity)
 
