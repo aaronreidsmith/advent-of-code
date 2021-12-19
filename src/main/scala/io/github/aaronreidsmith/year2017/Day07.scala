@@ -28,7 +28,7 @@ object Day07 {
         node.childString match {
           case Some(children) =>
             val mappedChildren = children.split(", ").map(getChildren(_, allNodes))
-            name -> Node(name, node.weight, mappedChildren, node.childString)
+            name -> Node(name, node.weight, mappedChildren.toSeq, node.childString)
           case None => name -> node
         }
     }
@@ -44,7 +44,7 @@ object Day07 {
 
     val node     = mappings(name)
     val children = node.childString.map(_.split(", ").map(getChildren(_, mappings))).getOrElse(Array())
-    Node(node.name, node.weight, children, node.childString)
+    Node(node.name, node.weight, children.toSeq, node.childString)
   }
 
   @tailrec

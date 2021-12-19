@@ -16,6 +16,7 @@ object Day10 {
     def part1(remaining: Vector[Int], differences: Vector[Int] = Vector()): Int = remaining match {
       case Vector(_)        => differences.count(_ == 1) * differences.count(_ == 3)
       case Vector(a, b, _*) => part1(remaining.tail, differences :+ (b - a))
+      case _                => throw new IllegalArgumentException
     }
     println(s"Part 1: ${part1(joltages)}")
 

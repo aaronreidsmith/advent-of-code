@@ -14,11 +14,17 @@ object Day03 {
       .toList
     input.close()
 
-    val part1 = inputList.count { case a :: b :: c :: _ => isTriangle(a, b, c) }
+    val part1 = inputList.count {
+      case a :: b :: c :: _ => isTriangle(a, b, c)
+      case _                => false
+    }
     println(s"Part 1: $part1")
 
     val part2 = inputList.transpose.foldLeft(0) { (acc, column) =>
-      acc + column.grouped(3).count { case a :: b :: c :: _ => isTriangle(a, b, c) }
+      acc + column.grouped(3).count {
+        case a :: b :: c :: _ => isTriangle(a, b, c)
+        case _                => false
+      }
     }
     println(s"Part 2: $part2")
   }

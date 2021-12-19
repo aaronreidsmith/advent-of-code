@@ -27,6 +27,7 @@ object Day18 {
             list.foldLeft(num) {
               case (acc, "+" ~ y) => acc + y
               case (acc, "*" ~ y) => acc * y
+              case (acc, _)       => acc
             }
         }
     }
