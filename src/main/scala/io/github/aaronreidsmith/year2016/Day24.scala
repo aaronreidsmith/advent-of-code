@@ -1,8 +1,8 @@
 package io.github.aaronreidsmith.year2016
 
+import scala.collection.mutable
 import scala.io.Source
 import scala.util.Using
-import scala.collection.mutable
 
 // The majority of this is adapted from https://www.reddit.com/r/adventofcode/comments/5k1he1/comment/dbknd6b
 object Day24 {

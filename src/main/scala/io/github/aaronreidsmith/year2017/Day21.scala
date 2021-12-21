@@ -2,51 +2,51 @@ package io.github.aaronreidsmith.year2017
 
 import scala.io.Source
 
-// Adapted from https://www.reddit.com/r/adventofcode/comments/7l78eb/2017_day_21_solutions/drk8egp?utm_source=share&utm_medium=web2x&context=3
+// Adapted from https://www.reddit.com/r/adventofcode/comments/7l78eb/2017_day_21_solutions/drk8egp
 // No way I am smart enough to figure this out myself
-case class Square[T](twoDimensional: Vector[Vector[T]]) {
-  val size: Int = twoDimensional.length
-
-  def flip: Square[T]   = Square(twoDimensional.reverse)
-  def rotate: Square[T] = Square(twoDimensional.reverse.transpose)
-  def split(smallerSize: Int): Square[Square[T]] = Square(
-    twoDimensional
-      .grouped(smallerSize)
-      .toVector
-      .map(_.map(_.grouped(smallerSize).toVector).transpose.map(Square(_)))
-  )
-
-  lazy val permutations: Set[Square[T]] = Set(
-    this,
-    this.rotate,
-    this.rotate.rotate,
-    this.rotate.rotate.rotate,
-    this.flip,
-    this.flip.rotate,
-    this.flip.rotate.rotate,
-    this.flip.rotate.rotate.rotate
-  )
-
-  def flatten[R](implicit asSquare: T => Square[R]): Square[R] = Square(
-    twoDimensional.flatMap { row =>
-      row.map(_.twoDimensional).transpose.map(_.flatten)
-    }
-  )
-
-  def map[R](f: T => R): Square[R] = Square(twoDimensional.map(_.map(f)))
-
-  def flatMap[R](f: T => Square[R]): Square[R] = this.map(f).flatten
-}
-
-object Square {
-  def apply(twoDimensional: Array[Array[Char]]): Square[Char] = Square(twoDimensional.map(_.toVector).toVector)
-  def apply(flat: String): Square[Char]                       = Square(flat.split('/').toVector.map(_.toVector))
-}
-
-case class Rule(input: Square[Char], output: Square[Char])
-
 object Day21 {
   private val rule = "^(.*) => (.*)$".r
+
+  private case class Square[T](twoDimensional: Vector[Vector[T]]) {
+    val size: Int = twoDimensional.length
+
+    def flip: Square[T]   = Square(twoDimensional.reverse)
+    def rotate: Square[T] = Square(twoDimensional.reverse.transpose)
+    def split(smallerSize: Int): Square[Square[T]] = Square(
+      twoDimensional
+        .grouped(smallerSize)
+        .toVector
+        .map(_.map(_.grouped(smallerSize).toVector).transpose.map(Square(_)))
+    )
+
+    lazy val permutations: Set[Square[T]] = Set(
+      this,
+      this.rotate,
+      this.rotate.rotate,
+      this.rotate.rotate.rotate,
+      this.flip,
+      this.flip.rotate,
+      this.flip.rotate.rotate,
+      this.flip.rotate.rotate.rotate
+    )
+
+    def flatten[R](implicit asSquare: T => Square[R]): Square[R] = Square(
+      twoDimensional.flatMap { row =>
+        row.map(_.twoDimensional).transpose.map(_.flatten)
+      }
+    )
+
+    def map[R](f: T => R): Square[R] = Square(twoDimensional.map(_.map(f)))
+
+    def flatMap[R](f: T => Square[R]): Square[R] = this.map(f).flatten
+  }
+
+  private object Square {
+    def apply(twoDimensional: Array[Array[Char]]): Square[Char] = Square(twoDimensional.map(_.toVector).toVector)
+    def apply(flat: String): Square[Char]                       = Square(flat.split('/').toVector.map(_.toVector))
+  }
+
+  private case class Rule(input: Square[Char], output: Square[Char])
 
   def main(args: Array[String]): Unit = {
     val input = Source.fromResource("2017/day21.txt")
