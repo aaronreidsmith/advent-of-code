@@ -33,13 +33,13 @@ object Day07 extends IntCodeUtils {
       breakable {
         while (!finished) {
           aOutput = Some(aIntCode.run(eOutput.toSeq).getOutput.last)
-          if (finished) break
+          if (finished) break()
           bOutput = Some(bIntCode.run(aOutput.toSeq).getOutput.last)
-          if (finished) break
+          if (finished) break()
           cOutput = Some(cIntCode.run(bOutput.toSeq).getOutput.last)
-          if (finished) break
+          if (finished) break()
           dOutput = Some(dIntCode.run(cOutput.toSeq).getOutput.last)
-          if (finished) break
+          if (finished) break()
           eOutput = Some(eIntCode.run(dOutput.toSeq).getOutput.last)
         }
       }

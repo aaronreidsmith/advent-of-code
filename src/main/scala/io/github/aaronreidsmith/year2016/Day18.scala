@@ -42,6 +42,7 @@ object Day18 {
             Tile(true)
           }
         acc :+ newTile
+      case (acc, _) => acc
     }
     solution(tiles :+ newRow, threshold)
   }

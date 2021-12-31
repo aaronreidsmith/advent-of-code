@@ -14,6 +14,7 @@ object Day10 {
     val points = input.getLines().foldLeft(List.empty[Point]) {
       case (acc, entry(x, y, xDelta, yDelta)) =>
         acc :+ Point(x.trim.toInt, y.trim.toInt, xDelta.trim.toInt, yDelta.trim.toInt)
+      case (acc, _) => acc
     }
     input.close()
 

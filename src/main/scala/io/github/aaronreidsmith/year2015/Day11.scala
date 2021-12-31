@@ -25,7 +25,10 @@ object Day11 {
       .filter { case (pair, _) => pair.head == pair.last }
       .toList
       .combinations(2)
-      .exists { case List((a, i), (b, j)) => a != b && j != i - 1 && j != i && j != i + 1 }
+      .exists {
+        case List((a, i), (b, j)) => a != b && j != i - 1 && j != i && j != i + 1
+        case _                    => false
+      }
     increasingRun && noBadChars && twoOrMorePairs
   }
 
