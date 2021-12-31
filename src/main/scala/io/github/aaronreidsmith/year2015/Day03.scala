@@ -1,18 +1,18 @@
 package io.github.aaronreidsmith.year2015
 
+import io.github.aaronreidsmith.using
+
 import scala.annotation.tailrec
 import scala.io.Source
 
 object Day03 {
   def main(args: Array[String]): Unit = {
-    val input       = Source.fromResource("2015/day03.txt")
-    val inputString = input.mkString
-    input.close()
-    println(s"Part 1: ${part1(inputString)}")
-    println(s"Part 2: ${part2(inputString)}")
+    val input = using("2015/day03.txt")(_.mkString)
+    println(s"Part 1: ${part1(input)}")
+    println(s"Part 2: ${part2(input)}")
   }
 
-  private def part1(instructions: String): Int = {
+  private[year2015] def part1(instructions: String): Int = {
     val (_, seenHouses) = instructions.foldLeft((0, 0), Set((0, 0))) {
       case (((x, y), seen), char) =>
         val nextPos = nextPosition(x, y, char)
@@ -22,13 +22,13 @@ object Day03 {
   }
 
   @tailrec
-  private def part2(
+  private[year2015] def part2(
       instructions: String,
       pointer: Int = 0,
       santaPos: (Int, Int) = (0, 0),
-      santaSeen: Set[(Int, Int)] = Set(),
+      santaSeen: Set[(Int, Int)] = Set((0, 0)),
       robotSantaPos: (Int, Int) = (0, 0),
-      robotSantaSeen: Set[(Int, Int)] = Set()
+      robotSantaSeen: Set[(Int, Int)] = Set((0, 0))
   ): Int = if (pointer >= instructions.length) {
     (santaSeen ++ robotSantaSeen).size
   } else {

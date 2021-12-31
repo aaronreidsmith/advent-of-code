@@ -35,11 +35,11 @@ object Day14 {
           val existingPairCount = pairs.getOrElse(pair, 1L)
           pairs.update(pair, existingPairCount - count)
 
-          val firstNewPairKey   = first + inserted
+          val firstNewPairKey   = s"$first$inserted"
           val firstNewPairCount = pairs.getOrElse(firstNewPairKey, 0L)
           pairs.update(firstNewPairKey, firstNewPairCount + count)
 
-          val secondNewPairKey   = inserted + second
+          val secondNewPairKey   = s"$inserted$second"
           val secondNewPairCount = pairs.getOrElse(secondNewPairKey, 0L)
           pairs.update(secondNewPairKey, secondNewPairCount + count)
 

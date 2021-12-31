@@ -51,7 +51,7 @@ object Day04 {
       Board(grid.toMap) :: acc
     }
     println(s"Part 1: ${part1(numbers, boards)}")
-    println(s"Part 1: ${part2(numbers, boards)}")
+    println(s"Part 2: ${part2(numbers, boards)}")
   }
 
   @tailrec

@@ -18,7 +18,7 @@ object Day24 {
       .min
 
     println(s"Part 1: ${minQuantumEntanglement(gifts.sum / 3)}")
-    println(s"Part 1: ${minQuantumEntanglement(gifts.sum / 4)}")
+    println(s"Part 2: ${minQuantumEntanglement(gifts.sum / 4)}")
   }
 
 }

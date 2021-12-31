@@ -1,21 +1,20 @@
 package io.github.aaronreidsmith.year2015
 
+import io.github.aaronreidsmith.using
+
 import scala.annotation.tailrec
-import scala.io.Source
 
 object Day01 {
   def main(args: Array[String]): Unit = {
-    val input       = Source.fromResource("2015/day01.txt")
-    val inputString = input.mkString
-    input.close()
-
-    val part1 = inputString.count(_ == '(') - inputString.count(_ == ')')
-    println(s"Part 1: $part1")
-    println(s"Part 2: ${part2(inputString)}")
+    val input = using("2015/day01.txt")(_.mkString)
+    println(s"Part 1: ${part1(input)}")
+    println(s"Part 2: ${part2(input)}")
   }
 
+  private[year2015] def part1(inputString: String): Int = inputString.count(_ == '(') - inputString.count(_ == ')')
+
   @tailrec
-  private def part2(inputString: String, level: Int = 0, position: Int = 0): Int = if (level < 0) {
+  private[year2015] def part2(inputString: String, level: Int = 0, position: Int = 0): Int = if (level < 0) {
     position
   } else {
     inputString.head match {

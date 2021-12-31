@@ -1,10 +1,9 @@
 package io.github.aaronreidsmith.year2019.intcode.util
 
-import scala.io.Source
-import scala.util.Using
+import io.github.aaronreidsmith.using
 
 trait IntCodeUtils {
-  def makeInstructions(resource: String): Map[Long, Long] = Using.resource(Source.fromResource(resource)) { file =>
+  def makeInstructions(resource: String): Map[Long, Long] = using(resource) { file =>
     file.mkString
       .split(',')
       .zipWithIndex

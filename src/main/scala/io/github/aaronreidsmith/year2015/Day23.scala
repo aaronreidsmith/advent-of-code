@@ -43,6 +43,6 @@ object Day23 {
       }
 
     println(s"Part 1: ${solution()}")
-    println(s"Part 1: ${solution(Computer(a = 1))}")
+    println(s"Part 2: ${solution(Computer(a = 1))}")
   }
 }

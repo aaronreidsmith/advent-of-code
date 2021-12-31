@@ -1,5 +1,7 @@
 package io.github.aaronreidsmith.year2015
 
+import io.github.aaronreidsmith.using
+
 import scala.io.Source
 
 object Day16 {
@@ -15,7 +17,7 @@ object Day16 {
   private val cars        = "^cars: (\\d+)$".r
   private val perfumes    = "^perfumes: (\\d+)$".r
 
-  protected[this] case class Sue(
+  private[year2015] case class Sue(
       number: Int,
       children: Option[Int] = None,
       cats: Option[Int] = None,
@@ -30,128 +32,67 @@ object Day16 {
   )
 
   def main(args: Array[String]): Unit = {
-    val input = Source.fromResource("2015/day16.txt")
-    val sues = input.getLines().foldLeft(List.empty[Sue]) {
-      case (acc, sue(num, characteristics)) =>
-        val newSue = characteristics.split(", ").foldLeft(Sue(num.toInt)) { (currSue, characteristic) =>
-          characteristic match {
-            case children(childNum)         => currSue.copy(children = Some(childNum.toInt))
-            case cats(catNum)               => currSue.copy(cats = Some(catNum.toInt))
-            case samoyeds(samoyedNum)       => currSue.copy(samoyeds = Some(samoyedNum.toInt))
-            case pomeranians(pomeranianNum) => currSue.copy(pomeranians = Some(pomeranianNum.toInt))
-            case akitas(akitaNum)           => currSue.copy(akitas = Some(akitaNum.toInt))
-            case vizslas(vizslaNum)         => currSue.copy(vizslas = Some(vizslaNum.toInt))
-            case goldfish(goldfishNum)      => currSue.copy(goldfish = Some(goldfishNum.toInt))
-            case trees(treeNum)             => currSue.copy(trees = Some(treeNum.toInt))
-            case cars(carNum)               => currSue.copy(cars = Some(carNum.toInt))
-            case perfumes(perfumeNum)       => currSue.copy(perfumes = Some(perfumeNum.toInt))
-            case _                          => throw new IllegalArgumentException
-          }
-        }
-        acc :+ newSue
-      case _ => throw new IllegalArgumentException
-    }
-    input.close()
-
-    val part1 = sues
-      .filter { sue =>
-        val childCheck = sue.children match {
-          case Some(childNum) => childNum == 3
-          case None           => true
-        }
-        val catCheck = sue.cats match {
-          case Some(catNum) => catNum == 7
-          case None         => true
-        }
-        val samoyedCheck = sue.samoyeds match {
-          case Some(samoyedNum) => samoyedNum == 2
-          case None             => true
-        }
-        val pomeranianCheck = sue.pomeranians match {
-          case Some(pomeranianNum) => pomeranianNum == 3
-          case None                => true
-        }
-        val akitaCheck = sue.akitas match {
-          case Some(akitaNum) => akitaNum == 0
-          case None           => true
-        }
-        val vizslaCheck = sue.vizslas match {
-          case Some(vizslaNum) => vizslaNum == 0
-          case None            => true
-        }
-        val goldfishCheck = sue.goldfish match {
-          case Some(goldfishNum) => goldfishNum == 5
-          case None              => true
-        }
-        val treeCheck = sue.trees match {
-          case Some(treeNum) => treeNum == 3
-          case None          => true
-        }
-        val carCheck = sue.cars match {
-          case Some(carNum) => carNum == 2
-          case None         => true
-        }
-        val perfumeCheck = sue.perfumes match {
-          case Some(perfumeNum) => perfumeNum == 1
-          case None             => true
-        }
-
-        childCheck && catCheck && samoyedCheck && pomeranianCheck && akitaCheck &&
-        vizslaCheck && goldfishCheck && treeCheck && carCheck && perfumeCheck
-      }
-      .head
-      .number
-    println(s"Part 1: $part1")
-
-    val part2 = sues
-      .filter { sue =>
-        val childCheck = sue.children match {
-          case Some(childNum) => childNum == 3
-          case None           => true
-        }
-        val catCheck = sue.cats match {
-          case Some(catNum) => catNum > 7
-          case None         => true
-        }
-        val samoyedCheck = sue.samoyeds match {
-          case Some(samoyedNum) => samoyedNum == 2
-          case None             => true
-        }
-        val pomeranianCheck = sue.pomeranians match {
-          case Some(pomeranianNum) => pomeranianNum < 3
-          case None                => true
-        }
-        val akitaCheck = sue.akitas match {
-          case Some(akitaNum) => akitaNum == 0
-          case None           => true
-        }
-        val vizslaCheck = sue.vizslas match {
-          case Some(vizslaNum) => vizslaNum == 0
-          case None            => true
-        }
-        val goldfishCheck = sue.goldfish match {
-          case Some(goldfishNum) => goldfishNum < 5
-          case None              => true
-        }
-        val treeCheck = sue.trees match {
-          case Some(treeNum) => treeNum > 3
-          case None          => true
-        }
-        val carCheck = sue.cars match {
-          case Some(carNum) => carNum == 2
-          case None         => true
-        }
-        val perfumeCheck = sue.perfumes match {
-          case Some(perfumeNum) => perfumeNum == 1
-          case None             => true
-        }
-
-        childCheck && catCheck && samoyedCheck && pomeranianCheck && akitaCheck &&
-        vizslaCheck && goldfishCheck && treeCheck && carCheck && perfumeCheck
-      }
-      .head
-      .number
-    println(s"Part 2: $part2")
+    val sues = using("2015/day16.txt")(parseInput)
+    println(s"Part 1: ${part1(sues)}")
+    println(s"Part 2: ${part2(sues)}")
   }
 
+  private[year2015] def parseInput(file: Source): List[Sue] = file.getLines().foldLeft(List.empty[Sue]) {
+    case (acc, sue(num, characteristics)) =>
+      val newSue = characteristics.split(", ").foldLeft(Sue(num.toInt)) { (currSue, characteristic) =>
+        characteristic match {
+          case children(childNum)         => currSue.copy(children = Some(childNum.toInt))
+          case cats(catNum)               => currSue.copy(cats = Some(catNum.toInt))
+          case samoyeds(samoyedNum)       => currSue.copy(samoyeds = Some(samoyedNum.toInt))
+          case pomeranians(pomeranianNum) => currSue.copy(pomeranians = Some(pomeranianNum.toInt))
+          case akitas(akitaNum)           => currSue.copy(akitas = Some(akitaNum.toInt))
+          case vizslas(vizslaNum)         => currSue.copy(vizslas = Some(vizslaNum.toInt))
+          case goldfish(goldfishNum)      => currSue.copy(goldfish = Some(goldfishNum.toInt))
+          case trees(treeNum)             => currSue.copy(trees = Some(treeNum.toInt))
+          case cars(carNum)               => currSue.copy(cars = Some(carNum.toInt))
+          case perfumes(perfumeNum)       => currSue.copy(perfumes = Some(perfumeNum.toInt))
+          case _                          => throw new IllegalArgumentException
+        }
+      }
+      newSue :: acc
+    case _ => throw new IllegalArgumentException
+  }
+
+  private[year2015] def part1(sues: List[Sue]): Int = sues
+    .filter { sue =>
+      val childCheck      = sue.children.fold(true)(_ == 3)
+      val catCheck        = sue.cats.fold(true)(_ == 7)
+      val samoyedCheck    = sue.samoyeds.fold(true)(_ == 2)
+      val pomeranianCheck = sue.pomeranians.fold(true)(_ == 3)
+      val akitaCheck      = sue.akitas.fold(true)(_ == 0)
+      val vizslaCheck     = sue.vizslas.fold(true)(_ == 0)
+      val goldfishCheck   = sue.goldfish.fold(true)(_ == 5)
+      val treeCheck       = sue.trees.fold(true)(_ == 3)
+      val carCheck        = sue.cars.fold(true)(_ == 2)
+      val perfumeCheck    = sue.perfumes.fold(true)(_ == 1)
+
+      childCheck && catCheck && samoyedCheck && pomeranianCheck && akitaCheck &&
+      vizslaCheck && goldfishCheck && treeCheck && carCheck && perfumeCheck
+    }
+    .head
+    .number
+
+  private[year2015] def part2(sues: List[Sue]): Int = sues
+    .filter { sue =>
+      val childCheck      = sue.children.fold(true)(_ == 3)
+      val catCheck        = sue.cats.fold(true)(_ > 7)
+      val samoyedCheck    = sue.samoyeds.fold(true)(_ == 2)
+      val pomeranianCheck = sue.pomeranians.fold(true)(_ < 3)
+      val akitaCheck      = sue.akitas.fold(true)(_ == 0)
+      val vizslaCheck     = sue.vizslas.fold(true)(_ == 0)
+      val goldfishCheck   = sue.goldfish.fold(true)(_ < 5)
+      val treeCheck       = sue.trees.fold(true)(_ > 3)
+      val carCheck        = sue.cars.fold(true)(_ == 2)
+      val perfumeCheck    = sue.perfumes.fold(true)(_ == 1)
+
+      childCheck && catCheck && samoyedCheck && pomeranianCheck && akitaCheck &&
+      vizslaCheck && goldfishCheck && treeCheck && carCheck && perfumeCheck
+    }
+    .head
+    .number
 }

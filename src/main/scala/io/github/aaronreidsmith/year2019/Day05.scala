@@ -8,9 +8,9 @@ object Day05 extends IntCodeUtils {
     val instructions = makeInstructions("2019/day05.txt")
 
     val part1 = new IntCode(instructions, Seq(1L))
-    println(s"Part 1: ${part1.run().getOutputAsString}")
+    println(s"Part 1: ${part1.run().getOutput.last}")
 
     val part2 = new IntCode(instructions, Seq(5L))
-    println(s"Part 2: ${part2.run().getOutputAsString}")
+    println(s"Part 2: ${part2.run().getOutput.last}")
   }
 }

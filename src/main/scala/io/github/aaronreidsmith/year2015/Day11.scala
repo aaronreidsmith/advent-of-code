@@ -4,11 +4,13 @@ import scala.annotation.tailrec
 
 object Day11 {
   def main(args: Array[String]): Unit = {
-    val input     = "hxbxwxba"
-    val password1 = solution(input)
-    println(s"Part 1: $password1")
-    println(s"Part 2: ${solution(incrementPassword(password1))}")
+    val input = "hxbxwxba"
+    println(s"Part 1: ${part1(input)}")
+    println(s"Part 2: ${part2(input)}")
   }
+
+  private[year2015] def part1(input: String): String = solution(input)
+  private[year2015] def part2(input: String): String = solution(incrementPassword(part1(input)))
 
   @tailrec
   private def solution(password: String): String =

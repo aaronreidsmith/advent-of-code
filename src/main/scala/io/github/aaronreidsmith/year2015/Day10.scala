@@ -5,9 +5,12 @@ import scala.annotation.tailrec
 object Day10 {
   def main(args: Array[String]): Unit = {
     val input = 1321131112
-    println(s"Part 1: ${solution(input.toString, 40)}")
-    println(s"Part 2: ${solution(input.toString, 50)}")
+    println(s"Part 1: ${part1(input)}")
+    println(s"Part 2: ${part2(input)}")
   }
+
+  private[year2015] def part1(input: Int): Int = solution(input.toString, 40)
+  private[year2015] def part2(input: Int): Int = solution(input.toString, 50)
 
   @tailrec
   private def solution(currentNum: String, iterations: Int, currentIteration: Int = 0): Int =

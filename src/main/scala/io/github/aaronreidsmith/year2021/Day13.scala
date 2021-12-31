@@ -1,7 +1,6 @@
 package io.github.aaronreidsmith.year2021
 
-import scala.io.Source
-import scala.util.Using
+import io.github.aaronreidsmith.using
 
 object Day13 {
   private val verticalFold   = "^fold along x=(\\d+)$".r
@@ -26,7 +25,7 @@ object Day13 {
   }
 
   def main(args: Array[String]): Unit = {
-    val input                          = Using.resource(Source.fromResource("2021/day13.txt"))(_.mkString)
+    val input                          = using("2021/day13.txt")(_.mkString)
     val Array(rawPoints, rawFolds, _*) = input.split("\n\n")
     val grid = rawPoints
       .split('\n')

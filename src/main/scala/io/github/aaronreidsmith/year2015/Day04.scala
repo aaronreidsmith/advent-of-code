@@ -5,23 +5,24 @@ import java.security.MessageDigest
 
 object Day04 {
   def main(args: Array[String]): Unit = {
-    val input        = "yzbqklnj"
-    val infiniteList = LazyList.from(1)
-
-    val part1 = infiniteList
-      .collectFirst {
-        case i if md5(s"$input$i").startsWith("00000") => i
-      }
-      .getOrElse(-1)
-    println(s"Part 1: $part1")
-
-    val part2 = infiniteList
-      .collectFirst {
-        case i if md5(s"$input$i").startsWith("000000") => i
-      }
-      .getOrElse(-1)
-    println(s"Part 2: $part2")
+    val input = "yzbqklnj"
+    println(s"Part 1: ${part1(input)}")
+    println(s"Part 2: ${part1(input)}")
   }
+
+  private val infiniteList = LazyList.from(1)
+
+  private[year2015] def part1(input: String): Int = infiniteList
+    .collectFirst {
+      case i if md5(s"$input$i").startsWith("00000") => i
+    }
+    .getOrElse(-1)
+
+  private[year2015] def part2(input: String): Int = infiniteList
+    .collectFirst {
+      case i if md5(s"$input$i").startsWith("000000") => i
+    }
+    .getOrElse(-1)
 
   private def md5(input: String): String = {
     val md     = MessageDigest.getInstance("MD5")

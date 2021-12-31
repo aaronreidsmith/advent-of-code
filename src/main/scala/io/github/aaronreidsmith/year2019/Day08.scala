@@ -20,7 +20,7 @@ object Day08 {
           }
           .getOrElse('2')
       }
-      .grouped(width) // Re-group bu width/height
+      .grouped(width) // Re-group by width/height
       .toList
       .grouped(height)
       .toList

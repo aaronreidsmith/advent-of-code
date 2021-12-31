@@ -46,19 +46,18 @@ object Day22 {
       .indexOf(2019)
     println(s"Part 1: $part1")
 
-    // I am not smart enough to figure this out
     // Adapted from https://todd.ginsberg.com/post/advent-of-code/2019/day22/
     val part2 = {
-      val TWO             = BigInt(2)
-      val NUMBER_OF_CARDS = BigInt(119315717514047L)
-      val SHUFFLES        = BigInt(101741582076661L)
-      val FIND            = BigInt(2020)
+      val Two           = BigInt(2)
+      val NumberOfCards = BigInt(119315717514047L)
+      val Shuffles      = BigInt(101741582076661L)
+      val Target        = BigInt(2020)
 
       val memory = ArrayBuffer(BigInt(1), BigInt(0))
       input.reverse.foreach { instruction =>
         instruction match {
           case dealIncrement(n) =>
-            val multiplier = BigInt(n).modPow(NUMBER_OF_CARDS - TWO, NUMBER_OF_CARDS)
+            val multiplier = BigInt(n).modPow(NumberOfCards - Two, NumberOfCards)
             memory(0) *= multiplier
             memory(1) *= multiplier
           case cut(n) => memory(1) += BigInt(n)
@@ -67,14 +66,14 @@ object Day22 {
             memory(1) = -(memory(1) + 1)
           case other => throw new IllegalArgumentException(s"'$other' is not a valid instruction'")
         }
-        memory(0) %= NUMBER_OF_CARDS
-        memory(1) %= NUMBER_OF_CARDS
+        memory(0) %= NumberOfCards
+        memory(1) %= NumberOfCards
       }
-      val power = memory(0).modPow(SHUFFLES, NUMBER_OF_CARDS)
-      ((power * FIND) +
-        ((memory(1) * (power + NUMBER_OF_CARDS - 1)) *
-          (memory(0) - 1).modPow(NUMBER_OF_CARDS - TWO, NUMBER_OF_CARDS)))
-        .mod(NUMBER_OF_CARDS)
+      val power = memory(0).modPow(Shuffles, NumberOfCards)
+      ((power * Target) +
+        ((memory(1) * (power + NumberOfCards - 1)) *
+          (memory(0) - 1).modPow(NumberOfCards - Two, NumberOfCards)))
+        .mod(NumberOfCards)
     }
     println(s"Part 2: $part2")
   }
