@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@2.4.0
+        uses: actions/checkout@v2.4.0
 
       - name: Setup Scala
         uses: olafurpg/setup-scala@v10
