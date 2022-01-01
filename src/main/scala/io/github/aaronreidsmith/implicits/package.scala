@@ -16,11 +16,6 @@ package object implicits {
   }
 
   implicit class StringOps(string: String) {
-    def toGrid: Grid[Char] = {
-      for {
-        (line, row) <- string.split('\n').zipWithIndex
-        (char, col) <- line.zipWithIndex
-      } yield Point(row, col) -> char
-    }.toMap
+    def toGrid: Grid[Char] = Source.fromString(string).toGrid
   }
 }
