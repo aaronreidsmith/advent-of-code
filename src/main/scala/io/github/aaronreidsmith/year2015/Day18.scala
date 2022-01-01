@@ -1,69 +1,49 @@
 package io.github.aaronreidsmith.year2015
 
+import io.github.aaronreidsmith._
+import io.github.aaronreidsmith.implicits._
+
 import scala.annotation.tailrec
-import scala.io.Source
 
 object Day18 {
   def main(args: Array[String]): Unit = {
-    val input = Source.fromResource("2015/day18.txt")
-    val grid = input.getLines().zipWithIndex.foldLeft(Map.empty[(Int, Int), Char]) {
-      case (acc, (line, row)) =>
-        acc ++ line.zipWithIndex.foldLeft(Map.empty[(Int, Int), Char]) {
-          case (rowAcc, (char, col)) => rowAcc + ((row, col) -> char)
-        }
-    }
-    input.close()
+    val grid = using("2015/day18.txt")(_.toGrid)
     println(s"Part 1: ${part1(grid)}")
+    println(s"Part 2: ${part2(grid)}")
+  }
 
-    // Make sure all four corners have their lights on to start
-    val updated = grid ++ Map((0, 0) -> '#', (0, 99) -> '#', (99, 0) -> '#', (99, 99) -> '#')
-    println(s"Part 2: ${part2(updated)}")
+  private[year2015] def part1(grid: Grid[Char], iterations: Int = 100): Int = solution(grid, iterations, Seq(), 0)
+  private[year2015] def part2(grid: Grid[Char], iterations: Int = 100): Int = {
+    val (rows, cols) = grid.keys.unzip
+    val corners = for {
+      row <- Seq(rows.min, rows.max)
+      col <- Seq(cols.min, cols.max)
+    } yield Point(row, col)
+    val cornersOn = grid ++ corners.map(_ -> '#')
+    solution(cornersOn, iterations, corners, 0)
   }
 
   @tailrec
-  private def part1(grid: Map[(Int, Int), Char], iteration: Int = 0): Int = if (iteration >= 100) {
-    grid.values.count(_ == '#')
-  } else {
-    val updated = grid.foldLeft(Map.empty[(Int, Int), Char]) {
-      case (acc, ((row, col), char)) =>
-        val isOn        = char == '#'
-        val neighborsOn = getNeighbors(row, col).count { case (x, y) => grid(x, y) == '#' }
-        val newState = if (isOn) {
-          if (neighborsOn != 2 && neighborsOn != 3) '.' else '#'
-        } else {
-          if (neighborsOn == 3) '#' else '.'
-        }
-        acc + ((row, col) -> newState)
-    }
-    part1(updated, iteration + 1)
-  }
-
-  @tailrec
-  private def part2(grid: Map[(Int, Int), Char], iteration: Int = 0): Int = if (iteration >= 100) {
-    grid.values.count(_ == '#')
-  } else {
-    val alwaysOn = Seq((0, 0), (0, 99), (99, 0), (99, 99))
-    val updated = grid.foldLeft(Map.empty[(Int, Int), Char]) {
-      case (acc, ((row, col), char)) =>
-        if (alwaysOn.contains((row, col))) {
-          acc + ((row, col) -> '#')
-        } else {
-          val isOn        = char == '#'
-          val neighborsOn = getNeighbors(row, col).count { case (x, y) => grid(x, y) == '#' }
-          val newState = if (isOn) {
-            if (neighborsOn != 2 && neighborsOn != 3) '.' else '#'
+  private def solution(grid: Grid[Char], iterations: Int, alwaysOn: Seq[Point], iteration: Int): Int =
+    if (iteration >= iterations) {
+      grid.values.count(_ == '#')
+    } else {
+      val updated = grid.map {
+        case (point, char) =>
+          if (alwaysOn.contains(point)) {
+            point -> '#'
           } else {
-            if (neighborsOn == 3) '#' else '.'
+            val isOn        = char == '#'
+            val neighborsOn = point.neighbors.count(position => grid.get(position).fold(false)(_ == '#'))
+            val newState = isOn match {
+              case true if neighborsOn != 2 && neighborsOn != 3 => '.'
+              case true                                         => '#'
+              case false if neighborsOn == 3                    => '#'
+              case _                                            => '.'
+            }
+            point -> newState
           }
-          acc + ((row, col) -> newState)
-        }
+      }
+      solution(updated, iterations, alwaysOn, iteration + 1)
     }
-    part2(updated, iteration + 1)
-  }
-
-  private def getNeighbors(row: Int, col: Int): Seq[(Int, Int)] = for {
-    x <- Seq(row - 1, row, row + 1) if 0 <= x && x < 100
-    y <- Seq(col - 1, col, col + 1) if 0 <= y && y < 100
-    if (x, y) != (row, col)
-  } yield (x, y)
 }

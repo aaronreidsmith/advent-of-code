@@ -1,9 +1,8 @@
 package io.github.aaronreidsmith.year2015
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
+import io.github.aaronreidsmith.BaseTest
 
-class Day04Test extends AnyFlatSpec with Matchers {
+class Day04Test extends BaseTest {
   "Day04.part1" should "work on example input" in {
     Day04.part1("abcdef") shouldBe 609043
     Day04.part1("pqrstuv") shouldBe 1048970

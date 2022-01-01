@@ -1,10 +1,8 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.using
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
+import io.github.aaronreidsmith.{BaseTest, using}
 
-class Day14Test extends AnyFlatSpec with Matchers {
+class Day14Test extends BaseTest {
   private val reindeer = using("2015/day14.txt")(Day14.parseInput)
 
   "Day14.part1" should "work on example input" in {

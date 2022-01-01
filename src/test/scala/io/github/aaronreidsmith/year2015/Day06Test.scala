@@ -1,9 +1,8 @@
 package io.github.aaronreidsmith.year2015
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
+import io.github.aaronreidsmith.BaseTest
 
-class Day06Test extends AnyFlatSpec with Matchers {
+class Day06Test extends BaseTest {
   "Day06.part1" should "work on example input" in {
     val instructions = List(
       "turn on 0,0 through 999,999",     // turn on 1M lights

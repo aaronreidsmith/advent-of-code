@@ -1,9 +1,8 @@
 package io.github.aaronreidsmith.year2015
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
+import io.github.aaronreidsmith.BaseTest
 
-class Day11Test extends AnyFlatSpec with Matchers {
+class Day11Test extends BaseTest {
   private val input = "hxbxwxba" // No example input for this problem
 
   "Day11.part1" should "work on actual input" in {
