@@ -4,6 +4,7 @@ import scala.io.Source
 import scala.language.implicitConversions
 
 package object implicits {
+  // So we can unzip a Seq[Point]
   implicit def point2Tuple2(point: Point): (Int, Int) = (point.x, point.y)
 
   implicit class SourceOps(file: Source) {

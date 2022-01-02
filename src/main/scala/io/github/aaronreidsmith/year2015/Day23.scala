@@ -1,25 +1,33 @@
 package io.github.aaronreidsmith.year2015
 
+import io.github.aaronreidsmith.using
+
 import scala.annotation.tailrec
 import scala.io.Source
 
 object Day23 {
-  private val hlf = "^hlf (.*)$".r
-  private val tpl = "^tpl (.*)$".r
-  private val inc = "^inc (.*)$".r
-  private val jmp = "^jmp ([+-]\\d+)$".r
-  private val jie = "^jie (.*?), ([+-]\\d+)$".r
-  private val jio = "^jio (.*?), ([+-]\\d+)$".r
-
-  protected[this] case class Computer(a: Int = 0, b: Int = 0)
+  private case class Computer(a: Int = 0, b: Int = 0)
 
   def main(args: Array[String]): Unit = {
-    val input        = Source.fromResource("2015/day23.txt")
-    val instructions = input.getLines().toVector
-    input.close()
+    val instructions = using("2015/day23.txt")(parseInput)
+    println(s"Part 1: ${part1(instructions)}")
+    println(s"Part 2: ${part2(instructions)}")
+  }
+
+  private[year2015] def parseInput(file: Source): Vector[String] = file.getLines().toVector
+  private[year2015] def part1(instruction: Vector[String]): Int  = solution(instruction, Computer())
+  private[year2015] def part2(instructions: Vector[String]): Int = solution(instructions, Computer(a = 1))
+
+  private def solution(instructions: Vector[String], initialComputer: Computer): Int = {
+    val hlf = "^hlf (.*)$".r
+    val tpl = "^tpl (.*)$".r
+    val inc = "^inc (.*)$".r
+    val jmp = "^jmp ([+-]\\d+)$".r
+    val jie = "^jie (.*?), ([+-]\\d+)$".r
+    val jio = "^jio (.*?), ([+-]\\d+)$".r
 
     @tailrec
-    def solution(computer: Computer = Computer(), pointer: Int = 0): Int =
+    def helper(computer: Computer, pointer: Int = 0): Int =
       if (pointer < 0 || pointer >= instructions.length) {
         computer.b
       } else {
@@ -39,10 +47,9 @@ object Day23 {
           case jio(_, _)                                         => (computer, pointer + 1)
           case other                                             => throw new IllegalArgumentException(other)
         }
-        solution(updatedComputer, updatedPointer)
+        helper(updatedComputer, updatedPointer)
       }
 
-    println(s"Part 1: ${solution()}")
-    println(s"Part 2: ${solution(Computer(a = 1))}")
+    helper(initialComputer)
   }
 }
