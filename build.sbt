@@ -6,6 +6,7 @@ val settings = new {
   val libraryDependencies = Seq(
     "io.circe"               %% "circe-parser"             % circeVersion,
     "io.circe"               %% "circe-optics"             % circeVersion,
+    "org.apache.commons"      % "commons-text"             % "1.9",
     "org.jgrapht"             % "jgrapht-core"             % "1.5.1",
     "org.scala-lang"          % "scala-reflect"            % scalaVersion,
     "org.scala-lang"          % "scala-compiler"           % scalaVersion,
