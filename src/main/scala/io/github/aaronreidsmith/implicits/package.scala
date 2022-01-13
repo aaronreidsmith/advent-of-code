@@ -17,6 +17,11 @@ package object implicits {
   }
 
   implicit class StringOps(string: String) {
+    def letterOccurrences: Map[Char, Int] = string.groupMapReduce(identity)(_ => 1)(_ + _)
     def toGrid: Grid[Char] = Source.fromString(string).toGrid
+  }
+
+  implicit class SeqOps[T](seq: Seq[T]) {
+    def occurrences: Map[T, Int] = seq.groupMapReduce(identity)(_ => 1)(_ + _)
   }
 }
