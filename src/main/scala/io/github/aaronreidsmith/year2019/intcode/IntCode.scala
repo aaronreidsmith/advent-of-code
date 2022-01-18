@@ -6,7 +6,7 @@ import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.io.StdIn
 
-class IntCode(initialInstructions: Map[Long, Long], initialInput: Seq[Long] = Seq(), suspendOnOutput: Boolean = false) {
+class IntCode(initialInstructions: Instructions, initialInput: Seq[Long] = Seq(), suspendOnOutput: Boolean = false) {
   private val instructions = mutable.Map(initialInstructions.toSeq: _*).withDefaultValue(0)
   private val inputQueue   = mutable.Queue(initialInput: _*)
   private val output       = mutable.ListBuffer.empty[Long]
