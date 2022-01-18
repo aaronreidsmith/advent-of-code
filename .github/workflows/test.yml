@@ -15,10 +15,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2.4.0
 
-      - name: Setup Scala
-        uses: olafurpg/setup-scala@v10
-        with:
-          java-version: amazon-corretto@1.11
+      - name: Setup Cache
+        uses: coursier/cache-action@v6.3
 
-      - name: Test
+      - name: Setup Scala
+        uses: coursier/setup-action@v1.1.2
+        with:
+          jvm: adopt:11
+
+      - name: Run Test Suite
         run: sbt test
