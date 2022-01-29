@@ -1,5 +1,5 @@
 val settings = new {
-  val scalaVersion = "2.13.7"
+  val scalaVersion = "2.13.8"
 
   private val circeVersion = "0.14.1"
 
