@@ -25,11 +25,11 @@ object Day07 extends IntCodeUtils {
 
       // TODO: Use tail recursion or something
       def finished: Boolean = Seq(aIntCode, bIntCode, cIntCode, dIntCode, eIntCode).exists(_.isFinished)
-      var aOutput: Option[Long] = None
-      var bOutput: Option[Long] = None
-      var cOutput: Option[Long] = None
-      var dOutput: Option[Long] = None
-      var eOutput: Option[Long] = None
+      var aOutput           = Option.empty[Long]
+      var bOutput           = Option.empty[Long]
+      var cOutput           = Option.empty[Long]
+      var dOutput           = Option.empty[Long]
+      var eOutput           = Option.empty[Long]
       breakable {
         while (!finished) {
           aOutput = Some(aIntCode.run(eOutput.toSeq).getOutput.last)
