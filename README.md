@@ -1,14 +1,8 @@
 # Advent of Code
 
-My solutions to the [Advent of Code](https://adventofcode.com/).
+My solutions to the [Advent of Code](https://adventofcode.com/) in Scala.
 
-With the exception of Scala, solutions are stored in the following format:
-
-```
-src/main/<language>/<year>/<day-number>
-```
-
-Scala solutions are in:
+Solutions are stored in the following directory structure:
 
 ```
 src/main/scala/io/github/aaronreidsmith/<year>
