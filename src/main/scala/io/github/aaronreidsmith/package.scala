@@ -5,6 +5,8 @@ import scala.util.Using
 
 package object aaronreidsmith {
   case class Point(x: Int, y: Int) {
+    def +(other: Point): Point = Point(x + other.x, y + other.y)
+
     def neighbors: Seq[Point] = for {
       dx <- Seq(-1, 0, 1)
       dy <- Seq(-1, 0, 1)
@@ -12,6 +14,10 @@ package object aaronreidsmith {
     } yield Point(x + dx, y + dy)
 
     def manhattanDistance(that: Point): Int = (this.x - that.x).abs + (this.y - that.y).abs
+  }
+
+  object Point {
+    def zero: Point = Point(0, 0)
   }
 
   type Grid[T] = Map[Point, T]
