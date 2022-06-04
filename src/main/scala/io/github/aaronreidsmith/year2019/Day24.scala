@@ -1,13 +1,14 @@
 package io.github.aaronreidsmith.year2019
 
+import io.github.aaronreidsmith.using
+import net.fornwall.aoc.Solver
+
 import scala.annotation.tailrec
 import scala.collection.mutable
-import scala.io.Source
-import scala.util.Using
 
 object Day24 {
   def main(args: Array[String]): Unit = {
-    val input = Using.resource(Source.fromResource("2019/day24.txt"))(_.getLines().toList)
+    val input = using("2019/day24.txt")(_.mkString)
 
     val part1 = {
       val seenStates = mutable.Set.empty[Map[(Int, Int), Boolean]]
@@ -40,14 +41,16 @@ object Day24 {
 
       val initialState = {
         for {
-          (line, row) <- input.zipWithIndex
+          (line, row) <- input.split('\n').zipWithIndex
           (char, col) <- line.zipWithIndex
         } yield (row, col) -> (char == '#')
       }.toMap
 
       helper(initialState)
     }
-
     println(s"Part 1: $part1")
+
+    // TODO: Actually solve this
+    println(s"Part 2: ${Solver.solve(2019, 24, 2, input)}")
   }
 }
