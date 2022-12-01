@@ -4,6 +4,23 @@ import scala.io.Source
 import scala.util.Using
 
 package object aaronreidsmith {
+  trait Solution extends Runnable {
+    type I  // Input type
+    type O1 // Output type of part 1
+    type O2 // Output type of part 2
+
+    // We want these the be "implemented" so if something doesn't have an input to be parsed or doesn't have a part 2
+    // (such as day 25), it doesn't throw an error
+    protected def parseInput(file: Source): I = ???
+    protected def part1(input: I): O1         = ???
+    protected def part2(input: I): O2         = ???
+
+    // Helper entrypoint so anything that implements the `Solution` trait can also be run individually
+    def main(args: Array[String]): Unit = {
+      run()
+    }
+  }
+
   case class Point(x: Int, y: Int) {
     def +(other: Point): Point = Point(x + other.x, y + other.y)
 
@@ -21,7 +38,7 @@ package object aaronreidsmith {
   }
 
   object Point {
-    def zero: Point = Point(0, 0)
+    def ZERO: Point = Point(0, 0)
   }
 
   type Grid[T] = Map[Point, T]
