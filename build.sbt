@@ -19,3 +19,5 @@ val settings = new {
 scalaVersion := settings.scalaVersion
 libraryDependencies ++= settings.libraryDependencies
 scalacOptions ++= Seq("-deprecation")
+Test / fork := true
+Test / envVars := Map("IS_TEST" -> "true")

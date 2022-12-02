@@ -1,13 +1,17 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Solution, using}
 
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.util.Random
 
 // Copied from my Raku solution, so could probably be cleaned up
-object Day22 {
+object Day22 extends Solution {
+  type I  = GameState
+  type O1 = Int
+  type O2 = Int
+
   private[year2015] case class GameState(
       bossHp: Int,
       bossAttack: Int,
@@ -79,23 +83,25 @@ object Day22 {
   private[year2015] case object Player extends Turn { val next: Turn = Boss   }
   private[year2015] type Winner = Turn
 
-  def main(args: Array[String]): Unit = {
+  def run(): Unit = {
+    println("Year 2015, Day 22")
     val initialGameState = using("2015/day22.txt")(parseInput)
     println(s"Part 1: ${part1(initialGameState)}")
     println(s"Part 2: ${part2(initialGameState)}")
+    println()
   }
 
-  private[year2015] def parseInput(file: Source): GameState = {
+  override protected[year2015] def parseInput(file: Source): GameState = {
     val List(bossHp, bossAttack, _*) = file.getLines().toList.map(line => line.filter(_.isDigit).toInt)
     GameState(bossHp, bossAttack)
   }
 
-  private[year2015] def part1(gameState: GameState): Int = {
+  override protected[year2015] def part1(gameState: GameState): Int = {
     val regularMode = gameState.copy(hardMode = false) // Ensure hard mode is disabled
     solution(regularMode, 10000)
   }
 
-  private[year2015] def part2(gameState: GameState): Int = {
+  override protected[year2015] def part2(gameState: GameState): Int = {
     val hardMode = gameState.copy(hardMode = true) // Ensure hard mode is enabled
     solution(hardMode, 100000)
   }

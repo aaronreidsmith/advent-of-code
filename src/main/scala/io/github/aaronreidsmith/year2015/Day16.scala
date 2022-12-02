@@ -1,21 +1,13 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Solution, using}
 
 import scala.io.Source
 
-object Day16 {
-  private val sue         = "^Sue (\\d+): (.*)$".r
-  private val children    = "^children: (\\d+)$".r
-  private val cats        = "^cats: (\\d+)$".r
-  private val samoyeds    = "^samoyeds: (\\d+)$".r
-  private val pomeranians = "^pomeranians: (\\d+)$".r
-  private val akitas      = "^akitas: (\\d+)$".r
-  private val vizslas     = "^vizslas: (\\d+)$".r
-  private val goldfish    = "^goldfish: (\\d+)$".r
-  private val trees       = "^trees: (\\d+)$".r
-  private val cars        = "^cars: (\\d+)$".r
-  private val perfumes    = "^perfumes: (\\d+)$".r
+object Day16 extends Solution {
+  type I  = List[Sue]
+  type O1 = Int
+  type O2 = Int
 
   private[year2015] case class Sue(
       number: Int,
@@ -31,34 +23,50 @@ object Day16 {
       perfumes: Option[Int] = None
   )
 
-  def main(args: Array[String]): Unit = {
+  def run(): Unit = {
+    println("Year 2015, Day 16")
     val sues = using("2015/day16.txt")(parseInput)
     println(s"Part 1: ${part1(sues)}")
     println(s"Part 2: ${part2(sues)}")
+    println()
   }
 
-  private[year2015] def parseInput(file: Source): List[Sue] = file.getLines().foldLeft(List.empty[Sue]) {
-    case (acc, sue(num, characteristics)) =>
-      val newSue = characteristics.split(", ").foldLeft(Sue(num.toInt)) { (currSue, characteristic) =>
-        characteristic match {
-          case children(childNum)         => currSue.copy(children = Some(childNum.toInt))
-          case cats(catNum)               => currSue.copy(cats = Some(catNum.toInt))
-          case samoyeds(samoyedNum)       => currSue.copy(samoyeds = Some(samoyedNum.toInt))
-          case pomeranians(pomeranianNum) => currSue.copy(pomeranians = Some(pomeranianNum.toInt))
-          case akitas(akitaNum)           => currSue.copy(akitas = Some(akitaNum.toInt))
-          case vizslas(vizslaNum)         => currSue.copy(vizslas = Some(vizslaNum.toInt))
-          case goldfish(goldfishNum)      => currSue.copy(goldfish = Some(goldfishNum.toInt))
-          case trees(treeNum)             => currSue.copy(trees = Some(treeNum.toInt))
-          case cars(carNum)               => currSue.copy(cars = Some(carNum.toInt))
-          case perfumes(perfumeNum)       => currSue.copy(perfumes = Some(perfumeNum.toInt))
-          case _                          => throw new IllegalArgumentException
+  override protected[year2015] def parseInput(file: Source): List[Sue] = {
+    val sue         = "^Sue (\\d+): (.*)$".r
+    val children    = "^children: (\\d+)$".r
+    val cats        = "^cats: (\\d+)$".r
+    val samoyeds    = "^samoyeds: (\\d+)$".r
+    val pomeranians = "^pomeranians: (\\d+)$".r
+    val akitas      = "^akitas: (\\d+)$".r
+    val vizslas     = "^vizslas: (\\d+)$".r
+    val goldfish    = "^goldfish: (\\d+)$".r
+    val trees       = "^trees: (\\d+)$".r
+    val cars        = "^cars: (\\d+)$".r
+    val perfumes    = "^perfumes: (\\d+)$".r
+
+    file.getLines().foldLeft(List.empty[Sue]) {
+      case (acc, sue(num, characteristics)) =>
+        val newSue = characteristics.split(", ").foldLeft(Sue(num.toInt)) { (currSue, characteristic) =>
+          characteristic match {
+            case children(childNum)         => currSue.copy(children = Some(childNum.toInt))
+            case cats(catNum)               => currSue.copy(cats = Some(catNum.toInt))
+            case samoyeds(samoyedNum)       => currSue.copy(samoyeds = Some(samoyedNum.toInt))
+            case pomeranians(pomeranianNum) => currSue.copy(pomeranians = Some(pomeranianNum.toInt))
+            case akitas(akitaNum)           => currSue.copy(akitas = Some(akitaNum.toInt))
+            case vizslas(vizslaNum)         => currSue.copy(vizslas = Some(vizslaNum.toInt))
+            case goldfish(goldfishNum)      => currSue.copy(goldfish = Some(goldfishNum.toInt))
+            case trees(treeNum)             => currSue.copy(trees = Some(treeNum.toInt))
+            case cars(carNum)               => currSue.copy(cars = Some(carNum.toInt))
+            case perfumes(perfumeNum)       => currSue.copy(perfumes = Some(perfumeNum.toInt))
+            case _                          => throw new IllegalArgumentException
+          }
         }
-      }
-      newSue :: acc
-    case _ => throw new IllegalArgumentException
+        newSue :: acc
+      case _ => throw new IllegalArgumentException
+    }
   }
 
-  private[year2015] def part1(sues: List[Sue]): Int = sues
+  override protected[year2015] def part1(sues: List[Sue]): Int = sues
     .filter { sue =>
       val childCheck      = sue.children.fold(true)(_ == 3)
       val catCheck        = sue.cats.fold(true)(_ == 7)
@@ -77,7 +85,7 @@ object Day16 {
     .head
     .number
 
-  private[year2015] def part2(sues: List[Sue]): Int = sues
+  override protected[year2015] def part2(sues: List[Sue]): Int = sues
     .filter { sue =>
       val childCheck      = sue.children.fold(true)(_ == 3)
       val catCheck        = sue.cats.fold(true)(_ > 7)

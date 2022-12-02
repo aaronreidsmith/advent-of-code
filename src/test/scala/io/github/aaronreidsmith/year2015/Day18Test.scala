@@ -12,7 +12,7 @@ class Day18Test extends BaseTest {
         |..#...
         |#.#..#
         |####..""".stripMargin.toGrid
-    Day18.part1(grid, 4) shouldBe 4
+    Day18.part1(grid) shouldBe 4
   }
 
   "Day18.part2" should "work on example input" in {
@@ -23,6 +23,6 @@ class Day18Test extends BaseTest {
         |..#...
         |#.#..#
         |####.#""".stripMargin.toGrid
-    Day18.part2(grid, 5) shouldBe 17
+    Day18.part2(grid) shouldBe 17
   }
 }

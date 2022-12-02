@@ -4,7 +4,7 @@ import scala.annotation.tailrec
 import scala.collection.SortedMap
 
 object AdventOfCode {
-  private lazy val solutions2015: SortedMap[Int, Solution] = {
+  private val solutions2015: SortedMap[Int, Solution] = {
     import year2015._
     SortedMap(
       1  -> Day01,
@@ -16,19 +16,34 @@ object AdventOfCode {
       7  -> Day07,
       8  -> Day08,
       9  -> Day09,
-      10 -> Day10
+      10 -> Day10,
+      11 -> Day11,
+      12 -> Day12,
+      13 -> Day13,
+      14 -> Day14,
+      15 -> Day15,
+      16 -> Day16,
+      17 -> Day17,
+      18 -> Day18,
+      19 -> Day19,
+      20 -> Day20,
+      21 -> Day21,
+      22 -> Day22,
+      23 -> Day23,
+      24 -> Day24,
+      25 -> Day25
     )
   }
 
-  private lazy val solutions2016: SortedMap[Int, Solution] = SortedMap()
-  private lazy val solutions2017: SortedMap[Int, Solution] = SortedMap()
-  private lazy val solutions2018: SortedMap[Int, Solution] = SortedMap()
-  private lazy val solutions2019: SortedMap[Int, Solution] = SortedMap()
-  private lazy val solutions2020: SortedMap[Int, Solution] = SortedMap()
-  private lazy val solutions2021: SortedMap[Int, Solution] = SortedMap()
-  private lazy val solutions2022: SortedMap[Int, Solution] = SortedMap()
+  private val solutions2016: SortedMap[Int, Solution] = SortedMap()
+  private val solutions2017: SortedMap[Int, Solution] = SortedMap()
+  private val solutions2018: SortedMap[Int, Solution] = SortedMap()
+  private val solutions2019: SortedMap[Int, Solution] = SortedMap()
+  private val solutions2020: SortedMap[Int, Solution] = SortedMap()
+  private val solutions2021: SortedMap[Int, Solution] = SortedMap()
+  private val solutions2022: SortedMap[Int, Solution] = SortedMap()
 
-  private lazy val allSolutions: SortedMap[Int, SortedMap[Int, Solution]] = SortedMap(
+  private val allSolutions: SortedMap[Int, SortedMap[Int, Solution]] = SortedMap(
     2015 -> solutions2015,
     2016 -> solutions2016,
     2017 -> solutions2017,

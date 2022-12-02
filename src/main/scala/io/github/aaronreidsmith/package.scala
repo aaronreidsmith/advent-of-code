@@ -19,6 +19,9 @@ package object aaronreidsmith {
     def main(args: Array[String]): Unit = {
       run()
     }
+
+    // Helper function to see if we are in a test environment
+    def isTest: Boolean = Option(System.getenv("IS_TEST")).fold(false)(_.toBooleanOption.contains(true))
   }
 
   case class Point(x: Int, y: Int) {

@@ -26,7 +26,7 @@ object Day04 extends Solution {
     .getOrElse(-1)
 
   override protected[year2015] def part2(input: String): Int = LazyList
-    .from(9_000_000)
+    .from(1)
     .collectFirst {
       case i if md5(s"$input$i").startsWith("000000") => i
     }

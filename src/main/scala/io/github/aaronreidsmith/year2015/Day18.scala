@@ -4,23 +4,34 @@ import io.github.aaronreidsmith._
 import io.github.aaronreidsmith.implicits._
 
 import scala.annotation.tailrec
+import scala.io.Source
 
-object Day18 {
-  def main(args: Array[String]): Unit = {
-    val grid = using("2015/day18.txt")(_.toGrid)
+object Day18 extends Solution {
+  type I  = Grid[Char]
+  type O1 = Int
+  type O2 = Int
+
+  private val part1Iterations = if (isTest) 4 else 100
+  private val part2Iterations = if (isTest) 5 else 100
+
+  def run(): Unit = {
+    println("Year 2015, Day 18")
+    val grid = using("2015/day18.txt")(parseInput)
     println(s"Part 1: ${part1(grid)}")
     println(s"Part 2: ${part2(grid)}")
+    println()
   }
 
-  private[year2015] def part1(grid: Grid[Char], iterations: Int = 100): Int = solution(grid, iterations, Seq(), 0)
-  private[year2015] def part2(grid: Grid[Char], iterations: Int = 100): Int = {
+  override protected[year2015] def parseInput(file: Source): Grid[Char] = file.toGrid
+  override protected[year2015] def part1(grid: Grid[Char]): Int         = solution(grid, part1Iterations, Seq(), 0)
+  override protected[year2015] def part2(grid: Grid[Char]): Int = {
     val (rows, cols) = grid.keys.unzip
     val corners = for {
       row <- Seq(rows.min, rows.max)
       col <- Seq(cols.min, cols.max)
     } yield Point(row, col)
     val cornersOn = grid ++ corners.map(_ -> '#')
-    solution(cornersOn, iterations, corners, 0)
+    solution(cornersOn, part2Iterations, corners, 0)
   }
 
   @tailrec
