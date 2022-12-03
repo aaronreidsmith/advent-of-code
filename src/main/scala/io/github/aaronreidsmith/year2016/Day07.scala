@@ -1,19 +1,26 @@
 package io.github.aaronreidsmith.year2016
 
+import io.github.aaronreidsmith.{Solution, using}
+
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day07 {
-  def main(args: Array[String]): Unit = {
-    val input      = Source.fromResource("2016/day07.txt")
-    val inputLines = input.getLines().toList
-    input.close()
+object Day07 extends Solution {
+  type I  = List[String]
+  type O1 = Int
+  type O2 = Int
 
-    val part1 = inputLines.count(supportsTls)
-    println(s"Part 1: $part1")
-    val part2 = inputLines.count(supportsSsl)
-    println(s"Part 2: $part2")
+  def run(): Unit = {
+    println(s"Year 2016, Day 7")
+    val input = using("2016/day07.txt")(parseInput)
+    println(s"Part 1: ${part1(input)}")
+    println(s"Part 2: ${part2(input)}")
+    println()
   }
+
+  override protected[year2016] def parseInput(file: Source): List[String] = file.getLines().toList
+  override protected[year2016] def part1(input: List[String]): Int        = input.count(supportsTls)
+  override protected[year2016] def part2(input: List[String]): Int        = input.count(supportsSsl)
 
   private def matchesAbba(entry: String): Boolean = entry.sliding(4).exists { quartet =>
     val Array(a, b, c, d, _*) = quartet.split("")
@@ -42,7 +49,7 @@ object Day07 {
     }
   }
 
-  def supportsSsl(ip: String): Boolean = {
+  private def supportsSsl(ip: String): Boolean = {
     val (noBrackets, inBrackets) = split(ip)
     val abaSequences = noBrackets.flatMap { entry =>
       entry.sliding(3).flatMap { triplet =>
@@ -58,7 +65,7 @@ object Day07 {
     }
   }
 
-  def supportsTls(ip: String): Boolean = {
+  private def supportsTls(ip: String): Boolean = {
     val (noBrackets, inBrackets) = split(ip)
     noBrackets.exists(matchesAbba) && !inBrackets.exists(matchesAbba)
   }

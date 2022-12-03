@@ -11,6 +11,7 @@ object Day25 extends Solution {
     println("Year 2015, Day 25")
     val input = (2978, 3083)
     println(s"Part 1: ${part1(input)}")
+    println()
   }
 
   override protected[year2015] def part1(input: (Int, Int)): Long = {

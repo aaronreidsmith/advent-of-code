@@ -1,11 +1,12 @@
 package io.github.aaronreidsmith.year2015
 
 import io.github.aaronreidsmith.BaseTest
+import org.scalatest.tagobjects.Slow
 
 class Day20Test extends BaseTest {
   private val input = 34000000
 
-  "Day20.part1" should "work on actual input" in {
+  "Day20.part1" should "work on actual input" taggedAs Slow in {
     Day20.part1(input) shouldBe 786240
   }
 

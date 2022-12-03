@@ -1,52 +1,64 @@
 package io.github.aaronreidsmith.year2016
 
+import io.github.aaronreidsmith.{Solution, using}
+
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day04 {
-  private val entry = "^([a-z-]+)-([0-9]+)\\[([a-z]+)]$".r
+object Day04 extends Solution {
+  type I  = List[String]
+  type O1 = Int
+  type O2 = Int
 
-  def main(args: Array[String]): Unit = {
-    val input      = Source.fromResource("2016/day04.txt")
-    val inputLines = input.getLines().toList
-    input.close()
+  def run(): Unit = {
+    println("Year 2016, Day 4")
+    val input = using("2016/day04.txt")(parseInput)
+    println(s"Part 1: ${part1(input)}")
+    println(s"Part 2: ${part2(input)}")
+    println()
+  }
 
-    val part1 = inputLines.foldLeft(0) { (acc, line) =>
-      val (_, sectorId, _) = filterAndExtract(line)
-      acc + sectorId
-    }
-    println(s"Part 1: $part1")
+  override protected[year2016] def parseInput(file: Source): List[String] = file.getLines().toList
 
-    val part2 = inputLines
-      .foldLeft(List.empty[(String, Int)]) { (acc, line) =>
+  override protected[year2016] def part1(input: List[String]): Int = input.foldLeft(0) { (acc, line) =>
+    val (_, sectorId, _) = filterAndExtract(line)
+    acc + sectorId
+  }
+
+  override protected[year2016] def part2(input: List[String]): Int = {
+    val target = if (isTest) "very encrypted name" else "northpole object storage"
+    input
+      .foldLeft(Vector.empty[(String, Int)]) { (acc, line) =>
         val (name, sectorId, _) = filterAndExtract(line)
         if (sectorId != 0) {
-          val rotatedName = name.foldLeft("")(_ + rotate(_, sectorId).toString)
+          val rotatedName = name.map(rotate(_, sectorId).toString).mkString
           acc :+ (rotatedName, sectorId)
         } else {
           acc
         }
       }
       .collectFirst {
-        case (decryptedName, sectorId) if decryptedName == "northpole object storage" => sectorId
+        case (decryptedName, sectorId) if decryptedName == target => sectorId
       }
       .getOrElse(-1)
-    println(s"Part 2: $part2")
   }
 
-  private def filterAndExtract(doorId: String): (String, Int, String) = doorId match {
-    case entry(name, sectorId, checksum) =>
-      val top5 = name
-        .replace("-", "")
-        .groupBy(identity)
-        .toList
-        .sortBy { case (char, occurrences) => (-occurrences.length, char) }
-        .take(5)
-        .map { case (char, _) => char }
-        .mkString
-      val filteredId = if (checksum == top5) sectorId.toInt else 0
-      (name, filteredId, checksum)
-    case _ => throw new IllegalArgumentException
+  private def filterAndExtract(doorId: String): (String, Int, String) = {
+    val entry = "^([a-z-]+)-([0-9]+)\\[([a-z]+)]$".r
+    doorId match {
+      case entry(name, sectorId, checksum) =>
+        val top5 = name
+          .replace("-", "")
+          .groupBy(identity)
+          .toList
+          .sortBy { case (char, occurrences) => (-occurrences.length, char) }
+          .take(5)
+          .map { case (char, _) => char }
+          .mkString
+        val filteredId = if (checksum == top5) sectorId.toInt else 0
+        (name, filteredId, checksum)
+      case _ => throw new IllegalArgumentException
+    }
   }
 
   @tailrec

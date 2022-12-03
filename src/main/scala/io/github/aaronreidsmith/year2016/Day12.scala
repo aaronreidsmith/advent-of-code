@@ -1,14 +1,15 @@
 package io.github.aaronreidsmith.year2016
 
+import io.github.aaronreidsmith.{Solution, using}
+
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
-object Day12 {
-  private val cpy = "^cpy (.*) (.*)$".r
-  private val inc = "^inc (.*)$".r
-  private val dec = "^dec (.*)$".r
-  private val jnz = "^jnz (.*) (.*)$".r
+object Day12 extends Solution {
+  type I  = Vector[String]
+  type O1 = Int
+  type O2 = Int
 
   private implicit class RichString(str: String) {
     def toIntOrValue(registers: Map[String, Int]): Int = Try(str.toInt) match {
@@ -21,17 +22,29 @@ object Day12 {
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    val input        = Source.fromResource("2016/day12.txt")
-    val instructions = input.getLines().toVector
-    input.close()
-
-    println(s"Part 1: ${solution(instructions, Map("a" -> 0, "b" -> 0, "c" -> 0, "d" -> 0))}")
-    println(s"Part 2: ${solution(instructions, Map("a" -> 0, "b" -> 0, "c" -> 1, "d" -> 0))}")
+  def run(): Unit = {
+    println("Year 2016, Day 12")
+    val input = using("2016/day12.txt")(parseInput)
+    println(s"Part 1: ${part1(input)}")
+    println(s"Part 2: ${part2(input)}")
+    println()
   }
 
+  override protected[year2016] def parseInput(file: Source): Vector[String] = file.getLines().toVector
+  override protected[year2016] def part1(input: Vector[String]): Int = {
+    solution(input, Map("a" -> 0, "b" -> 0, "c" -> 0, "d" -> 0))
+  }
+  override protected[year2016] def part2(input: Vector[String]): Int = {
+    solution(input, Map("a" -> 0, "b" -> 0, "c" -> 1, "d" -> 0))
+  }
+
+  // Top-level so they are only compiled once
+  private val cpy = "^cpy (.*) (.*)$".r
+  private val inc = "^inc (.*)$".r
+  private val dec = "^dec (.*)$".r
+  private val jnz = "^jnz (.*) (.*)$".r
   @tailrec
-  private def solution(instructions: Vector[String], registers: Map[String, Int], pointer: Int = 0): Int =
+  private def solution(instructions: Vector[String], registers: Map[String, Int], pointer: Int = 0): Int = {
     if (pointer < 0 || pointer >= instructions.length) {
       registers("a")
     } else {
@@ -45,4 +58,5 @@ object Day12 {
       }
       solution(instructions, updatedRegisters, updatedPointer)
     }
+  }
 }
