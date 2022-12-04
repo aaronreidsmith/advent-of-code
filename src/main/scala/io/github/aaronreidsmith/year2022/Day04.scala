@@ -11,7 +11,7 @@ object Day04 {
     println(s"Part 2: ${part2(input)}")
   }
 
-  protected[year2022] def parseInput(file: Source): List[(Range, Range)] = {
+  protected[year2022] def parseInput(file: Source): List[(Set[Int], Set[Int])] = {
     file
       .getLines()
       .toList
@@ -19,18 +19,16 @@ object Day04 {
         val Array(left, right, _*)        = line.split(',')
         val Array(leftMin, leftMax, _*)   = left.split('-').map(_.toInt)
         val Array(rightMin, rightMax, _*) = right.split('-').map(_.toInt)
-        (leftMin to leftMax, rightMin to rightMax)
+        ((leftMin to leftMax).toSet, (rightMin to rightMax).toSet)
       }
   }
 
-  protected[year2022] def part1(input: List[(Range, Range)]): Int = input.count {
-    case (left, right) =>
-      val intersection = left.intersect(right)
-      left == intersection || right == intersection
-    case _ => false
+  protected[year2022] def part1(input: List[(Set[Int], Set[Int])]): Int = input.count {
+    case (left, right) => left.subsetOf(right) || right.subsetOf(left)
+    case _             => false
   }
 
-  protected[year2022] def part2(input: List[(Range, Range)]): Int = input.count {
+  protected[year2022] def part2(input: List[(Set[Int], Set[Int])]): Int = input.count {
     case (left, right) => left.intersect(right).nonEmpty
     case _             => false
   }
