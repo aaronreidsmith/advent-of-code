@@ -16,15 +16,9 @@ object Day05 {
     val Array(stackString, instructionString, _*) = file.mkString.split("\n\n")
 
     // Transpose our stacks and then parse them into map like this: Map(1 -> 'NZ', 2 -> 'DCM', 3 -> 'P')
-    val stacks    = stackString.split('\n').toList
-    val maxLength = stacks.map(_.length).max // Have to make sure all lines are the same length for transpose
-    val transposed = stacks
-      .map {
-        case line if line.length < maxLength => line.padTo(maxLength, ' ')
-        case line                            => line
-      }
-      .transpose
-      .map(_.mkString)
+    val stacks     = stackString.split('\n').toList
+    val maxLength  = stacks.map(_.length).max // Have to make sure all lines are the same length for transpose
+    val transposed = stacks.map(_.padTo(maxLength, ' ')).transpose.map(_.mkString)
 
     val numbersAndDigits = "[A-Z1-9]".r
     val parsedStacks = transposed.foldLeft(Map.empty[Int, String]) { (acc, stack) =>
@@ -53,8 +47,8 @@ object Day05 {
 
     val instruction = """^move (\d+) from (\d) to (\d)$""".r
     val updated = instructions.foldLeft(stacks) {
-      case (acc, instruction(numToMove, fromStr, toStr)) =>
-        val num  = numToMove.toInt
+      case (acc, instruction(numStr, fromStr, toStr)) =>
+        val num  = numStr.toInt
         val from = fromStr.toInt
         val to   = toStr.toInt
         if (part2) {
