@@ -15,7 +15,7 @@ object Day05 {
   protected[year2022] def parseInput(file: Source): (Map[Int, String], List[String]) = {
     val Array(stackString, instructionString, _*) = file.mkString.split("\n\n")
 
-    // Transpose our stacks and then parse them into map like this: Map(1 -> 'NZ', 2 -< 'DCM', 3 -> 'P')
+    // Transpose our stacks and then parse them into map like this: Map(1 -> 'NZ', 2 -> 'DCM', 3 -> 'P')
     val stacks    = stackString.split('\n').toList
     val maxLength = stacks.map(_.length).max // Have to make sure all lines are the same length for transpose
     val transposed = stacks
