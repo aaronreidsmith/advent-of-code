@@ -18,7 +18,7 @@ object Day06 {
   private def solution(input: String, markerSize: Int): Int = input.zipWithIndex
     .sliding(markerSize)
     .collectFirst {
-      case quartet if quartet.map(_._1).distinct.size == markerSize => quartet.map(_._2).last + 1
+      case group if group.map(_._1).distinct.size == markerSize => group.map(_._2).last + 1
     }
     .get
 }
