@@ -14,6 +14,7 @@ object Day16 extends Solution {
     val input = "10001110011110000"
     println(s"Part 1: ${part1(input)}")
     println(s"Part 2: ${part2(input)}")
+    println()
   }
 
   override protected[year2016] def part1(input: String): String = checksum(modifiedDragon(input, 272))

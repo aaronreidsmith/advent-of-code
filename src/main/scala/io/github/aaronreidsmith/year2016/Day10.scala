@@ -51,8 +51,14 @@ object Day10 extends Solution {
     solution(bots, pipeline)._2
   }
 
-  private lazy val solution: (Map[Int, Vector[Int]], Map[Int, ((String, Int), (String, Int))]) => (Int, Int) =
-    (initialBots, pipeline) => {
+  // Both solutions require the same traversal, so might as well only do it once
+  private var solved = false
+  private var answer = (0, 0)
+  private def solution(
+      initialBots: Map[Int, Vector[Int]],
+      pipeline: Map[Int, ((String, Int), (String, Int))]
+  ): (Int, Int) = {
+    if (!solved) {
       val bots        = mutable.Map(initialBots.toSeq: _*).withDefaultValue(Vector())
       val output      = mutable.Map.empty[Int, Vector[Int]].withDefaultValue(Vector())
       var part1Answer = -1
@@ -83,6 +89,10 @@ object Day10 extends Solution {
       }
       val part2Answer = Seq(0, 1, 2).foldLeft(1)((acc, location) => acc * output(location).head)
 
-      (part1Answer, part2Answer)
+      answer = (part1Answer, part2Answer)
+      solved = true
     }
+
+    answer
+  }
 }

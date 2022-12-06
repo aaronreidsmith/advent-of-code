@@ -1,79 +1,82 @@
 package io.github.aaronreidsmith.year2016
 
-import scala.collection.mutable
+import io.github.aaronreidsmith.implicits.SourceOps
+import io.github.aaronreidsmith.{Point, Solution, using}
+import org.jgrapht.alg.shortestpath.BFSShortestPath
+import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
+
 import scala.io.Source
-import scala.util.Using
+import scala.jdk.CollectionConverters._
 
 // The majority of this is adapted from https://www.reddit.com/r/adventofcode/comments/5k1he1/comment/dbknd6b
-object Day24 {
-  private implicit class Tuple2Ops(tuple: (Int, Int)) {
-    private val (row, col) = tuple
+object Day24 extends Solution {
+  type I  = DefaultUndirectedGraph[(Point, Char), DefaultEdge]
+  type O1 = Int
+  type O2 = Int
 
-    private def left: (Int, Int)  = (row, col - 1)
-    private def right: (Int, Int) = (row, col + 1)
-    private def up: (Int, Int)    = (row - 1, col)
-    private def down: (Int, Int)  = (row + 1, col)
-
-    def neighbors: Seq[(Int, Int)] = Seq(left, right, up, down)
+  def run(): Unit = {
+    println("Year 2016, Day 24")
+    val input = using("2016/day24.txt")(parseInput)
+    println(s"Part 1: ${part1(input)}")
+    println(s"Part 2: ${part2(input)}")
+    println()
   }
 
-  def main(args: Array[String]): Unit = {
-    val grid = Using
-      .resource(Source.fromResource("2016/day24.txt")) { file =>
-        {
-          for {
-            (line, row) <- file.getLines().zipWithIndex
-            (char, col) <- line.zipWithIndex
-          } yield (row, col) -> char
-        }.toMap
-      }
-      .withDefaultValue('#')
-    val startPosition = grid.collectFirst { case (position, value) if value == '0' => position }.get
-    // Find all non-zero positions
-    val targetPositions =
-      ('1' to '7').map(char => grid.collectFirst { case (position, value) if value == char => position }.get)
-    // Precompute distance from 0 to all other numbers
-    val distanceFromZero = targetPositions.map { target => bfsFromTo(grid, startPosition, target) }
-    // Precompute distance from 0 to all other numbers
-    val K = distanceFromZero.length
-    val distances = {
-      for {
-        i <- 0 until K
-        j <- i + 1 until K
-        distance = bfsFromTo(grid, targetPositions(i), targetPositions(j))
-      } yield Seq((i, j) -> distance, (j, i) -> distance)
-    }.flatten.toMap
-
-    // Iterate through all possible paths and find the shortest one for each part
-    val (part1, part2) = (0 until 7).permutations.foldLeft((Int.MaxValue, Int.MaxValue)) {
-      case ((part1Acc, part2Acc), path) =>
-        val distance = path.sliding(2).foldLeft(distanceFromZero(path.head)) {
-          case (acc, Seq(a, b)) => acc + distances((a, b))
+  override protected[year2016] def parseInput(file: Source): DefaultUndirectedGraph[(Point, Char), DefaultEdge] = {
+    val grid  = file.toGrid
+    val graph = new DefaultUndirectedGraph[(Point, Char), DefaultEdge](classOf[DefaultEdge])
+    grid.foreach {
+      case (point, char) if char != '#' =>
+        graph.addVertex((point, char))
+        point.immediateNeighbors.foreach { neighbor =>
+          val neighborValue = grid(neighbor)
+          if (neighborValue != '#') {
+            graph.addVertex((neighbor, neighborValue))
+            graph.addEdge((point, char), (neighbor, neighborValue))
+          }
         }
-        val newPart1 = Seq(part1Acc, distance).min
-        val newPart2 = Seq(part2Acc, distance + distanceFromZero(path.last)).min
-        (newPart1, newPart2)
+      case _ => // do nothing
     }
-    println(s"Part 1: $part1")
-    println(s"Part 2: $part2")
+    graph
   }
 
-  // Hate this function, but not smart enough to refactor it, lol
-  private def bfsFromTo(grid: Map[(Int, Int), Char], from: (Int, Int), to: (Int, Int)): Int = {
-    val q       = mutable.ArrayDeque((0, from))
-    val visited = mutable.Set(from)
-    while (q.nonEmpty) {
-      val (destination, current) = q.removeLast()
-      if (current == to) {
-        return destination
+  override protected[year2016] def part1(input: DefaultUndirectedGraph[(Point, Char), DefaultEdge]): Int = {
+    solution(input)._1
+  }
+  override protected[year2016] def part2(input: DefaultUndirectedGraph[(Point, Char), DefaultEdge]): Int = {
+    solution(input)._2
+  }
+
+  // Both solutions require the same traversal, so might as well only do it once
+  private var solved = false
+  private var answer = (0, 0)
+  private def solution(graph: DefaultUndirectedGraph[(Point, Char), DefaultEdge]): (Int, Int) = {
+    if (!solved) {
+      val vertices          = graph.vertexSet().asScala
+      val start             = vertices.find { case (_, char) => char == '0' }.get
+      val targets           = vertices.filter { case (_, char) => char != '.' && char != '0' }.toVector.sortBy(_._2)
+      val distancesFromZero = targets.map(target => BFSShortestPath.findPathBetween(graph, start, target).getLength)
+      val segments          = distancesFromZero.size
+      val allDistances = {
+        for {
+          i <- 0 until segments
+          j <- i + 1 until segments
+          distance = BFSShortestPath.findPathBetween(graph, targets(i), targets(j)).getLength
+        } yield Seq((i, j) -> distance, (j, i) -> distance)
+      }.flatten.toMap
+
+      answer = (0 until segments).permutations.foldLeft((Int.MaxValue, Int.MaxValue)) {
+        case ((part1Acc, part2Acc), path) =>
+          val distance = path.sliding(2).foldLeft(distancesFromZero(path.head)) {
+            case (acc, Seq(a, b)) => acc + allDistances((a, b))
+            case (acc, _)         => acc
+          }
+          (part1Acc.min(distance), part2Acc.min(distance + distancesFromZero(path.last)))
+        case (acc, _) => acc
       }
-      current.neighbors.foreach { neighbor =>
-        if (grid(neighbor) != '#' && !visited.contains(neighbor)) {
-          q.prepend((destination + 1, neighbor))
-          visited.add(neighbor)
-        }
-      }
+      solved = true
     }
-    -1
+
+    answer
   }
 }

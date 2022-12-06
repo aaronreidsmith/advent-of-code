@@ -1,59 +1,73 @@
 package io.github.aaronreidsmith.year2016
 
+import io.github.aaronreidsmith.{Point, Solution, using}
+
 import scala.io.Source
 
-object Day22 {
-  protected[this] case class Node(used: Int, available: Int) {
+object Day22 extends Solution {
+  type I  = Map[Point, Node]
+  type O1 = Int
+  type O2 = Int
+
+  protected[year2016] case class Node(used: Int, available: Int) {
     private val totalSpace = used + available
 
     def isEmpty: Boolean  = used == 0
-    def nonEmpty: Boolean = !isEmpty
+    def nonEmpty: Boolean = used != 0
 
     override def toString: String = {
-      val _used = if (used == 0) "__" else used
+      val _used = if (isEmpty) "__" else used
       // High capacity nodes are basically walls since they are already full
       if (totalSpace >= 500) "|||||" else s"${_used}/$totalSpace"
     }
   }
 
-  private val nodeEntry = "^/dev/grid/node-x(\\d+)-y(\\d+)\\s+\\d+T\\s+(\\d+)T\\s+(\\d+)T\\s+\\d+%$".r
-
-  def main(args: Array[String]): Unit = {
-    val input = Source.fromResource("2016/day22.txt")
-    val nodes = input.getLines().drop(2).foldLeft(Map.empty[(Int, Int), Node]) { (acc, line) =>
-      line match {
-        case nodeEntry(x, y, used, available) =>
-          val (row, col) = (x.toInt, y.toInt)
-          acc + ((row, col) -> Node(used.toInt, available.toInt))
-        case other => throw new IllegalArgumentException(other)
-      }
-    }
-    input.close()
-
-    val part1 = {
-      for {
-        node  <- nodes.values
-        other <- nodes.values if other != node && node.nonEmpty && node.used <= other.available
-      } yield 1
-    }.sum
-    println(s"Part 1: $part1")
-
-    // Solved by hand like so: https://www.reddit.com/r/adventofcode/comments/5jor9q/comment/dbhvxkp/
-    // 62 steps to move hole to bottom left, then 29 cycles of 5 to move it to the top left. 29 * 5 + 62 = 207
-    printGrid(nodes)
+  def run(): Unit = {
+    println("Year 2016, Day 22")
+    val input = using("2016/day22.txt")(parseInput)
+    println(s"Part 1: ${part1(input)}")
+    println(s"Part 2: ${part2(input)}")
+    println()
   }
 
-  private def printGrid(grid: Map[(Int, Int), Node]): Unit = {
-    var row = 0
-    grid.toSeq
-      .sortBy { case (position, _) => position }
-      .foreach {
-        case ((currRow, _), node) =>
-          if (currRow != row) {
-            row += 1
-            println()
-          }
-          print(s"$node ")
+  override protected[year2016] def parseInput(file: Source): Map[Point, Node] = {
+    val nodeEntry = "^/dev/grid/node-x(\\d+)-y(\\d+)\\s+\\d+T\\s+(\\d+)T\\s+(\\d+)T\\s+\\d+%$".r
+
+    file
+      .getLines()
+      .drop(2)
+      .foldLeft(Map.empty[Point, Node]) {
+        case (acc, nodeEntry(x, y, used, available)) =>
+          val (row, col) = (x.toInt, y.toInt)
+          acc + (Point(row, col) -> Node(used.toInt, available.toInt))
+        case (acc, _) => acc
       }
+  }
+
+  override protected[year2016] def part1(input: Map[Point, Node]): Int = input.values.foldLeft(0) {
+    case (acc, node) if node.nonEmpty =>
+      acc + input.values.count(other => other != node && node.used <= other.available)
+    case (acc, _) => acc
+  }
+
+  override protected[year2016] def part2(input: Map[Point, Node]): Int = {
+    def printGrid(grid: Map[Point, Node]): Unit = {
+      var row = 0
+      grid.toSeq
+        .sortBy { case (position, _) => (position.x, position.y) }
+        .foreach {
+          case (pos, node) =>
+            if (pos.x != row) {
+              row += 1
+              println()
+            }
+            print(s"$node ")
+        }
+    }
+
+    // TODO: Solved by hand like so: https://www.reddit.com/r/adventofcode/comments/5jor9q/comment/dbhvxkp/.
+    //  Maybe I will do this via code some day
+    // printGrid(input)
+    207
   }
 }

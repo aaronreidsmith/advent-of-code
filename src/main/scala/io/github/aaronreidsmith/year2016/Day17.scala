@@ -18,26 +18,32 @@ object Day17 extends Solution {
     println()
   }
 
-  override protected[year2016] def part1(input: String): String = allPaths(input).minBy(_.length)
-  override protected[year2016] def part2(input: String): Int    = allPaths(input).map(_.length).max
+  override protected[year2016] def part1(input: String): String = getAllPaths(input).minBy(_.length)
+  override protected[year2016] def part2(input: String): Int    = getAllPaths(input).map(_.length).max
 
-  private lazy val allPaths: String => Seq[String] = input => {
-    val open = 'b' to 'z'
-    def helper(currentPath: String, position: (Int, Int)): Seq[String] = if (position == (3, 3)) {
-      Seq(currentPath)
-    } else {
-      val Seq(upOpen, downOpen, leftOpen, rightOpen) = md5(input + currentPath).take(4).map(open.contains)
+  // Both solutions require the same traversal, so might as well only do it once
+  private var allPaths = Seq.empty[String]
+  private def getAllPaths(input: String): Seq[String] = {
+    if (allPaths.isEmpty || isTest) {
+      val open = 'b' to 'z'
+      def helper(currentPath: String, position: (Int, Int)): Seq[String] = if (position == (3, 3)) {
+        Seq(currentPath)
+      } else {
+        val Seq(upOpen, downOpen, leftOpen, rightOpen) = md5(input + currentPath).take(4).map(open.contains)
 
-      val (row, col) = position
-      val upPaths    = if (upOpen && row - 1 >= 0) helper(currentPath + "U", (row - 1, col)) else Seq()
-      val downPaths  = if (downOpen && row + 1 <= 3) helper(currentPath + "D", (row + 1, col)) else Seq()
-      val leftPaths  = if (leftOpen && col - 1 >= 0) helper(currentPath + "L", (row, col - 1)) else Seq()
-      val rightPaths = if (rightOpen && col + 1 <= 3) helper(currentPath + "R", (row, col + 1)) else Seq()
+        val (row, col) = position
+        val upPaths    = if (upOpen && row - 1 >= 0) helper(currentPath + "U", (row - 1, col)) else Seq()
+        val downPaths  = if (downOpen && row + 1 <= 3) helper(currentPath + "D", (row + 1, col)) else Seq()
+        val leftPaths  = if (leftOpen && col - 1 >= 0) helper(currentPath + "L", (row, col - 1)) else Seq()
+        val rightPaths = if (rightOpen && col + 1 <= 3) helper(currentPath + "R", (row, col + 1)) else Seq()
 
-      upPaths ++ downPaths ++ leftPaths ++ rightPaths
+        upPaths ++ downPaths ++ leftPaths ++ rightPaths
+      }
+
+      allPaths = helper("", (0, 0))
     }
 
-    helper("", (0, 0))
+    allPaths
   }
 
   private val md = MessageDigest.getInstance("MD5")
