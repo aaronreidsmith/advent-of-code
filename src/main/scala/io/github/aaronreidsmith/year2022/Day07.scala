@@ -18,13 +18,13 @@ object Day07 {
     val directories = mutable.Set("/")
 
     // Regex variables; we don't care about 'ls'
-    val commandRegex = """^\$ (\S+)\s?(\S+)?$""".r
-    val dirRegex     = """^dir (\S+)$""".r
-    val fileRegex    = """^(\d+) (\S+)$""".r
+    val cdRegex   = """^\$ cd (\S+)$""".r
+    val dirRegex  = """^dir (\S+)$""".r
+    val fileRegex = """^(\d+) (\S+)$""".r
 
     // Skip first line for ease
     file.getLines().drop(1).foldLeft("") {
-      case (currentDir, commandRegex(command, directory)) if command == "cd" =>
+      case (currentDir, cdRegex(directory)) =>
         if (directory == "..") currentDir.split('/').init.mkString("/") else s"$currentDir/$directory"
       case (currentDir, dirRegex(name)) =>
         directories.add(s"$currentDir/$name")
