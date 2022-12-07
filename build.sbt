@@ -4,6 +4,7 @@ val settings = new {
   private val circeVersion = "0.14.1"
 
   val libraryDependencies = Seq(
+    "com.google.guava"        % "guava"                    % "31.1-jre",
     "io.circe"               %% "circe-parser"             % circeVersion,
     "io.circe"               %% "circe-optics"             % circeVersion,
     "net.fornwall"            % "aoc"                      % "2019.12.442", // TODO: Don't rely on this
