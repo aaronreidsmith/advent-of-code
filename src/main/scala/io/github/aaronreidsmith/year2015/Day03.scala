@@ -21,7 +21,7 @@ object Day03 extends Solution {
   override protected[year2015] def parseInput(file: Source): String = file.mkString
 
   override protected[year2015] def part1(instructions: String): Int = {
-    val (_, seenHouses) = instructions.foldLeft(Point.ZERO, Set(Point.ZERO)) {
+    val (_, seenHouses) = instructions.foldLeft(Point.zero, Set(Point.zero)) {
       case ((point, seen), char) =>
         val nextPos = nextPosition(point, char)
         (nextPos, seen + nextPos)
@@ -33,11 +33,11 @@ object Day03 extends Solution {
   override protected[year2015] def part2(instructions: String): Int = {
     @tailrec
     def helper(
-        pointer: Int = 0,
-        santaPos: Point = Point.ZERO,
-        santaSeen: Set[Point] = Set(Point.ZERO),
-        robotSantaPos: Point = Point.ZERO,
-        robotSantaSeen: Set[Point] = Set(Point.ZERO)
+                pointer: Int = 0,
+                santaPos: Point = Point.zero,
+                santaSeen: Set[Point] = Set(Point.zero),
+                robotSantaPos: Point = Point.zero,
+                robotSantaSeen: Set[Point] = Set(Point.zero)
     ): Int = if (pointer >= instructions.length) {
       (santaSeen ++ robotSantaSeen).size
     } else {

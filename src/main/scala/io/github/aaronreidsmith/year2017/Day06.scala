@@ -1,58 +1,67 @@
 package io.github.aaronreidsmith.year2017
 
-import scala.annotation.tailrec
+import io.github.aaronreidsmith.{Solution, using}
+
+import scala.collection.mutable
 import scala.io.Source
 
-object Day06 {
-  def main(args: Array[String]): Unit = {
-    val input = Source.fromResource("2017/day06.txt")
-    val banks = input.mkString.split('\t').map(_.toInt).toList
-    input.close()
+object Day06 extends Solution {
+  type I  = List[Int]
+  type O1 = Int
+  type O2 = Int
 
-    val (infiniteState, part1) = partOne(banks)
-    println(s"Part 1: $part1")
-    println(s"Part 2: ${partTwo(infiniteState, infiniteState)}")
+  def run(): Unit = {
+    val input = using("2017/day06.txt")(parseInput)
+    println(s"Part 1: ${part1(input)}")
+    println(s"Part 2: ${part2(input)}")
   }
 
-  @tailrec
-  private def partOne(currentState: List[Int], seen: Set[List[Int]] = Set(), iterations: Int = 0): (List[Int], Int) = {
-    if (seen.contains(currentState)) {
-      (currentState, iterations)
-    } else {
-      val (maxBank, maxIndex) = currentState.zipWithIndex.maxBy(_._1)
+  override protected[year2017] def parseInput(file: Source): List[Int] = file.mkString.split('\t').map(_.toInt).toList
 
-      val newState = currentState.toArray
-      newState(maxIndex) = 0
-
-      var currentIndex = maxIndex + 1
-      (0 until maxBank).foreach { _ =>
-        if (currentIndex > 15) currentIndex = 0
-        newState(currentIndex) += 1
-        currentIndex += 1
-      }
-
-      partOne(newState.toList, seen + currentState, iterations + 1)
+  override protected[year2017] def part1(input: List[Int]): Int = {
+    val seen       = mutable.Set.empty[List[Int]]
+    var state      = input
+    var iterations = 0
+    while (!seen.contains(state)) {
+      seen.add(state)
+      iterations += 1
+      state = iterate(state)
     }
+    iterations
   }
 
-  @tailrec
-  private def partTwo(currentState: List[Int], startingState: List[Int], iterations: Int = 0): Int = {
-    if (iterations > 0 && currentState == startingState) {
-      iterations
-    } else {
-      val (maxBank, maxIndex) = currentState.zipWithIndex.maxBy(_._1)
-
-      val newState = currentState.toArray
-      newState(maxIndex) = 0
-
-      var currentIndex = maxIndex + 1
-      (0 until maxBank).foreach { _ =>
-        if (currentIndex > 15) currentIndex = 0
-        newState(currentIndex) += 1
-        currentIndex += 1
-      }
-
-      partTwo(newState.toList, startingState, iterations + 1)
+  override protected[year2017] def part2(input: List[Int]): Int = {
+    // Redo part 1 to get to infinite state
+    val seen  = mutable.Set.empty[List[Int]]
+    var state = input
+    while (!seen.contains(state)) {
+      seen.add(state)
+      state = iterate(state)
     }
+
+    val infiniteState = state
+    state = iterate(state)
+    var iterations = 1 // Start at 1 to make things easier
+    while (state != infiniteState) {
+      iterations += 1
+      state = iterate(state)
+    }
+    iterations
+  }
+
+  private def iterate(state: List[Int]): List[Int] = {
+    val (maxBank, maxIndex) = state.zipWithIndex.maxBy(_._1)
+
+    val newState = state.toArray
+    newState(maxIndex) = 0
+
+    var currentIndex = maxIndex + 1
+    (0 until maxBank).foreach { _ =>
+      if (currentIndex > state.size - 1) currentIndex = 0
+      newState(currentIndex) += 1
+      currentIndex += 1
+    }
+
+    newState.toList
   }
 }

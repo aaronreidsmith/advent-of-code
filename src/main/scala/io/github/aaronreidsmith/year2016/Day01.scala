@@ -42,7 +42,7 @@ object Day01 extends Solution {
   }
 
   private object State {
-    def origin: State = State(North, Point.ZERO)
+    def origin: State = State(North, Point.zero)
   }
 
   def run(): Unit = {
@@ -61,7 +61,7 @@ object Day01 extends Solution {
   }
 
   override protected[year2016] def part1(input: List[Instruction]): Int = {
-    traverse(input).position.manhattanDistance(Point.ZERO)
+    traverse(input).position.manhattanDistance(Point.zero)
   }
 
   override protected[year2016] def part2(input: List[Instruction]): Int = {
@@ -69,7 +69,7 @@ object Day01 extends Solution {
     def helper(points: Vector[Point], seen: Set[Point] = Set()): Int = {
       val head +: tail = points
       if (seen.contains(head)) {
-        head.manhattanDistance(Point.ZERO)
+        head.manhattanDistance(Point.zero)
       } else {
         helper(tail, seen + head)
       }

@@ -1,40 +1,56 @@
 package io.github.aaronreidsmith.year2017
 
+import io.github.aaronreidsmith.{FlatCoordinate, Solution, using}
+
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day11 {
-  private var globalMaxStep: Option[Int] = None
+object Day11 extends Solution {
+  type I  = List[String]
+  type O1 = Int
+  type O2 = Int
 
-  def main(args: Array[String]): Unit = {
-    val input      = Source.fromResource("2017/day11.txt")
-    val directions = input.mkString.split(',').toList
-    input.close()
-
-    println(s"Part 1: ${solution(directions)}")
-    println(s"Part 2: ${globalMaxStep.get}")
+  def run(): Unit = {
+    println("Year 2017, Day 11")
+    val input = using("2017/day11.txt")(parseInput)
+    println(s"Part 1: ${part1(input)}")
+    println(s"Part 2: ${part2(input)}")
+    println()
   }
 
-  @tailrec
-  def solution(directions: List[String], x: Int = 0, y: Int = 0, z: Int = 0): Int = directions match {
-    case Nil => distance(x, y, z)
-    case currentDirection :: remainingDirections =>
-      val (newX, newY, newZ) = currentDirection match {
-        case "n"  => (x, y + 1, z - 1)
-        case "ne" => (x + 1, y, z - 1)
-        case "se" => (x + 1, y - 1, z)
-        case "s"  => (x, y - 1, z + 1)
-        case "sw" => (x - 1, y, z + 1)
-        case "nw" => (x - 1, y + 1, z)
-        case _    => throw new IllegalArgumentException
-      }
-      val currentCubeDistance = distance(newX, newY, newZ)
-      globalMaxStep = globalMaxStep match {
-        case Some(value) => if (currentCubeDistance > value) Some(currentCubeDistance) else globalMaxStep
-        case None        => Some(currentCubeDistance)
-      }
-      solution(remainingDirections, newX, newY, newZ)
-  }
+  override protected[year2017] def parseInput(file: Source): List[String] = file.mkString.split(',').toList
+  override protected[year2017] def part1(input: List[String]): Int        = solution(input)._1
+  override protected[year2017] def part2(input: List[String]): Int        = solution(input)._2
 
-  private def distance(x: Int, y: Int, z: Int): Int = Seq(math.abs(x), math.abs(y), math.abs(z)).max
+  // Both parts require the same traversal, so might as well only make it once
+  private var part1Solution = 0
+  private var part2Solution = Int.MinValue
+  private var solved        = false
+  private def solution(input: List[String]): (Int, Int) = {
+    @tailrec
+    def helper(directions: List[String], coordinate: FlatCoordinate): Unit = directions match {
+      case Nil =>
+        part1Solution = coordinate.distanceFrom(FlatCoordinate.zero)
+        solved = true
+      case head :: tail =>
+        val newCoordinate = head match {
+          case "n"  => coordinate.north
+          case "ne" => coordinate.northEast
+          case "se" => coordinate.southEast
+          case "s"  => coordinate.south
+          case "sw" => coordinate.southWest
+          case "nw" => coordinate.northWest
+          case _    => throw new IllegalArgumentException
+        }
+        val currentDistance = newCoordinate.distanceFrom(FlatCoordinate.zero)
+        part2Solution = part2Solution.max(currentDistance)
+        helper(tail, newCoordinate)
+    }
+
+    if (!solved || isTest) {
+      helper(input, FlatCoordinate.zero)
+    }
+
+    (part1Solution, part2Solution)
+  }
 }

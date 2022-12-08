@@ -36,7 +36,7 @@ object Day03 extends Solution {
       direction: Direction = North
   ): Int = {
     if (acc == target && part1) {
-      pos.manhattanDistance(Point.ZERO)
+      pos.manhattanDistance(Point.zero)
     } else if (acc > target && !part1) {
       acc
     } else {

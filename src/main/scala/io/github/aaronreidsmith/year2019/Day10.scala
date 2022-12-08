@@ -47,7 +47,7 @@ object Day10 {
   }
 
   private def findStationCoordinates(asteroids: Set[Point]): (Point, Set[Point]) =
-    asteroids.toSeq.foldLeft((Point.ZERO, Set.empty[Point])) {
+    asteroids.toSeq.foldLeft((Point.zero, Set.empty[Point])) {
       case ((currentStation, currentTargets), asteroid) =>
         val others  = asteroids - asteroid
         val visible = asteroid.visibleFrom(others.toList)

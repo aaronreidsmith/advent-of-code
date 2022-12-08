@@ -22,5 +22,5 @@ case class Point(x: Int, y: Int) {
 }
 
 object Point {
-  def ZERO: Point = Point(0, 0)
+  def zero: Point = Point(0, 0)
 }
