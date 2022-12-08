@@ -22,5 +22,7 @@ case class Point(x: Int, y: Int) {
 }
 
 object Point {
+  implicit val ordering: Ordering[Point] = Ordering.by(unapply)
+
   def zero: Point = Point(0, 0)
 }
