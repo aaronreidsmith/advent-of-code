@@ -4,10 +4,20 @@ import scala.io.Source
 import scala.util.Using
 
 package object aaronreidsmith {
-  case class Point(x: Int, y: Int) {
+  case class Point(x: Int, y: Int) extends Ordered[Point] {
+    def compare(that: Point): Int = {
+      import scala.math.Ordered.orderingToOrdered
+      (this.x, this.y).compare((that.x, that.y))
+    }
+
     def +(other: Point): Point = Point(x + other.x, y + other.y)
 
-    def immediateNeighbors: Seq[Point] = Seq(Point(x - 1, y), Point(x + 1, y), Point(x, y - 1), Point(x, y + 1))
+    def up: Point    = Point(x, y - 1)
+    def right: Point = Point(x + 1, y)
+    def down: Point  = Point(x, y + 1)
+    def left: Point  = Point(x - 1, y)
+
+    def immediateNeighbors: Seq[Point] = Seq(up, right, left, down)
 
     def neighbors: Seq[Point] = for {
       dx <- Seq(-1, 0, 1)
