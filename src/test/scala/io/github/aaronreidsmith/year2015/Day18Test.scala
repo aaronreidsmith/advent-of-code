@@ -11,7 +11,7 @@ class Day18Test extends BaseTest {
         |#....#
         |..#...
         |#.#..#
-        |####..""".stripMargin.toCharGrid
+        |####..""".stripMargin.toGrid
     Day18.part1(grid, 4) shouldBe 4
   }
 
@@ -22,7 +22,7 @@ class Day18Test extends BaseTest {
         |#....#
         |..#...
         |#.#..#
-        |####.#""".stripMargin.toCharGrid
+        |####.#""".stripMargin.toGrid
     Day18.part2(grid, 5) shouldBe 17
   }
 }
