@@ -8,17 +8,25 @@ package object implicits {
   implicit def point2Tuple2(point: Point): (Int, Int) = (point.x, point.y)
 
   implicit class SourceOps(file: Source) {
-    def toGrid: Grid[Char] = {
+    def toCharGrid: Grid[Char] = {
       for {
         (line, row) <- file.getLines().zipWithIndex
         (char, col) <- line.zipWithIndex
       } yield Point(row, col) -> char
     }.toMap
+
+    def toIntGrid: Grid[Int] = {
+      for {
+        (line, row) <- file.getLines().zipWithIndex
+        (char, col) <- line.zipWithIndex
+      } yield Point(row, col) -> char.asDigit
+    }.toMap
   }
 
   implicit class StringOps(string: String) {
     def letterOccurrences: Map[Char, Int] = string.toSeq.occurrences
-    def toGrid: Grid[Char]                = Source.fromString(string).toGrid
+    def toCharGrid: Grid[Char]            = Source.fromString(string).toCharGrid
+    def toIntGrid: Grid[Int]              = Source.fromString(string).toIntGrid
   }
 
   implicit class SeqOps[T](seq: Seq[T]) {

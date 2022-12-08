@@ -7,7 +7,7 @@ import scala.annotation.tailrec
 
 object Day18 {
   def main(args: Array[String]): Unit = {
-    val grid = using("2015/day18.txt")(_.toGrid)
+    val grid = using("2015/day18.txt")(_.toCharGrid)
     println(s"Part 1: ${part1(grid)}")
     println(s"Part 2: ${part2(grid)}")
   }
