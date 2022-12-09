@@ -1,14 +1,27 @@
 package io.github.aaronreidsmith
 
-case class Point(x: Int, y: Int) {
+case class Point(x: Int, y: Int) extends Ordered[Point] {
+  def compare(that: Point): Int = {
+    import scala.math.Ordered.orderingToOrdered
+    (this.x, this.y).compare((that.x, that.y))
+  }
+
   def +(other: Point): Point = Point(x + other.x, y + other.y)
 
-  def left: Point  = Point(x - 1, y)
+  def up: Point    = Point(x, y + 1)
   def right: Point = Point(x + 1, y)
-  def up: Point    = Point(x, y - 1)
-  def down: Point  = Point(x, y + 1)
+  def down: Point  = Point(x, y - 1)
+  def left: Point  = Point(x - 1, y)
 
-  def immediateNeighbors: Seq[Point] = Seq(left, right, up, down)
+  // Helpers because I always screw up comparisons
+  def isAbove(that: Point): Boolean      = this.y > that.y
+  def isBelow(that: Point): Boolean      = this.y < that.y
+  def isLeftOf(that: Point): Boolean     = this.x < that.x
+  def isRightOf(that: Point): Boolean    = this.x > that.x
+  def sameColumnAs(that: Point): Boolean = this.x == that.x
+  def sameRowAs(that: Point): Boolean    = this.y == that.y
+
+  def immediateNeighbors: Seq[Point] = Seq(up, right, left, down)
 
   def neighbors: Seq[Point] = for {
     dx <- Seq(-1, 0, 1)
@@ -22,7 +35,5 @@ case class Point(x: Int, y: Int) {
 }
 
 object Point {
-  implicit val ordering: Ordering[Point] = Ordering.by(unapply)
-
   def zero: Point = Point(0, 0)
 }
