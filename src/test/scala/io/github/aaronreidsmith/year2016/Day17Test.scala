@@ -10,7 +10,6 @@ class Day17Test extends BaseTest {
       ("ulqzkmiv", "DRURDRUDDLLDLUURRDULRLDUUDDDRR", 830)
     ).foreach {
       case (input, expected1, expected2) =>
-        println(expected1, expected2)
         Day17.part1(input) shouldBe expected1
         Day17.part2(input) shouldBe expected2
     }

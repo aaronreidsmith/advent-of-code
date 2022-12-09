@@ -33,11 +33,11 @@ object Day03 extends Solution {
   override protected[year2015] def part2(instructions: String): Int = {
     @tailrec
     def helper(
-                pointer: Int = 0,
-                santaPos: Point = Point.zero,
-                santaSeen: Set[Point] = Set(Point.zero),
-                robotSantaPos: Point = Point.zero,
-                robotSantaSeen: Set[Point] = Set(Point.zero)
+        pointer: Int = 0,
+        santaPos: Point = Point.zero,
+        santaSeen: Set[Point] = Set(Point.zero),
+        robotSantaPos: Point = Point.zero,
+        robotSantaSeen: Set[Point] = Set(Point.zero)
     ): Int = if (pointer >= instructions.length) {
       (santaSeen ++ robotSantaSeen).size
     } else {
@@ -55,10 +55,10 @@ object Day03 extends Solution {
   }
 
   private def nextPosition(point: Point, char: Char): Point = char match {
-    case '^' => point.copy(x = point.x - 1)
-    case '>' => point.copy(y = point.y + 1)
-    case 'v' => point.copy(x = point.x + 1)
-    case '<' => point.copy(y = point.y - 1)
+    case '^' => point.up
+    case '>' => point.right
+    case 'v' => point.down
+    case '<' => point.left
     case _   => throw new IllegalArgumentException
   }
 }

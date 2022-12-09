@@ -46,7 +46,7 @@ object Day07 extends Solution {
 
     val mappedNodes = allNodes.map {
       case (_, Node(name, weight, _, Some(children))) =>
-        val mappedChildren = children.split(", ").map(getChildren)
+        val mappedChildren = children.split(", ").map(getChildren).toSeq
         name -> Node(name, weight, mappedChildren, Some(children))
       case (name, node) => name -> node
     }
