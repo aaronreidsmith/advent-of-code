@@ -12,10 +12,18 @@ package object aaronreidsmith {
 
     def +(other: Point): Point = Point(x + other.x, y + other.y)
 
-    def up: Point    = Point(x, y - 1)
+    def up: Point    = Point(x, y + 1)
     def right: Point = Point(x + 1, y)
-    def down: Point  = Point(x, y + 1)
+    def down: Point  = Point(x, y - 1)
     def left: Point  = Point(x - 1, y)
+
+    // Helpers because I always screw up comparisons
+    def isAbove(that: Point): Boolean      = this.y > that.y
+    def isBelow(that: Point): Boolean      = this.y < that.y
+    def isLeftOf(that: Point): Boolean     = this.x < that.x
+    def isRightOf(that: Point): Boolean    = this.x > that.x
+    def sameColumnAs(that: Point): Boolean = this.x == that.x
+    def sameRowAs(that: Point): Boolean    = this.y == that.y
 
     def immediateNeighbors: Seq[Point] = Seq(up, right, left, down)
 

@@ -50,8 +50,8 @@ object Day08 {
         val scenicScore = {
           viewingDistance(left.reverse, treeHeight) *
             viewingDistance(right, treeHeight) *
-            viewingDistance(up.reverse, treeHeight) *
-            viewingDistance(down, treeHeight)
+            viewingDistance(up, treeHeight) *
+            viewingDistance(down.reverse, treeHeight)
         }
         if (scenicScore > acc) scenicScore else acc
       case (acc, _) => acc
@@ -67,18 +67,10 @@ object Day08 {
       point: Point
   ): (Vector[Int], Vector[Int], Vector[Int], Vector[Int]) = {
     grid.foldLeft((Vector.empty[Int], Vector.empty[Int], Vector.empty[Int], Vector.empty[Int])) {
-      case ((left, right, up, down), (other, height)) =>
-        if (other != point && other.x == point.x && other.y < point.y) {
-          (left :+ height, right, up, down)
-        } else if (other != point && other.x == point.x && other.y > point.y) {
-          (left, right :+ height, up, down)
-        } else if (other != point && other.y == point.y && other.x < point.x) {
-          (left, right, up :+ height, down)
-        } else if (other != point && other.y == point.y && other.x > point.x) {
-          (left, right, up, down :+ height)
-        } else {
-          (left, right, up, down)
-        }
+      case ((left, right, up, down), (other, height)) if other != point && other.sameRowAs(point) =>
+        if (other.isLeftOf(point)) (left :+ height, right, up, down) else (left, right :+ height, up, down)
+      case ((left, right, up, down), (other, height)) if other != point && other.sameColumnAs(point) =>
+        if (other.isAbove(point)) (left, right, up :+ height, down) else (left, right, up, down :+ height)
       case (acc, _) => acc
     }
   }

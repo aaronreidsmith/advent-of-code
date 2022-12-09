@@ -40,7 +40,6 @@ object Day09 {
         val newHead = moveHead(knots(0), direction)
         val newState = (1 to 9).foldLeft(Map(0 -> newHead)) {
           case (acc, knot) => acc.updated(knot, move(knots(knot), acc(knot - 1)))
-          case (acc, _)    => acc
         }
         (newState, seen + newState(9))
       case (acc, _) => acc
@@ -59,16 +58,15 @@ object Day09 {
   private def move(point: Point, other: Point): Point = {
     if (other == point || point.neighbors.contains(other)) {
       point
-    } else if (other.x == point.x) { // Same row...
-      if (other.y < point.y) point.up else point.down
-    } else if (other.y == point.y) { // Same column
-      if (other.x < point.x) point.left else point.right
+    } else if (other.sameColumnAs(point)) {
+      if (other.isAbove(point)) point.up else point.down
+    } else if (other.sameRowAs(point)) {
+      if (other.isLeftOf(point)) point.left else point.right
     } else { // Diagonal
-      (other.x > point.x, other.y > point.y) match {
-        case (true, true)   => point.right.down
-        case (true, false)  => point.right.up
-        case (false, true)  => point.left.down
-        case (false, false) => point.left.up
+      if (other.isRightOf(point)) {
+        if (other.isAbove(point)) point.right.up else point.right.down
+      } else {
+        if (other.isAbove(point)) point.left.up else point.left.down
       }
     }
   }
