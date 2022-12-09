@@ -1,18 +1,24 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.{Point, using}
+import io.github.aaronreidsmith.{Point, Solution, using}
 
 import scala.collection.SortedMap
 import scala.io.Source
 
-object Day08 {
-  def main(args: Array[String]): Unit = {
+object Day08 extends Solution {
+  type I  = SortedMap[Point, Int]
+  type O1 = Int
+  type O2 = Int
+
+  def run(): Unit = {
+    println("Year 2022, Day 8")
     val input = using("2022/day08.txt")(parseInput)
     println(s"Part 1: ${part1(input)}")
     println(s"Part 2: ${part2(input)}")
+    println()
   }
 
-  protected[year2022] def parseInput(file: Source): SortedMap[Point, Int] = {
+  override protected[year2022] def parseInput(file: Source): SortedMap[Point, Int] = {
     val pairs = for {
       (line, row) <- file.getLines().zipWithIndex
       (char, col) <- line.zipWithIndex
@@ -20,7 +26,7 @@ object Day08 {
     SortedMap.from(pairs)
   }
 
-  protected[year2022] def part1(input: SortedMap[Point, Int]): Int = input.foldLeft(0) {
+  override protected[year2022] def part1(input: SortedMap[Point, Int]): Int = input.foldLeft(0) {
     case (acc, (position, treeHeight)) =>
       val (left, right, up, down) = treesOfInterest(input, position)
       if (
@@ -37,7 +43,7 @@ object Day08 {
     case (acc, _) => acc
   }
 
-  protected[year2022] def part2(input: SortedMap[Point, Int]): Int = {
+  override protected[year2022] def part2(input: SortedMap[Point, Int]): Int = {
     def viewingDistance(trees: Vector[Int], height: Int): Int = if (trees.forall(_ < height)) {
       trees.size
     } else {

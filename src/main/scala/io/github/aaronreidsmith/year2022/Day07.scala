@@ -1,18 +1,24 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Solution, using}
 
 import scala.collection.mutable
 import scala.io.Source
 
-object Day07 {
-  def main(args: Array[String]): Unit = {
+object Day07 extends Solution {
+  type I = (Set[String], Map[String, Int])
+  type O1 = Int
+  type O2 = Int
+
+  def run(): Unit = {
+    println("Year 2022, Day 7")
     val input = using("2022/day07.txt")(parseInput)
     println(s"Part 1: ${part1(input)}")
     println(s"Part 2: ${part2(input)}")
+    println()
   }
 
-  protected[year2022] def parseInput(file: Source): (Set[String], Map[String, Int]) = {
+  override protected[year2022] def parseInput(file: Source): (Set[String], Map[String, Int]) = {
     // Output variables
     val structure   = mutable.Map.empty[String, Int]
     val directories = mutable.Set("/")
@@ -38,7 +44,7 @@ object Day07 {
     (directories.toSet, structure.toMap)
   }
 
-  protected[year2022] def part1(input: (Set[String], Map[String, Int])): Int = {
+  override protected[year2022] def part1(input: (Set[String], Map[String, Int])): Int = {
     val (directories, files) = input
     directories.foldLeft(0) { (acc, directory) =>
       val size = directorySize(files, directory)
@@ -46,7 +52,7 @@ object Day07 {
     }
   }
 
-  protected[year2022] def part2(input: (Set[String], Map[String, Int])): Int = {
+  override protected[year2022] def part2(input: (Set[String], Map[String, Int])): Int = {
     val (directories, files) = input
 
     val totalSpace     = 70000000 // Given

@@ -1,17 +1,23 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.{Point, using}
+import io.github.aaronreidsmith.{Point, Solution, using}
 
 import scala.io.Source
 
-object Day09 {
-  def main(args: Array[String]): Unit = {
+object Day09 extends Solution {
+  type I = String
+  type O1 = Int
+  type O2 = Int
+
+  def run(): Unit = {
+    println("Year 2022, Day 9")
     val input = using("2022/day09.txt")(parseInput)
     println(s"Part 1: ${part1(input)}")
     println(s"Part 2: ${part2(input)}")
+    println()
   }
 
-  protected[year2022] def parseInput(file: Source): String = {
+  override protected[year2022] def parseInput(file: Source): String = {
     val parsed = new StringBuilder
     file.getLines().foreach { line =>
       val split     = line.split(' ')
@@ -22,7 +28,7 @@ object Day09 {
     parsed.mkString
   }
 
-  protected[year2022] def part1(input: String): Int = {
+  override protected[year2022] def part1(input: String): Int = {
     val (_, _, visited) = input.foldLeft((Point.zero, Point.zero, Set(Point.zero))) {
       case ((head, tail, seen), direction) =>
         val newHead = moveHead(head, direction)
@@ -33,7 +39,7 @@ object Day09 {
     visited.size
   }
 
-  protected[year2022] def part2(input: String): Int = {
+  override protected[year2022] def part2(input: String): Int = {
     val initialKnots = (0 to 9).map(_ -> Point.zero).toMap
     val (_, visited) = input.foldLeft((initialKnots, Set(Point.zero))) {
       case ((knots, seen), direction) =>

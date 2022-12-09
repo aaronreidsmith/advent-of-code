@@ -1,24 +1,30 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Solution, using}
 
 import scala.io.Source
 
-object Day02 {
-  def main(args: Array[String]): Unit = {
+object Day02 extends Solution {
+  type I = List[(Char, Char)]
+  type O1 = Int
+  type O2 = Int
+
+  def run(): Unit = {
+    println("Year 2022, Day 2")
     val input = using("2022/day02.txt")(parseInput)
     println(s"Part 1: ${part1(input)}")
     println(s"Part 2: ${part2(input)}")
+    println()
   }
 
-  protected[year2022] def parseInput(file: Source): List[(Char, Char)] = {
+  override protected[year2022] def parseInput(file: Source): List[(Char, Char)] = {
     file
       .getLines()
       .map(line => (line.head, line.last))
       .toList
   }
 
-  protected[year2022] def part1(rounds: List[(Char, Char)]): Int = rounds.foldLeft(0) {
+  override protected[year2022] def part1(rounds: List[(Char, Char)]): Int = rounds.foldLeft(0) {
     case (acc, (opponent, player)) =>
       val score = (opponent, player) match {
         case ('A', 'X') => 4 // Rock, Rock (3 + 1)
@@ -36,7 +42,7 @@ object Day02 {
     case (acc, _) => acc
   }
 
-  protected[year2022] def part2(rounds: List[(Char, Char)]): Int = rounds.foldLeft(0) {
+  override protected[year2022] def part2(rounds: List[(Char, Char)]): Int = rounds.foldLeft(0) {
     case (acc, (opponent, outcome)) =>
       val score = (opponent, outcome) match {
         case ('A', 'X') => 3 // They chose Rock, I chose Scissors to Lose (3 + 0)
