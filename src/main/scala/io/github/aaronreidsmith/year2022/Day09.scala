@@ -25,13 +25,7 @@ object Day09 {
   protected[year2022] def part1(input: String): Int = {
     val (_, _, visited) = input.foldLeft((Point.zero, Point.zero, Set(Point.zero))) {
       case ((head, tail, seen), direction) =>
-        val newHead = direction match {
-          case 'U' => head.up
-          case 'R' => head.right
-          case 'L' => head.left
-          case 'D' => head.down
-          case _   => throw new IllegalArgumentException
-        }
+        val newHead = moveHead(head, direction)
         val newTail = move(tail, newHead)
         (newHead, newTail, seen + newTail)
       case (acc, _) => acc
@@ -43,14 +37,7 @@ object Day09 {
     val initialKnots = (0 to 9).map(_ -> Point.zero).toMap
     val (_, visited) = input.foldLeft((initialKnots, Set(Point.zero))) {
       case ((knots, seen), direction) =>
-        val head = knots(0)
-        val newHead = direction match {
-          case 'U' => head.up
-          case 'R' => head.right
-          case 'L' => head.left
-          case 'D' => head.down
-          case _   => throw new IllegalArgumentException
-        }
+        val newHead = moveHead(knots(0), direction)
         val newState = (1 to 9).foldLeft(Map(0 -> newHead)) {
           case (acc, knot) => acc.updated(knot, move(knots(knot), acc(knot - 1)))
           case (acc, _)    => acc
@@ -59,6 +46,14 @@ object Day09 {
       case (acc, _) => acc
     }
     visited.size
+  }
+
+  private def moveHead(point: Point, direction: Char): Point = direction match {
+    case 'U' => point.up
+    case 'R' => point.right
+    case 'L' => point.left
+    case 'D' => point.down
+    case _   => throw new IllegalArgumentException
   }
 
   private def move(point: Point, other: Point): Point = {
