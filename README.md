@@ -8,8 +8,4 @@ Solutions are stored in the following directory structure:
 src/main/scala/io/github/aaronreidsmith/<year>
 ```
 
-Input files, if they exist, are in:
-
-```
-src/main/resources/<year>/<day>.txt
-```
+Input files are encrypted in accordance with the [AoC creator's wishes](https://mobile.twitter.com/ericwastl/status/1465805354214830081)
