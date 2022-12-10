@@ -1,33 +1,48 @@
 package io.github.aaronreidsmith.year2017
 
+import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.implicits._
+
 import scala.collection.mutable
 import scala.io.Source
-import scala.language.implicitConversions
 
-object Day12 {
-  // Utils for converting between immutable and mutable maps
-  private implicit def mutableToImmutable(map: mutable.Map[Int, List[Int]]): Map[Int, List[Int]] = Map(map.toSeq: _*)
-  private implicit def immutableToMutable(map: Map[Int, List[Int]]): mutable.Map[Int, List[Int]] =
-    mutable.Map(map.toSeq: _*)
+object Day12 extends Solution {
+  type I  = Map[Int, List[Int]]
+  type O1 = Int
+  type O2 = Int
 
-  private val pipeEntry = "^(\\d+) <-> (.*)".r
+  def run(): Unit = {
+    println("Year 2017, Day 12")
+    val input = using("2017/day12.txt")(parseInput)
+    println(s"Part 1: ${part1(input)}")
+    println(s"Part 2: ${part2(input)}")
+    println()
+  }
 
-  def main(args: Array[String]): Unit = {
-    val input = Source.fromResource("2017/day12.txt")
-
-    val directRelationships = input.getLines().foldLeft(Map.empty[Int, List[Int]]) {
+  override protected[year2017] def parseInput(file: Source): Map[Int, List[Int]] = {
+    val pipeEntry = """^(\d+) <-> (.*)""".r
+    file.getLines().foldLeft(Map.empty[Int, List[Int]]) {
       case (acc, pipeEntry(pipe, neighbors)) =>
         val id          = pipe.toInt
         val neighborIds = neighbors.split(", ").map(_.toInt).toList
         acc + (id -> neighborIds)
+      case (acc, _) => acc
     }
-    input.close()
-
-    println(s"Part 1: ${part1(directRelationships).size}")
-    println(s"Part 2: ${part2(directRelationships)}")
   }
 
-  private def part1(programs: Map[Int, List[Int]], key: Int = 0): mutable.Set[Int] = {
+  override protected[year2017] def part1(input: Map[Int, List[Int]]): Int = findConnected(input, 0).size
+  override protected[year2017] def part2(input: Map[Int, List[Int]]): Int = {
+    var groups   = 0
+    val programs = input.toMutable
+    while (programs.nonEmpty) {
+      val group = findConnected(programs.toMap, programs.keys.head)
+      group.foreach(programs -= _)
+      groups += 1
+    }
+    groups
+  }
+
+  private def findConnected(programs: Map[Int, List[Int]], key: Int): Set[Int] = {
     val connectedPrograms = mutable.Set(key)
     val lookupQueue       = mutable.Queue(key)
     while (lookupQueue.nonEmpty) {
@@ -39,17 +54,6 @@ object Day12 {
         }
       }
     }
-    connectedPrograms
+    connectedPrograms.toSet
   }
-
-  private def part2(programs: mutable.Map[Int, List[Int]]): Int = {
-    var groups = 0
-    while (programs.nonEmpty) {
-      val group = part1(programs, programs.keys.head)
-      group.foreach(programs -= _)
-      groups += 1
-    }
-    groups
-  }
-
 }
