@@ -15,6 +15,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2.4.0
 
+      - name: Decrypt input
+        uses: sliteteam/github-action-git-crypt-unlock@1.1.0
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+
       - name: Setup Cache
         uses: coursier/cache-action@v6.3
 
