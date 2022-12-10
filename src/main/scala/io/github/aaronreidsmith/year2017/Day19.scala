@@ -1,87 +1,76 @@
 package io.github.aaronreidsmith.year2017
 
+import io.github.aaronreidsmith.implicits.SourceOps
+import io.github.aaronreidsmith.{Direction, East, Grid, North, Point, Solution, South, West}
+
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day19 {
-  object Direction extends Enumeration {
-    type Direction = Value
-    val Up, Down, Left, Right = Value
-  }
-  import Direction._
+object Day19 extends Solution(2017, 19) {
+  type I  = Grid[Char]
+  type O1 = String
+  type O2 = Int
 
-  def main(args: Array[String]): Unit = {
-    val input = Source.fromResource("2017/day19.txt")
-    val grid = input.getLines().zipWithIndex.foldLeft(Map.empty[(Int, Int), Char]) {
-      case (acc, (line, i)) =>
-        val row = line.zipWithIndex.foldLeft(Map.empty[(Int, Int), Char]) {
-          case (rowAcc, (char, j)) => rowAcc + ((i, j) -> char)
-        }
-        acc ++ row
-    }
-    input.close()
-    val (startX, startY) = grid.collectFirst {
-      case ((row, column), char) if row == 0 && char == '|' => (row, column)
-    }.get
+  override protected[year2017] def parseInput(file: Source): Grid[Char] = file.toGrid
+  override protected[year2017] def part1(input: Grid[Char]): String     = solution(input)._1
+  override protected[year2017] def part2(input: Grid[Char]): Int        = solution(input)._2
 
-    val (lettersSeen, stepCount) = solution(startX, startY, grid)
-    println(s"Part 1: $lettersSeen")
-    println(s"Part 2: $stepCount")
-  }
-
-  @tailrec
-  def solution(
-      row: Int,
-      col: Int,
-      grid: Map[(Int, Int), Char],
-      direction: Direction = Down,
-      lettersSeen: String = "",
-      stepCount: Int = 0
-  ): (String, Int) = grid.get((row, col)) match {
-    case Some(char) if char != ' ' =>
-      char match {
-        // Turn the only available direction
-        case '+' =>
-          val (newDirection, newRow, newCol) = turn(direction, grid, row, col)
-          solution(newRow, newCol, grid, newDirection, lettersSeen, stepCount + 1)
-        // Keep going in same direction and collect letter
-        case other =>
-          val (newRow, newY) = direction match {
-            case Down  => (row + 1, col)
-            case Up    => (row - 1, col)
-            case Left  => (row, col - 1)
-            case Right => (row, col + 1)
-          }
-          val addedLetter = if (other == '|' | other == '-') "" else other.toString
-          solution(newRow, newY, grid, direction, lettersSeen + addedLetter, stepCount + 1)
-      }
-    case _ => (lettersSeen, stepCount)
-  }
-
-  private def turn(
-      currentDirection: Direction,
-      grid: Map[(Int, Int), Char],
-      row: Int,
-      col: Int
-  ): (Direction, Int, Int) =
-    currentDirection match {
-      case Down | Up =>
-        grid.get((row, col - 1)) match {
-          case Some(char) if char != ' ' => (Left, row, col - 1)
+  private var answer = ("", 0)
+  private var solved = false
+  private def solution(grid: Grid[Char]): (String, Int) = {
+    def turn(currentDirection: Direction, pos: Point): (Direction, Point) = currentDirection match {
+      case North | South =>
+        grid.get(pos.left) match {
+          case Some(char) if char != ' ' => (West, pos.left)
           case _ =>
-            grid.get((row, col + 1)) match {
-              case Some(char) if char != ' ' => (Right, row, col + 1)
-              case _                         => (currentDirection, -1, -1)
+            grid.get(pos.right) match {
+              case Some(char) if char != ' ' => (East, pos.right)
+              case _                         => throw new IllegalArgumentException
             }
         }
-      case Left | Right =>
-        grid.get((row + 1, col)) match {
-          case Some(char) if char != ' ' => (Down, row + 1, col)
+      case East | West =>
+        grid.get(pos.up) match {
+          case Some(char) if char != ' ' => (North, pos.up)
           case _ =>
-            grid.get((row - 1, col)) match {
-              case Some(char) if char != ' ' => (Up, row - 1, col)
-              case _                         => (currentDirection, -1, -1)
+            grid.get(pos.down) match {
+              case Some(char) if char != ' ' => (South, pos.down)
+              case _                         => throw new IllegalArgumentException
             }
         }
     }
+
+    @tailrec
+    def helper(
+        position: Point,
+        direction: Direction = South,
+        lettersSeen: StringBuilder = new StringBuilder,
+        stepCount: Int = 0
+    ): (String, Int) = grid.get(position) match {
+      case Some(char) if char != ' ' =>
+        char match {
+          // Turn the only available direction
+          case '+' =>
+            val (newDirection, newPosition) = turn(direction, position)
+            helper(newPosition, newDirection, lettersSeen, stepCount + 1)
+          case other =>
+            val newPosition = direction match {
+              case North => position.up
+              case East  => position.right
+              case South => position.down
+              case West  => position.left
+            }
+            val addedLetter = if (other == '|' | other == '-') "" else other.toString
+            helper(newPosition, direction, lettersSeen.addAll(addedLetter), stepCount + 1)
+        }
+      case _ => (lettersSeen.result(), stepCount)
+    }
+
+    if (!solved) {
+      val start = grid.collectFirst { case (pos, char) if pos.x == 0 && char == '|' => pos }.get
+      answer = helper(start)
+      solved = true
+    }
+
+    answer
+  }
 }

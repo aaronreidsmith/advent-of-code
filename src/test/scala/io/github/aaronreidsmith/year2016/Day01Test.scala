@@ -12,7 +12,7 @@ class Day01Test extends BaseTest {
       ("R5, L5, R5, R3", 12)
     ).foreach {
       case (inputString, expected) =>
-        val input = Day01.parseInput(Source.fromString(inputString))
+        val input = Day01.parseInput(inputString.asSource)
         Day01.part1(input) shouldBe expected
       case _ => // Do nothing
     }
@@ -20,7 +20,7 @@ class Day01Test extends BaseTest {
 
   "Day01.part2" should "work on example input" in {
     val inputString = "R8, R4, R4, R8"
-    val input       = Day01.parseInput(Source.fromString(inputString))
+    val input       = Day01.parseInput(inputString.asSource)
     Day01.part2(input) shouldBe 4
   }
 }

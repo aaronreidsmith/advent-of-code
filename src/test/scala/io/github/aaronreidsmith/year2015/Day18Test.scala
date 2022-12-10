@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2015
 
 import io.github.aaronreidsmith.BaseTest
-import io.github.aaronreidsmith.implicits._
+import io.github.aaronreidsmith.implicits.StringOps
 
 class Day18Test extends BaseTest {
   "Day18.part1" should "work on example input" in {

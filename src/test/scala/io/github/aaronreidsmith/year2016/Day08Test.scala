@@ -12,6 +12,7 @@ class Day08Test extends BaseTest {
   "Day08.part2" should "work on actual input" in {
     // Have to do this because trailing spaces are stripped in multiline strings
     val expected = Seq(
+      "",
       "#  # ###   ##    ## #### #    ###   ##  #### #### ",
       "#  # #  # #  #    # #    #    #  # #  # #       # ",
       "#  # #  # #  #    # ###  #    ###  #    ###    #  ",

@@ -13,7 +13,7 @@ class Day01Test extends BaseTest {
       ("91212129", 9)
     ).foreach {
       case (input, expected) =>
-        val parsed = Day01.parseInput(Source.fromString(input))
+        val parsed = Day01.parseInput(input.asSource)
         Day01.part1(parsed) shouldBe expected
     }
   }
@@ -27,7 +27,7 @@ class Day01Test extends BaseTest {
       ("12131415", 4)
     ).foreach {
       case (input, expected) =>
-        val parsed = Day01.parseInput(Source.fromString(input))
+        val parsed = Day01.parseInput(input.asSource)
         Day01.part2(parsed) shouldBe expected
     }
   }

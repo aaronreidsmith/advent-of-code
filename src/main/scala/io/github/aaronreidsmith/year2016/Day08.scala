@@ -34,7 +34,7 @@ object Day08 extends Solution(2016, 8) {
           state: Vector[Vector[Char]] = Vector.fill(6)(Vector.fill(50)('.'))
       ): (Int, String) = instructions match {
         case Nil =>
-          val display = new StringBuilder
+          val display = new StringBuilder("\n")
           val numOn = state.foldLeft(0) { (acc, row) =>
             val newRow = s"${row.mkString.replace('.', ' ')}\n"
             display.appendAll(newRow)

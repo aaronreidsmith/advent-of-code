@@ -8,18 +8,19 @@ case class Point(x: Int, y: Int) extends Ordered[Point] {
 
   def +(other: Point): Point = Point(x + other.x, y + other.y)
 
-  def up: Point    = Point(x, y + 1)
-  def right: Point = Point(x + 1, y)
-  def down: Point  = Point(x, y - 1)
-  def left: Point  = Point(x - 1, y)
+  // This is different than a traditional graph to play nice with the Grid[T] type, which is based on indices
+  def up: Point    = Point(x - 1, y)
+  def right: Point = Point(x, y + 1)
+  def down: Point  = Point(x + 1, y)
+  def left: Point  = Point(x, y - 1)
 
   // Helpers because I always screw up comparisons
-  def isAbove(that: Point): Boolean      = this.y > that.y
-  def isBelow(that: Point): Boolean      = this.y < that.y
-  def isLeftOf(that: Point): Boolean     = this.x < that.x
-  def isRightOf(that: Point): Boolean    = this.x > that.x
-  def sameColumnAs(that: Point): Boolean = this.x == that.x
-  def sameRowAs(that: Point): Boolean    = this.y == that.y
+  def isAbove(that: Point): Boolean      = this.x < that.x
+  def isBelow(that: Point): Boolean      = this.x > that.x
+  def isLeftOf(that: Point): Boolean     = this.y < that.y
+  def isRightOf(that: Point): Boolean    = this.y > that.y
+  def sameColumnAs(that: Point): Boolean = this.y == that.y
+  def sameRowAs(that: Point): Boolean    = this.x == that.x
 
   def immediateNeighbors: Seq[Point] = Seq(up, right, left, down)
 

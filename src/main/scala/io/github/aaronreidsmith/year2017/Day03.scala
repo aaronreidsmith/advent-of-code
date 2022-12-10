@@ -13,11 +13,11 @@ object Day03 extends Solution(2017, 3) {
   override protected[year2017] def parseInput(file: Source): Int = file.mkString.toInt
 
   override protected[year2017] def part1(input: Int): Int = {
-    solution(input, Map(Point(0, 0) -> 1, Point(1, 0) -> 2), part1 = true)
+    solution(input, Map(Point(0, 0) -> 1, Point(0, 1) -> 2), part1 = true)
   }
 
   override protected[year2017] def part2(input: Int): Int = {
-    solution(input, Map(Point(0, 0) -> 1, Point(1, 0) -> 1), part1 = false)
+    solution(input, Map(Point(0, 0) -> 1, Point(0, 1) -> 1), part1 = false)
   }
 
   // Start in second square for ease of algorithm
@@ -26,7 +26,7 @@ object Day03 extends Solution(2017, 3) {
       target: Int,
       grid: Map[Point, Int],
       part1: Boolean,
-      pos: Point = Point(1, 0),
+      pos: Point = Point(0, 1),
       acc: Int = 2,
       direction: Direction = North
   ): Int = {

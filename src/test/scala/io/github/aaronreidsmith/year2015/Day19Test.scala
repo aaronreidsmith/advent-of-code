@@ -6,13 +6,13 @@ import scala.io.Source
 
 class Day19Test extends BaseTest {
   "Day19.part1" should "work on example input" in {
-    val inputString =
+    val input = Day19.parseInput(
       """H => HO
         |H => OH
         |O => HH
         |
-        |HOH""".stripMargin
-    val input = Day19.parseInput(Source.fromString(inputString))
+        |HOH""".stripMargin.asSource
+    )
     Day19.part1(input) shouldBe 4
   }
 

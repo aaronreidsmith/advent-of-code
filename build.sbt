@@ -18,11 +18,17 @@ val settings = new {
 
 // Root options
 libraryDependencies ++= settings.libraryDependencies
+onLoadMessage.withRank(KeyRanks.Invisible) := ""
 scalacOptions ++= Seq("-deprecation")
 scalaVersion := settings.scalaVersion
 
 // Compile options
 Compile / mainClass := Some("io.github.aaronreidsmith.AdventOfCode")
+
+// Run options
+run / fork           := true
+run / javaOptions    := Seq("-Xms1G", "-Xmx8G")
+run / outputStrategy := Some(StdoutOutput)
 
 // Test options
 Test / envVars     := Map("IS_TEST" -> "true")
