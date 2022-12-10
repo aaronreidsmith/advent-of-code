@@ -22,52 +22,44 @@ object Day09 {
     parsed.mkString
   }
 
-  protected[year2022] def part1(input: String): Int = {
-    val (_, _, visited) = input.foldLeft((Point.zero, Point.zero, Set(Point.zero))) {
-      case ((head, tail, seen), direction) =>
-        val newHead = moveHead(head, direction)
-        val newTail = move(tail, newHead)
-        (newHead, newTail, seen + newTail)
-      case (acc, _) => acc
-    }
-    visited.size
-  }
+  protected[year2022] def part1(input: String): Int = solution(input, 2)
+  protected[year2022] def part2(input: String): Int = solution(input, 10)
 
-  protected[year2022] def part2(input: String): Int = {
-    val initialKnots = (0 to 9).map(_ -> Point.zero).toMap
+  private def solution(input: String, numKnots: Int): Int = {
+    def moveHead(point: Point, direction: Char): Point = direction match {
+      case 'U' => point.up
+      case 'R' => point.right
+      case 'L' => point.left
+      case 'D' => point.down
+      case _   => throw new IllegalArgumentException
+    }
+
+    def moveKnot(knot: Point, other: Point): Point = {
+      if (other == knot || knot.neighbors.contains(other)) {
+        knot
+      } else if (other.sameColumnAs(knot)) {
+        if (other.isAbove(knot)) knot.up else knot.down
+      } else if (other.sameRowAs(knot)) {
+        if (other.isLeftOf(knot)) knot.left else knot.right
+      } else { // Diagonal
+        if (other.isRightOf(knot)) {
+          if (other.isAbove(knot)) knot.right.up else knot.right.down
+        } else {
+          if (other.isAbove(knot)) knot.left.up else knot.left.down
+        }
+      }
+    }
+
+    val initialKnots = (0 until numKnots).map(_ -> Point.zero).toMap
     val (_, visited) = input.foldLeft((initialKnots, Set(Point.zero))) {
       case ((knots, seen), direction) =>
         val newHead = moveHead(knots(0), direction)
-        val newState = (1 to 9).foldLeft(Map(0 -> newHead)) {
-          case (acc, knot) => acc.updated(knot, move(knots(knot), acc(knot - 1)))
+        val newState = (1 until numKnots).foldLeft(Map(0 -> newHead)) {
+          case (acc, knot) => acc.updated(knot, moveKnot(knots(knot), acc(knot - 1)))
         }
-        (newState, seen + newState(9))
+        (newState, seen + newState(numKnots - 1))
       case (acc, _) => acc
     }
     visited.size
-  }
-
-  private def moveHead(point: Point, direction: Char): Point = direction match {
-    case 'U' => point.up
-    case 'R' => point.right
-    case 'L' => point.left
-    case 'D' => point.down
-    case _   => throw new IllegalArgumentException
-  }
-
-  private def move(point: Point, other: Point): Point = {
-    if (other == point || point.neighbors.contains(other)) {
-      point
-    } else if (other.sameColumnAs(point)) {
-      if (other.isAbove(point)) point.up else point.down
-    } else if (other.sameRowAs(point)) {
-      if (other.isLeftOf(point)) point.left else point.right
-    } else { // Diagonal
-      if (other.isRightOf(point)) {
-        if (other.isAbove(point)) point.right.up else point.right.down
-      } else {
-        if (other.isAbove(point)) point.left.up else point.left.down
-      }
-    }
   }
 }
