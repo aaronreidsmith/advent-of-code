@@ -9,7 +9,7 @@ import scala.util.{Failure, Success, Try}
 object Day25 extends Solution(2016, 25) {
   type I  = Vector[String]
   type O1 = Int
-  type O2 = Unit
+  type O2 = Nothing
 
   private implicit class RichString(str: String) {
     def toIntOrValue(registers: Map[String, Int]): Int = Try(str.toInt) match {

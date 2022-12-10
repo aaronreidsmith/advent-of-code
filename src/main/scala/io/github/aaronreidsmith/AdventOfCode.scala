@@ -82,7 +82,17 @@ object AdventOfCode {
       12 -> Day12,
       13 -> Day13,
       14 -> Day14,
-      15 -> Day15
+      15 -> Day15,
+      16 -> Day16,
+      17 -> Day17,
+      18 -> Day18,
+      19 -> Day19,
+      20 -> Day20,
+      21 -> Day21,
+      22 -> Day22,
+      // 23
+      // 24
+      25 -> Day25
     )
   }
   private val solutions2018: SortedMap[Int, Solution] = SortedMap()

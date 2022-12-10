@@ -7,7 +7,7 @@ import scala.io.Source
 object Day25 extends Solution(2015, 25) {
   type I  = (Int, Int)
   type O1 = Long
-  type O2 = Unit
+  type O2 = Nothing
 
   override protected[year2015] def parseInput(file: Source): (Int, Int) = {
     val Array(row, col, _*) = file.mkString.split(',')

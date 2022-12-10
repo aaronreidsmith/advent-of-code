@@ -1,151 +1,101 @@
 package io.github.aaronreidsmith.year2017
 
+import io.github.aaronreidsmith.implicits.SourceOps
+import io.github.aaronreidsmith.{Direction, Grid, North, Point, Solution}
+
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day22 {
-  private object Direction extends Enumeration {
-    type Direction = Value
-    val Up, Down, Left, Right = Value
+object Day22 extends Solution(2017, 22) {
+  type I  = (Node, Grid[State])
+  type O1 = Int
+  type O2 = Int
+
+  private[year2017] sealed trait State
+  private case object Clean    extends State
+  private case object Weakened extends State
+  private case object Flagged  extends State
+  private case object Infected extends State
+
+  private object State {
+    def apply(char: Char): State = char match {
+      case '.' => Clean
+      case 'W' => Weakened
+      case 'F' => Flagged
+      case '#' => Infected
+      case _   => throw new IllegalArgumentException
+    }
   }
-  import Direction._
 
-  private object State extends Enumeration {
-    type State = Value
-    val Clean, Weakened, Flagged, Infected = Value
-  }
-  import State._
+  private[year2017] case class Node(position: Point, direction: Direction)
 
-  private def toState(char: Char): State = char match {
-    case '.'   => Clean
-    case 'W'   => Weakened
-    case 'F'   => Flagged
-    case '#'   => Infected
-    case other => throw new IllegalArgumentException(other.toString)
+  override protected[year2017] def parseInput(file: Source): (Node, Grid[State]) = {
+    val grid   = file.toGrid.view.mapValues(State(_)).toMap.withDefaultValue(Clean)
+    val middle = grid.keySet.map(_.x).size / 2
+    val start  = Node(Point(middle, middle), North)
+    (start, grid)
   }
 
-  private case class Node(direction: Direction, row: Int, col: Int)
+  override protected[year2017] def part1(input: (Node, Grid[State])): Int = {
+    val (initialNode, initialGrid) = input
 
-  def main(args: Array[String]): Unit = {
-    val input      = Source.fromResource("2017/day22.txt")
-    val inputLines = input.getLines().toList
-    input.close()
+    @tailrec
+    def helper(node: Node, grid: Grid[State], iteration: Int = 0, nodesInfected: Int = 0): Int = {
+      if (iteration >= 10_000) {
+        nodesInfected
+      } else {
+        val Node(position, direction) = node
+        val state                     = grid(position)
+        val isInfected                = state == Infected
+        val nextDirection             = if (isInfected) direction.right else direction.left
+        val nextPosition              = position.move(nextDirection)
+        val newState                  = if (isInfected) Clean else Infected
+        val newInfectionCount         = if (newState == Infected) 1 else 0
+        helper(
+          Node(nextPosition, nextDirection),
+          grid.updated(position, newState),
+          iteration + 1,
+          nodesInfected + newInfectionCount
+        )
+      }
+    }
 
-    val grid = inputLines.zipWithIndex.foldLeft(Map.empty[(Int, Int), State]) {
-      case (acc, (line, row)) =>
-        acc ++ line.zipWithIndex.foldLeft(Map.empty[(Int, Int), State]) {
-          case (rowAcc, (char, col)) => rowAcc + ((row, col) -> toState(char))
+    helper(initialNode, initialGrid)
+  }
+
+  override protected[year2017] def part2(input: (Node, Grid[State])): Int = {
+    val (initialNode, initialGrid) = input
+
+    @tailrec
+    def helper(node: Node, grid: Grid[State], iteration: Int = 0, nodesInfected: Int = 0): Int = {
+      if (iteration >= 10_000_000) {
+        nodesInfected
+      } else {
+        val Node(position, direction) = node
+        val state                     = grid(position)
+        val nextDirection = state match {
+          case Clean    => direction.left
+          case Weakened => direction
+          case Infected => direction.right
+          case Flagged  => direction.opposite
         }
-    }
-
-    val startRow    = inputLines.size / 2
-    val startCol    = startRow
-    val initialNode = Node(Up, startRow, startCol)
-
-    println(s"Part 1: ${part1(initialNode, grid)}")
-    println(s"Part 2: ${part2(initialNode, grid)}")
-  }
-
-  @tailrec
-  def part1(node: Node, grid: Map[(Int, Int), State], iteration: Int = 0, nodesInfected: Int = 0): Int =
-    if (iteration >= 10000) {
-      nodesInfected
-    } else {
-      import node._
-      grid.get((row, col)) match {
-        case Some(state) =>
-          val isInfected        = state == Infected
-          val nextDirection     = if (isInfected) turnRight(direction) else turnLeft(direction)
-          val (newRow, newCol)  = stepForward(nextDirection, row, col)
-          val newState          = if (isInfected) Clean else Infected
-          val newInfectionCount = if (newState == Infected) 1 else 0
-          part1(
-            Node(nextDirection, newRow, newCol),
-            grid.updated((row, col), newState),
-            iteration + 1,
-            nodesInfected + newInfectionCount
-          )
-        // An unknown node, but we assume it is uninfected
-        case None =>
-          val nextDirection    = turnLeft(direction)
-          val (newRow, newCol) = stepForward(nextDirection, row, col)
-          val newState         = Infected
-          part1(
-            Node(nextDirection, newRow, newCol),
-            grid.updated((row, col), newState),
-            iteration + 1,
-            nodesInfected + 1
-          )
+        val newState = state match {
+          case Clean    => Weakened
+          case Weakened => Infected
+          case Infected => Flagged
+          case Flagged  => Clean
+        }
+        val nextPosition      = position.move(nextDirection)
+        val newInfectionCount = if (newState == Infected) 1 else 0
+        helper(
+          Node(nextPosition, nextDirection),
+          grid.updated(position, newState),
+          iteration + 1,
+          nodesInfected + newInfectionCount
+        )
       }
     }
 
-  @tailrec
-  private def part2(node: Node, grid: Map[(Int, Int), State], iteration: Int = 0, nodesInfected: Int = 0): Int =
-    if (iteration >= 10000000) {
-      nodesInfected
-    } else {
-      import node._
-      grid.get((row, col)) match {
-        case Some(state) =>
-          val nextDirection = state match {
-            case Clean    => turnLeft(direction)
-            case Weakened => direction
-            case Infected => turnRight(direction)
-            case Flagged  => reverse(direction)
-          }
-          val newState = state match {
-            case Clean    => Weakened
-            case Weakened => Infected
-            case Infected => Flagged
-            case Flagged  => Clean
-          }
-          val (newRow, newCol) = stepForward(nextDirection, row, col)
-          val newInfectedCount = if (newState == Infected) 1 else 0
-          part2(
-            Node(nextDirection, newRow, newCol),
-            grid.updated((row, col), newState),
-            iteration + 1,
-            nodesInfected + newInfectedCount
-          )
-        // An unknown node, but we assume it is uninfected
-        case None =>
-          val nextDirection    = turnLeft(direction)
-          val (newRow, newCol) = stepForward(nextDirection, row, col)
-          val newState         = Weakened
-          part2(
-            Node(nextDirection, newRow, newCol),
-            grid.updated((row, col), newState),
-            iteration + 1,
-            nodesInfected
-          )
-      }
-    }
-
-  private def turnLeft(direction: Direction): Direction = direction match {
-    case Up    => Left
-    case Right => Up
-    case Down  => Right
-    case Left  => Down
-  }
-
-  private def turnRight(direction: Direction): Direction = direction match {
-    case Up    => Right
-    case Right => Down
-    case Down  => Left
-    case Left  => Up
-  }
-
-  private def reverse(direction: Direction): Direction = direction match {
-    case Up    => Down
-    case Right => Left
-    case Down  => Up
-    case Left  => Right
-  }
-
-  private def stepForward(direction: Direction, row: Int, col: Int): (Int, Int) = direction match {
-    case Up    => (row - 1, col)
-    case Right => (row, col + 1)
-    case Down  => (row + 1, col)
-    case Left  => (row, col - 1)
+    helper(initialNode, initialGrid)
   }
 }
