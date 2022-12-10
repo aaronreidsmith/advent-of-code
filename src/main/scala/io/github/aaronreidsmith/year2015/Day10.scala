@@ -3,22 +3,16 @@ package io.github.aaronreidsmith.year2015
 import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
+import scala.io.Source
 
-object Day10 extends Solution {
+object Day10 extends Solution(2015, 10) {
   type I  = Int
   type O1 = Int
   type O2 = Int
 
-  def run(): Unit = {
-    println("Year 2015, Day 10")
-    val input = 1321131112
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
-
-  override protected[year2015] def part1(input: Int): Int = solution(input.toString, 40)
-  override protected[year2015] def part2(input: Int): Int = solution(input.toString, 50)
+  override protected[year2015] def parseInput(file: Source): Int = file.mkString.toInt
+  override protected[year2015] def part1(input: Int): Int        = solution(input.toString, 40)
+  override protected[year2015] def part2(input: Int): Int        = solution(input.toString, 50)
 
   @tailrec
   private def solution(currentNum: String, iterations: Int, currentIteration: Int = 0): Int =

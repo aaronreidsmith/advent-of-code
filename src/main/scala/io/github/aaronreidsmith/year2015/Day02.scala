@@ -1,10 +1,10 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day02 extends Solution {
+object Day02 extends Solution(2015, 2) {
   type I  = List[Box]
   type O1 = Int
   type O2 = Int
@@ -20,14 +20,6 @@ object Day02 extends Solution {
 
     lazy val surfaceArea: Int = (2 * lw) + (2 * wh) + (2 * hl) + smallestSide
     lazy val ribbon: Int      = smallestPerimeter + volume
-  }
-
-  def run(): Unit = {
-    println("Year 2015, Day 2")
-    val boxes = using("2015/day02.txt")(parseInput)
-    println(s"Part 1: ${part1(boxes)}")
-    println(s"Part 2: ${part2(boxes)}")
-    println()
   }
 
   override protected[year2015] def parseInput(file: Source): List[Box] = {

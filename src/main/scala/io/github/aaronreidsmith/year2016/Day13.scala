@@ -1,24 +1,16 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.{Point, Solution, using}
-import org.jgrapht.alg.shortestpath.{AllDirectedPaths, DijkstraShortestPath}
+import io.github.aaronreidsmith.{Point, Solution}
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath
 import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
 
 import scala.io.Source
 import scala.jdk.CollectionConverters._
 
-object Day13 extends Solution {
+object Day13 extends Solution(2016, 13) {
   type I  = DefaultUndirectedGraph[Point, DefaultEdge]
   type O1 = Int
   type O2 = Int
-
-  def run(): Unit = {
-    println("Year 2016, Day 13")
-    val input = using("2016/day13.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
 
   override protected[year2016] def parseInput(file: Source): DefaultUndirectedGraph[Point, DefaultEdge] = {
     val input = file.mkString.toInt

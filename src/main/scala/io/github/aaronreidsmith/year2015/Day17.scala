@@ -1,11 +1,11 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import java.util.concurrent.atomic.AtomicInteger
 import scala.io.Source
 
-object Day17 extends Solution {
+object Day17 extends Solution(2015, 17) {
   type I  = List[Container]
   type O1 = Int
   type O2 = Int
@@ -17,14 +17,6 @@ object Day17 extends Solution {
   private[year2015] case class Container(size: Int) {
     private val _hashCode        = hashCodeGenerator.getAndIncrement()
     override def hashCode(): Int = _hashCode
-  }
-
-  def run(): Unit = {
-    println("Year 2015, Day 17")
-    val containers = using("2015/day17.txt")(parseInput)
-    println(s"Part 1: ${part1(containers)}")
-    println(s"Part 2: ${part2(containers)}")
-    println()
   }
 
   override protected[year2015] def parseInput(file: Source): List[Container] = {

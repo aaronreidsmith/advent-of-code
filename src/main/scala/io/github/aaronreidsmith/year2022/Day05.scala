@@ -5,18 +5,10 @@ import io.github.aaronreidsmith.{Solution, using}
 import scala.collection.mutable
 import scala.io.Source
 
-object Day05 extends Solution {
+object Day05 extends Solution(2022, 5) {
   type I = (Map[Int, String], List[String])
   type O1 = String
   type O2 = String
-
-  def run(): Unit = {
-    println("Year 2022, Day 5")
-    val input = using("2022/day05.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
 
   override protected[year2022] def parseInput(file: Source): (Map[Int, String], List[String]) = {
     val Array(stackString, instructionString, _*) = file.mkString.split("\n\n")

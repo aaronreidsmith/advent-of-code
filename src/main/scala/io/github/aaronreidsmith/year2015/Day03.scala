@@ -1,22 +1,14 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Point, Solution, using}
+import io.github.aaronreidsmith.{Point, Solution}
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day03 extends Solution {
+object Day03 extends Solution(2015, 3) {
   type I  = String
   type O1 = Int
   type O2 = Int
-
-  def run(): Unit = {
-    println("Year 2015, Day 3")
-    val input = using("2015/day03.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
 
   override protected[year2015] def parseInput(file: Source): String = file.mkString
 

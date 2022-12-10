@@ -1,12 +1,12 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
-import scala.util.{Failure, Success, Try, Using}
+import scala.util.{Failure, Success, Try}
 
-object Day25 extends Solution {
+object Day25 extends Solution(2016, 25) {
   type I  = Vector[String]
   type O1 = Int
   type O2 = Unit
@@ -20,13 +20,6 @@ object Day25 extends Solution {
           case None      => throw new IllegalArgumentException(str)
         }
     }
-  }
-
-  def run(): Unit = {
-    println("Year 2016, Day 25")
-    val input = using("2016/day25.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println()
   }
 
   override protected[year2016] def parseInput(file: Source): Vector[String] = file.getLines().toVector

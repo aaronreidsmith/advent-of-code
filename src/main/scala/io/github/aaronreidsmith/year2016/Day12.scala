@@ -6,7 +6,7 @@ import scala.annotation.tailrec
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
-object Day12 extends Solution {
+object Day12 extends Solution(2016, 12) {
   type I  = Vector[String]
   type O1 = Int
   type O2 = Int
@@ -20,14 +20,6 @@ object Day12 extends Solution {
           case None      => throw new IllegalArgumentException(str)
         }
     }
-  }
-
-  def run(): Unit = {
-    println("Year 2016, Day 12")
-    val input = using("2016/day12.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
   }
 
   override protected[year2016] def parseInput(file: Source): Vector[String] = file.getLines().toVector

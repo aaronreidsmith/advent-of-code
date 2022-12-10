@@ -1,13 +1,13 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.util.Random
 
 // Copied from my Raku solution, so could probably be cleaned up
-object Day22 extends Solution {
+object Day22 extends Solution(2015, 22) {
   type I  = GameState
   type O1 = Int
   type O2 = Int
@@ -82,14 +82,6 @@ object Day22 extends Solution {
   private[year2015] case object Boss   extends Turn { val next: Turn = Player }
   private[year2015] case object Player extends Turn { val next: Turn = Boss   }
   private[year2015] type Winner = Turn
-
-  def run(): Unit = {
-    println("Year 2015, Day 22")
-    val initialGameState = using("2015/day22.txt")(parseInput)
-    println(s"Part 1: ${part1(initialGameState)}")
-    println(s"Part 2: ${part2(initialGameState)}")
-    println()
-  }
 
   override protected[year2015] def parseInput(file: Source): GameState = {
     val List(bossHp, bossAttack, _*) = file.getLines().toList.map(line => line.filter(_.isDigit).toInt)

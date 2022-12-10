@@ -1,24 +1,16 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 import org.jgrapht.alg.shortestpath.AllDirectedPaths
 import org.jgrapht.graph.{DefaultWeightedEdge, SimpleDirectedWeightedGraph}
 
 import scala.io.Source
 import scala.jdk.CollectionConverters._
 
-object Day09 extends Solution {
+object Day09 extends Solution(2015, 9) {
   type I = SimpleDirectedWeightedGraph[String, DefaultWeightedEdge]
   type O1 = Int
   type O2 = Int
-
-  def run(): Unit = {
-    println("Year 2015, Day 9")
-    val graph = using("2015/day09.txt")(parseInput)
-    println(s"Part 1: ${part1(graph)}")
-    println(s"Part 2: ${part2(graph)}")
-    println()
-  }
 
   override protected[year2015] def parseInput(file: Source): SimpleDirectedWeightedGraph[String, DefaultWeightedEdge] = {
     val entry = "^(.*) to (.*) = (\\d+)$".r

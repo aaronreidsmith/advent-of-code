@@ -4,22 +4,16 @@ import io.github.aaronreidsmith.Solution
 
 import java.math.BigInteger
 import java.security.MessageDigest
+import scala.io.Source
 
-object Day14 extends Solution {
+object Day14 extends Solution(2016, 14) {
   type I  = String
   type O1 = Int
   type O2 = Int
 
-  def run(): Unit = {
-    println("Year 2016, Day 14")
-    val input = "jlmsuwbz"
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
-
-  override protected[year2016] def part1(input: String): Int = solution(input, md5)
-  override protected[year2016] def part2(input: String): Int = solution(input, stretchedMd5)
+  override protected[year2016] def parseInput(file: Source): String = file.mkString
+  override protected[year2016] def part1(input: String): Int        = solution(input, md5)
+  override protected[year2016] def part2(input: String): Int        = solution(input, stretchedMd5)
 
   private def solution(salt: String, md5Generator: String => String): Int = {
     val md5s = LazyList.from(0).map(i => md5Generator(s"$salt$i"))

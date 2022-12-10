@@ -6,18 +6,10 @@ import io.github.aaronreidsmith.implicits._
 import scala.collection.mutable
 import scala.io.Source
 
-object Day12 extends Solution {
+object Day12 extends Solution(2017, 12) {
   type I  = Map[Int, List[Int]]
   type O1 = Int
   type O2 = Int
-
-  def run(): Unit = {
-    println("Year 2017, Day 12")
-    val input = using("2017/day12.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
 
   override protected[year2017] def parseInput(file: Source): Map[Int, List[Int]] = {
     val pipeEntry = """^(\d+) <-> (.*)""".r

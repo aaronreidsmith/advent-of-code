@@ -3,9 +3,10 @@ package io.github.aaronreidsmith.year2016
 import io.github.aaronreidsmith.Solution
 
 import java.util
+import scala.io.Source
 
 // This a very Java way to do this, but it works 🤷
-object Day19 extends Solution {
+object Day19 extends Solution(2016, 19) {
   type I  = Int
   type O1 = Int
   type O2 = Int
@@ -18,13 +19,7 @@ object Day19 extends Solution {
   }
   private var start: Elf = _
 
-  def run(): Unit = {
-    println("Year 2016, Day 19")
-    val input = 3012210
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
+  override protected[year2016] def parseInput(file: Source): Int = file.mkString.toInt
 
   override protected[year2016] def part1(input: Int): Int = {
     (1 to input).foreach { number =>

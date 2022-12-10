@@ -2,18 +2,14 @@ package io.github.aaronreidsmith.year2015
 
 import io.github.aaronreidsmith.Solution
 
-object Day20 extends Solution {
+import scala.io.Source
+
+object Day20 extends Solution(2015, 20) {
   type I  = Int
   type O1 = Int
   type O2 = Int
 
-  def run(): Unit = {
-    println("Year 2015, Day 20")
-    val input = 34000000
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
+  override protected[year2015] def parseInput(file: Source): Int = file.mkString.toInt
 
   override protected[year2015] def part1(input: Int): Int = {
     def presents(houseNumber: Int): Int = (1 to math.sqrt(houseNumber).toInt)

@@ -6,19 +6,14 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import scala.annotation.tailrec
 import scala.collection.mutable
+import scala.io.Source
 
-object Day05 extends Solution {
+object Day05 extends Solution(2016, 5) {
   type I  = String
   type O1 = String
   type O2 = String
 
-  def run(): Unit = {
-    println("Year 2016, Day 5")
-    val input = "cxdnnyjw"
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
+  override protected[year2016] def parseInput(file: Source): String = file.mkString
 
   override protected[year2016] def part1(doorId: String): String = {
     val password = new StringBuilder
@@ -43,13 +38,12 @@ object Day05 extends Solution {
     val password = mutable.Map.empty[Int, Char]
     @tailrec
     def helper(index: Int): String = if (password.size >= 8) {
-      password
-        .toList
+      password.toList
         .sortBy { case (i, _) => i }
         .map { case (_, char) => char }
         .mkString
     } else {
-      val hash = md5(s"$doorId$index")
+      val hash           = md5(s"$doorId$index")
       val insertPosition = hash(5).asDigit
       if (hash.startsWith("00000") && insertPosition >= 0 && insertPosition < 8 && !password.contains(insertPosition)) {
         password.addOne(insertPosition -> hash(6))

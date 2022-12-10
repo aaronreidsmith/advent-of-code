@@ -3,19 +3,14 @@ package io.github.aaronreidsmith.year2017
 import io.github.aaronreidsmith.{Direction, East, North, Point, Solution, South, West}
 
 import scala.annotation.tailrec
+import scala.io.Source
 
-object Day03 extends Solution {
+object Day03 extends Solution(2017, 3) {
   type I  = Int
   type O1 = Int
   type O2 = Int
 
-  def run(): Unit = {
-    println("Year 2017, Day 3")
-    val input = 347991
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
+  override protected[year2017] def parseInput(file: Source): Int = file.mkString.toInt
 
   override protected[year2017] def part1(input: Int): Int = {
     solution(input, Map(Point(0, 0) -> 1, Point(1, 0) -> 2), part1 = true)

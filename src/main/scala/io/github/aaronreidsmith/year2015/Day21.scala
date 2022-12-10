@@ -1,11 +1,11 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day21 extends Solution {
+object Day21 extends Solution(2015, 21) {
   type I  = Boss
   type O1 = Int
   type O2 = Int
@@ -147,14 +147,6 @@ object Day21 extends Solution {
   private val armors  = List(Some(Leather), Some(Chainmail), Some(Splintmail), Some(Bandedmail), Some(Platemail), None)
   private val rings =
     List(DamagePlusOne, DamagePlusTwo, DamagePlusThree, DefensePlusOne, DefensePlusTwo, DefensePlusThree)
-
-  def run(): Unit = {
-    println("Year 2015, Day 21")
-    val boss = using("2015/day21.txt")(parseInput)
-    println(s"Part 1: ${part1(boss)}")
-    println(s"Part 2: ${part2(boss)}")
-    println()
-  }
 
   override protected[year2015] def parseInput(file: Source): Boss = {
     val Array(bossHp, bossDamage, bossArmor, _*) = file.mkString.split('\n').map(_.split(": ").last.toInt)

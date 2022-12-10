@@ -4,18 +4,10 @@ import io.github.aaronreidsmith.{Solution, using}
 
 import scala.io.Source
 
-object Day01 extends Solution {
+object Day01 extends Solution(2017, 1) {
   type I  = Vector[Int]
   type O1 = Int
   type O2 = Int
-
-  def run(): Unit = {
-    println("Year 2017, Day 1")
-    val input = using("2017/day01.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
 
   override protected[year2017] def parseInput(file: Source): Vector[Int] = file.mkString.map(_.asDigit).toVector
 

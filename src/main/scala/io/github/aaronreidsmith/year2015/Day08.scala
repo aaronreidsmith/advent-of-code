@@ -1,11 +1,11 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 import org.apache.commons.text.StringEscapeUtils
 
 import scala.io.Source
 
-object Day08 extends Solution {
+object Day08 extends Solution(2015, 8) {
   type I  = List[String]
   type O1 = Int
   type O2 = Int
@@ -32,14 +32,6 @@ object Day08 extends Solution {
     }
 
     def reEncodedLength: Int = StringEscapeUtils.escapeJson(string).length + 2 // For the leading and trailing quotes
-  }
-
-  def run(): Unit = {
-    println("Year 2015, Day 8")
-    val input = using("2015/day08.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
   }
 
   override protected[year2015] def parseInput(file: Source): List[String] = file.getLines().toList

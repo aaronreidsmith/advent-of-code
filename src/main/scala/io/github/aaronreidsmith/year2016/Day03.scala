@@ -1,21 +1,13 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day03 extends Solution {
+object Day03 extends Solution(2016, 3) {
   type I  = List[List[Int]] // We use an inner list instead of a tuple for easy transposition
   type O1 = Int
   type O2 = Int
-
-  def run(): Unit = {
-    println("Year 2016, Day 3")
-    val input = using("2016/day03.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
 
   override protected[year2016] def parseInput(file: Source): List[List[Int]] = {
     file

@@ -2,16 +2,16 @@ package io.github.aaronreidsmith.year2015
 
 import io.github.aaronreidsmith.Solution
 
-object Day25 extends Solution {
+import scala.io.Source
+
+object Day25 extends Solution(2015, 25) {
   type I  = (Int, Int)
   type O1 = Long
   type O2 = Unit
 
-  def run(): Unit = {
-    println("Year 2015, Day 25")
-    val input = (2978, 3083)
-    println(s"Part 1: ${part1(input)}")
-    println()
+  override protected[year2015] def parseInput(file: Source): (Int, Int) = {
+    val Array(row, col, _*) = file.mkString.split(',')
+    (row.toInt, col.toInt)
   }
 
   override protected[year2015] def part1(input: (Int, Int)): Long = {

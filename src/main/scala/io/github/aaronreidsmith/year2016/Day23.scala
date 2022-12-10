@@ -1,12 +1,12 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.util.Try
 
-object Day23 extends Solution {
+object Day23 extends Solution(2016, 23) {
   type I  = Vector[String]
   type O1 = Int
   type O2 = Int
@@ -14,14 +14,6 @@ object Day23 extends Solution {
   private implicit class RichString(str: String) {
     def toIntOrValue(registers: Map[String, Int]): Int =
       Try(str.toInt).getOrElse(registers.getOrElse(str, throw new IllegalArgumentException(str)))
-  }
-
-  def run(): Unit = {
-    println("Year 2016, Day 23")
-    val input = using("2016/day23.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
   }
 
   override protected[year2016] def parseInput(file: Source): Vector[String] = file.getLines().toVector

@@ -1,23 +1,15 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day15 extends Solution {
+object Day15 extends Solution(2016, 15) {
   type I  = Vector[Disc]
   type O1 = Int
   type O2 = Int
 
   protected[year2016] case class Disc(number: Int, positions: Int, initialPosition: Int)
-
-  def run(): Unit = {
-    println("Year 2016, Day 15")
-    val input = using("2016/day15.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
 
   override protected[year2016] def parseInput(file: Source): Vector[Disc] = {
     val entry = "^Disc #(\\d+) has (\\d+) positions; at time=0, it is at position (\\d+)\\.$".r

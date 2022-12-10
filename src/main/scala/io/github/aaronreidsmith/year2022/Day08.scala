@@ -5,18 +5,10 @@ import io.github.aaronreidsmith.{Point, Solution, using}
 import scala.collection.SortedMap
 import scala.io.Source
 
-object Day08 extends Solution {
+object Day08 extends Solution(2022, 8) {
   type I  = SortedMap[Point, Int]
   type O1 = Int
   type O2 = Int
-
-  def run(): Unit = {
-    println("Year 2022, Day 8")
-    val input = using("2022/day08.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
 
   override protected[year2022] def parseInput(file: Source): SortedMap[Point, Int] = {
     val pairs = for {

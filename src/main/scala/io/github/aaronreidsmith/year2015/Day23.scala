@@ -1,24 +1,16 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day23 extends Solution {
+object Day23 extends Solution(2015, 23) {
   type I = Vector[String]
   type O1 = Int
   type O2 = Int
 
   private case class Computer(a: Int = 0, b: Int = 0)
-
-  def run(): Unit = {
-    println("Year 2015, Day 23")
-    val instructions = using("2015/day23.txt")(parseInput)
-    println(s"Part 1: ${part1(instructions)}")
-    println(s"Part 2: ${part2(instructions)}")
-    println()
-  }
 
   override protected[year2015] def parseInput(file: Source): Vector[String] = file.getLines().toVector
   override protected[year2015] def part1(instruction: Vector[String]): Int  = solution(instruction, Computer())

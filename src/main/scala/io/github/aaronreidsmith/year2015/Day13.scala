@@ -1,23 +1,15 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day13 extends Solution {
+object Day13 extends Solution(2015, 13) {
   type I = List[Person]
   type O1 = Int
   type O2 = Int
 
   private[year2015] case class Person(name: String, rules: Map[String, Int])
-
-  def run(): Unit = {
-    println("Year 2015, Day 13")
-    val rules = using("2015/day13.txt")(parseInput)
-    println(s"Part 1: ${part1(rules)}")
-    println(s"Part 2: ${part2(rules)}")
-    println()
-  }
 
   override protected[year2015] def parseInput(file: Source): List[Person] = {
     val gain = "^(.*?) would gain (\\d+) happiness units by sitting next to (.*?)\\.$".r

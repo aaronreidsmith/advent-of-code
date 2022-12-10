@@ -1,10 +1,10 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.{Point, Solution, using}
+import io.github.aaronreidsmith.{Point, Solution}
 
 import scala.io.Source
 
-object Day22 extends Solution {
+object Day22 extends Solution(2016, 22) {
   type I  = Map[Point, Node]
   type O1 = Int
   type O2 = Int
@@ -20,14 +20,6 @@ object Day22 extends Solution {
       // High capacity nodes are basically walls since they are already full
       if (totalSpace >= 500) "|||||" else s"${_used}/$totalSpace"
     }
-  }
-
-  def run(): Unit = {
-    println("Year 2016, Day 22")
-    val input = using("2016/day22.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
   }
 
   override protected[year2016] def parseInput(file: Source): Map[Point, Node] = {

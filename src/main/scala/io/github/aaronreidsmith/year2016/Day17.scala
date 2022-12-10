@@ -4,22 +4,16 @@ import io.github.aaronreidsmith.Solution
 
 import java.math.BigInteger
 import java.security.MessageDigest
+import scala.io.Source
 
-object Day17 extends Solution {
+object Day17 extends Solution(2016, 17) {
   type I  = String
   type O1 = String
   type O2 = Int
 
-  def run(): Unit = {
-    println("Year 2016, Day 17")
-    val input = "vkjiggvb"
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
-
-  override protected[year2016] def part1(input: String): String = getAllPaths(input).minBy(_.length)
-  override protected[year2016] def part2(input: String): Int    = getAllPaths(input).map(_.length).max
+  override protected[year2016] def parseInput(file: Source): String = file.mkString
+  override protected[year2016] def part1(input: String): String     = getAllPaths(input).minBy(_.length)
+  override protected[year2016] def part2(input: String): Int        = getAllPaths(input).map(_.length).max
 
   // Both solutions require the same traversal, so might as well only do it once
   private var allPaths = Seq.empty[String]

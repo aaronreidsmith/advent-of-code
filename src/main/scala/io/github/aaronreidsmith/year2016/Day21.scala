@@ -1,21 +1,13 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day21 extends Solution {
+object Day21 extends Solution(2016, 21) {
   type I  = List[String]
   type O1 = String
   type O2 = String
-
-  def run(): Unit = {
-    println("Year 2016, Day 21")
-    val input = using("2016/day21.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
 
   override protected[year2016] def parseInput(file: Source): List[String] = file.getLines().toList
   override protected[year2016] def part1(input: List[String]): String     = scramble("abcdefgh", input)

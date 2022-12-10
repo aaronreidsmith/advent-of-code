@@ -1,23 +1,15 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.collection.mutable
 import scala.io.Source
 
 // TODO: Adapted from my Python solution, so v mutable
-object Day10 extends Solution {
+object Day10 extends Solution(2016, 10) {
   type I  = (Map[Int, Vector[Int]], Map[Int, ((String, Int), (String, Int))])
   type O1 = Int
   type O2 = Int
-
-  def run(): Unit = {
-    println("Year 2016 Day 10")
-    val input = using("2016/day10.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
 
   override protected[year2016] def parseInput(
       file: Source

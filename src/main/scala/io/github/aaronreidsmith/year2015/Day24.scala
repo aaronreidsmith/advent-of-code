@@ -1,21 +1,13 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day24 extends Solution {
+object Day24 extends Solution(2015, 24) {
   type I  = List[Int]
   type O1 = BigInt
   type O2 = BigInt
-
-  def run(): Unit = {
-    println("Year 2015, Day 24")
-    val gifts = using("2015/day24.txt")(parseInput)
-    println(s"Part 1: ${part1(gifts)}")
-    println(s"Part 2: ${part2(gifts)}")
-    println()
-  }
 
   override protected[year2015] def parseInput(file: Source): List[Int] = file.getLines().toList.map(_.toInt)
   override protected[year2015] def part1(gifts: List[Int]): BigInt     = minQuantumEntanglement(gifts, gifts.sum / 3)

@@ -6,7 +6,7 @@ import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.io.Source
 
-object Day07 extends Solution {
+object Day07 extends Solution(2017, 7) {
   type I  = (Map[String, Node], Set[String])
   type O1 = String
   type O2 = Int
@@ -17,14 +17,6 @@ object Day07 extends Solution {
       children: Seq[Node] = Seq(),
       childString: Option[String] = None
   )
-
-  def run(): Unit = {
-    println("Year 2017, Day 7")
-    val input = using("2017/day07.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
 
   override protected[year2017] def parseInput(file: Source): (Map[String, Node], Set[String]) = {
     val noChildren   = """^(\S+) \((\d+)\)$""".r

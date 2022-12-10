@@ -1,10 +1,10 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day16 extends Solution {
+object Day16 extends Solution(2015, 16) {
   type I  = List[Sue]
   type O1 = Int
   type O2 = Int
@@ -22,14 +22,6 @@ object Day16 extends Solution {
       cars: Option[Int] = None,
       perfumes: Option[Int] = None
   )
-
-  def run(): Unit = {
-    println("Year 2015, Day 16")
-    val sues = using("2015/day16.txt")(parseInput)
-    println(s"Part 1: ${part1(sues)}")
-    println(s"Part 2: ${part2(sues)}")
-    println()
-  }
 
   override protected[year2015] def parseInput(file: Source): List[Sue] = {
     val sue         = "^Sue (\\d+): (.*)$".r

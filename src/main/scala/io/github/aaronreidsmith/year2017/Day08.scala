@@ -4,18 +4,10 @@ import io.github.aaronreidsmith.{Solution, using}
 
 import scala.io.Source
 
-object Day08 extends Solution {
+object Day08 extends Solution(2017, 8) {
   type I  = List[String]
   type O1 = Int
   type O2 = Int
-
-  def run(): Unit = {
-    println("Year 2017, Day 8")
-    val input = using("2017/day08.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
 
   override protected[year2017] def parseInput(file: Source): List[String] = file.getLines().toList
   override protected[year2017] def part1(input: List[String]): Int        = solution(input)._1

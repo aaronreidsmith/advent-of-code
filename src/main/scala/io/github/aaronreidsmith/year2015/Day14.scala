@@ -1,11 +1,11 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day14 extends Solution {
+object Day14 extends Solution(2015, 14) {
   type I  = List[Reindeer]
   type O1 = Int
   type O2 = Int
@@ -23,14 +23,6 @@ object Day14 extends Solution {
   )
 
   private val maxTime = if (isTest) 1000 else 2503
-
-  def run(): Unit = {
-    println("Year 2015, Day 14")
-    val reindeer = using("2015/day14.txt")(parseInput)
-    println(s"Part 1: ${part1(reindeer)}")
-    println(s"Part 2: ${part2(reindeer)}")
-    println()
-  }
 
   override protected[year2015] def parseInput(file: Source): List[Reindeer] = {
     val reindeerEntry = "^(.*?) can fly (\\d+) km/s for (\\d+) seconds, but then must rest for (\\d+) seconds\\.$".r

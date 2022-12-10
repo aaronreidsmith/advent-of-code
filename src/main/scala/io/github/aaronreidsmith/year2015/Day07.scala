@@ -1,13 +1,13 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 import scala.reflect.runtime.currentMirror
 import scala.tools.reflect.ToolBox
 import scala.util.parsing.combinator.JavaTokenParsers
 
-object Day07 extends Solution with JavaTokenParsers {
+object Day07 extends Solution(2015, 7) with JavaTokenParsers {
   type I  = String
   type O1 = String
   type O2 = String
@@ -30,14 +30,6 @@ object Day07 extends Solution with JavaTokenParsers {
   private val toolBox = currentMirror.mkToolBox()
 
   private def wires(input: String): String = parse(rep(line), input).get.mkString("; ")
-
-  def run(): Unit = {
-    println("Year 2015, Day 7")
-    val input = using("2015/day07.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
 
   override protected[year2015] def parseInput(file: Source): String = file.getLines().mkString("\n")
 

@@ -1,11 +1,11 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.{Direction, East, North, Point, Solution, South, West, using}
+import io.github.aaronreidsmith._
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day01 extends Solution {
+object Day01 extends Solution(2016, 1) {
   type I  = List[Instruction]
   type O1 = Int
   type O2 = Int
@@ -43,14 +43,6 @@ object Day01 extends Solution {
 
   private object State {
     def origin: State = State(North, Point.zero)
-  }
-
-  def run(): Unit = {
-    println("Year 2016, Day 1")
-    val input = using("2016/day01.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
   }
 
   override protected[year2016] def parseInput(file: Source): List[Instruction] = {

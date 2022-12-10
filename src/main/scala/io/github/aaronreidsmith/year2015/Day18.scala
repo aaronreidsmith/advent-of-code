@@ -6,21 +6,13 @@ import io.github.aaronreidsmith.implicits._
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day18 extends Solution {
+object Day18 extends Solution(2015, 18) {
   type I  = Grid[Char]
   type O1 = Int
   type O2 = Int
 
   private val part1Iterations = if (isTest) 4 else 100
   private val part2Iterations = if (isTest) 5 else 100
-
-  def run(): Unit = {
-    println("Year 2015, Day 18")
-    val grid = using("2015/day18.txt")(parseInput)
-    println(s"Part 1: ${part1(grid)}")
-    println(s"Part 2: ${part2(grid)}")
-    println()
-  }
 
   override protected[year2015] def parseInput(file: Source): Grid[Char] = file.toGrid
   override protected[year2015] def part1(grid: Grid[Char]): Int         = solution(grid, part1Iterations, Seq(), 0)

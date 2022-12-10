@@ -1,11 +1,11 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day02 extends Solution {
+object Day02 extends Solution(2016, 2){
   type I  = List[List[Char]]
   type O1 = String
   type O2 = String
@@ -116,14 +116,6 @@ object Day02 extends Solution {
   case object D extends Character {
     val value: Char                   = 'D'
     override val partTwoUp: Character = B
-  }
-
-  def run(): Unit = {
-    println("Year 2016, Day 2")
-    val input = using("2016/day02.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
   }
 
   override protected[year2016] def parseInput(file: Source): List[List[Char]] = file.getLines().toList.map(_.toList)

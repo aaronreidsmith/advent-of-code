@@ -1,10 +1,10 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day15 extends Solution {
+object Day15 extends Solution(2015, 15) {
   type I  = List[Ingredient]
   type O1 = Int
   type O2 = Int
@@ -31,14 +31,6 @@ object Day15 extends Solution {
     }
 
     lazy val calories: Int = ingredients.foldLeft(0)(_ + _.calories)
-  }
-
-  def run(): Unit = {
-    println("Year 2015, Day 15")
-    val choices = using("2015/day15.txt")(parseInput)
-    println(s"Part 1: ${part1(choices)}")
-    println(s"Part 2: ${part2(choices)}")
-    println()
   }
 
   override protected[year2015] def parseInput(file: Source): List[Ingredient] = {

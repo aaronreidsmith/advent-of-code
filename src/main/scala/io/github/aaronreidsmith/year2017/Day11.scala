@@ -5,18 +5,10 @@ import io.github.aaronreidsmith.{FlatCoordinate, Solution, using}
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day11 extends Solution {
+object Day11 extends Solution(2017, 11) {
   type I  = List[String]
   type O1 = Int
   type O2 = Int
-
-  def run(): Unit = {
-    println("Year 2017, Day 11")
-    val input = using("2017/day11.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
-  }
 
   override protected[year2017] def parseInput(file: Source): List[String] = file.mkString.split(',').toList
   override protected[year2017] def part1(input: List[String]): Int        = solution(input)._1

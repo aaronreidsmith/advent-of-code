@@ -1,27 +1,19 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.io.Source
 import scala.util.matching.Regex
 
-object Day19 extends Solution {
+object Day19 extends Solution(2015, 19) {
   type I  = (List[Rule], String)
   type O1 = Int
   type O2 = Int
 
   private[year2015] case class Rule(original: String, replacement: String) {
     val regex: Regex = original.r
-  }
-
-  def run(): Unit = {
-    println("Year 2015, Day 19")
-    val input = using("2015/day19.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-    println()
   }
 
   override protected[year2015] def parseInput(file: Source): (List[Rule], String) = {
