@@ -95,7 +95,14 @@ object AdventOfCode {
       25 -> Day25
     )
   }
-  private val solutions2018: SortedMap[Int, Solution] = SortedMap()
+  private val solutions2018: SortedMap[Int, Solution] = {
+    import year2018._
+    SortedMap(
+      1 -> Day01,
+      2 -> Day02,
+      3 -> Day03,
+    )
+  }
   private val solutions2019: SortedMap[Int, Solution] = SortedMap()
   private val solutions2020: SortedMap[Int, Solution] = SortedMap()
   private val solutions2021: SortedMap[Int, Solution] = SortedMap()

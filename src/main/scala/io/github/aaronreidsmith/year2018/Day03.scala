@@ -1,19 +1,17 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.{Point, using}
+import io.github.aaronreidsmith.{Point, Solution, using}
 
 import scala.io.Source
 
-object Day03 {
+object Day03 extends Solution(2018, 3) {
+  type I  = List[Square]
+  type O1 = Int
+  type O2 = Int
+
   private[year2018] case class Square(id: Int, leftIndent: Int, topIndent: Int, width: Int, height: Int)
 
-  def main(args: Array[String]): Unit = {
-    val squares = using("2018/day03.txt")(parseInput)
-    println(s"Part 1: ${part1(squares)}")
-    println(s"Part 2: ${part2(squares)}")
-  }
-
-  private[year2018] def parseInput(file: Source): List[Square] = {
+  override protected[year2018] def parseInput(file: Source): List[Square] = {
     val square = "^#(\\d+) @ (\\d+),(\\d+): (\\d+)x(\\d+)$".r
     file.getLines().toList.collect {
       case square(id, leftIndent, topIndent, width, height) =>
@@ -21,9 +19,9 @@ object Day03 {
     }
   }
 
-  private[year2018] def part1(squares: List[Square]): Int = getOverlaps(squares).size
+  override protected[year2018] def part1(squares: List[Square]): Int = getOverlaps(squares).size
 
-  private[year2018] def part2(squares: List[Square]): Int = {
+  override protected[year2018] def part2(squares: List[Square]): Int = {
     val ids        = squares.map(_.id).toSet
     val overlapSet = getOverlaps(squares).reduceLeft(_ ++ _)
     ids.diff(overlapSet).head
