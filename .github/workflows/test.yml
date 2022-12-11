@@ -8,9 +8,14 @@ on:
     branches:
       - main
 
+# Cancel older runs of the same workflow on the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest # macOS runners have more memory than Linux
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3

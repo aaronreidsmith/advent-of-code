@@ -7,6 +7,7 @@ val settings = new {
     "io.circe"               %% "circe-parser"             % circeVersion,
     "io.circe"               %% "circe-optics"             % circeVersion,
     "net.fornwall"            % "aoc"                      % "2019.12.442", // TODO: Don't rely on this
+    "org.apache.commons"      % "commons-math3"            % "3.6.1",
     "org.apache.commons"      % "commons-text"             % "1.10.0",
     "org.jgrapht"             % "jgrapht-core"             % "1.5.1",
     "org.scala-lang"          % "scala-reflect"            % scalaVersion,
@@ -18,7 +19,6 @@ val settings = new {
 
 // Root options
 libraryDependencies ++= settings.libraryDependencies
-onLoadMessage.withRank(KeyRanks.Invisible) := ""
 scalacOptions ++= Seq("-deprecation")
 scalaVersion := settings.scalaVersion
 
@@ -33,6 +33,7 @@ run / outputStrategy := Some(StdoutOutput)
 // Test options
 Test / envVars            := Map("IS_TEST" -> "true")
 Test / fork               := true
+Test / javaOptions        := Seq("-Xms1G", "-Xmx8G")
 Test / testForkedParallel := true
 Test / testOptions += {
   // Only run slow tests on CI
