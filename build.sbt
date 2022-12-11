@@ -37,7 +37,7 @@ Test / testForkedParallel := true
 Test / testOptions += {
   // Only run slow tests on CI
   sys.env.get("CI") match {
-    case Some(_) => Tests.Argument(TestFrameworks.ScalaTest)
+    case Some(_) => Tests.Argument(TestFrameworks.ScalaTest, "-l", "io.github.aaronreidsmith.IgnoreOnCI")
     case None    => Tests.Argument(TestFrameworks.ScalaTest, "-l", "org.scalatest.tags.Slow")
   }
 }
