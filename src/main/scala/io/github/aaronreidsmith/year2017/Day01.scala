@@ -9,7 +9,7 @@ object Day01 extends Solution(2017, 1) {
   type O1 = Int
   type O2 = Int
 
-  override protected[year2017] def parseInput(file: Source): Vector[Int] = file.mkString.map(_.asDigit).toVector
+  override protected[year2017] def parseInput(file: Source): Vector[Int] = file.mkString.trim.map(_.asDigit).toVector
 
   override protected[year2017] def part1(input: Vector[Int]): Int = input.appended(input.head).sliding(2).foldLeft(0) {
     case (acc, Vector(a, b)) if a == b => acc + a

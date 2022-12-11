@@ -13,7 +13,7 @@ object Day13 extends Solution(2016, 13) {
   type O2 = Int
 
   override protected[year2016] def parseInput(file: Source): DefaultUndirectedGraph[Point, DefaultEdge] = {
-    val input = file.mkString.toInt
+    val input = file.mkString.trim.toInt
     val graph = new DefaultUndirectedGraph[Point, DefaultEdge](classOf[DefaultEdge])
 
     // Add all our vertices

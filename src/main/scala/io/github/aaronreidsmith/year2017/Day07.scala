@@ -25,6 +25,7 @@ object Day07 extends Solution(2017, 7) {
       case (acc, noChildren(name, weight)) => acc.updated(name, Node(name, weight.toInt))
       case (acc, withChildren(name, weight, childString)) =>
         acc.updated(name, Node(name, weight.toInt, childString = Some(childString)))
+      case (acc, _) => acc
     }
 
     val childNodes = mutable.Set.empty[String]

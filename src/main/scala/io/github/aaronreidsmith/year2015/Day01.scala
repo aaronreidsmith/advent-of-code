@@ -10,7 +10,7 @@ object Day01 extends Solution(2015, 1) {
   type O1 = Int
   type O2 = Int
 
-  override protected[year2015] def parseInput(file: Source): String = file.mkString
+  override protected[year2015] def parseInput(file: Source): String = file.mkString.trim
   override protected[year2015] def part1(input: String): Int        = input.count(_ == '(') - input.count(_ == ')')
   override protected[year2015] def part2(input: String): Int = {
     @tailrec

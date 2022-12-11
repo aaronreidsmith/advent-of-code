@@ -19,7 +19,7 @@ object Day19 extends Solution(2016, 19) {
   }
   private var start: Elf = _
 
-  override protected[year2016] def parseInput(file: Source): Int = file.mkString.toInt
+  override protected[year2016] def parseInput(file: Source): Int = file.mkString.trim.toInt
 
   override protected[year2016] def part1(input: Int): Int = {
     (1 to input).foreach { number =>

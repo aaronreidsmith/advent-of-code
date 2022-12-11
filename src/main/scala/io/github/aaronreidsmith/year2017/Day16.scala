@@ -26,7 +26,7 @@ object Day16 extends Solution(2017, 16) {
     val spin     = "^s(\\d+)$".r
     val exchange = "^x(\\d+)/(\\d+)$".r
     val partner  = "^p(.*)/(.*)$".r
-    file.mkString.split(',').toList.collect {
+    file.mkString.trim.split(',').toList.collect {
       case spin(amount)                   => Spin(amount.toInt)
       case exchange(position1, position2) => Exchange(position1.toInt, position2.toInt)
       case partner(char1, char2)          => Partner(char1.charAt(0), char2.charAt(0))

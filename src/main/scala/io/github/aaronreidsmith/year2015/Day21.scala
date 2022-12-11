@@ -149,7 +149,7 @@ object Day21 extends Solution(2015, 21) {
     List(DamagePlusOne, DamagePlusTwo, DamagePlusThree, DefensePlusOne, DefensePlusTwo, DefensePlusThree)
 
   override protected[year2015] def parseInput(file: Source): Boss = {
-    val Array(bossHp, bossDamage, bossArmor, _*) = file.mkString.split('\n').map(_.split(": ").last.toInt)
+    val Array(bossHp, bossDamage, bossArmor, _*) = file.mkString.trim.split('\n').map(_.split(": ").last.toInt)
     Boss(bossHp, bossArmor, bossDamage)
   }
 

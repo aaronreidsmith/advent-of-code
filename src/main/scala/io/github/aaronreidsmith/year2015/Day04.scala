@@ -11,7 +11,7 @@ object Day04 extends Solution(2015, 4) {
   type O1 = Int
   type O2 = Int
 
-  override protected[year2015] def parseInput(file: Source): String = file.mkString
+  override protected[year2015] def parseInput(file: Source): String = file.mkString.trim
 
   override protected[year2015] def part1(input: String): Int = LazyList
     .from(1)

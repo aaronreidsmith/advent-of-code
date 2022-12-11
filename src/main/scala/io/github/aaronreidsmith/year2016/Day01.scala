@@ -46,7 +46,7 @@ object Day01 extends Solution(2016, 1) {
   }
 
   override protected[year2016] def parseInput(file: Source): List[Instruction] = {
-    file.mkString
+    file.mkString.trim
       .split(", ")
       .map(entry => Instruction(entry.head, entry.tail.toInt))
       .toList

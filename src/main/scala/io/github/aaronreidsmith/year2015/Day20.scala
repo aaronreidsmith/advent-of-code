@@ -9,7 +9,7 @@ object Day20 extends Solution(2015, 20) {
   type O1 = Int
   type O2 = Int
 
-  override protected[year2015] def parseInput(file: Source): Int = file.mkString.toInt
+  override protected[year2015] def parseInput(file: Source): Int = file.mkString.trim.toInt
 
   override protected[year2015] def part1(input: Int): Int = {
     def presents(houseNumber: Int): Int = (1 to math.sqrt(houseNumber).toInt)

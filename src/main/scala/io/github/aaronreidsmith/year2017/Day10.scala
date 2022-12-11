@@ -10,7 +10,7 @@ object Day10 extends Solution(2017, 10) {
   type O1 = Int
   type O2 = String
 
-  override protected[year2017] def parseInput(file: Source): String = file.mkString
+  override protected[year2017] def parseInput(file: Source): String = file.mkString.trim
 
   override protected[year2017] def part1(input: String): Int = solution(input.split(',').toVector.map(_.toInt))._1
   override protected[year2017] def part2(input: String): String = {

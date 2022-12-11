@@ -10,7 +10,7 @@ object Day06 extends Solution(2017, 6) {
   type O1 = Int
   type O2 = Int
 
-  override protected[year2017] def parseInput(file: Source): List[Int] = file.mkString.split('\t').map(_.toInt).toList
+  override protected[year2017] def parseInput(file: Source): List[Int] = file.mkString.trim.split('\t').map(_.toInt).toList
 
   override protected[year2017] def part1(input: List[Int]): Int = {
     val seen       = mutable.Set.empty[List[Int]]

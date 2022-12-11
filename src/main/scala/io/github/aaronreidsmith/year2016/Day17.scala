@@ -11,7 +11,7 @@ object Day17 extends Solution(2016, 17) {
   type O1 = String
   type O2 = Int
 
-  override protected[year2016] def parseInput(file: Source): String = file.mkString
+  override protected[year2016] def parseInput(file: Source): String = file.mkString.trim
   override protected[year2016] def part1(input: String): String     = getAllPaths(input).minBy(_.length)
   override protected[year2016] def part2(input: String): Int        = getAllPaths(input).map(_.length).max
 

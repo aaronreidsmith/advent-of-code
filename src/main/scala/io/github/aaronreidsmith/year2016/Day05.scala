@@ -13,7 +13,7 @@ object Day05 extends Solution(2016, 5) {
   type O1 = String
   type O2 = String
 
-  override protected[year2016] def parseInput(file: Source): String = file.mkString
+  override protected[year2016] def parseInput(file: Source): String = file.mkString.trim
 
   override protected[year2016] def part1(doorId: String): String = {
     val password = new StringBuilder

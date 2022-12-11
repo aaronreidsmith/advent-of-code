@@ -52,7 +52,7 @@ object Day14 extends Solution(2017, 14) {
       if (binary.length < 4) s"0000$binary".takeRight(4) else binary
     }
 
-    val input = file.mkString
+    val input = file.mkString.trim
     (0 until 128).toVector.flatMap { row =>
       val lengths = Vector.fill(64)(s"$input-$row".map(_.toInt).toVector ++ Vector(17, 31, 73, 47, 23)).flatten
       val hash    = knotHash(lengths)

@@ -10,7 +10,7 @@ object Day03 extends Solution(2015, 3) {
   type O1 = Int
   type O2 = Int
 
-  override protected[year2015] def parseInput(file: Source): String = file.mkString
+  override protected[year2015] def parseInput(file: Source): String = file.mkString.trim
 
   override protected[year2015] def part1(instructions: String): Int = {
     val (_, seenHouses) = instructions.foldLeft(Point.zero, Set(Point.zero)) {

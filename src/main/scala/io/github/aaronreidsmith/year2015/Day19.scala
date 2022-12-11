@@ -18,7 +18,7 @@ object Day19 extends Solution(2015, 19) {
 
   override protected[year2015] def parseInput(file: Source): (List[Rule], String) = {
     val rule                       = "^(.*?) => (.*?)$".r
-    val Array(ruleInput, molecule) = file.mkString.split("\n\n", 2)
+    val Array(ruleInput, molecule) = file.mkString.trim.split("\n\n", 2)
     val rules = ruleInput.split('\n').foldLeft(List.empty[Rule]) {
       case (acc, rule(original, replacement)) => Rule(original, replacement) :: acc
       case (acc, _)                           => acc
