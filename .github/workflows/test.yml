@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   test:
-    runs-on: macos-latest # macOS runners have more memory than Linux
+    runs-on: ubuntu-latest # Have to use Linux since the "decrypt" step uses a container, which is only supported on Linux
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
