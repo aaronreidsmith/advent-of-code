@@ -33,7 +33,6 @@ run / outputStrategy := Some(StdoutOutput)
 // Test options
 Test / envVars            := Map("IS_TEST" -> "true")
 Test / fork               := true
-Test / javaOptions        := Seq("-Xms1G", "-Xmx8G")
 Test / testForkedParallel := true
 Test / testOptions += {
   // Only run slow tests on CI
