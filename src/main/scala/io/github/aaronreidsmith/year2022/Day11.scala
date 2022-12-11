@@ -8,16 +8,18 @@ import scala.collection.mutable
 import scala.io.Source
 
 object Day11 extends Solution(2022, 11) {
-  type I = (SortedMap[Int, Monkey], Long)
+  type I  = (SortedMap[Int, Monkey], Long)
   type O1 = Long
   type O2 = Long
 
   private[year2022] trait Monkey {
+    // Abstract API
     val initialItems: Queue[Long] // Needed so we can "reset" the state between parts 1 and 2
-    lazy val items: mutable.Queue[Long] = mutable.Queue.from(initialItems)
-
     def operate(old: Long, mod: Long): Long
     def test(item: Long): Int
+
+    // Concrete API
+    lazy val items: mutable.Queue[Long] = mutable.Queue.from(initialItems)
     def reset(): Unit = {
       items.clear()
       items.enqueueAll(initialItems)
@@ -70,10 +72,10 @@ object Day11 extends Solution(2022, 11) {
       monkeys.foreach {
         case (monkeyId, monkey) =>
           while (monkey.items.nonEmpty) {
-            val item     = monkey.items.dequeue()
-            val operated = monkey.operate(item, mod)
-            val newInt   = monkey.test(operated)
-            monkeys(newInt).items.enqueue(operated)
+            val item        = monkey.items.dequeue()
+            val operated    = monkey.operate(item, mod)
+            val newMonkeyId = monkey.test(operated)
+            monkeys(newMonkeyId).items.enqueue(operated)
             counts.update(monkeyId, counts(monkeyId) + 1)
           }
       }
