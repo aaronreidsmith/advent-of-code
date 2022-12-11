@@ -31,9 +31,9 @@ run / javaOptions    := Seq("-Xms1G", "-Xmx8G")
 run / outputStrategy := Some(StdoutOutput)
 
 // Test options
-Test / envVars     := Map("IS_TEST" -> "true")
-Test / fork        := true
-Test / logBuffered := false
+Test / envVars            := Map("IS_TEST" -> "true")
+Test / fork               := true
+Test / testForkedParallel := true
 Test / testOptions += {
   // Only run slow tests on CI
   sys.env.get("CI") match {
