@@ -1,7 +1,9 @@
 package io.github.aaronreidsmith.year2018
 
 import io.github.aaronreidsmith.{BaseTest, IgnoreOnCI, using}
+import org.scalatest.tags.Slow
 
+@Slow
 @IgnoreOnCI
 class Day20Test extends BaseTest {
   private val input = using("2018/day20.txt")(Day20.parseInput)

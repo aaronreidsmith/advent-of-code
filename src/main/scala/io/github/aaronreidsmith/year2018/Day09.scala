@@ -1,12 +1,16 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Solution, using}
 
 import scala.collection.mutable
 import scala.io.Source
 
 // TODO: Adapted from my Python solution, so a decent amount of mutability
-object Day09 {
+object Day09 extends Solution(2018, 9) {
+  type I = (Int, Int)
+  type O1 = Long
+  type O2 = Long
+
   private implicit class ArrayDequeOps(deque: mutable.ArrayDeque[Long]) {
     // https://docs.python.org/3/library/collections.html#collections.deque.rotate
     def rotate(n: Int): Unit = if (n > 0) {
@@ -20,20 +24,21 @@ object Day09 {
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    val (maxPlayers, lastMarble) = using("2018/day09.txt")(parseInput)
-    println(s"Part 1: ${part1(maxPlayers, lastMarble)}")
-    println(s"Part 2: ${part2(maxPlayers, lastMarble)}")
-  }
-
-  private[year2018] def parseInput(file: Source): (Int, Int) = {
+  override protected[year2018] def parseInput(file: Source): (Int, Int) = {
     val regex                         = "^(\\d+) players; last marble is worth (\\d+) points$".r
-    val regex(maxPlayers, lastMarble) = file.mkString
+    val regex(maxPlayers, lastMarble) = file.mkString.trim
     (maxPlayers.toInt, lastMarble.toInt)
   }
 
-  private[year2018] def part1(maxPlayers: Int, lastMarble: Int): Long = playGame(maxPlayers, lastMarble)
-  private[year2018] def part2(maxPlayers: Int, lastMarble: Int): Long = playGame(maxPlayers, lastMarble * 100)
+  override protected[year2018] def part1(input: (Int, Int)): Long = {
+    val (maxPlayers, lastMarble) = input
+    playGame(maxPlayers, lastMarble)
+  }
+
+  override protected[year2018] def part2(input: (Int, Int)): Long = {
+    val (maxPlayers, lastMarble) = input
+    playGame(maxPlayers, lastMarble * 100)
+  }
 
   private def playGame(maxPlayers: Int, lastMarble: Long): Long = {
     val scores = mutable.Map.empty[Long, Long].withDefaultValue(0)

@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.{Point, Solution, using}
+import io.github.aaronreidsmith.{Point, Solution}
 
 import scala.io.Source
 

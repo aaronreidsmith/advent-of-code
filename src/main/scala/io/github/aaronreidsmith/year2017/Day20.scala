@@ -10,9 +10,6 @@ object Day20 extends Solution(2017, 20) {
   type O1 = Int
   type O2 = Int
 
-  private val particle =
-    "^p=<(-?\\d+),(-?\\d+),(-?\\d+)>, v=<(-?\\d+),(-?\\d+),(-?\\d+)>, a=<(-?\\d+),(-?\\d+),(-?\\d+)>".r
-
   private[year2017] sealed trait Delta {
     def increment(xDelta: Int, yDelta: Int, zDelta: Int): Delta
   }

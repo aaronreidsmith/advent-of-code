@@ -5,6 +5,16 @@ sealed trait Direction {
   def right: Direction
   def opposite: Direction
 }
+object Direction {
+  def fromChar(char: Char): Direction = char.toUpper match {
+    case 'N' => North
+    case 'S' => South
+    case 'E' => East
+    case 'W' => West
+    case _   => throw new IllegalArgumentException
+  }
+}
+
 case object North extends Direction {
   def left: Direction     = West
   def right: Direction    = East

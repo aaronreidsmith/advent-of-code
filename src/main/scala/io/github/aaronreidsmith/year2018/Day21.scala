@@ -1,56 +1,65 @@
 package io.github.aaronreidsmith.year2018
 
+import io.github.aaronreidsmith.Solution
+
 import scala.collection.mutable
+import scala.io.Source
 import scala.util.control.Breaks._
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/a86jgt/comment/ec8frrd
-object Day21 {
-  def main(args: Array[String]): Unit = {
-    println(s"Part 1: $part1")
-    println(s"Part 2: $part2")
-  }
+object Day21 extends Solution(2018, 21) {
+  type I  = List[String] // Unused
+  type O1 = Long
+  type O2 = Long
 
-  private[year2018] def part1: Long = solution._1
-  private[year2018] def part2: Long = solution._2
+  override protected[year2018] def parseInput(file: Source): List[String] = file.getLines().toList
+  override protected[year2018] def part1(input: List[String]): Long       = solution(input)._1
+  override protected[year2018] def part2(input: List[String]): Long       = solution(input)._2
 
-  // Not a general solution; a code representation of my Elf-code input
-  private lazy val solution: (Long, Long) = {
-    var part1 = -1L
-    var part2 = -1L
+  private var answer = (0L, 0L)
+  private var solved = false
+  private def solution(input: List[String]): (Long, Long) = {
+    if (!solved) {
+      var part1 = -1L
+      var part2 = -1L
 
-    val seen = mutable.Set.empty[Long]
-    val CS   = mutable.Set.empty[Long]
+      val seen = mutable.Set.empty[Long]
+      val CS   = mutable.Set.empty[Long]
 
-    val twoToThe16th = math.pow(2, 16).toLong
-    val twoToThe24th = math.pow(2, 24).toLong
-    val originalC    = 10736359L
+      val twoToThe16th = math.pow(2, 16).toLong
+      val twoToThe24th = math.pow(2, 24).toLong
+      val originalC    = 10736359L
 
-    var C = originalC
-    var D = 65536L
-    breakable {
-      while (true) {
-        val E = D % 256
-        C += E
-        C = (C % twoToThe24th * 65899) % twoToThe24th
-        if (D < 256) {
-          if (CS.isEmpty) {
-            part1 = C
-          } else if (!CS.contains(C)) {
-            part2 = C
+      var C = originalC
+      var D = 65536L
+      breakable {
+        while (true) {
+          val E = D % 256
+          C += E
+          C = (C % twoToThe24th * 65899) % twoToThe24th
+          if (D < 256) {
+            if (CS.isEmpty) {
+              part1 = C
+            } else if (!CS.contains(C)) {
+              part2 = C
+            }
+            CS.add(C)
+            D = C | twoToThe16th
+            if (seen.contains(D)) {
+              break()
+            }
+            seen.add(D)
+            C = originalC
+          } else {
+            D = D / 256
           }
-          CS.add(C)
-          D = C | twoToThe16th
-          if (seen.contains(D)) {
-            break()
-          }
-          seen.add(D)
-          C = originalC
-        } else {
-          D = D / 256
         }
       }
+
+      answer = (part1, part2)
+      solved = true
     }
 
-    (part1, part2)
+    answer
   }
 }
