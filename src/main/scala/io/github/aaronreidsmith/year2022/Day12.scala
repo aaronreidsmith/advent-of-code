@@ -1,8 +1,8 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.{Point, Solution}
 import io.github.aaronreidsmith.implicits.SourceOps
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath
+import io.github.aaronreidsmith.{Point, Solution}
+import org.jgrapht.alg.shortestpath.{BFSShortestPath, DijkstraShortestPath}
 import org.jgrapht.graph.{DefaultDirectedGraph, DefaultEdge}
 
 import scala.io.Source
@@ -55,7 +55,7 @@ object Day12 extends Solution(2022, 12) {
     val end      = vertices.find(_._2 == 'E').get
     vertices.foldLeft(Int.MaxValue) {
       case (currentMin, candidate) if candidate._2.elevation == 'a' =>
-        Option(DijkstraShortestPath.findPathBetween(input, candidate, end)) match {
+        Option(BFSShortestPath.findPathBetween(input, candidate, end)) match {
           case Some(path) => currentMin.min(path.getLength)
           case None       => currentMin
         }

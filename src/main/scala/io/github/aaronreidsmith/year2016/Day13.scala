@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2016
 
 import io.github.aaronreidsmith.{Point, Solution}
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath
+import org.jgrapht.alg.shortestpath.BFSShortestPath
 import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
 
 import scala.io.Source
@@ -40,13 +40,16 @@ object Day13 extends Solution(2016, 13) {
   }
 
   override protected[year2016] def part1(input: DefaultUndirectedGraph[Point, DefaultEdge]): Int = {
-    DijkstraShortestPath.findPathBetween(input, Point(1, 1), Point(31, 39)).getLength
+    BFSShortestPath.findPathBetween(input, Point(1, 1), Point(31, 39)).getLength
   }
 
   override protected[year2016] def part2(input: DefaultUndirectedGraph[Point, DefaultEdge]): Int = {
     val start = Point(1, 1)
     input.vertexSet().asScala.count { other =>
-      Option(DijkstraShortestPath.findPathBetween(input, start, other)).fold(false)(_.getLength <= 50)
+      Option(BFSShortestPath.findPathBetween(input, start, other)) match {
+        case Some(path) => path.getLength <= 50
+        case None       => false
+      }
     }
   }
 }

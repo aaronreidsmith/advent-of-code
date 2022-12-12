@@ -108,7 +108,15 @@ object AdventOfCode {
       8  -> Day08,
       9  -> Day09,
       10 -> Day10,
-      11 -> Day11
+      11 -> Day11,
+      12 -> Day12,
+      13 -> Day13,
+      14 -> Day14,
+      // TODO
+      20 -> Day20,
+      20 -> Day21,
+      // TODO
+      25 -> Day25
     )
   }
   private val solutions2019: SortedMap[Int, Solution] = SortedMap()

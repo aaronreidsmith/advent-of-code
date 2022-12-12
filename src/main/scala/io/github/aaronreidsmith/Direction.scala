@@ -7,11 +7,11 @@ sealed trait Direction {
 }
 object Direction {
   def fromChar(char: Char): Direction = char.toUpper match {
-    case 'N' => North
-    case 'S' => South
-    case 'E' => East
-    case 'W' => West
-    case _   => throw new IllegalArgumentException
+    case 'N' | '^' => North
+    case 'E' | '>' => East
+    case 'S' | 'V' => South
+    case 'W' | '<' => West
+    case other     => throw new IllegalArgumentException(other.toString)
   }
 }
 

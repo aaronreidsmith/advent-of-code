@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.{Direction, Point, Solution, using}
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath
+import io.github.aaronreidsmith.{Direction, Point, Solution}
+import org.jgrapht.alg.shortestpath.BFSShortestPath
 import org.jgrapht.graph.{DefaultDirectedGraph, DefaultEdge}
 
 import scala.collection.mutable
@@ -52,7 +52,7 @@ object Day20 extends Solution(2018, 20) {
       case _ => throw new IllegalArgumentException
     }
     graph.vertexSet().asScala.foldLeft(List.empty[Int]) { (acc, vertex) =>
-      DijkstraShortestPath.findPathBetween(graph, start, vertex).getLength :: acc
+      BFSShortestPath.findPathBetween(graph, start, vertex).getLength :: acc
     }
   }
 

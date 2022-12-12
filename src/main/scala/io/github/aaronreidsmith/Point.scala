@@ -1,11 +1,6 @@
 package io.github.aaronreidsmith
 
-case class Point(x: Int, y: Int) extends Ordered[Point] {
-  def compare(that: Point): Int = {
-    import scala.math.Ordered.orderingToOrdered
-    (this.x, this.y).compare((that.x, that.y))
-  }
-
+case class Point(x: Int, y: Int) {
   def +(other: Point): Point = Point(x + other.x, y + other.y)
 
   def move(direction: Direction): Point = direction match {
@@ -43,5 +38,7 @@ case class Point(x: Int, y: Int) extends Ordered[Point] {
 }
 
 object Point {
+  implicit val ordering: Ordering[Point] = Ordering.by(unapply)
+
   def zero: Point = Point(0, 0)
 }
