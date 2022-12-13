@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2022
 
 import io.github.aaronreidsmith.using
-import ujson.{Arr, Num, Value, read}
+import ujson._
 
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
@@ -16,12 +16,12 @@ object Day13 {
           case ArrayBuffer()           => 0
           case ArrayBuffer((a, b), _*) => Packet(a).compare(Packet(b))
         }
-      case (a: Arr, b: Num)       => Packet(a).compare(Packet(Arr(b)))
-      case (_: Value, ujson.Null) => 1
-      case (a: Num, b: Arr)       => Packet(Arr(a)).compare(Packet(b))
-      case (ujson.Null, _: Value) => -1
-      case (Num(a), Num(b))       => a.compare(b)
-      case other                  => throw new IllegalArgumentException(other.toString())
+      case (a: ujson.Arr, b: ujson.Num) => Packet(a).compare(Packet(ujson.Arr(b)))
+      case (_: ujson.Value, ujson.Null) => 1
+      case (a: ujson.Num, b: ujson.Arr) => Packet(ujson.Arr(a)).compare(Packet(b))
+      case (ujson.Null, _: ujson.Value) => -1
+      case (ujson.Num(a), ujson.Num(b)) => a.compare(b)
+      case other                        => throw new IllegalArgumentException(other.toString())
     }
   }
 
@@ -32,7 +32,7 @@ object Day13 {
   }
 
   protected[year2022] def parseInput(file: Source): List[Packet] = file.getLines().toList.collect {
-    case line if line.nonEmpty => Packet(read(line))
+    case line if line.nonEmpty => Packet(ujson.read(line))
   }
 
   protected[year2022] def part1(input: List[Packet]): Int = input.grouped(2).zipWithIndex.foldLeft(0) {
@@ -41,8 +41,8 @@ object Day13 {
   }
 
   protected[year2022] def part2(input: List[Packet]): Int = {
-    val dividerA = Packet(read("[[2]]"))
-    val dividerB = Packet(read("[[6]]"))
+    val dividerA = Packet(ujson.read("[[2]]"))
+    val dividerB = Packet(ujson.read("[[6]]"))
     val sorted   = (dividerA :: dividerB :: input).sorted
     val indexA   = sorted.indexOf(dividerA) + 1
     val indexB   = sorted.indexOf(dividerB) + 1
