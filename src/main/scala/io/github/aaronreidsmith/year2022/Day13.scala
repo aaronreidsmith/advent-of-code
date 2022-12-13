@@ -1,12 +1,16 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 import ujson._
 
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
-object Day13 {
+object Day13 extends Solution(2022, 13) {
+  type I  = List[Packet]
+  type O1 = Int
+  type O2 = Int
+
   private[year2022] case class Packet(value: ujson.Value) extends Ordered[Packet] {
     def compare(that: Packet): Int = (value, that.value) match {
       case (a: Arr, b: Arr) =>
@@ -21,26 +25,20 @@ object Day13 {
       case (a: ujson.Num, b: ujson.Arr) => Packet(ujson.Arr(a)).compare(Packet(b))
       case (ujson.Null, _: ujson.Value) => -1
       case (ujson.Num(a), ujson.Num(b)) => a.compare(b)
-      case other                        => throw new IllegalArgumentException(other.toString())
+      case _                            => throw new IllegalArgumentException
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    val input = using("2022/day13.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
-
-  protected[year2022] def parseInput(file: Source): List[Packet] = file.getLines().toList.collect {
+  override protected[year2022] def parseInput(file: Source): List[Packet] = file.getLines().toList.collect {
     case line if line.nonEmpty => Packet(ujson.read(line))
   }
 
-  protected[year2022] def part1(input: List[Packet]): Int = input.grouped(2).zipWithIndex.foldLeft(0) {
+  override protected[year2022] def part1(input: List[Packet]): Int = input.grouped(2).zipWithIndex.foldLeft(0) {
     case (acc, (Seq(a, b), index)) if a.compare(b) < 0 => acc + index + 1
     case (acc, _)                                      => acc
   }
 
-  protected[year2022] def part2(input: List[Packet]): Int = {
+  override protected[year2022] def part2(input: List[Packet]): Int = {
     val dividerA = Packet(ujson.read("[[2]]"))
     val dividerB = Packet(ujson.read("[[6]]"))
     val sorted   = (dividerA :: dividerB :: input).sorted
