@@ -1,7 +1,6 @@
 package io.github.aaronreidsmith.year2022
 
 import io.github.aaronreidsmith.Solution
-import ujson._
 
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
@@ -13,7 +12,7 @@ object Day13 extends Solution(2022, 13) {
 
   private[year2022] case class Packet(value: ujson.Value) extends Ordered[Packet] {
     def compare(that: Packet): Int = (value, that.value) match {
-      case (a: Arr, b: Arr) =>
+      case (a: ujson.Arr, b: ujson.Arr) =>
         a.value.zipAll(b.value, ujson.Null, ujson.Null).dropWhile {
           case (a, b) => Packet(a).compare(Packet(b)) == 0
         } match {

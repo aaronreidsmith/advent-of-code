@@ -1,12 +1,8 @@
 val settings = new {
   val scalaVersion = "2.13.10"
 
-  private val circeVersion = "0.14.1" // Highest supported for circe optics on Scala 2.13
-
   val libraryDependencies = Seq(
     "com.lihaoyi"            %% "ujson"                    % "2.0.0",
-    "io.circe"               %% "circe-parser"             % circeVersion,
-    "io.circe"               %% "circe-optics"             % circeVersion,
     "net.fornwall"            % "aoc"                      % "2019.12.442", // TODO: Don't rely on this
     "org.apache.commons"      % "commons-math3"            % "3.6.1",
     "org.apache.commons"      % "commons-text"             % "1.10.0",

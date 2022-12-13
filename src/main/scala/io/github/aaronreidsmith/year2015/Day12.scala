@@ -1,10 +1,8 @@
 package io.github.aaronreidsmith.year2015
 
-import io.circe._
-import io.circe.optics.all._
-import io.circe.parser.parse
 import io.github.aaronreidsmith.Solution
 
+import scala.collection.mutable
 import scala.io.Source
 
 object Day12 extends Solution(2015, 12) {
@@ -18,15 +16,15 @@ object Day12 extends Solution(2015, 12) {
     number.findAllIn(input).foldLeft(0)(_ + _.toInt)
   }
   override protected[year2015] def part2(input: String): Int = {
-    def sumValues(values: Seq[Json]): Int = values.foldLeft(0)((acc, json) => acc + helper(json))
+    def sumValues(values: mutable.Buffer[ujson.Value]): Int = values.foldLeft(0)((acc, json) => acc + helper(json))
 
-    def helper(json: Json): Int = json match {
-      case jsonNumber(num)                                                  => num.toInt.getOrElse(0)
-      case jsonArray(array)                                                 => sumValues(array)
-      case jsonObject(obj) if !obj.values.toSeq.contains(jsonString("red")) => sumValues(obj.values.toSeq)
-      case _                                                                => 0
+    def helper(json: ujson.Value): Int = json match {
+      case ujson.Num(num)                                                       => num.toInt
+      case array: ujson.Arr                                                     => sumValues(array.value)
+      case obj: ujson.Obj if !obj.value.values.toSeq.contains(ujson.Str("red")) => sumValues(obj.value.values.toBuffer)
+      case _                                                                    => 0
     }
 
-    helper(parse(input).getOrElse(Json.Null))
+    helper(ujson.read(input))
   }
 }
