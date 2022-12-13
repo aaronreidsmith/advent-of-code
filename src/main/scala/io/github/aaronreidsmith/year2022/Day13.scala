@@ -41,11 +41,11 @@ object Day13 {
   }
 
   protected[year2022] def part2(input: List[Packet]): Int = {
-    val decoderA = Packet(read("[[2]]"))
-    val decoderB = Packet(read("[[6]]"))
-    val sorted = (decoderA :: decoderB :: input).sorted
-    val indexA = sorted.indexOf(decoderA) + 1
-    val indexB = sorted.indexOf(decoderB) + 1
+    val dividerA = Packet(read("[[2]]"))
+    val dividerB = Packet(read("[[6]]"))
+    val sorted   = (dividerA :: dividerB :: input).sorted
+    val indexA   = sorted.indexOf(dividerA) + 1
+    val indexB   = sorted.indexOf(dividerB) + 1
     indexA * indexB
   }
 }
