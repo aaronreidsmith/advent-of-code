@@ -1,20 +1,14 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Grid, Point, Solution, using}
 
 import scala.io.Source
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/a6wpup/2018_day_17_solutions/ebyws5k/
-object Day17 {
-  private[year2018] type Pos = (Int, Int)
-  private[year2018] implicit class PosOps(pos: Pos) {
-    val (x, y) = pos
-  }
-
-  private[year2018] type Tiles = Map[Pos, Tile]
-  private[year2018] object Tiles {
-    def empty: Tiles = Map.empty[Pos, Tile].withDefaultValue(Sand)
-  }
+object Day17 extends Solution(2018, 17) {
+  type I  = Grid[Tile]
+  type O1 = Int
+  type O2 = Int
 
   private[year2018] sealed trait Tile
   private[year2018] sealed trait WaterTile extends Tile
@@ -25,70 +19,60 @@ object Day17 {
   private[year2018] case object Settling extends WaterTile
   private[year2018] case object Settled  extends WaterTile
 
-  private val xEntry = "^x=(\\d+), y=(\\d+)..(\\d+)$".r
-  private val yEntry = "^y=(\\d+), x=(\\d+)..(\\d+)$".r
-
-  def main(args: Array[String]): Unit = {
-    val input = using("2018/day17.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
-
-  private[year2018] def parseInput(file: Source): Tiles = file.getLines().foldLeft(Tiles.empty) { (acc, line) =>
-    val newEntries = line match {
-      case xEntry(x, yStart, yEnd) =>
-        (yStart.toInt to yEnd.toInt).foldLeft(Map.empty[(Int, Int), Tile]) { (clayAcc, y) =>
-          clayAcc.updated((x.toInt, y), Clay)
-        }
-      case yEntry(y, xStart, xEnd) =>
-        (xStart.toInt to xEnd.toInt).foldLeft(Map.empty[(Int, Int), Tile]) { (clayAcc, x) =>
-          clayAcc.updated((x, y.toInt), Clay)
-        }
-      case _ => throw new IllegalArgumentException
-    }
-    acc ++ newEntries
-  }
-
-  private[year2018] def part1(tiles: Tiles): Int = {
-    val ys   = tiles.keys.map(_.y)
-    val minY = ys.min
-    val maxY = ys.max
-    flood(tiles, maxY, (500, 0), (500, -1)).count {
-      case (pos, tile) => pos.y >= minY && tile.isInstanceOf[WaterTile]
+  // The input use x increasing to the right and y increasing downward, but my `Point` class uses x increasing downward
+  // and y increasing to the right, so I had to swap them (made this very confusing)
+  override protected[year2018] def parseInput(file: Source): Grid[Tile] = {
+    val xEntry = """^x=(\d+), y=(\d+)..(\d+)$""".r
+    val yEntry = """^y=(\d+), x=(\d+)..(\d+)$""".r
+    file.getLines().foldLeft(Map.empty[Point, Tile].withDefaultValue(Sand)) {
+      case (acc, xEntry(x, yStart, yEnd)) => acc ++ (yStart.toInt to yEnd.toInt).map(Point(_, x.toInt) -> Clay).toMap
+      case (acc, yEntry(y, xStart, xEnd)) => acc ++ (xStart.toInt to xEnd.toInt).map(Point(y.toInt, _) -> Clay).toMap
+      case (acc, _)                       => acc
     }
   }
 
-  private[year2018] def part2(tiles: Tiles): Int = {
-    val ys   = tiles.keys.map(_.y)
-    val minY = ys.min
-    val maxY = ys.max
-    flood(tiles, maxY, (500, 0), (500, -1)).count {
-      case (pos, tile) => pos.y >= minY && tile == Settled
+  override protected[year2018] def part1(tiles: Grid[Tile]): Int = {
+    val depths   = tiles.keys.map(_.x)
+    val minDepth = depths.min
+    val maxDepth = depths.max
+    flood(tiles, maxDepth, Point(0, 500), Point(-1, 500)).count {
+      case (pos, _: WaterTile) => pos.x >= minDepth
+      case _                   => false
     }
   }
 
-  private def flood(tiles: Tiles, maxY: Int, pos: Pos, previousPos: Pos): Tiles = {
-    if (pos.y > maxY) {
+  override protected[year2018] def part2(tiles: Grid[Tile]): Int = {
+    val depths   = tiles.keys.map(_.x)
+    val minDepth = depths.min
+    val maxDepth = depths.max
+    flood(tiles, maxDepth, Point(0, 500), Point(-1, 500)).count {
+      case (pos, Settled) => pos.y >= minDepth
+      case _              => false
+    }
+  }
+
+  private def flood(tiles: Grid[Tile], maxDepth: Int, position: Point, previousPosition: Point): Grid[Tile] = {
+    if (position.x > maxDepth) {
       tiles
     } else {
-      tiles(pos) match {
+      tiles(position) match {
         case Clay | Flowing | Settled | Settling => tiles
         case Sand =>
-          val downPos   = (pos.x, pos.y + 1)
-          val downTiles = flood(tiles + (pos -> Flowing), maxY, downPos, pos)
-          downTiles(downPos) match {
+          val down      = position.down
+          val downTiles = flood(tiles + (position -> Flowing), maxDepth, down, position)
+          downTiles(down) match {
             case Flowing | Settling => downTiles
             case Clay | Settled =>
-              val leftPos    = (pos.x - 1, pos.y)
-              val leftTiles  = flood(downTiles, maxY, leftPos, pos)
-              val rightPos   = (pos.x + 1, pos.y)
-              val rightTiles = flood(leftTiles, maxY, rightPos, pos)
-              (rightTiles(leftPos), rightTiles(rightPos)) match {
+              val left       = position.left
+              val leftTiles  = flood(downTiles, maxDepth, left, position)
+              val right      = position.right
+              val rightTiles = flood(leftTiles, maxDepth, right, position)
+              (rightTiles(left), rightTiles(right)) match {
                 case (Clay | Settled | Settling, _) | (_, Clay | Settled | Settling)
-                    if previousPos == leftPos || previousPos == rightPos =>
-                  rightTiles + (pos -> Settling)
+                    if previousPosition == left || previousPosition == right =>
+                  rightTiles + (position -> Settling)
                 case (Clay | Settled | Settling, Clay | Settled | Settling) =>
-                  settle(settle(rightTiles, leftPos), rightPos) + (pos -> Settled)
+                  settle(settle(rightTiles, left), right) + (position -> Settled)
                 case _ => rightTiles
               }
             case Sand => downTiles
@@ -97,9 +81,9 @@ object Day17 {
     }
   }
 
-  private def settle(tiles: Tiles, pos: Pos): Tiles = {
+  private def settle(tiles: Grid[Tile], pos: Point): Grid[Tile] = {
     tiles(pos) match {
-      case Settling => settle(settle(tiles + (pos -> Settled), (pos.x - 1, pos.y)), (pos.x + 1, pos.y))
+      case Settling => settle(settle(tiles + (pos -> Settled), pos.left), pos.right)
       case _        => tiles
     }
   }
