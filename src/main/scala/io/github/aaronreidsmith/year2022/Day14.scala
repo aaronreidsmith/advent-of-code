@@ -1,25 +1,22 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.{Grid, Point, using}
+import io.github.aaronreidsmith.{Grid, Point, Solution}
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day14 {
+object Day14 extends Solution(2022, 14) {
+  type I  = Grid[Tile]
+  type O1 = Int
+  type O2 = Int
+
   private[year2022] sealed trait Tile
   private case object Air  extends Tile
   private case object Rock extends Tile
   private case object Sand extends Tile
 
-  def main(args: Array[String]): Unit = {
-    val input = using("2022/day14.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
-
-  // The input has y increase from left to right and x increase downward,
-  // but we swap them to play nice with our `Point` class
-  private[year2022] def parseInput(file: Source): Grid[Tile] = {
+  // We switch x and y to play nice with our Point class
+  override protected[year2022] def parseInput(file: Source): Grid[Tile] = {
     val point = """^(\d+),(\d+)$""".r
     file
       .getLines()
@@ -33,7 +30,7 @@ object Day14 {
             for {
               x <- minX to maxX
               y <- minY to maxY
-            } yield Point(x, -y) -> Rock
+            } yield Point(y, x) -> Rock
           case _ => Nil
         }
         acc ++ segments
@@ -41,20 +38,19 @@ object Day14 {
       .withDefaultValue(Air)
   }
 
-  private[year2022] def part1(input: Grid[Tile]): Int = {
-    val maxDepth = input.keys.map(_.y).min
+  override protected[year2022] def part1(input: Grid[Tile]): Int = {
+    val maxDepth = input.keys.map(_.x).max
     settle(input, maxDepth).values.count(_ == Sand)
   }
 
-  private[year2022] def part2(input: Grid[Tile]): Int = {
-    val maxDepth = input.keys.map(_.y).min - 2
-    // 0 to 1000 is arbitrary. Really only needs to be |maxDepth| in either direction from 500,
-    // but with depth being negative, it looks kind of ugly
-    val floor = (0 to 1000).map(Point(_, maxDepth) -> Rock)
+  override protected[year2022] def part2(input: Grid[Tile]): Int = {
+    val maxDepth = input.keys.map(_.x).max + 2
+    // 0 to 1000 is arbitrary. Really only needs to be |maxDepth| in either direction from 500
+    val floor = (0 to 1000).map(Point(maxDepth, _) -> Rock)
     settle(input ++ floor, maxDepth).values.count(_ == Sand)
   }
 
-  private def settle(grid: Grid[Tile], maxDepth: Int, sandPosition: Point = Point(500, 0)): Grid[Tile] = {
+  private def settle(grid: Grid[Tile], maxDepth: Int, sandPosition: Point = Point(0, 500)): Grid[Tile] = {
     @tailrec
     def helper(tiles: Grid[Tile], moves: List[Point]): Grid[Tile] = moves match {
       case Nil => tiles.updated(sandPosition, Sand)
@@ -66,7 +62,7 @@ object Day14 {
         }
     }
 
-    if (sandPosition.y < maxDepth) {
+    if (sandPosition.x > maxDepth) {
       grid
     } else {
       grid(sandPosition) match {
