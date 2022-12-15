@@ -1,13 +1,19 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Solution, using}
 
-object Day01 {
-  def main(args: Array[String]): Unit = {
-    val input = using("2020/day01.txt")(_.getLines().map(_.toInt).toList)
-    val part1 = input.combinations(2).collectFirst { case pair if pair.sum == 2020 => pair.product }.get
-    println(s"Part 1: $part1")
-    val part2 = input.combinations(3).collectFirst { case triplet if triplet.sum == 2020 => triplet.product }.get
-    println(s"Part 2: $part2")
+import scala.io.Source
+
+object Day01 extends Solution(2020, 1) {
+  type I  = List[Int]
+  type O1 = Int
+  type O2 = Int
+
+  override protected[year2020] def parseInput(file: Source): List[Int] = file.getLines().map(_.toInt).toList
+  override protected[year2020] def part1(input: List[Int]): Int        = solution(input, 2)
+  override protected[year2020] def part2(input: List[Int]): Int        = solution(input, 3)
+
+  private def solution(input: List[Int], groupSize: Int): Int = {
+    input.combinations(groupSize).collectFirst { case group if group.sum == 2020 => group.product }.get
   }
 }

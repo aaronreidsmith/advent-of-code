@@ -1,20 +1,22 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith._
+import io.github.aaronreidsmith.{Point, Solution}
 
 import scala.annotation.tailrec
+import scala.io.Source
 
-object Day03 {
-  def main(args: Array[String]): Unit = {
-    val input = using("2020/day03.txt") { file =>
-      file.getLines().toList.map { line =>
-        LazyList.continually(line.toList).flatten
-      }
-    }
-    val part1 = Seq((1, 3)).map(traverse(input, _)).product
-    println(s"Part 2: $part1")
-    val part2 = Seq((1, 1), (1, 3), (1, 5), (1, 7), (2, 1)).map(traverse(input, _)).product
-    println(s"Part 2: $part2")
+object Day03 extends Solution(2020, 3) {
+  type I  = List[LazyList[Char]]
+  type O1 = Int
+  type O2 = Int
+
+  override protected[year2020] def parseInput(file: Source): List[LazyList[Char]] = file.getLines().toList.map { line =>
+    LazyList.continually(line).flatten
+  }
+
+  override protected[year2020] def part1(input: List[LazyList[Char]]): Int = traverse(input, (1, 3))
+  override protected[year2020] def part2(input: List[LazyList[Char]]): Int = {
+    Seq((1, 1), (1, 3), (1, 5), (1, 7), (2, 1)).foldLeft(1)(_ * traverse(input, _))
   }
 
   @tailrec
@@ -22,15 +24,11 @@ object Day03 {
       mountain: List[LazyList[Char]],
       increments: (Int, Int),
       treesEncountered: Int = 0,
-      position: (Int, Int) = (0, 0)
-  ): Int = {
-    val (row, col) = position
-    if (row >= mountain.size) {
-      treesEncountered
-    } else {
-      val (dx, dy) = increments
-      val treesHit = if (mountain(row)(col) == '#') 1 else 0
-      traverse(mountain, increments, treesEncountered + treesHit, (row + dx, col + dy))
-    }
+      position: Point = Point.zero
+  ): Int = if (position.x >= mountain.size) {
+    treesEncountered
+  } else {
+    val treesHit = if (mountain(position.x)(position.y) == '#') 1 else 0
+    traverse(mountain, increments, treesEncountered + treesHit, position + increments)
   }
 }
