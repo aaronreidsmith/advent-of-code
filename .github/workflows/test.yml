@@ -8,9 +8,14 @@ on:
     branches:
       - main
 
+# Cancel older runs of the same workflow on the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Have to use Linux since the "decrypt" step uses a container, which is only supported on Linux
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3

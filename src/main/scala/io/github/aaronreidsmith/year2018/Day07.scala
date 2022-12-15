@@ -1,19 +1,18 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
+import io.github.aaronreidsmith.implicits.MapOps
 
 import scala.collection.mutable
 import scala.io.Source
 
 // TODO: Adapted from Raku solution
-object Day07 {
-  def main(args: Array[String]): Unit = {
-    val input = using("2018/day07.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
+object Day07 extends Solution(2018, 7) {
+  type I  = Map[Char, Set[Char]]
+  type O1 = String
+  type O2 = Int
 
-  private[year2018] def parseInput(file: Source): Map[Char, Set[Char]] = {
+  override protected[year2018] def parseInput(file: Source): Map[Char, Set[Char]] = {
     val regex = "^Step ([A-Z]) must be finished before step ([A-Z]) can begin.$".r
 
     val fromFile = file.getLines().foldLeft(Map.empty[Char, Set[Char]]) {
@@ -31,12 +30,12 @@ object Day07 {
     fromFile + (last -> Set.empty)
   }
 
-  private[year2018] def part1(input: Map[Char, Set[Char]]): String = solution(input, 1)._1
-  private[year2018] def part2(input: Map[Char, Set[Char]]): Int    = solution(input, 5)._2
+  override protected[year2018] def part1(input: Map[Char, Set[Char]]): String = solution(input, 1)._1
+  override protected[year2018] def part2(input: Map[Char, Set[Char]]): Int    = solution(input, 5)._2
 
   private def solution(dependencies: Map[Char, Set[Char]], numWorkers: Int): (String, Int) = {
     var duration    = 0
-    val mutableDeps = mutable.Map(dependencies.toSeq: _*)
+    val mutableDeps = dependencies.toMutable
     val work        = mutable.Map.empty[Char, Int]
     val order       = new StringBuilder
     while (mutableDeps.nonEmpty) {

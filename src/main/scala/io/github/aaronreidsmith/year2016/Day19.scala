@@ -1,9 +1,16 @@
 package io.github.aaronreidsmith.year2016
 
+import io.github.aaronreidsmith.Solution
+
 import java.util
+import scala.io.Source
 
 // This a very Java way to do this, but it works 🤷
-object Day19 {
+object Day19 extends Solution(2016, 19) {
+  type I  = Int
+  type O1 = Int
+  type O2 = Int
+
   private class Elf {
     var number: Int = _
     var gifts: Int  = 1
@@ -12,13 +19,9 @@ object Day19 {
   }
   private var start: Elf = _
 
-  def main(args: Array[String]): Unit = {
-    val input = 3012210
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
+  override protected[year2016] def parseInput(file: Source): Int = file.mkString.trim.toInt
 
-  private def part1(input: Int): Int = {
+  override protected[year2016] def part1(input: Int): Int = {
     (1 to input).foreach { number =>
       val newElf = new Elf
       newElf.number = number
@@ -49,7 +52,7 @@ object Day19 {
   }
 
   // Adapted from https://www.reddit.com/r/adventofcode/comments/5j4lp1/comment/dbdf9mn
-  private def part2(input: Int): Int = {
+  override protected[year2016] def part2(input: Int): Int = {
     val left  = new util.LinkedList[Int]
     val right = new util.LinkedList[Int]
     (1 to input).foreach { elf =>

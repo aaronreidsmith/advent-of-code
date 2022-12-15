@@ -1,20 +1,18 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day01 {
-  def main(args: Array[String]): Unit = {
-    val input = using("2018/day01.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
+object Day01 extends Solution(2018, 1) {
+  type I  = Vector[Int]
+  type O1 = Int
+  type O2 = Int
 
-  private[year2018] def parseInput(file: Source): Vector[Int] = file.getLines().toVector.map(_.toInt)
-  private[year2018] def part1(numbers: Vector[Int]): Int      = numbers.sum
-  private[year2018] def part2(initialNumbers: Vector[Int]): Int = {
+  override protected[year2018] def parseInput(file: Source): Vector[Int] = file.getLines().toVector.map(_.toInt)
+  override protected[year2018] def part1(input: Vector[Int]): Int        = input.sum
+  override protected[year2018] def part2(input: Vector[Int]): Int = {
     @tailrec
     def helper(numbers: Vector[Int], pointer: Int = 0, currentFrequency: Int = 0, seen: Set[Int] = Set()): Int = {
       if (seen.contains(currentFrequency)) {
@@ -26,6 +24,6 @@ object Day01 {
       }
     }
 
-    helper(initialNumbers)
+    helper(input)
   }
 }

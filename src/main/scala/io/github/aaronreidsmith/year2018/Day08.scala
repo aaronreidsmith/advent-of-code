@@ -1,20 +1,18 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
-object Day08 {
-  def main(args: Array[String]): Unit = {
-    val tree = using("2018/day08.txt")(parseInput)
-    println(s"Part 1: ${part1(tree)}")
-    println(s"Part 2: ${part2(tree)}")
-  }
+object Day08 extends Solution(2018, 8) {
+  type I  = List[Int]
+  type O1 = Int
+  type O2 = Int
 
-  private[year2018] def parseInput(file: Source): List[Int] = file.mkString.split(' ').toList.map(_.toInt)
+  override protected[year2018] def parseInput(file: Source): List[Int] = file.mkString.trim.split(' ').toList.map(_.toInt)
 
-  private[year2018] def part1(initialTree: List[Int]): Int = {
+  override protected[year2018] def part1(initialTree: List[Int]): Int = {
     val tree       = initialTree.toBuffer
     var runningSum = 0
 
@@ -32,7 +30,7 @@ object Day08 {
     runningSum
   }
 
-  private[year2018] def part2(initialTree: List[Int]): Int = {
+  override protected[year2018] def part2(initialTree: List[Int]): Int = {
     val tree = initialTree.toBuffer
     def helper(): Int = {
       var childSum      = 0

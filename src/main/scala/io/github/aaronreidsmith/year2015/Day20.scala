@@ -1,13 +1,17 @@
 package io.github.aaronreidsmith.year2015
 
-object Day20 {
-  def main(args: Array[String]): Unit = {
-    val input = 34000000
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
+import io.github.aaronreidsmith.Solution
 
-  private[year2015] def part1(input: Int): Int = {
+import scala.io.Source
+
+object Day20 extends Solution(2015, 20) {
+  type I  = Int
+  type O1 = Int
+  type O2 = Int
+
+  override protected[year2015] def parseInput(file: Source): Int = file.mkString.trim.toInt
+
+  override protected[year2015] def part1(input: Int): Int = {
     def presents(houseNumber: Int): Int = (1 to math.sqrt(houseNumber).toInt)
       .foldLeft(Set.empty[Int]) {
         case (acc, n) if houseNumber % n == 0 => acc ++ Set(n, houseNumber / n)
@@ -17,7 +21,7 @@ object Day20 {
     solution(input, presents)
   }
 
-  private[year2015] def part2(input: Int): Int = {
+  override protected[year2015] def part2(input: Int): Int = {
     def presents(houseNumber: Int): Int = (1 to 50).foldLeft(0) {
       case (acc, i) if i <= houseNumber && houseNumber % i == 0 => acc + (houseNumber / i)
       case (acc, _) => acc
@@ -25,8 +29,8 @@ object Day20 {
     solution(input, presents)
   }
 
-  private val houseNumbers = LazyList.from(100000)
-  private def solution(input: Int, presents: Int => Int): Int = houseNumbers
+  private def solution(input: Int, presents: Int => Int): Int = LazyList
+    .from(100_000)
     .collectFirst {
       case houseNumber if presents(houseNumber) >= input => houseNumber
     }

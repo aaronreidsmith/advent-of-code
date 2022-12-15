@@ -1,19 +1,19 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 
 import scala.collection.mutable
 import scala.io.Source
 
 // TODO: Adapted from my Python solution, so v mutable
-object Day10 {
-  def main(args: Array[String]): Unit = {
-    val (initialBots, pipeline) = using("2016/day10.txt")(parseInput)
-    println(s"Part 1: ${part1(initialBots, pipeline)}")
-    println(s"Part 2: ${part2(initialBots, pipeline)}")
-  }
+object Day10 extends Solution(2016, 10) {
+  type I  = (Map[Int, Vector[Int]], Map[Int, ((String, Int), (String, Int))])
+  type O1 = Int
+  type O2 = Int
 
-  private[year2016] def parseInput(file: Source): (Map[Int, Vector[Int]], Map[Int, ((String, Int), (String, Int))]) = {
+  override protected[year2016] def parseInput(
+      file: Source
+  ): (Map[Int, Vector[Int]], Map[Int, ((String, Int), (String, Int))]) = {
     val valueEntry = "^value (\\d+) goes to bot (\\d+)$".r
     val botEntry   = "^bot (\\d+) gives low to (bot|output) (\\d+) and high to (bot|output) (\\d+)$".r
     file.getLines().foldLeft((Map.empty[Int, Vector[Int]], Map.empty[Int, ((String, Int), (String, Int))])) {
@@ -30,11 +30,27 @@ object Day10 {
     }
   }
 
-  private[year2016] def part1(bots: Map[Int, Vector[Int]], pipeline: Map[Int, ((String, Int), (String, Int))]) = solution(bots, pipeline)._1
-  private[year2016] def part2(bots: Map[Int, Vector[Int]], pipeline: Map[Int, ((String, Int), (String, Int))]) = solution(bots, pipeline)._2
+  override protected[year2016] def part1(
+      input: (Map[Int, Vector[Int]], Map[Int, ((String, Int), (String, Int))])
+  ): Int = {
+    val (bots, pipeline) = input
+    solution(bots, pipeline)._1
+  }
+  override protected[year2016] def part2(
+      input: (Map[Int, Vector[Int]], Map[Int, ((String, Int), (String, Int))])
+  ): Int = {
+    val (bots, pipeline) = input
+    solution(bots, pipeline)._2
+  }
 
-  private lazy val solution: (Map[Int, Vector[Int]], Map[Int, ((String, Int), (String, Int))]) => (Int, Int) =
-    (initialBots, pipeline) => {
+  // Both solutions require the same traversal, so might as well only do it once
+  private var solved = false
+  private var answer = (0, 0)
+  private def solution(
+      initialBots: Map[Int, Vector[Int]],
+      pipeline: Map[Int, ((String, Int), (String, Int))]
+  ): (Int, Int) = {
+    if (!solved) {
       val bots        = mutable.Map(initialBots.toSeq: _*).withDefaultValue(Vector())
       val output      = mutable.Map.empty[Int, Vector[Int]].withDefaultValue(Vector())
       var part1Answer = -1
@@ -65,6 +81,10 @@ object Day10 {
       }
       val part2Answer = Seq(0, 1, 2).foldLeft(1)((acc, location) => acc * output(location).head)
 
-      (part1Answer, part2Answer)
+      answer = (part1Answer, part2Answer)
+      solved = true
     }
+
+    answer
+  }
 }

@@ -1,17 +1,15 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.{Point, using}
+import io.github.aaronreidsmith.{Point, Solution, using}
 
 import scala.io.Source
 
-object Day09 {
-  def main(args: Array[String]): Unit = {
-    val input = using("2022/day09.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
+object Day09 extends Solution(2022, 9) {
+  type I = String
+  type O1 = Int
+  type O2 = Int
 
-  protected[year2022] def parseInput(file: Source): String = {
+  override protected[year2022] def parseInput(file: Source): String = {
     val parsed = new StringBuilder
     file.getLines().foreach { line =>
       val split     = line.split(' ')
@@ -22,8 +20,8 @@ object Day09 {
     parsed.mkString
   }
 
-  protected[year2022] def part1(input: String): Int = solution(input, 2)
-  protected[year2022] def part2(input: String): Int = solution(input, 10)
+  override protected[year2022] def part1(input: String): Int = solution(input, 2)
+  override protected[year2022] def part2(input: String): Int = solution(input, 10)
 
   private def solution(input: String, numKnots: Int): Int = {
     def moveHead(point: Point, direction: Char): Point = direction match {

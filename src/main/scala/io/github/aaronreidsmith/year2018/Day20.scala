@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.using
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath
+import io.github.aaronreidsmith.{Direction, Point, Solution}
+import org.jgrapht.alg.shortestpath.BFSShortestPath
 import org.jgrapht.graph.{DefaultDirectedGraph, DefaultEdge}
 
 import scala.collection.mutable
@@ -9,44 +9,31 @@ import scala.io.Source
 import scala.jdk.CollectionConverters._
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/a7uk3f/2018_day_20_solutions/ec5y3lm/
-object Day20 {
-  private type Node = (Int, Int)
+object Day20 extends Solution(2018, 20) {
+  type I  = List[Int]
+  type O1 = Int
+  type O2 = Int
 
-  def main(args: Array[String]): Unit = {
-    val pathLengths = using("2018/day20.txt")(parseInput)
-    println(s"Part 1: ${part1(pathLengths)}")
-    println(s"Part 2: ${part2(pathLengths)}")
-  }
-
-  private[year2018] def parseInput(file: Source): List[Int] = {
+  override protected[year2018] def parseInput(file: Source): List[Int] = {
     val paths    = file.mkString.tail.init
-    val graph    = new DefaultDirectedGraph[Node, DefaultEdge](classOf[DefaultEdge])
-    val start    = (0, 0)
+    val graph    = new DefaultDirectedGraph[Point, DefaultEdge](classOf[DefaultEdge])
+    val start    = Point.zero
     val position = mutable.Set(start)
-    val stack    = mutable.Stack.empty[(Set[Node], Set[Node])]
+    val stack    = mutable.Stack.empty[(Set[Point], Set[Point])]
     val starts   = mutable.Set(start)
-    val ends     = mutable.Set.empty[Node]
+    val ends     = mutable.Set.empty[Point]
     paths.foreach {
       case '|' =>
         ends.addAll(position)
         position.clear()
         position.addAll(starts)
       case char if "NESW".contains(char) =>
-        val (dx, dy) = char match {
-          case 'N' => (-1, 0)
-          case 'E' => (0, 1)
-          case 'S' => (1, 0)
-          case 'W' => (0, -1)
-          case _   => throw new IllegalArgumentException
-        }
-        val newPos = position.map {
-          case (x, y) =>
-            val source = (x, y)
-            val dest   = (x + dx, y + dy)
-            graph.addVertex(source)
-            graph.addVertex(dest)
-            graph.addEdge(source, dest)
-            dest
+        val newPos = position.map { source =>
+          val dest = source.move(Direction.fromChar(char))
+          graph.addVertex(source)
+          graph.addVertex(dest)
+          graph.addEdge(source, dest)
+          dest
         }
         position.clear()
         position.addAll(newPos)
@@ -65,10 +52,10 @@ object Day20 {
       case _ => throw new IllegalArgumentException
     }
     graph.vertexSet().asScala.foldLeft(List.empty[Int]) { (acc, vertex) =>
-      DijkstraShortestPath.findPathBetween(graph, start, vertex).getLength :: acc
+      BFSShortestPath.findPathBetween(graph, start, vertex).getLength :: acc
     }
   }
 
-  private[year2018] def part1(lengths: List[Int]): Int = lengths.max
-  private[year2018] def part2(lengths: List[Int]): Int = lengths.count(_ >= 1000)
+  override protected[year2018] def part1(lengths: List[Int]): Int = lengths.max
+  override protected[year2018] def part2(lengths: List[Int]): Int = lengths.count(_ >= 1000)
 }

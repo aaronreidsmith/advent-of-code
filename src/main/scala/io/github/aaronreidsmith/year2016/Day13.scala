@@ -1,44 +1,55 @@
 package io.github.aaronreidsmith.year2016
 
-object Day13 {
-  private sealed trait Space
-  private case object Open extends Space
-  private case object Wall extends Space
+import io.github.aaronreidsmith.{Point, Solution}
+import org.jgrapht.alg.shortestpath.BFSShortestPath
+import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
 
-  def main(args: Array[String]): Unit = {
-    val input = 1350
-    val grid = {
-      for {
-        x <- 0 to 50
-        y <- 0 to 50
-      } yield {
-        val num      = (x * x) + (3 * x) + (2 * x * y) + y + (y * y) + input
-        val oneCount = num.toBinaryString.count(_ == '1')
-        (x, y) -> (if (oneCount % 2 == 0) Open else Wall)
-      }
-    }.toMap
-    printGrid(grid) // Just printed and solved both parts by hand (Part 1: 92, Part 2: 124)
+import scala.io.Source
+import scala.jdk.CollectionConverters._
+
+object Day13 extends Solution(2016, 13) {
+  type I  = DefaultUndirectedGraph[Point, DefaultEdge]
+  type O1 = Int
+  type O2 = Int
+
+  override protected[year2016] def parseInput(file: Source): DefaultUndirectedGraph[Point, DefaultEdge] = {
+    val input = file.mkString.trim.toInt
+    val graph = new DefaultUndirectedGraph[Point, DefaultEdge](classOf[DefaultEdge])
+
+    // Add all our vertices
+    for {
+      x <- 0 to 50
+      y <- 0 to 50
+      num      = (x * x) + (3 * x) + (2 * x * y) + y + (y * y) + input
+      oneCount = num.toBinaryString.count(_ == '1')
+      if oneCount % 2 == 0
+    } {
+      graph.addVertex(Point(x, y))
+    }
+
+    // Add all our edges
+    for {
+      point    <- graph.vertexSet().asScala
+      neighbor <- point.immediateNeighbors
+      if graph.containsVertex(neighbor)
+    } {
+      graph.addEdge(point, neighbor)
+    }
+
+    graph
   }
 
-  private def printGrid(grid: Map[(Int, Int), Space]): Unit = {
-    var row = 0
-    grid.toSeq
-      .sortBy { case (position, _) => position }
-      .foreach {
-        case ((currRow, currCol), space) =>
-          val char = space match {
-            case Open => ' '
-            case Wall => '#'
-          }
-          if (currRow != row) {
-            row += 1
-            println()
-          }
-          if ((currRow, currCol) == (31, 39)) {
-            print('X')
-          } else {
-            print(char)
-          }
+  override protected[year2016] def part1(input: DefaultUndirectedGraph[Point, DefaultEdge]): Int = {
+    BFSShortestPath.findPathBetween(input, Point(1, 1), Point(31, 39)).getLength
+  }
+
+  override protected[year2016] def part2(input: DefaultUndirectedGraph[Point, DefaultEdge]): Int = {
+    val start = Point(1, 1)
+    input.vertexSet().asScala.count { other =>
+      Option(BFSShortestPath.findPathBetween(input, start, other)) match {
+        case Some(path) => path.getLength <= 50
+        case None       => false
       }
+    }
   }
 }

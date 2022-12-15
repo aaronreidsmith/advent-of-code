@@ -1,22 +1,25 @@
 package io.github.aaronreidsmith.year2019
 
+import io.github.aaronreidsmith.Solution
 import io.github.aaronreidsmith.year2019.intcode.util.IntCodeUtils
 import io.github.aaronreidsmith.year2019.intcode.{Instructions, IntCode}
 
-object Day02 extends IntCodeUtils {
-  def main(args: Array[String]): Unit = {
-    val instructions = makeInstructions("2019/day02.txt")
-    println(s"Part 1: ${part1(instructions)}")
-    println(s"Part 2: ${part2(instructions)}")
-  }
+import scala.io.Source
 
-  private[year2019] def part1(instructions: Instructions): Long = {
+object Day02 extends Solution(2019, 2) with IntCodeUtils {
+  type I  = Instructions
+  type O1 = Long
+  type O2 = Long
+
+  override protected[year2019] def parseInput(file: Source): Instructions = file.toInstructions
+
+  override protected[year2019] def part1(instructions: Instructions): Long = {
     val updatedInstructions = instructions ++ Map(1L -> 12L, 2L -> 2L) // From problem
     val intCode             = new IntCode(updatedInstructions)
     intCode.run().getRegisterValue(0)
   }
 
-  private[year2019] def part2(instructions: Instructions): Long = {
+  override protected[year2019] def part2(instructions: Instructions): Long = {
     for {
       noun <- 0L until 100L
       verb <- 0L until 100L

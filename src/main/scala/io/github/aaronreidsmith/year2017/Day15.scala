@@ -1,28 +1,35 @@
 package io.github.aaronreidsmith.year2017
 
-object Day15 {
-  def main(args: Array[String]): Unit = {
-    val aStart  = 116L
-    val aFactor = 16807L
+import io.github.aaronreidsmith.Solution
 
-    val bStart  = 299L
-    val bFactor = 48271L
+import scala.io.Source
 
-    val aGenerator = generator(aStart, aFactor)
-    val bGenerator = generator(bStart, bFactor)
+object Day15 extends Solution(2017, 15) {
+  type I  = (LazyList[Long], LazyList[Long])
+  type O1 = Int
+  type O2 = Int
 
-    val part1 = aGenerator.take(40000000).lazyZip(bGenerator).count(matching)
-    println(s"Part 1: $part1")
+  // Hard-coded numbers are given in puzzle text
+  override protected[year2017] def parseInput(file: Source): (LazyList[Long], LazyList[Long]) = {
+    def generator(previous: Long, factor: Long): LazyList[Long] = {
+      val next = (previous * factor) % 2147483647
+      previous #:: generator(next, factor)
+    }
 
-    // Our seed is divisible by 4, so we need to skip it
-    // https://www.reddit.com/r/adventofcode/comments/nrfqa6/2017_day_15_part_2_scala_works_for_test_input_but/
-    val part2 = aGenerator.filter(_ % 4 == 0).slice(1, 5000001).lazyZip(bGenerator.filter(_ % 8 == 0)).count(matching)
-    println(s"Part 2: $part2")
+    val aStart :: bStart :: _ = file.getLines().toList.map(_.filter(_.isDigit).toLong)
+    (generator(aStart, 16807L), generator(bStart, 48271L))
   }
 
-  private def generator(previous: Long, factor: Long, divisor: Long = 2147483647): LazyList[Long] = {
-    val next = (previous * factor) % divisor
-    previous #:: generator(next, factor)
+  override protected[year2017] def part1(input: (LazyList[Long], LazyList[Long])): Int = {
+    val (a, b) = input
+    a.take(40000000).lazyZip(b).count(matching)
+  }
+
+  override protected[year2017] def part2(input: (LazyList[Long], LazyList[Long])): Int = {
+    val (a, b) = input
+    // Our seed is divisible by 4, so we need to skip it
+    // https://www.reddit.com/r/adventofcode/comments/nrfqa6/2017_day_15_part_2_scala_works_for_test_input_but/
+    a.filter(_ % 4 == 0).slice(1, 5000001).lazyZip(b.filter(_ % 8 == 0)).count(matching)
   }
 
   private def lowest16Bits(num: Long): String = {

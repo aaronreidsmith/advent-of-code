@@ -1,77 +1,59 @@
 package io.github.aaronreidsmith.year2017
 
+import io.github.aaronreidsmith.{Direction, East, North, Point, Solution, South, West}
+
 import scala.annotation.tailrec
+import scala.io.Source
 
-object Direction extends Enumeration {
-  type Direction = Value
-  val NORTH, EAST, SOUTH, WEST = Value
-}
+object Day03 extends Solution(2017, 3) {
+  type I  = Int
+  type O1 = Int
+  type O2 = Int
 
-object Day03 {
-  import Direction._
+  override protected[year2017] def parseInput(file: Source): Int = file.mkString.trim.toInt
 
-  def main(args: Array[String]): Unit = {
-    val input = 347991
-    println(s"Part 1: ${solution(input)}")
-    println(s"Part 2: ${solution(input, part1 = false, grid = Map((0, 0) -> 1, (1, 0) -> 1))}")
+  override protected[year2017] def part1(input: Int): Int = {
+    solution(input, Map(Point(0, 0) -> 1, Point(0, 1) -> 2), part1 = true)
+  }
+
+  override protected[year2017] def part2(input: Int): Int = {
+    solution(input, Map(Point(0, 0) -> 1, Point(0, 1) -> 1), part1 = false)
   }
 
   // Start in second square for ease of algorithm
   @tailrec
   private def solution(
       target: Int,
-      part1: Boolean = true,
-      x: Int = 1,
-      y: Int = 0,
-      currentNum: Int = 2,
-      currentDirection: Direction = NORTH,
-      grid: Map[(Int, Int), Int] = Map((0, 0) -> 1, (1, 0) -> 2)
+      grid: Map[Point, Int],
+      part1: Boolean,
+      pos: Point = Point(0, 1),
+      acc: Int = 2,
+      direction: Direction = North
   ): Int = {
-    if (currentNum == target && part1) {
-      math.abs(x) + math.abs(y)
-    } else if (currentNum > target && !part1) {
-      currentNum
+    if (acc == target && part1) {
+      pos.manhattanDistance(Point.zero)
+    } else if (acc > target && !part1) {
+      acc
     } else {
-      val squareToLeft = currentDirection match {
-        case NORTH => (x - 1, y)
-        case EAST  => (x, y + 1)
-        case SOUTH => (x + 1, y)
-        case WEST  => (x, y - 1)
+      val squareToLeft = direction match {
+        case North => pos.left
+        case East  => pos.up
+        case South => pos.right
+        case West  => pos.down
       }
-      val newCurrentDirection = grid.get(squareToLeft) match {
-        // If there is something to our left, keep going in same direction
-        case Some(_) => currentDirection
-        // Otherwise, rotate counterclockwise
-        case None =>
-          currentDirection match {
-            case NORTH => WEST
-            case EAST  => NORTH
-            case SOUTH => EAST
-            case WEST  => SOUTH
-          }
+      val newDirection = grid.get(squareToLeft) match {
+        case Some(_) => direction      // If there is something to our left, keep going in same direction
+        case None    => direction.left // Otherwise rotate counter clockwise
       }
-      val (newX, newY) = newCurrentDirection match {
-        case NORTH => (x, y + 1)
-        case EAST  => (x + 1, y)
-        case SOUTH => (x, y - 1)
-        case WEST  => (x - 1, y)
+      val newPos = newDirection match {
+        case North => pos.up
+        case East  => pos.right
+        case South => pos.down
+        case West  => pos.left
       }
-      val newCurrentNum = if (part1) currentNum + 1 else adjacentSquares(x, y).flatMap(grid.get).sum
-      val newGrid       = grid + ((x, y) -> newCurrentNum)
-      solution(target, part1, newX, newY, newCurrentNum, newCurrentDirection, newGrid)
+      val newNum  = if (part1) acc + 1 else pos.neighbors.flatMap(grid.get).sum
+      val newGrid = grid + (pos -> newNum)
+      solution(target, newGrid, part1, newPos, newNum, newDirection)
     }
   }
-
-  private def adjacentSquares(x: Int, y: Int): Seq[(Int, Int)] = Seq(
-    // Horizontal neighbors
-    (x + 1, y),
-    (x - 1, y),
-    (x, y + 1),
-    (x, y - 1),
-    // Diagonal neighbors
-    (x + 1, y + 1),
-    (x + 1, y - 1),
-    (x - 1, y + 1),
-    (x - 1, y - 1)
-  )
 }

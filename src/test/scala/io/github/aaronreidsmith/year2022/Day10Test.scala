@@ -10,6 +10,7 @@ class Day10Test extends BaseTest {
     // Example output on website uses periods instead of spaces, but I switched it so I could read the actual output
     // for my given input. Have to use a seq/mkString instead of stripMargin or Scala strips trailing spaces
     Day10.part2(input) shouldBe Seq(
+      "",
       "##  ##  ##  ##  ##  ##  ##  ##  ##  ##  ",
       "###   ###   ###   ###   ###   ###   ### ",
       "####    ####    ####    ####    ####    ",

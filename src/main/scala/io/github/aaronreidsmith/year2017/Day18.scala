@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2017
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Solution, using}
 
 import scala.annotation.tailrec
 import scala.collection.mutable
@@ -8,7 +8,12 @@ import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
-object Day18 {
+object Day18 extends Solution(2017, 18) {
+  type I  = Vector[String]
+  type O1 = Long
+  type O2 = Int
+
+  // Top-level so we only have to compile once
   private val snd = "^snd (.*)$".r
   private val set = "^set (.*) (.*)$".r
   private val add = "^add (.*) (.*)$".r
@@ -17,15 +22,9 @@ object Day18 {
   private val rcv = "^rcv (.*)$".r
   private val jgz = "^jgz (.*) (.*)$".r
 
-  def main(args: Array[String]): Unit = {
-    val instructions = using("2017/day18.txt")(parseInput)
-    println(s"Part 1: ${part1(instructions)}")
-    println(s"Part 2: ${part2(instructions)}")
-  }
+  override protected[year2017] def parseInput(file: Source): Vector[String] = file.getLines().toVector
 
-  private[year2017] def parseInput(file: Source): Vector[String] = file.getLines().toVector
-
-  private[year2017] def part1(initialInstructions: Vector[String]): Long = {
+  override protected[year2017] def part1(initialInstructions: Vector[String]): Long = {
     def getValue(registers: Map[String, Long], maybeValue: String): Long = Try(maybeValue.toInt) match {
       case Success(value) => value
       case Failure(_)     => registers.getOrElse(maybeValue, 0)
@@ -84,7 +83,7 @@ object Day18 {
   }
 
   // TODO: Copied from my Python solution, so v mutable
-  private[year2017] def part2(instructions: Vector[String]): Int = {
+  override protected[year2017] def part2(instructions: Vector[String]): Int = {
     class Program(pid: Long, var other: Program, instructions: Vector[String]) {
       val registers: mutable.Map[String, Long] = mutable.Map("p" -> pid).withDefaultValue(0)
       var ip: Long                             = 0

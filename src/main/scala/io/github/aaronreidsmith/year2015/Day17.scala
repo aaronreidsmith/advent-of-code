@@ -1,12 +1,17 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 
 import java.util.concurrent.atomic.AtomicInteger
 import scala.io.Source
 
-object Day17 {
+object Day17 extends Solution(2015, 17) {
+  type I  = List[Container]
+  type O1 = Int
+  type O2 = Int
+
   private val hashCodeGenerator = new AtomicInteger
+  private val targetLiters      = if (isTest) 25 else 150
 
   // This whole class is only used so we can have duplicate container sizes when using `combinations`
   private[year2015] case class Container(size: Int) {
@@ -14,17 +19,13 @@ object Day17 {
     override def hashCode(): Int = _hashCode
   }
 
-  def main(args: Array[String]): Unit = {
-    val containers = using("2015/day17.txt")(_.getLines().toList.map(line => Container(line.toInt)))
-    println(s"Part 1: ${part1(containers)}")
-    println(s"Part 2: ${part2(containers)}")
+  override protected[year2015] def parseInput(file: Source): List[Container] = {
+    file.getLines().toList.map(line => Container(line.toInt))
   }
-
-  private[year2015] def part1(containers: List[Container], liters: Int = 150): Int =
-    getValidCombinations(containers, liters).length
-
-  private[year2015] def part2(containers: List[Container], liters: Int = 150): Int = {
-    val validCombinations = getValidCombinations(containers, liters)
+  override protected[year2015] def part1(containers: List[Container]): Int =
+    getValidCombinations(containers, targetLiters).length
+  override protected[year2015] def part2(containers: List[Container]): Int = {
+    val validCombinations = getValidCombinations(containers, targetLiters)
     val minContainers = validCombinations.foldLeft(Int.MaxValue) { (currentMin, combination) =>
       currentMin.min(combination.size)
     }

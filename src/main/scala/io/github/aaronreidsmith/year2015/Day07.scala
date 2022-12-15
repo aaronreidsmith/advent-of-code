@@ -1,13 +1,17 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 import scala.reflect.runtime.currentMirror
 import scala.tools.reflect.ToolBox
 import scala.util.parsing.combinator.JavaTokenParsers
 
-object Day07 extends JavaTokenParsers {
+object Day07 extends Solution(2015, 7) with JavaTokenParsers {
+  type I  = String
+  type O1 = String
+  type O2 = String
+
   private def quotedIdent: Parser[String] = ident ^^ (i => s"`$i`")
   private def operation: Parser[String] = {
     def expression = quotedIdent | wholeNumber
@@ -27,20 +31,14 @@ object Day07 extends JavaTokenParsers {
 
   private def wires(input: String): String = parse(rep(line), input).get.mkString("; ")
 
-  def main(args: Array[String]): Unit = {
-    val input = using("2015/day07.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
+  override protected[year2015] def parseInput(file: Source): String = file.getLines().mkString("\n")
 
-  private[year2015] def parseInput(file: Source): String = file.getLines().mkString("\n")
-
-  private[year2015] def part1(input: String): String = {
+  override protected[year2015] def part1(input: String): String = {
     val tree = s"object Part1 { ${wires(input)} }; Part1.a"
     toolBox.eval(toolBox.parse(tree)).toString
   }
 
-  private[year2015] def part2(input: String): String = {
+  override protected[year2015] def part2(input: String): String = {
     val tree =
       s"""trait Base { ${wires(input)} }
          |object Part1 extends Base

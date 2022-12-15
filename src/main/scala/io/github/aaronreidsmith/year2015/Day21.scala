@@ -1,11 +1,15 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day21 {
+object Day21 extends Solution(2015, 21) {
+  type I  = Boss
+  type O1 = Int
+  type O2 = Int
+
   private sealed trait Item {
     val cost: Int
     val damage: Int
@@ -139,33 +143,17 @@ object Day21 {
     override def beAttacked(damage: Int): Character = this.copy(hp = this.hp - math.max(1, damage - armor))
   }
 
-  @tailrec
-  private def playerWins(attacker: Character, defender: Character): Boolean = {
-    val updatedDefender = attacker.attack(defender)
-    updatedDefender match {
-      case player: Player if !player.isAlive => false
-      case boss: Boss if !boss.isAlive       => true
-      case _                                 => playerWins(updatedDefender, attacker)
-    }
-  }
-
-  def main(args: Array[String]): Unit = {
-    val boss = using("2015/day21.txt")(parseInput)
-    println(s"Part 1: ${part1(boss)}")
-    println(s"Part 2: ${part2(boss)}")
-  }
-
-  private[year2015] def parseInput(file: Source): Boss = {
-    val Array(bossHp, bossDamage, bossArmor, _*) = file.mkString.split('\n').map(_.split(": ").last.toInt)
-    Boss(bossHp, bossArmor, bossDamage)
-  }
-
   private val weapons = List(Dagger, Shortsword, Warhammer, Longsword, Greataxe)
   private val armors  = List(Some(Leather), Some(Chainmail), Some(Splintmail), Some(Bandedmail), Some(Platemail), None)
   private val rings =
     List(DamagePlusOne, DamagePlusTwo, DamagePlusThree, DefensePlusOne, DefensePlusTwo, DefensePlusThree)
 
-  private[year2015] def part1(boss: Boss): Int = {
+  override protected[year2015] def parseInput(file: Source): Boss = {
+    val Array(bossHp, bossDamage, bossArmor, _*) = file.mkString.trim.split('\n').map(_.split(": ").last.toInt)
+    Boss(bossHp, bossArmor, bossDamage)
+  }
+
+  override protected[year2015] def part1(boss: Boss): Int = {
     for {
       weapon <- weapons
       armor  <- armors
@@ -175,7 +163,7 @@ object Day21 {
     } yield player.itemCost
   }.min
 
-  private[year2015] def part2(boss: Boss): Int = {
+  override protected[year2015] def part2(boss: Boss): Int = {
     for {
       weapon <- weapons
       armor  <- armors
@@ -185,4 +173,13 @@ object Day21 {
     } yield player.itemCost
   }.max
 
+  @tailrec
+  private def playerWins(attacker: Character, defender: Character): Boolean = {
+    val updatedDefender = attacker.attack(defender)
+    updatedDefender match {
+      case player: Player if !player.isAlive => false
+      case boss: Boss if !boss.isAlive       => true
+      case _                                 => playerWins(updatedDefender, attacker)
+    }
+  }
 }

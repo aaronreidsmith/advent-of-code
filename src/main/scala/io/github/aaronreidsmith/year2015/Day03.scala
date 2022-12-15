@@ -1,54 +1,56 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Point, Solution}
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day03 {
-  def main(args: Array[String]): Unit = {
-    val input = using("2015/day03.txt")(_.mkString)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
+object Day03 extends Solution(2015, 3) {
+  type I  = String
+  type O1 = Int
+  type O2 = Int
 
-  private[year2015] def part1(instructions: String): Int = {
-    val (_, seenHouses) = instructions.foldLeft((0, 0), Set((0, 0))) {
-      case (((x, y), seen), char) =>
-        val nextPos = nextPosition(x, y, char)
+  override protected[year2015] def parseInput(file: Source): String = file.mkString.trim
+
+  override protected[year2015] def part1(instructions: String): Int = {
+    val (_, seenHouses) = instructions.foldLeft(Point.zero, Set(Point.zero)) {
+      case ((point, seen), char) =>
+        val nextPos = nextPosition(point, char)
         (nextPos, seen + nextPos)
+      case (acc, _) => acc
     }
     seenHouses.size
   }
 
-  @tailrec
-  private[year2015] def part2(
-      instructions: String,
-      pointer: Int = 0,
-      santaPos: (Int, Int) = (0, 0),
-      santaSeen: Set[(Int, Int)] = Set((0, 0)),
-      robotSantaPos: (Int, Int) = (0, 0),
-      robotSantaSeen: Set[(Int, Int)] = Set((0, 0))
-  ): Int = if (pointer >= instructions.length) {
-    (santaSeen ++ robotSantaSeen).size
-  } else {
-    val char = instructions(pointer)
-    if (pointer % 2 == 0) {
-      val newSantaPos = nextPosition(santaPos, char)
-      part2(instructions, pointer + 1, newSantaPos, santaSeen + newSantaPos, robotSantaPos, robotSantaSeen)
+  override protected[year2015] def part2(instructions: String): Int = {
+    @tailrec
+    def helper(
+        pointer: Int = 0,
+        santaPos: Point = Point.zero,
+        santaSeen: Set[Point] = Set(Point.zero),
+        robotSantaPos: Point = Point.zero,
+        robotSantaSeen: Set[Point] = Set(Point.zero)
+    ): Int = if (pointer >= instructions.length) {
+      (santaSeen ++ robotSantaSeen).size
     } else {
-      val newRobotSantaPos = nextPosition(robotSantaPos, char)
-      part2(instructions, pointer + 1, santaPos, santaSeen, newRobotSantaPos, robotSantaSeen + newRobotSantaPos)
+      val char = instructions(pointer)
+      if (pointer % 2 == 0) {
+        val newSantaPos = nextPosition(santaPos, char)
+        helper(pointer + 1, newSantaPos, santaSeen + newSantaPos, robotSantaPos, robotSantaSeen)
+      } else {
+        val newRobotSantaPos = nextPosition(robotSantaPos, char)
+        helper(pointer + 1, santaPos, santaSeen, newRobotSantaPos, robotSantaSeen + newRobotSantaPos)
+      }
     }
+
+    helper()
   }
 
-  private def nextPosition(pos: (Int, Int), char: Char): (Int, Int) = nextPosition(pos._1, pos._2, char)
-
-  private def nextPosition(x: Int, y: Int, char: Char): (Int, Int) = char match {
-    case '^' => (x - 1, y)
-    case '>' => (x, y + 1)
-    case 'v' => (x + 1, y)
-    case '<' => (x, y - 1)
+  private def nextPosition(point: Point, char: Char): Point = char match {
+    case '^' => point.up
+    case '>' => point.right
+    case 'v' => point.down
+    case '<' => point.left
     case _   => throw new IllegalArgumentException
   }
 }

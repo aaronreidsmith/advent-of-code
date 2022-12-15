@@ -1,7 +1,9 @@
 package io.github.aaronreidsmith.year2015
 
 import io.github.aaronreidsmith.BaseTest
+import org.scalatest.tags.Slow
 
+@Slow
 class Day04Test extends BaseTest {
   "Day04.part1" should "work on example input" in {
     Day04.part1("abcdef") shouldBe 609043

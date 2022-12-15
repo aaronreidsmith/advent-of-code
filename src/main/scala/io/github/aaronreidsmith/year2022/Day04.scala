@@ -1,17 +1,15 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Solution, using}
 
 import scala.io.Source
 
-object Day04 {
-  def main(args: Array[String]): Unit = {
-    val input = using("2022/day04.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
+object Day04 extends Solution(2022, 4) {
+  type I = List[(Set[Int], Set[Int])]
+  type O1 = Int
+  type O2 = Int
 
-  protected[year2022] def parseInput(file: Source): List[(Set[Int], Set[Int])] = {
+  override protected[year2022] def parseInput(file: Source): List[(Set[Int], Set[Int])] = {
     file
       .getLines()
       .toList
@@ -23,12 +21,12 @@ object Day04 {
       }
   }
 
-  protected[year2022] def part1(input: List[(Set[Int], Set[Int])]): Int = input.count {
+  override protected[year2022] def part1(input: List[(Set[Int], Set[Int])]): Int = input.count {
     case (left, right) => left.subsetOf(right) || right.subsetOf(left)
     case _             => false
   }
 
-  protected[year2022] def part2(input: List[(Set[Int], Set[Int])]): Int = input.count {
+  override protected[year2022] def part2(input: List[(Set[Int], Set[Int])]): Int = input.count {
     case (left, right) => left.intersect(right).nonEmpty
     case _             => false
   }

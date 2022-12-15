@@ -1,24 +1,27 @@
 package io.github.aaronreidsmith.year2015
 
+import io.github.aaronreidsmith.{Solution, using}
+
 import java.math.BigInteger
 import java.security.MessageDigest
+import scala.io.Source
 
-object Day04 {
-  def main(args: Array[String]): Unit = {
-    val input = "yzbqklnj"
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part1(input)}")
-  }
+object Day04 extends Solution(2015, 4) {
+  type I  = String
+  type O1 = Int
+  type O2 = Int
 
-  private val infiniteList = LazyList.from(1)
+  override protected[year2015] def parseInput(file: Source): String = file.mkString.trim
 
-  private[year2015] def part1(input: String): Int = infiniteList
+  override protected[year2015] def part1(input: String): Int = LazyList
+    .from(1)
     .collectFirst {
       case i if md5(s"$input$i").startsWith("00000") => i
     }
     .getOrElse(-1)
 
-  private[year2015] def part2(input: String): Int = infiniteList
+  override protected[year2015] def part2(input: String): Int = LazyList
+    .from(1)
     .collectFirst {
       case i if md5(s"$input$i").startsWith("000000") => i
     }

@@ -1,72 +1,76 @@
 package io.github.aaronreidsmith.year2016
 
+import io.github.aaronreidsmith._
+
+import scala.annotation.tailrec
 import scala.io.Source
 
-object Day01 {
-  private val left  = "^L(\\d+)$".r
-  private val right = "^R(\\d+)$".r
+object Day01 extends Solution(2016, 1) {
+  type I  = List[Instruction]
+  type O1 = Int
+  type O2 = Int
 
-  protected[this] object Direction extends Enumeration {
-    type Direction = Value
-    val North, East, South, West = Value
+  private[year2016] case class Instruction(direction: Char, steps: Int)
+  private case class State(facing: Direction, position: Point, visited: Vector[Point] = Vector()) {
+    @tailrec
+    final def move(instruction: Instruction): State = instruction.direction match {
+      case 'R' =>
+        val (newPos, newVisited) = facing match {
+          case North =>
+            val newX       = position.x + instruction.steps
+            val newVisited = (position.x until newX).map(Point(_, position.y))
+            (position.copy(x = newX), visited ++ newVisited)
+          case East =>
+            val newY       = position.y - instruction.steps
+            val newVisited = (position.y until newY by -1).map(Point(position.x, _))
+            (position.copy(y = newY), visited ++ newVisited)
+          case South =>
+            val newX       = position.x - instruction.steps
+            val newVisited = (position.x until newX by -1).map(Point(_, position.y))
+            (position.copy(x = newX), visited ++ newVisited)
+          case West =>
+            val newY       = position.y + instruction.steps
+            val newVisited = (position.y until newY).map(Point(position.x, _))
+            (position.copy(y = newY), visited ++ newVisited)
+        }
+        State(facing.right, newPos, newVisited)
+      case 'L' =>
+        // Handle "L" by just turning the state around and swapping the instruction (rather than duplicate logic)
+        this.copy(facing = facing.opposite).move(instruction.copy(direction = 'R'))
+      case _ => throw new IllegalArgumentException
+    }
   }
-  import Direction._
 
-  def main(args: Array[String]): Unit = {
-    val input        = Source.fromResource("2016/day01.txt")
-    val instructions = input.mkString.split(", ").toList
-    input.close()
+  private object State {
+    def origin: State = State(North, Point.zero)
+  }
 
-    val ((finalRow, finalCol), _, visited) = instructions.foldLeft(((0, 0), North, List.empty[(Int, Int)])) {
-      case (((currentRow, currentCol), currentDirection, visitedAcc), instruction) =>
-        instruction match {
-          case left(steps) if currentDirection == North =>
-            val newCol     = currentCol - steps.toInt
-            val newVisited = (currentCol until newCol by -1).map((currentRow, _))
-            ((currentRow, newCol), West, visitedAcc ++ newVisited)
-          case left(steps) if currentDirection == East =>
-            val newRow     = currentRow + steps.toInt
-            val newVisited = (currentRow until newRow).map((_, currentCol))
-            ((newRow, currentCol), North, visitedAcc ++ newVisited)
-          case left(steps) if currentDirection == South =>
-            val newCol     = currentCol + steps.toInt
-            val newVisited = (currentCol until newCol).map((currentRow, _))
-            ((currentRow, newCol), East, visitedAcc ++ newVisited)
-          case left(steps) if currentDirection == West =>
-            val newRow     = currentRow - steps.toInt
-            val newVisited = (currentRow until newRow by -1).map((_, currentCol))
-            ((newRow, currentCol), South, visitedAcc ++ newVisited)
-          case right(steps) if currentDirection == North =>
-            val newCol     = currentCol + steps.toInt
-            val newVisited = (currentCol until newCol).map((currentRow, _))
-            ((currentRow, newCol), East, visitedAcc ++ newVisited)
-          case right(steps) if currentDirection == East =>
-            val newRow     = currentRow - steps.toInt
-            val newVisited = (currentRow until newRow by -1).map((_, currentCol))
-            ((newRow, currentCol), South, visitedAcc ++ newVisited)
-          case right(steps) if currentDirection == South =>
-            val newCol     = currentCol - steps.toInt
-            val newVisited = (currentCol until newCol by -1).map((currentRow, _))
-            ((currentRow, newCol), West, visitedAcc ++ newVisited)
-          case right(steps) if currentDirection == West =>
-            val newRow     = currentRow + steps.toInt
-            val newVisited = (currentRow until newRow).map((_, currentCol))
-            ((newRow, currentCol), North, visitedAcc ++ newVisited)
-          case other => throw new IllegalArgumentException(other)
-        }
+  override protected[year2016] def parseInput(file: Source): List[Instruction] = {
+    file.mkString.trim
+      .split(", ")
+      .map(entry => Instruction(entry.head, entry.tail.toInt))
+      .toList
+  }
+
+  override protected[year2016] def part1(input: List[Instruction]): Int = {
+    traverse(input).position.manhattanDistance(Point.zero)
+  }
+
+  override protected[year2016] def part2(input: List[Instruction]): Int = {
+    @tailrec
+    def helper(points: Vector[Point], seen: Set[Point] = Set()): Int = {
+      val head +: tail = points
+      if (seen.contains(head)) {
+        head.manhattanDistance(Point.zero)
+      } else {
+        helper(tail, seen + head)
+      }
     }
-    val part1 = math.abs(finalRow) + math.abs(finalCol)
-    println(s"Part 1: $part1")
 
-    val (part2, _) = visited.foldLeft(0, Set.empty[(Int, Int)]) {
-      case ((coordinateDistance, visitedSet), coordinate) if coordinateDistance == 0 =>
-        if (visitedSet.contains(coordinate)) {
-          (math.abs(coordinate._1) + math.abs(coordinate._2), visitedSet)
-        } else {
-          (0, visitedSet + coordinate)
-        }
-      case ((answer, visitedSet), _) => (answer, visitedSet)
-    }
-    println(s"Part 2: $part2")
+    helper(traverse(input).visited)
+  }
+
+  private def traverse(instructions: List[Instruction]): State = {
+    instructions.foldLeft(State.origin)((state, instruction) => state.move(instruction))
   }
 }

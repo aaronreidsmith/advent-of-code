@@ -1,60 +1,51 @@
 package io.github.aaronreidsmith.year2017
 
+import io.github.aaronreidsmith.{Solution, using}
+
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day10 {
-  def main(args: Array[String]): Unit = {
-    val input       = Source.fromResource("2017/day10.txt")
-    val inputString = input.mkString
-    input.close()
+object Day10 extends Solution(2017, 10) {
+  type I  = String
+  type O1 = Int
+  type O2 = String
 
-    val part1Lengths = inputString.split(',').map(_.toInt).toList
-    val part2Lengths = List.fill(64)(inputString.map(_.toInt).toList ++: List(17, 31, 73, 47, 23)).flatten
+  override protected[year2017] def parseInput(file: Source): String = file.mkString.trim
 
-    println(s"Part 1: ${part1(part1Lengths)}")
-    println(s"Part 2: ${part2(part2Lengths)}")
+  override protected[year2017] def part1(input: String): Int = solution(input.split(',').toVector.map(_.toInt))._1
+  override protected[year2017] def part2(input: String): String = {
+    val modified = Vector.fill(64)(input.map(_.toInt).toVector ++ Vector(17, 31, 73, 47, 23)).flatten
+    solution(modified)._2
   }
 
-  @tailrec
-  private def part1(
-      reversalLengths: List[Int],
-      list: List[Int] = Range(0, 256).toList,
-      currentPosition: Int = 0,
-      skipSize: Int = 0
-  ): Int = reversalLengths match {
-    case Nil => list.take(2).product
-    case reversalLength :: tail =>
-      val leftRotated   = rotateLeft(list, currentPosition)
-      val reversedPart  = leftRotated.take(reversalLength).reverse
-      val remainingPart = leftRotated.drop(reversalLength)
-      val newList       = rotateRight(reversedPart ++: remainingPart, currentPosition)
-      part1(tail, newList, (currentPosition + reversalLength + skipSize) % 256, skipSize + 1)
-  }
+  private def solution(input: Vector[Int]): (Int, String) = {
+    def rotateLeft(list: Vector[Int], i: Int): Vector[Int] = {
+      val size = list.size
+      list.drop(i % size) ++ list.take(i % size)
+    }
 
-  @tailrec
-  private def part2(
-      reversalLengths: List[Int],
-      list: List[Int] = Range(0, 256).toList,
-      currentPosition: Int = 0,
-      skipSize: Int = 0
-  ): String = reversalLengths match {
-    case Nil => list.grouped(16).map(_.reduceLeft(_ ^ _).toHexString).mkString
-    case reversalLength :: tail =>
-      val leftRotated   = rotateLeft(list, currentPosition)
-      val reversedPart  = leftRotated.take(reversalLength).reverse
-      val remainingPart = leftRotated.drop(reversalLength)
-      val newList       = rotateRight(reversedPart ++: remainingPart, currentPosition)
-      part2(tail, newList, (currentPosition + reversalLength + skipSize) % 256, skipSize + 1)
-  }
+    def rotateRight(list: Vector[Int], i: Int): Vector[Int] = {
+      val size = list.size
+      list.drop(size - (i % size)) ++ list.take(size - (i % size))
+    }
 
-  private def rotateLeft(list: List[Int], i: Int): List[Int] = {
-    val size = list.size
-    list.drop(i % size) ++: list.take(i % size)
-  }
+    @tailrec
+    def helper(
+        reversalLengths: Vector[Int],
+        list: Vector[Int] = (0 until 256).toVector,
+        currentPosition: Int = 0,
+        skipSize: Int = 0
+    ): (Int, String) = reversalLengths match {
+      case Vector() => (list.take(2).product, list.grouped(16).map(_.reduceLeft(_ ^ _).toHexString).mkString)
+      case reversalLength +: tail =>
+        val leftRotated   = rotateLeft(list, currentPosition)
+        val reversedPart  = leftRotated.take(reversalLength).reverse
+        val remainingPart = leftRotated.drop(reversalLength)
+        val newList       = rotateRight(reversedPart ++ remainingPart, currentPosition)
+        helper(tail, newList, (currentPosition + reversalLength + skipSize) % 256, skipSize + 1)
+      case _ => throw new IllegalArgumentException
+    }
 
-  private def rotateRight(list: List[Int], i: Int): List[Int] = {
-    val size = list.size
-    list.drop(size - (i % size)) ++: list.take(size - (i % size))
+    helper(input)
   }
 }

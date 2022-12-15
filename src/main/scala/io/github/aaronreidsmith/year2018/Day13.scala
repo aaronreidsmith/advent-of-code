@@ -1,93 +1,59 @@
 package io.github.aaronreidsmith.year2018
 
+import io.github.aaronreidsmith._
+
 import scala.annotation.tailrec
 import scala.io.Source
-import scala.math.Ordered.orderingToOrdered
 
-object Day13 {
-  protected[this] object Direction extends Enumeration {
-    type Direction = Value
-    val North, East, South, West = Value
-  }
-  import Direction._
+object Day13 extends Solution(2018, 13) {
+  type I  = (Vector[String], Vector[Cart])
+  type O1 = String
+  type O2 = String
 
-  protected[this] object Turn extends Enumeration {
-    type Turn = Value
-    val Left, Straight, Right = Value
-  }
-  import Turn._
+  private[year2018] sealed trait Turn
+  private case object Left     extends Turn
+  private case object Right    extends Turn
+  private case object Straight extends Turn
 
-  protected[this] case class Cart(
-      row: Int,
-      col: Int,
+  protected[year2018] case class Cart(
+      position: Point,
       direction: Direction,
       currentTurn: Turn = Left,
       dead: Boolean = false
-  ) extends Ordered[Cart] {
-    val position: (Int, Int) = (row, col)
-
-    override def compare(that: Cart): Int = this.position compare that.position
-
-    def move: Cart = direction match {
-      case North => this.copy(row = row - 1)
-      case East  => this.copy(col = col + 1)
-      case South => this.copy(row = row + 1)
-      case West  => this.copy(col = col - 1)
-    }
-
+  ) {
+    def move: Cart = this.copy(position = position.move(direction))
     def turn: Cart = currentTurn match {
-      case Left =>
-        direction match {
-          case North => this.copy(direction = West, currentTurn = Straight)
-          case East  => this.copy(direction = North, currentTurn = Straight)
-          case South => this.copy(direction = East, currentTurn = Straight)
-          case West  => this.copy(direction = South, currentTurn = Straight)
-        }
+      case Left     => this.copy(direction = direction.left, currentTurn = Straight)
       case Straight => this.copy(currentTurn = Right)
-      case Right =>
-        direction match {
-          case North => this.copy(direction = East, currentTurn = Left)
-          case East  => this.copy(direction = South, currentTurn = Left)
-          case South => this.copy(direction = West, currentTurn = Left)
-          case West  => this.copy(direction = North, currentTurn = Left)
-        }
+      case Right    => this.copy(direction = direction.right, currentTurn = Left)
     }
   }
 
-  protected[this] implicit class CharOps(char: Char) {
-    private val directionMappings = Map(
-      '^' -> North,
-      '>' -> East,
-      'v' -> South,
-      '<' -> West
-    )
-
-    def isCart: Boolean        = directionMappings.contains(char)
-    def toDirection: Direction = directionMappings.getOrElse(char, throw new IllegalArgumentException)
-  }
-
-  def main(args: Array[String]): Unit = {
-    val input = Source.fromResource("2018/day13.txt")
-    val (track, carts) = input.getLines().zipWithIndex.foldLeft((Vector.empty[String], Vector.empty[Cart])) {
-      case ((trackAcc, cartAcc), (line, row)) =>
+  override protected[year2018] def parseInput(file: Source): (Vector[String], Vector[Cart]) = {
+    file.getLines().zipWithIndex.foldLeft((Vector.empty[String], Vector.empty[Cart])) {
+      case ((track, carts), (line, row)) =>
         val newCarts = line.zipWithIndex.collect {
-          case (char, col) if char.isCart => Cart(row, col, char.toDirection)
+          case (char, col) if "^v<>".contains(char) => Cart(Point(row, col), Direction.fromChar(char))
         }
         val updatedLine = line.replaceAll("[\\^v]", "|").replaceAll("[<>]", "-")
-        (trackAcc :+ updatedLine, cartAcc ++ newCarts)
+        (track :+ updatedLine, carts ++ newCarts)
+      case (acc, _) => acc
     }
-    input.close()
+  }
+
+  override protected[year2018] def part1(input: (Vector[String], Vector[Cart])): String = {
+    val (track, initialCarts) = input
 
     @tailrec
-    def part1(carts: Vector[Cart], pointer: Int = 0): String =
+    def helper(carts: Vector[Cart], pointer: Int = 0): String = {
       carts.groupBy(_.position).view.mapValues(_.length).collectFirst {
-        case ((row, col), count) if count > 1 => s"$col,$row"
+        case (pos, count) if count > 1 => s"${pos.y},${pos.x}"
       } match {
         case Some(answer) => answer
         case None =>
           val currentCart = carts(pointer)
           val moved       = currentCart.move
-          val turned = track(moved.row)(moved.col) match {
+          val turned = track(moved.position.x)(moved.position.y) match {
             case '+'                              => moved.turn
             case '/' if moved.direction == North  => moved.copy(direction = East)
             case '/' if moved.direction == East   => moved.copy(direction = North)
@@ -101,22 +67,27 @@ object Day13 {
           }
           val nextPointer  = (pointer + 1) % carts.length
           val updatedCarts = carts.updated(pointer, turned)
-          val sortedCarts  = if (nextPointer == 0) updatedCarts.sorted else updatedCarts
-          part1(sortedCarts, nextPointer)
+          val sortedCarts  = if (nextPointer == 0) updatedCarts.sortBy(_.position) else updatedCarts
+          helper(sortedCarts, nextPointer)
       }
+    }
+
+    helper(initialCarts)
+  }
+
+  override protected[year2018] def part2(input: (Vector[String], Vector[Cart])): String = {
+    val (track, initialCarts) = input
 
     @tailrec
-    def part2(carts: Vector[Cart], pointer: Int = 0): String = carts match {
-      case Vector(head) =>
-        val (row, col) = head.position
-        s"$col,$row"
+    def helper(carts: Vector[Cart], pointer: Int = 0): String = carts match {
+      case Vector(head) => s"${head.position.y},${head.position.x}"
       case _ =>
         val currentCart = carts(pointer)
         val turned = if (currentCart.dead) {
           currentCart
         } else {
           val moved = currentCart.move
-          track(moved.row)(moved.col) match {
+          track(moved.position.x)(moved.position.y) match {
             case '+'                              => moved.turn
             case '/' if moved.direction == North  => moved.copy(direction = East)
             case '/' if moved.direction == East   => moved.copy(direction = North)
@@ -141,11 +112,14 @@ object Day13 {
           case None => updatedCarts
         }
         val nextPointer = (pointer + 1) % withCartsMarkedDead.length
-        val sortedCarts = if (nextPointer == 0) withCartsMarkedDead.filterNot(_.dead).sorted else withCartsMarkedDead
-        part2(sortedCarts, nextPointer)
+        val sortedCarts = if (nextPointer == 0) {
+          withCartsMarkedDead.filterNot(_.dead).sortBy(_.position)
+        } else {
+          withCartsMarkedDead
+        }
+        helper(sortedCarts, nextPointer)
     }
 
-    println(s"Part 1: ${part1(carts)}")
-    println(s"Part 2: ${part2(carts)}")
+    helper(initialCarts)
   }
 }

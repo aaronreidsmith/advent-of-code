@@ -1,27 +1,29 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith._
+import io.github.aaronreidsmith.Solution
 
-object Day02 {
-  private val passwordEntry = "^(\\d+)-(\\d+) ([a-z]): ([a-z]+)$".r
+import scala.io.Source
 
-  def main(args: Array[String]): Unit = {
-    val input = using("2020/day02.txt")(_.getLines().toList)
-    val part1 = input.count {
-      case passwordEntry(rangeStart, rangeEnd, target, password) =>
-        val targetCount = password.count(_ == target.head)
-        rangeStart.toInt <= targetCount && targetCount <= rangeEnd.toInt
-      case _ => false
+object Day02 extends Solution(2020, 2) {
+  type I  = List[Entry]
+  type O1 = Int
+  type O2 = Int
+
+  private[year2020] case class Entry(start: Int, end: Int, target: Char, password: String)
+
+  override protected[year2020] def parseInput(file: Source): List[Entry] = {
+    val entry = """^(\d+)-(\d+) ([a-z]): ([a-z]+)$""".r
+    file.getLines().toList.collect {
+      case entry(start, end, target, password) => Entry(start.toInt, end.toInt, target.head, password)
     }
-    println(s"Part 1: $part1")
-    val part2 = input.count {
-      case passwordEntry(positionOne, positionTwo, target, password) =>
-        val indexOne   = positionOne.toInt - 1
-        val indexTwo   = positionTwo.toInt - 1
-        val targetChar = target.head
-        password(indexOne) == targetChar ^ password(indexTwo) == targetChar
-      case _ => false
-    }
-    println(s"Part 2: $part2")
+  }
+
+  override protected[year2020] def part1(input: List[Entry]): Int = input.count { entry =>
+    val targetCount = entry.password.count(_ == entry.target)
+    entry.start <= targetCount && targetCount <= entry.end
+  }
+
+  override protected[year2020] def part2(input: List[Entry]): Int = input.count { entry =>
+    entry.password(entry.start - 1) == entry.target ^ entry.password(entry.end - 1) == entry.target
   }
 }

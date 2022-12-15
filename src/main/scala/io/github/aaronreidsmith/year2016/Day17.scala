@@ -1,16 +1,25 @@
 package io.github.aaronreidsmith.year2016
 
+import io.github.aaronreidsmith.Solution
+
 import java.math.BigInteger
 import java.security.MessageDigest
+import scala.io.Source
 
-object Day17 {
-  private val md   = MessageDigest.getInstance("MD5")
-  private val open = 'b' to 'z'
+object Day17 extends Solution(2016, 17) {
+  type I  = String
+  type O1 = String
+  type O2 = Int
 
-  def main(args: Array[String]): Unit = {
-    val input = "vkjiggvb"
+  override protected[year2016] def parseInput(file: Source): String = file.mkString.trim
+  override protected[year2016] def part1(input: String): String     = getAllPaths(input).minBy(_.length)
+  override protected[year2016] def part2(input: String): Int        = getAllPaths(input).map(_.length).max
 
-    lazy val allPaths = {
+  // Both solutions require the same traversal, so might as well only do it once
+  private var allPaths = Seq.empty[String]
+  private def getAllPaths(input: String): Seq[String] = {
+    if (allPaths.isEmpty || isTest) {
+      val open = 'b' to 'z'
       def helper(currentPath: String, position: (Int, Int)): Seq[String] = if (position == (3, 3)) {
         Seq(currentPath)
       } else {
@@ -25,13 +34,13 @@ object Day17 {
         upPaths ++ downPaths ++ leftPaths ++ rightPaths
       }
 
-      helper("", (0, 0))
+      allPaths = helper("", (0, 0))
     }
 
-    println(s"Part 1: ${allPaths.minBy(_.length)}")
-    println(s"Part 2: ${allPaths.map(_.length).max}")
+    allPaths
   }
 
+  private val md = MessageDigest.getInstance("MD5")
   private def md5(input: String): String = {
     val digest = md.digest(input.getBytes)
     val bigInt = new BigInteger(1, digest)

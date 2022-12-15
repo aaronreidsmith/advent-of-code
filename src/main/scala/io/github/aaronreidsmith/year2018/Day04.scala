@@ -1,17 +1,21 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 
 import scala.collection.mutable
 import scala.io.Source
 import scala.math.Ordered.orderingToOrdered
 
 // TODO: Copied from Raku solution, so quite a bit of mutability
-object Day04 {
+object Day04 extends Solution(2018, 4) {
+  type I  = List[Entry]
+  type O1 = Int
+  type O2 = Int
+
   private[year2018] sealed trait Memo
-  private[year2018] case object FallsAsleep         extends Memo
-  private[year2018] case object WakesUp             extends Memo
-  private[year2018] case class BeginsShift(id: Int) extends Memo
+  private case object FallsAsleep         extends Memo
+  private case object WakesUp             extends Memo
+  private case class BeginsShift(id: Int) extends Memo
 
   private[year2018] case class Timestamp(year: Int, month: Int, day: Int, hour: Int, minute: Int)
       extends Ordered[Timestamp] {
@@ -20,15 +24,9 @@ object Day04 {
   }
   private[year2018] case class Entry(timestamp: Timestamp, memo: Memo)
 
-  def main(args: Array[String]): Unit = {
-    val input = using("2018/day04.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
-
-  private[year2018] def parseInput(file: Source): List[Entry] = {
-    val entry       = "^\\[(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2})] (.*)$".r
-    val beginsShift = "^Guard #(\\d+) begins shift$".r
+  override protected[year2018] def parseInput(file: Source): List[Entry] = {
+    val entry       = """^\[(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})] (.*)$""".r
+    val beginsShift = """^Guard #(\d+) begins shift$""".r
     file
       .getLines()
       .toList
@@ -45,14 +43,14 @@ object Day04 {
       .sortBy(_.timestamp)
   }
 
-  private[year2018] def part1(input: List[Entry]): Int = {
+  override protected[year2018] def part1(input: List[Entry]): Int = {
     val guardShifts                                = getGuardShifts(input)
     val (mostAsleepGuard, mostAsleepGuardSchedule) = guardShifts.maxBy { case (_, schedule) => schedule(-1) }
     val mostAsleepMinute                           = mostAsleepGuardSchedule.removed(-1).maxBy(_._2)._1
     mostAsleepGuard * mostAsleepMinute
   }
 
-  private[year2018] def part2(input: List[Entry]): Int = {
+  override protected[year2018] def part2(input: List[Entry]): Int = {
     val guardShifts = getGuardShifts(input)
     val mostAsleepGuard = mutable.Map(
       "id"                       -> -1,

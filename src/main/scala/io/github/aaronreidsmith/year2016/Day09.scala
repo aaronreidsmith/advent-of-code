@@ -1,21 +1,19 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/5hbygy/comment/dazb5db
-object Day09 {
-  def main(args: Array[String]): Unit = {
-    val input = using("2016/day09.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
+object Day09 extends Solution(2016, 9) {
+  type I  = String
+  type O1 = Int
+  type O2 = Long
 
-  private[year2016] def parseInput(file: Source): String = file.mkString
+  override protected[year2016] def parseInput(file: Source): String = file.mkString.trim
 
-  private[year2016] def part1(input: String): Int = {
+  override protected[year2016] def part1(input: String): Int = {
     @tailrec
     def decompress(content: List[Char], count: Int = 0): Int = content match {
       case Nil => count
@@ -32,7 +30,7 @@ object Day09 {
     decompress(input.toList)
   }
 
-  private[year2016] def part2(input: String): Long = {
+  override protected[year2016] def part2(input: String): Long = {
     def decompress(content: List[Char], count: Long = 0L): Long = content match {
       case Nil => count
       case '(' :: _ =>

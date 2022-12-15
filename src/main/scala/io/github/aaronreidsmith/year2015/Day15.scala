@@ -1,12 +1,13 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day15 {
-  private val ingredient =
-    "^(.*?): capacity (-?\\d+), durability (-?\\d+), flavor (-?\\d+), texture (-?\\d+), calories (-?\\d+)$".r
+object Day15 extends Solution(2015, 15) {
+  type I  = List[Ingredient]
+  type O1 = Int
+  type O2 = Int
 
   private[year2015] case class Ingredient(
       name: String,
@@ -32,19 +33,17 @@ object Day15 {
     lazy val calories: Int = ingredients.foldLeft(0)(_ + _.calories)
   }
 
-  def main(args: Array[String]): Unit = {
-    val choices = using("2015/day15.txt")(parseInput)
-    println(s"Part 1: ${part1(choices)}")
-    println(s"Part 2: ${part2(choices)}")
+  override protected[year2015] def parseInput(file: Source): List[Ingredient] = {
+    val ingredient =
+      "^(.*?): capacity (-?\\d+), durability (-?\\d+), flavor (-?\\d+), texture (-?\\d+), calories (-?\\d+)$".r
+    file.getLines().foldLeft(List.empty[Ingredient]) {
+      case (acc, ingredient(name, capacity, durability, flavor, texture, calories)) =>
+        Ingredient(name, capacity.toInt, durability.toInt, flavor.toInt, texture.toInt, calories.toInt) :: acc
+      case _ => throw new IllegalArgumentException
+    }
   }
 
-  private[year2015] def parseInput(file: Source): List[Ingredient] = file.getLines().foldLeft(List.empty[Ingredient]) {
-    case (acc, ingredient(name, capacity, durability, flavor, texture, calories)) =>
-      Ingredient(name, capacity.toInt, durability.toInt, flavor.toInt, texture.toInt, calories.toInt) :: acc
-    case _ => throw new IllegalArgumentException
-  }
-
-  private[year2015] def part1(choices: List[Ingredient]): Int = {
+  override protected[year2015] def part1(choices: List[Ingredient]): Int = {
     val ingredients = List.fill(100)(choices).flatten
     ingredients.combinations(100).foldLeft(0) { (currentBest, combination) =>
       val cookie = Cookie(combination)
@@ -52,7 +51,7 @@ object Day15 {
     }
   }
 
-  private[year2015] def part2(choices: List[Ingredient]): Int = {
+  override protected[year2015] def part2(choices: List[Ingredient]): Int = {
     val ingredients = List.fill(100)(choices).flatten
     ingredients.combinations(100).foldLeft(0) { (currentBest, combination) =>
       val cookie = Cookie(combination)

@@ -1,8 +1,14 @@
 package io.github.aaronreidsmith.year2015
 
+import io.github.aaronreidsmith.Solution
+
 import scala.io.Source
 
-object Day02 {
+object Day02 extends Solution(2015, 2) {
+  type I  = List[Box]
+  type O1 = Int
+  type O2 = Int
+
   private[year2015] case class Box(width: Int, height: Int, length: Int) {
     private lazy val lw           = length * width
     private lazy val wh           = width * height
@@ -16,21 +22,17 @@ object Day02 {
     lazy val ribbon: Int      = smallestPerimeter + volume
   }
 
-  private val box = "^(\\d+)x(\\d+)x(\\d+)$".r
+  override protected[year2015] def parseInput(file: Source): List[Box] = {
+    val box = "^(\\d+)x(\\d+)x(\\d+)$".r
 
-  def main(args: Array[String]): Unit = {
-    val input = Source.fromResource("2015/day02.txt")
-    val boxes = input.getLines().foldLeft(List.empty[Box]) { (acc, line) =>
+    file.getLines().foldLeft(List.empty[Box]) { (acc, line) =>
       val newBox = line match {
         case box(width, height, length) => Box(width.toInt, height.toInt, length.toInt)
         case _                          => throw new IllegalArgumentException
       }
       newBox :: acc
     }
-    println(s"Part 1: ${part1(boxes)}")
-    println(s"Part 2: ${part2(boxes)}")
   }
-
-  private[year2015] def part1(boxes: List[Box]): Int = boxes.foldLeft(0)(_ + _.surfaceArea)
-  private[year2015] def part2(boxes: List[Box]): Int = boxes.foldLeft(0)(_ + _.ribbon)
+  override protected[year2015] def part1(boxes: List[Box]): Int = boxes.foldLeft(0)(_ + _.surfaceArea)
+  override protected[year2015] def part2(boxes: List[Box]): Int = boxes.foldLeft(0)(_ + _.ribbon)
 }

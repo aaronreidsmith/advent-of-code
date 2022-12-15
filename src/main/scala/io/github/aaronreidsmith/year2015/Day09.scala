@@ -1,20 +1,18 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 import org.jgrapht.alg.shortestpath.AllDirectedPaths
 import org.jgrapht.graph.{DefaultWeightedEdge, SimpleDirectedWeightedGraph}
 
 import scala.io.Source
 import scala.jdk.CollectionConverters._
 
-object Day09 {
-  def main(args: Array[String]): Unit = {
-    val graph = using("2015/day09.txt")(parseInput)
-    println(s"Part 1: ${part1(graph)}")
-    println(s"Part 2: ${part2(graph)}")
-  }
+object Day09 extends Solution(2015, 9) {
+  type I = SimpleDirectedWeightedGraph[String, DefaultWeightedEdge]
+  type O1 = Int
+  type O2 = Int
 
-  private[year2015] def parseInput(file: Source): SimpleDirectedWeightedGraph[String, DefaultWeightedEdge] = {
+  override protected[year2015] def parseInput(file: Source): SimpleDirectedWeightedGraph[String, DefaultWeightedEdge] = {
     val entry = "^(.*) to (.*) = (\\d+)$".r
     val graph = new SimpleDirectedWeightedGraph[String, DefaultWeightedEdge](classOf[DefaultWeightedEdge])
     file.getLines().foreach {
@@ -35,9 +33,9 @@ object Day09 {
     graph
   }
 
-  private[year2015] def part1(graph: SimpleDirectedWeightedGraph[String, DefaultWeightedEdge]): Int =
+  override protected[year2015] def part1(graph: SimpleDirectedWeightedGraph[String, DefaultWeightedEdge]): Int =
     allPathWeights(graph).min.toInt
-  private[year2015] def part2(graph: SimpleDirectedWeightedGraph[String, DefaultWeightedEdge]): Int =
+  override protected[year2015] def part2(graph: SimpleDirectedWeightedGraph[String, DefaultWeightedEdge]): Int =
     allPathWeights(graph).max.toInt
 
   private def allPathWeights(graph: SimpleDirectedWeightedGraph[String, DefaultWeightedEdge]): Vector[Double] = {

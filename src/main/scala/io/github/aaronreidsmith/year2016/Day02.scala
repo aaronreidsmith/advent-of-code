@@ -1,11 +1,17 @@
 package io.github.aaronreidsmith.year2016
 
+import io.github.aaronreidsmith.Solution
+
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day02 {
+object Day02 extends Solution(2016, 2){
+  type I  = List[List[Char]]
+  type O1 = String
+  type O2 = String
+
   sealed trait Character {
-    val value: String
+    val value: Char
     // Default to not moving
     val partOneLeft: Character  = this
     val partOneRight: Character = this
@@ -17,13 +23,13 @@ object Day02 {
     val partTwoDown: Character  = this
   }
   case object One extends Character {
-    override val value: String           = "1"
+    val value: Char                      = '1'
     override val partOneRight: Character = Two
     override val partOneDown: Character  = Four
     override val partTwoDown: Character  = Three
   }
   case object Two extends Character {
-    override val value: String           = "2"
+    val value: Char                      = '2'
     override val partOneLeft: Character  = One
     override val partOneRight: Character = Three
     override val partOneDown: Character  = Five
@@ -31,7 +37,7 @@ object Day02 {
     override val partTwoDown: Character  = Six
   }
   case object Three extends Character {
-    override val value: String           = "3"
+    val value: Char                      = '3'
     override val partOneLeft: Character  = Two
     override val partOneDown: Character  = Six
     override val partTwoLeft: Character  = Two
@@ -40,7 +46,7 @@ object Day02 {
     override val partTwoDown: Character  = Seven
   }
   case object Four extends Character {
-    override val value: String           = "4"
+    val value: Char                      = '4'
     override val partOneRight: Character = Five
     override val partOneUp: Character    = One
     override val partOneDown: Character  = Seven
@@ -48,7 +54,7 @@ object Day02 {
     override val partTwoDown: Character  = Eight
   }
   case object Five extends Character {
-    override val value: String           = "5"
+    val value: Char                      = '5'
     override val partOneLeft: Character  = Four
     override val partOneRight: Character = Six
     override val partOneUp: Character    = Two
@@ -56,7 +62,7 @@ object Day02 {
     override val partTwoRight: Character = Six
   }
   case object Six extends Character {
-    override val value: String           = "6"
+    val value: Char                      = '6'
     override val partOneLeft: Character  = Five
     override val partOneUp: Character    = Three
     override val partOneDown: Character  = Nine
@@ -66,7 +72,7 @@ object Day02 {
     override val partTwoDown: Character  = A
   }
   case object Seven extends Character {
-    override val value: String           = "7"
+    val value: Char                      = '7'
     override val partOneRight: Character = Eight
     override val partOneUp: Character    = Four
     override val partTwoLeft: Character  = Six
@@ -75,7 +81,7 @@ object Day02 {
     override val partTwoDown: Character  = B
   }
   case object Eight extends Character {
-    override val value: String           = "8"
+    val value: Char                      = '8'
     override val partOneLeft: Character  = Seven
     override val partOneRight: Character = Nine
     override val partOneUp: Character    = Five
@@ -85,77 +91,86 @@ object Day02 {
     override val partTwoDown: Character  = C
   }
   case object Nine extends Character {
-    override val value: String          = "9"
+    val value: Char                     = '9'
     override val partOneLeft: Character = Eight
     override val partOneUp: Character   = Six
     override val partTwoLeft: Character = Eight
   }
   case object A extends Character {
-    override val value: String           = "A"
+    val value: Char                      = 'A'
     override val partTwoRight: Character = B
     override val partTwoUp: Character    = Six
   }
   case object B extends Character {
-    override val value: String           = "B"
+    val value: Char                      = 'B'
     override val partTwoLeft: Character  = A
     override val partTwoRight: Character = C
     override val partTwoUp: Character    = Seven
     override val partTwoDown: Character  = D
   }
   case object C extends Character {
-    override val value: String          = "C"
+    val value: Char                     = 'C'
     override val partTwoLeft: Character = B
     override val partTwoUp: Character   = Eight
   }
   case object D extends Character {
-    override val value: String        = "D"
+    val value: Char                   = 'D'
     override val partTwoUp: Character = B
   }
 
-  def main(args: Array[String]): Unit = {
-    val input        = Source.fromResource("2016/day02.txt")
-    val instructions = input.getLines().toList.map(_.toCharArray.toList)
-    input.close()
+  override protected[year2016] def parseInput(file: Source): List[List[Char]] = file.getLines().toList.map(_.toList)
 
-    println(s"Part 1: ${part1(instructions)}")
-    println(s"Part 2: ${part2(instructions)}")
+  override protected[year2016] def part1(input: List[List[Char]]): String = {
+    val output = new StringBuilder
+    @tailrec
+    def helper(instructions: List[List[Char]], currentNum: Character = Five): String = {
+      if (instructions.isEmpty) {
+        output.mkString
+      } else {
+        instructions.head match {
+          case Nil =>
+            output.append(currentNum.value)
+            helper(instructions.tail, currentNum)
+          case head :: tail =>
+            val newCurrentNum = head match {
+              case 'U' => currentNum.partOneUp
+              case 'D' => currentNum.partOneDown
+              case 'L' => currentNum.partOneLeft
+              case 'R' => currentNum.partOneRight
+              case _   => throw new IllegalArgumentException
+            }
+            helper(tail :: instructions.tail, newCurrentNum)
+        }
+      }
+    }
+
+    helper(input)
   }
 
-  @tailrec
-  private def part1(instructions: List[List[Char]], currentCode: String = "", currentNum: Character = Five): String =
-    if (instructions.isEmpty) {
-      currentCode
-    } else {
-      instructions.head match {
-        case Nil => part1(instructions.tail, currentCode + currentNum.value, currentNum)
-        case head :: tail =>
-          val newCurrentNum = head match {
-            case 'U' => currentNum.partOneUp
-            case 'D' => currentNum.partOneDown
-            case 'L' => currentNum.partOneLeft
-            case 'R' => currentNum.partOneRight
-            case _   => throw new IllegalArgumentException
-          }
-          part1(tail :: instructions.tail, currentCode, newCurrentNum)
+  override protected[year2016] def part2(input: List[List[Char]]): String = {
+    val output = new StringBuilder
+    @tailrec
+    def helper(instructions: List[List[Char]], currentNum: Character = Five): String = {
+      if (instructions.isEmpty) {
+        output.mkString
+      } else {
+        instructions.head match {
+          case Nil =>
+            output.append(currentNum.value)
+            helper(instructions.tail, currentNum)
+          case head :: tail =>
+            val newCurrentNum = head match {
+              case 'U' => currentNum.partTwoUp
+              case 'D' => currentNum.partTwoDown
+              case 'L' => currentNum.partTwoLeft
+              case 'R' => currentNum.partTwoRight
+              case _   => throw new IllegalArgumentException
+            }
+            helper(tail :: instructions.tail, newCurrentNum)
+        }
       }
     }
 
-  @tailrec
-  private def part2(instructions: List[List[Char]], currentCode: String = "", currentNum: Character = Five): String =
-    if (instructions.isEmpty) {
-      currentCode
-    } else {
-      instructions.head match {
-        case Nil => part2(instructions.tail, currentCode + currentNum.value, currentNum)
-        case head :: tail =>
-          val newCurrentNum = head match {
-            case 'U' => currentNum.partTwoUp
-            case 'D' => currentNum.partTwoDown
-            case 'L' => currentNum.partTwoLeft
-            case 'R' => currentNum.partTwoRight
-            case _   => throw new IllegalArgumentException
-          }
-          part2(tail :: instructions.tail, currentCode, newCurrentNum)
-      }
-    }
+    helper(input)
+  }
 }

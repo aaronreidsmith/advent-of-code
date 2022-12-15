@@ -1,13 +1,18 @@
 package io.github.aaronreidsmith.year2017
 
+import io.github.aaronreidsmith.Solution
+
 import scala.io.Source
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/7l78eb/2017_day_21_solutions/drk8egp
 // No way I am smart enough to figure this out myself
-object Day21 {
-  private val rule = "^(.*) => (.*)$".r
+object Day21 extends Solution(2017, 21) {
+  private type Rules = Map[Square[Char], Square[Char]]
+  type I             = Rules
+  type O1            = Int
+  type O2            = Int
 
-  private case class Square[T](twoDimensional: Vector[Vector[T]]) {
+  private[year2017] case class Square[T](twoDimensional: Vector[Vector[T]]) {
     val size: Int = twoDimensional.length
 
     def flip: Square[T]   = Square(twoDimensional.reverse)
@@ -46,21 +51,22 @@ object Day21 {
     def apply(flat: String): Square[Char]                       = Square(flat.split('/').toVector.map(_.toVector))
   }
 
-  private case class Rule(input: Square[Char], output: Square[Char])
-
-  def main(args: Array[String]): Unit = {
-    val input = Source.fromResource("2017/day21.txt")
-    val rules = input
+  override protected[year2017] def parseInput(file: Source): Rules = {
+    val rule = "^(.*) => (.*)$".r
+    file
       .getLines()
       .flatMap {
         case rule(input, output) => Square(input).permutations.map(_ -> Square(output))
       }
       .toMap
-    input.close()
+  }
 
+  override protected[year2017] def part1(input: Rules): Int = solution(input, 5)
+  override protected[year2017] def part2(input: Rules): Int = solution(input, 18)
+
+  private def solution(rules: Rules, iterations: Int): Int = {
     val initial = Square(".#./..#/###")
-
-    def solution(iterations: Int): Int = Iterator
+    Iterator
       .iterate(initial) { grid =>
         val smallSquareSize = if (grid.size % 2 == 0) 2 else 3
         grid.split(smallSquareSize).flatMap(rules)
@@ -76,8 +82,5 @@ object Day21 {
           .mapValues(_.length)
       }
       .foldLeft(0)((acc, counts) => acc + counts('#'))
-
-    println(s"Part 1: ${solution(5)}")
-    println(s"Part 2: ${solution(18)}")
   }
 }

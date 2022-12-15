@@ -1,9 +1,15 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 import org.apache.commons.text.StringEscapeUtils
 
-object Day08 {
+import scala.io.Source
+
+object Day08 extends Solution(2015, 8) {
+  type I  = List[String]
+  type O1 = Int
+  type O2 = Int
+
   private implicit class StringOps(string: String) {
     def memoryLength: Int = {
       val it  = string.drop(1).dropRight(1).iterator
@@ -28,22 +34,20 @@ object Day08 {
     def reEncodedLength: Int = StringEscapeUtils.escapeJson(string).length + 2 // For the leading and trailing quotes
   }
 
-  def main(args: Array[String]): Unit = {
-    val input = using("2015/day08.txt")(_.getLines().toList)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
+  override protected[year2015] def parseInput(file: Source): List[String] = file.getLines().toList
 
-  private[year2015] def part1(input: List[String]): Int = {
+  override protected[year2015] def part1(input: List[String]): Int = {
     val (chars, memory) = input.foldLeft((0, 0)) {
       case ((charAcc, memAcc), line) => (charAcc + line.length, memAcc + line.memoryLength)
+      case (acc, _)                  => acc
     }
     chars - memory
   }
 
-  private[year2015] def part2(input: List[String]): Int = {
+  override protected[year2015] def part2(input: List[String]): Int = {
     val (reEncoded, chars) = input.foldLeft((0, 0)) {
       case ((reEncodedAcc, charsAcc), line) => (reEncodedAcc + line.reEncodedLength, charsAcc + line.length)
+      case (acc, _)                         => acc
     }
     reEncoded - chars
   }
