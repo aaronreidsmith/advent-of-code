@@ -54,6 +54,12 @@ object AdventOfCode {
     runtimeMirror.reflect(runtimeMirror.reflectModule(solution).instance).reflectMethod(runMethod)()
   } match {
     case Success(_) => // Do nothing
-    case Failure(_) => println(s"Year $year day $day has not been converted to a sub-type of Solution")
+    case Failure(_) =>
+      println(
+        f"""Year $year day $day has not been converted to a sub-type of Solution. Run it directly like so:
+           |
+           |sbt "runMain io.github.aaronreidsmith.year$year.Day$day%02d"
+           |""".stripMargin
+      )
   }
 }
