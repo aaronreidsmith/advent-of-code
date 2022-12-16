@@ -118,6 +118,7 @@ object AdventOfCode {
       19 -> Day19,
       20 -> Day20,
       21 -> Day21,
+      22 -> Day22,
       // TODO
       25 -> Day25
     )
