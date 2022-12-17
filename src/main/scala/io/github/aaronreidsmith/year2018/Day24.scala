@@ -1,15 +1,19 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/a91ysq/comment/ecg6y79
-object Day24 {
+object Day24 extends Solution(2018, 24) {
+  type I  = List[Group]
+  type O1 = Int
+  type O2 = Int
+
   private[year2018] sealed trait GroupType { def target: GroupType }
-  private[year2018] case object ImmuneSystem extends GroupType { def target: GroupType = Infection    }
-  private[year2018] case object Infection    extends GroupType { def target: GroupType = ImmuneSystem }
+  private case object ImmuneSystem extends GroupType { def target: GroupType = Infection    }
+  private case object Infection    extends GroupType { def target: GroupType = ImmuneSystem }
 
   private[year2018] case class Group(
       i: Int,
@@ -32,13 +36,7 @@ object Day24 {
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    val input = using("2018/day24.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 1: ${part2(input)}")
-  }
-
-  private[year2018] def parseInput(file: Source): Seq[Group] = {
+  override protected[year2018] def parseInput(file: Source): List[Group] = {
     def parseGroup(i: Int, line: String, groupType: GroupType): Group = {
       def parseWeakImmune(string: String): (Set[String], Set[String]) = {
         val weaknessRegex   = """^weak to ([\w, ]+)$""".r
@@ -85,15 +83,15 @@ object Day24 {
       }
     }
 
-    file.mkString.split("\n\n").toSeq.flatMap(parseGroups)
+    file.mkString.split("\n\n").toList.flatMap(parseGroups)
   }
 
-  private[year2018] def part1(initialGroups: Seq[Group]): Int = combat(initialGroups) match {
+  override protected[year2018] def part1(initialGroups: List[Group]): Int = combat(initialGroups) match {
     case Some((_, units)) => units
     case None             => -1
   }
 
-  private[year2018] def part2(initialGroups: Seq[Group]): Int = {
+  override protected[year2018] def part2(initialGroups: List[Group]): Int = {
     def boostGroups(groups: Seq[Group], boost: Int): Seq[Group] = groups.map { group =>
       group.groupType match {
         case ImmuneSystem => group.copy(attack = group.attack + boost)

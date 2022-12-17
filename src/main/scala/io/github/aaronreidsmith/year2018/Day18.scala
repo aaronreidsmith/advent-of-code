@@ -44,7 +44,7 @@ object Day18 extends Solution(2018, 18) {
     case _   => OpenGround
   }.toMap
 
-  override protected[year2018] def part1(input: Grid[Square]): Int = run(input, 10)
+  override protected[year2018] def part1(input: Grid[Square]): Int = simulate(input, 10)
 
   override protected[year2018] def part2(input: Grid[Square]): Int = {
     val seenStates     = mutable.Set.empty[Grid[Square]]
@@ -62,7 +62,7 @@ object Day18 extends Solution(2018, 18) {
       } else if (loopSize == 0) { // Will only enter here once we have a consistent cycle and have found a second loop
         loopSize = iteration
         val limit = (1000000000 - startUpCycles) % loopSize
-        run(startedUpState, limit) // Run that number of cycles from the beginning of the looping phase
+        simulate(startedUpState, limit) // Run that number of cycles from the beginning of the looping phase
       } else {
         -1 // Doesn't get here
       }
@@ -74,7 +74,7 @@ object Day18 extends Solution(2018, 18) {
     helper(input)
   }
 
-  private def run(state: Grid[Square], iterations: Int): Int = {
+  private def simulate(state: Grid[Square], iterations: Int): Int = {
     val finalState = Iterator.iterate(state)(_.next).take(iterations + 1).toSeq.last
     finalState.values.count(_ == Trees) * finalState.values.count(_ == Lumberyard)
   }
