@@ -4,7 +4,6 @@ import io.github.aaronreidsmith.Solution
 
 import scala.collection.mutable
 import scala.io.Source
-import scala.util.Using
 
 object Day23 extends Solution(2018, 23) {
   type I  = List[NanoBot]
