@@ -1,9 +1,12 @@
 package io.github.aaronreidsmith.year2018
 
 import io.github.aaronreidsmith.Solution
+import io.github.aaronreidsmith.annotations.Slow
+import io.github.aaronreidsmith.year2018.Day14.part1
 
 import scala.io.Source
 
+@Slow(part2 = true)
 object Day14 extends Solution(2018, 14) {
   type I  = Int
   type O1 = String

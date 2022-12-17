@@ -1,9 +1,11 @@
 package io.github.aaronreidsmith.year2017
 
 import io.github.aaronreidsmith.Solution
+import io.github.aaronreidsmith.annotations.Slow
 
 import scala.io.Source
 
+@Slow(part1 = true, part2 = true)
 object Day15 extends Solution(2017, 15) {
   type I  = (LazyList[Long], LazyList[Long])
   type O1 = Int

@@ -1,11 +1,13 @@
 package io.github.aaronreidsmith.year2016
 
 import io.github.aaronreidsmith.Solution
+import io.github.aaronreidsmith.annotations.Slow
 
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
+@Slow(part1 = true)
 object Day25 extends Solution(2016, 25) {
   type I  = Vector[String]
   type O1 = Int
@@ -24,7 +26,7 @@ object Day25 extends Solution(2016, 25) {
 
   override protected[year2016] def parseInput(file: Source): Vector[String] = file.getLines().toVector
   override protected[year2016] def part1(input: Vector[String]): Int = {
-    LazyList.from(0).find(i => solution(input, Map("a" -> i, "b" -> 0, "c" -> 0, "d" -> 0))).get
+    Iterator.from(0).find(i => solution(input, Map("a" -> i, "b" -> 0, "c" -> 0, "d" -> 0))).get
   }
 
   // Top-level so these are only defined once

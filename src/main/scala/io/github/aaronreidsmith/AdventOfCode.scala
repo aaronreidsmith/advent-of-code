@@ -54,7 +54,8 @@ object AdventOfCode {
     runtimeMirror.reflect(runtimeMirror.reflectModule(solution).instance).reflectMethod(runMethod)()
   } match {
     case Success(_) => // Do nothing
-    case Failure(_) =>
+    case Failure(e) =>
+      println(e)
       println(
         f"Year $year day $day has not been converted to a sub-type of Solution. Run it directly like so: sbt \"runMain io.github.aaronreidsmith.year$year.Day$day%02d\"\n"
       )

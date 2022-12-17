@@ -1,5 +1,7 @@
 package io.github.aaronreidsmith
 
+import io.github.aaronreidsmith.annotations.Slow
+
 import scala.io.Source
 
 abstract class Solution(year: Int, day: Int) extends Runnable {
@@ -20,9 +22,33 @@ abstract class Solution(year: Int, day: Int) extends Runnable {
 
   def run(): Unit = {
     println(s"Year $year, Day $day")
+
+    // Check for "Slow" annotation. Do this first because parsing can be marked as slow
+    val annotation = Option(getClass.getAnnotation(classOf[Slow]))
+    annotation match {
+      case Some(a) =>
+        if (a.parsing()) {
+          println("Parsing for this solution has been marked as slow; please be patient!")
+        }
+        if (a.part1()) {
+          if (a.part2()) {
+            println("Both parts of this solution have been marked as slow; please be patient!")
+          } else {
+            println("Part 1 of this solution has been marked as slow; please be patient!")
+          }
+        }
+      case None => // Do nothing
+    }
+
     val input = using(f"$year/day$day%02d.txt")(parseInput)
     println(s"Part 1: ${part1(input)}")
+
     if (day < 25) {
+      annotation match {
+        case Some(a) if !a.part1() && a.part2() =>
+          println("Part 2 of this solution has been marked as slow; please be patient!")
+        case _ => // Do nothing
+      }
       println(s"Part 2: ${part2(input)}")
     }
     println()

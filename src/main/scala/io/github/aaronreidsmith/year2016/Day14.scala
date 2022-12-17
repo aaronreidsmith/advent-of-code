@@ -1,11 +1,13 @@
 package io.github.aaronreidsmith.year2016
 
 import io.github.aaronreidsmith.Solution
+import io.github.aaronreidsmith.annotations.Slow
 
 import java.math.BigInteger
 import java.security.MessageDigest
 import scala.io.Source
 
+@Slow(part1 = true, part2 = true)
 object Day14 extends Solution(2016, 14) {
   type I  = String
   type O1 = Int

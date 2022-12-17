@@ -1,5 +1,6 @@
 package io.github.aaronreidsmith.year2018
 
+import io.github.aaronreidsmith.annotations.Slow
 import io.github.aaronreidsmith.implicits.SourceOps
 import io.github.aaronreidsmith.{Grid, Point, Solution}
 
@@ -9,8 +10,9 @@ import scala.io.Source
 // TODO: This runs incredibly slowly for both parts, but it works (at least for my input)
 // Adapted from https://git.io/Jn2WO. Works for part 2 but not part 1??? Had to use this for part 1:
 // https://www.reddit.com/r/adventofcode/comments/a6chwa/2018_day_15_solutions/ebtwcqr
+@Slow(part1 = true, part2 = true)
 object Day15 extends Solution(2018, 15) {
-  type I = (Grid[Square], List[Creature])
+  type I  = (Grid[Square], List[Creature])
   type O1 = Int
   type O2 = Int
 

@@ -1,5 +1,6 @@
 package io.github.aaronreidsmith.year2018
 
+import io.github.aaronreidsmith.annotations.Slow
 import io.github.aaronreidsmith.{Direction, Point, Solution}
 import org.jgrapht.alg.shortestpath.BFSShortestPath
 import org.jgrapht.graph.{DefaultDirectedGraph, DefaultEdge}
@@ -9,6 +10,7 @@ import scala.io.Source
 import scala.jdk.CollectionConverters._
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/a7uk3f/2018_day_20_solutions/ec5y3lm/
+@Slow(parsing = true)
 object Day20 extends Solution(2018, 20) {
   type I  = List[Int]
   type O1 = Int

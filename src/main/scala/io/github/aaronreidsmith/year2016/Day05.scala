@@ -1,6 +1,7 @@
 package io.github.aaronreidsmith.year2016
 
 import io.github.aaronreidsmith.Solution
+import io.github.aaronreidsmith.annotations.Slow
 
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -8,6 +9,7 @@ import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.io.Source
 
+@Slow(part1 = true, part2 = true)
 object Day05 extends Solution(2016, 5) {
   type I  = String
   type O1 = String

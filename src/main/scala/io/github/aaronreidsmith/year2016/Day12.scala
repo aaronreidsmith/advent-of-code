@@ -1,11 +1,13 @@
 package io.github.aaronreidsmith.year2016
 
+import io.github.aaronreidsmith.annotations.Slow
 import io.github.aaronreidsmith.{Solution, using}
 
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
+@Slow(part2 = true)
 object Day12 extends Solution(2016, 12) {
   type I  = Vector[String]
   type O1 = Int
