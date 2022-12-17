@@ -10,23 +10,27 @@ object Day17 extends Solution(2022, 17) {
   type O1 = Int
   type O2 = Long
 
-  private val shapes = Map(
-    0 -> Set(Point(0, 0), Point(1, 0), Point(2, 0), Point(3, 0)),
-    1 -> Set(Point(1, 0), Point(0, 1), Point(1, 1), Point(2, 1), Point(1, 2)),
-    2 -> Set(Point(0, 0), Point(1, 0), Point(2, 0), Point(2, 1), Point(2, 2)),
-    3 -> Set(Point(0, 0), Point(0, 1), Point(0, 2), Point(0, 3)),
-    4 -> Set(Point(0, 0), Point(1, 0), Point(0, 1), Point(1, 1))
+  private val allShapes = Seq(
+    Set(Point(0, 0), Point(1, 0), Point(2, 0), Point(3, 0)),              // Horizontal
+    Set(Point(1, 0), Point(0, 1), Point(1, 1), Point(2, 1), Point(1, 2)), // Plus
+    Set(Point(0, 0), Point(1, 0), Point(2, 0), Point(2, 1), Point(2, 2)), // Backwards L
+    Set(Point(0, 0), Point(0, 1), Point(0, 2), Point(0, 3)),              // Vertical
+    Set(Point(0, 0), Point(1, 0), Point(0, 1), Point(1, 1))               // Square
   )
 
-  private[year2022] case class State(grid: Set[Point], wind: String, shapeKey: Int, windPointer: Int, height: Int) {
+  private[year2022] case class State(
+      wind: Iterator[Char],
+      grid: Set[Point] = Set.tabulate(8)(Point(_, 0)),
+      shapes: Iterator[Set[Point]] = Iterator.continually(allShapes).flatten,
+      height: Int = 0
+  ) {
     def next: State = {
-      val shape                        = shapes(shapeKey).map(_ + Point(3, height + 4))
-      val (nextWindPointer, nextShape) = fall(grid, shape, wind, windPointer)
+      val shape     = shapes.next().map(_ + Point(3, height + 4))
+      val nextShape = fall(grid, shape, wind)
       State(
-        grid ++ nextShape,
         wind,
-        (shapeKey + 1) % shapes.size,
-        nextWindPointer,
+        grid ++ nextShape,
+        shapes,
         height.max(nextShape.map(_.y).max)
       )
     }
@@ -34,7 +38,7 @@ object Day17 extends Solution(2022, 17) {
 
   override protected[year2022] def parseInput(file: Source): State = {
     val wind = file.mkString.trim
-    State(Set.tabulate(8)(Point(_, 0)), wind, 0, 0, 0)
+    State(Iterator.continually(wind).flatten)
   }
 
   override protected[year2022] def part1(input: State): Int = tetris(input).drop(2022).next().height
@@ -42,7 +46,7 @@ object Day17 extends Solution(2022, 17) {
   override protected[year2022] def part2(input: State): Long = {
     val guess       = 1000
     val height      = tetris(input).slice(1, 10 * guess + 1).map(_.height).toSeq
-    val delta       = height.sliding(2).map { case Seq(a, b) => b - a }.toSeq
+    val delta       = height.sliding(2).map(_.reduceRight(_ - _)).toSeq
     val index       = delta.lastIndexOfSlice(delta.takeRight(guess), delta.size - guess - 1)
     val cycleHeight = height(delta.size - guess) - height(index)
     val cycleWidth  = delta.size - guess - index
@@ -53,9 +57,9 @@ object Day17 extends Solution(2022, 17) {
   }
 
   @tailrec
-  private def fall(grid: Set[Point], shape: Set[Point], wind: String, windPointer: Int): (Int, Set[Point]) = {
+  private def fall(grid: Set[Point], shape: Set[Point], wind: Iterator[Char]): Set[Point] = {
     var next = shape
-    val gust = wind(windPointer)
+    val gust = wind.next()
 
     // Move left/right
     val shift = if (gust == '>') Point(1, 0) else Point(-1, 0)
@@ -68,11 +72,7 @@ object Day17 extends Solution(2022, 17) {
     test = next.map(_ + Point(0, -1))
 
     // Check if we're at the bottom
-    if (test.exists(grid.contains)) {
-      ((windPointer + 1) % wind.length, next)
-    } else {
-      fall(grid, test, wind, (windPointer + 1) % wind.length)
-    }
+    if (test.exists(grid.contains)) next else fall(grid, test, wind)
   }
 
   private def tetris(initial: State): Iterator[State] = Iterator.iterate(initial)(_.next)
