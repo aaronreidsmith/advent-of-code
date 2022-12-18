@@ -1,22 +1,29 @@
 package io.github.aaronreidsmith.year2019
 
+import io.github.aaronreidsmith.Solution
+import org.apache.commons.math3.util.ArithmeticUtils
+
 import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.io.Source
-import scala.util.Using
 
-object Day12 {
-  private case class Point(x: Int = 0, y: Int = 0, z: Int = 0) {
-    def +(other: Point): Point = this.copy(x = this.x + other.x, y = this.y + other.y, z = this.z + other.z)
-    def compare(other: Point): Point = {
+object Day12 extends Solution(2019, 12) {
+  type I  = Vector[Moon]
+  type O1 = Int
+  type O2 = Long
+
+  private[year2019] case class Point3(x: Int = 0, y: Int = 0, z: Int = 0) {
+    def +(other: Point3): Point3 = this.copy(x = this.x + other.x, y = this.y + other.y, z = this.z + other.z)
+    def compare(other: Point3): Point3 = {
       val xChange = other.x.compare(this.x)
       val yChange = other.y.compare(this.y)
       val zChange = other.z.compare(this.z)
-      Point(xChange, yChange, zChange)
+      Point3(xChange, yChange, zChange)
     }
     def energy: Int = x.abs + y.abs + z.abs
   }
-  private case class Moon(position: Point, velocity: Point = Point()) {
+
+  private[year2019] case class Moon(position: Point3, velocity: Point3 = Point3()) {
     def applyGravity(other: Moon): Moon = this.copy(velocity = this.velocity + this.position.compare(other.position))
     def applyVelocity: Moon             = this.copy(position = this.position + this.velocity)
     def kineticEnergy: Int              = velocity.energy
@@ -24,33 +31,44 @@ object Day12 {
     def totalEnergy: Int                = potentialEnergy * kineticEnergy
   }
 
-  private val moonEntry = "^<x=\\s*(-?\\d+), y=\\s*(-?\\d+), z=\\s*(-?\\d+)>$".r
-
-  def main(args: Array[String]): Unit = {
-    val moons = Using.resource(Source.fromResource("2019/day12.txt")) { file =>
-      file.getLines().foldLeft(Vector.empty[Moon]) { (acc, line) =>
-        line match {
-          case moonEntry(x, y, z) => acc :+ Moon(Point(x.toInt, y.toInt, z.toInt))
-          case other              => throw new IllegalArgumentException(s"'$other' is not a valid entry'")
-        }
-      }
+  override protected[year2019] def parseInput(file: Source): Vector[Moon] = {
+    val moon = "^<x=\\s*(-?\\d+), y=\\s*(-?\\d+), z=\\s*(-?\\d+)>$".r
+    file.getLines().toVector.collect {
+      case moon(x, y, z) => Moon(Point3(x.toInt, y.toInt, z.toInt))
     }
-    println(s"Part 1: ${part1(moons)}")
-    println(s"Part 2: ${part2(moons)}")
   }
 
-  @tailrec
-  private def part1(moons: Vector[Moon], iteration: Int = 0): Int = if (iteration >= 1000) {
-    moons.foldLeft(0)(_ + _.totalEnergy)
-  } else {
-    part1(nextState(moons), iteration + 1)
+  override protected[year2019] def part1(input: Vector[Moon]): Int = {
+    val iterations = if (isTest) 10 else 1000
+
+    @tailrec
+    def helper(moons: Vector[Moon], iteration: Int = 0): Int = {
+      if (iteration >= iterations) {
+        moons.foldLeft(0)(_ + _.totalEnergy)
+      } else {
+        helper(nextState(moons), iteration + 1)
+      }
+    }
+
+    helper(input)
   }
 
   // Adapted from https://git.io/J1O9W
-  private def part2(moons: Vector[Moon]): Long = {
-    @tailrec
-    def gcd(a: Long, b: Long): Long = if (b == 0) a else gcd(b, a % b)
-    def lcm(a: Long, b: Long): Long = a * b / gcd(a, b)
+  override protected[year2019] def part2(moons: Vector[Moon]): Long = {
+    // Doesn't work with ArithmeticUtils.lcm for some reason, so had to define my own
+    def lcm(a: Long, b: Long): Long = a * b / ArithmeticUtils.gcd(a, b)
+
+    // Adapted from https://git.io/J1O9Z
+    def cycleLength(moons: Vector[Moon])(toTuple: Moon => (Int, Int)): Int = {
+      val memo = mutable.Map.empty[Vector[(Int, Int)], Vector[(Int, Int)]]
+      Iterator
+        .iterate((moons, Vector())) { case (key, value) => (nextState(key), value) }
+        .zipWithIndex
+        .map { case ((key, value), index) => (index, memo.put(key.map(toTuple), value.map(toTuple))) }
+        .dropWhile { case (_, maybeValue) => maybeValue.isEmpty }
+        .next()
+        ._1
+    }
 
     val baseFunction = cycleLength(moons) _
     val xCycle       = baseFunction(moon => (moon.position.x, moon.velocity.x))
@@ -60,19 +78,8 @@ object Day12 {
     lcm(lcm(xCycle, yCycle), zCycle)
   }
 
-  // Adapted from https://git.io/J1O9Z
-  private def cycleLength(moons: Vector[Moon])(toTuple: Moon => (Int, Int)): Int = {
-    val memo = mutable.Map.empty[Vector[(Int, Int)], Vector[(Int, Int)]]
-    Iterator
-      .iterate((moons, Vector())) { case (key, value) => (nextState(key), value) }
-      .zipWithIndex
-      .map { case ((key, value), index) => (index, memo.put(key.map(toTuple), value.map(toTuple))) }
-      .dropWhile { case (_, maybeValue) => maybeValue.isEmpty }
-      .next()
-      ._1
-  }
-
   // Lol, good luck figuring this out in a year+
-  private def nextState(moons: Vector[Moon]): Vector[Moon] =
+  private def nextState(moons: Vector[Moon]): Vector[Moon] = {
     moons.map(moons.foldLeft(_)(_.applyGravity(_)).applyVelocity)
+  }
 }

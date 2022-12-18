@@ -1,68 +1,34 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.year2019.intcode.IntCode
-import io.github.aaronreidsmith.year2019.intcode.util.IntCodeUtils
+import io.github.aaronreidsmith.Solution
 
-import scala.util.control.Breaks._
+import scala.annotation.tailrec
+import scala.io.Source
 
-object Day07 extends IntCodeUtils {
-  private case class Circuit(
-      instructions: Map[Long, Long],
-      a: Int,
-      b: Int,
-      c: Int,
-      d: Int,
-      e: Int,
-      feedbackMode: Boolean
-  ) {
-    lazy val thrustSignal: Long = if (feedbackMode) {
-      val suspendOnOutput = feedbackMode
-      val aIntCode        = new IntCode(instructions, Seq(a.toLong, 0L), suspendOnOutput)
-      val bIntCode        = new IntCode(instructions, Seq(b.toLong), suspendOnOutput)
-      val cIntCode        = new IntCode(instructions, Seq(c.toLong), suspendOnOutput)
-      val dIntCode        = new IntCode(instructions, Seq(d.toLong), suspendOnOutput)
-      val eIntCode        = new IntCode(instructions, Seq(e.toLong), suspendOnOutput)
+object Day07 extends Solution(2019, 7) {
+  type I  = IntCode
+  type O1 = Long
+  type O2 = Long
 
-      // TODO: Use tail recursion or something
-      def finished: Boolean = Seq(aIntCode, bIntCode, cIntCode, dIntCode, eIntCode).exists(_.isFinished)
-      var aOutput           = Option.empty[Long]
-      var bOutput           = Option.empty[Long]
-      var cOutput           = Option.empty[Long]
-      var dOutput           = Option.empty[Long]
-      var eOutput           = Option.empty[Long]
-      breakable {
-        while (!finished) {
-          aOutput = Some(aIntCode.run(eOutput.toSeq).getOutput.last)
-          if (finished) break()
-          bOutput = Some(bIntCode.run(aOutput.toSeq).getOutput.last)
-          if (finished) break()
-          cOutput = Some(cIntCode.run(bOutput.toSeq).getOutput.last)
-          if (finished) break()
-          dOutput = Some(dIntCode.run(cOutput.toSeq).getOutput.last)
-          if (finished) break()
-          eOutput = Some(eIntCode.run(dOutput.toSeq).getOutput.last)
-        }
-      }
-      eOutput.get
-    } else {
-      val aOut = new IntCode(instructions, Seq(a.toLong, 0L)).run().getOutput.head
-      val bOut = new IntCode(instructions, Seq(b.toLong, aOut)).run().getOutput.head
-      val cOut = new IntCode(instructions, Seq(c.toLong, bOut)).run().getOutput.head
-      val dOut = new IntCode(instructions, Seq(d.toLong, cOut)).run().getOutput.head
-      new IntCode(instructions, Seq(e.toLong, dOut)).run().getOutput.head
+  override protected[year2019] def parseInput(file: Source): IntCode = IntCode(file)
+
+  override protected[year2019] def part1(input: IntCode): Long = {
+    (0L to 4L).permutations.foldLeft(Long.MinValue) { (currentMax, perm) =>
+      val thrustSignal = perm.foldLeft(0L)((acc, next) => input.withInput(next, acc).allOutput.last)
+      currentMax.max(thrustSignal)
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    val instructions = makeInstructions("2019/day07.txt")
-    val part1 = (0 to 4).permutations.map {
-      case IndexedSeq(a, b, c, d, e) => Circuit(instructions, a, b, c, d, e, feedbackMode = false).thrustSignal
-    }.max
-    println(s"Part 1: $part1")
+  override protected[year2019] def part2(input: IntCode): Long = {
+    @tailrec
+    def helper(amps: Seq[IntCode], previousOutput: Long = 0L): Long = {
+      val nextAmp = amps.head.withInput(previousOutput).nextOutput
+      nextAmp.result match {
+        case IntCode.Output(nextOutput) => helper(amps.tail :+ nextAmp, nextOutput)
+        case _                          => previousOutput
+      }
+    }
 
-    val part2 = (5 to 9).permutations.map {
-      case IndexedSeq(a, b, c, d, e) => Circuit(instructions, a, b, c, d, e, feedbackMode = true).thrustSignal
-    }.max
-    println(s"Part 2: $part2")
+    (5L to 9L).map(input.withInput(_)).permutations.map(helper(_)).max
   }
 }

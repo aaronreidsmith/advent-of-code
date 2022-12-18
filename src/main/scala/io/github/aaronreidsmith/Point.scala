@@ -4,6 +4,9 @@ case class Point(x: Int, y: Int) {
   def +(other: (Int, Int)): Point = Point(x + other._1, y + other._2)
   def +(other: Point): Point      = Point(x + other.x, y + other.y)
 
+  def -(other: (Int, Int)): Point = Point(x - other._1, y - other._2)
+  def -(other: Point): Point      = Point(x - other.x, y - other.y)
+
   def move(direction: Direction): Point = direction match {
     case North => this.up
     case East  => this.right

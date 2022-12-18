@@ -1,32 +1,25 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.{Point, using}
+import io.github.aaronreidsmith.{Point, Solution}
+import org.apache.commons.math3.util.ArithmeticUtils
 
-import scala.annotation.tailrec
 import scala.io.Source
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/e8m1z3/comment/faeb25d
-object Day10 {
-  private implicit class PointOps(point: Point) {
-    def visibleFrom(points: List[Point]): Set[Point] = {
-      @tailrec
-      def gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)
+object Day10 extends Solution(2019, 10) {
+  type I  = Set[Point]
+  type O1 = Int
+  type O2 = Int
 
-      points.map { p =>
-        val (dx, dy) = (p.x - point.x, p.y - point.y)
-        val g        = gcd(dx, dy).abs
-        Point(dx / g, dy / g)
-      }.toSet
+  private implicit class PointOps(point: Point) {
+    def visibleFrom(points: List[Point]): Set[Point] = points.foldLeft(Set.empty[Point]) { (acc, p) =>
+      val Point(dx, dy) = p - point
+      val gcd           = ArithmeticUtils.gcd(dx, dy)
+      acc + Point(dx / gcd, dy / gcd)
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    val asteroids = using("2019/day10.txt")(parseInput)
-    println(s"Part 1: ${part1(asteroids)}")
-    println(s"Part 2: ${part2(asteroids)}")
-  }
-
-  private[year2019] def parseInput(file: Source): Set[Point] = {
+  override protected[year2019] def parseInput(file: Source): Set[Point] = {
     for {
       (line, row) <- file.getLines().zipWithIndex
       (char, col) <- line.zipWithIndex
@@ -34,9 +27,9 @@ object Day10 {
     } yield Point(row, col)
   }.toSet
 
-  private[year2019] def part1(asteroids: Set[Point]): Int = findStationCoordinates(asteroids)._2.size
+  override protected[year2019] def part1(asteroids: Set[Point]): Int = findStationCoordinates(asteroids)._2.size
 
-  private[year2019] def part2(asteroids: Set[Point]): Int = {
+  override protected[year2019] def part2(asteroids: Set[Point]): Int = {
     val (station, targets) = findStationCoordinates(asteroids)
     val target = station + targets.toIndexedSeq
       .map(asteroid => (math.atan2(asteroid.y, asteroid.x), asteroid))

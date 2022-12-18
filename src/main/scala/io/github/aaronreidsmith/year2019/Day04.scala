@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2019
 
+import io.github.aaronreidsmith.Solution
 import io.github.aaronreidsmith.implicits._
-import io.github.aaronreidsmith.{Solution, using}
 
 import scala.io.Source
 

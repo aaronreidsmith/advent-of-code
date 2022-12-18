@@ -1,5 +1,6 @@
 package io.github.aaronreidsmith.year2019
 
+import scala.collection.immutable.Queue
 import scala.io.Source
 
 /* Adapted from https://github.com/maneatingape/advent-of-code/blob/06921c88d77baa8a2b17985fa9c30b35f85096b3/src/main/scala/AdventOfCode2019/Day09.scala
@@ -27,7 +28,13 @@ import scala.io.Source
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-case class IntCode(ip: Long, relativeBase: Long, memory: Map[Long, Long], input: Seq[Long], result: IntCode.State) {
+private[year2019] case class IntCode(
+    ip: Long,
+    relativeBase: Long,
+    memory: Map[Long, Long],
+    input: Queue[Long],
+    result: IntCode.State
+) {
   import IntCode._
 
   private def read(offset: Int): Long = (memory(ip) / powers(offset)) % 10 match {
@@ -57,16 +64,16 @@ case class IntCode(ip: Long, relativeBase: Long, memory: Map[Long, Long], input:
     case _  => throw new IllegalArgumentException
   }
 
-  def withInput(next: Long*): IntCode = copy(input = next)
+  def withInput(next: Long*): IntCode = copy(input = input ++ next)
   def nextOutput: IntCode             = Iterator.iterate(next)(_.next).dropWhile(_.result == Running).next()
   def allOutput: Seq[Long] = {
     val output = Iterator.iterate(this)(_.nextOutput).takeWhile(_.result != Halted)
-    output.toSeq.map(_.result).collect { case Output(value) => value }
+    output.collect { case IntCode(_, _, _, _, Output(value)) => value }.toSeq
   }
 
 }
 
-object IntCode {
+private[year2019] object IntCode {
   private val powers = Map(1 -> 100, 2 -> 1000, 3 -> 10000)
 
   sealed trait State
@@ -79,8 +86,10 @@ object IntCode {
     val memory = file.mkString.trim
       .split(',')
       .zipWithIndex
-      .map { case (value, index) => index.toLong -> value.toLong }
-      .toMap
-    IntCode(0, 0, memory.withDefaultValue(0), Seq(), Initial)
+      .foldLeft(Map.empty[Long, Long]) {
+        case (acc, (value, index)) => acc.updated(index.toLong, value.toLong)
+        case (acc, _)              => acc
+      }
+    IntCode(0, 0, memory.withDefaultValue(0L), Queue.empty[Long], Initial)
   }
 }

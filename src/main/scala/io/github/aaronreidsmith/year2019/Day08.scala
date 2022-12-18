@@ -1,18 +1,29 @@
 package io.github.aaronreidsmith.year2019
 
+import io.github.aaronreidsmith.Solution
+
 import scala.io.Source
-import scala.util.Using
 
-object Day08 {
-  def main(args: Array[String]): Unit = {
-    val width           = 25
-    val height          = 6
-    val flattenedLayers = Using.resource(Source.fromResource("2019/day08.txt"))(_.mkString).toSeq.grouped(width * height).toList
-    val minZeroLayer    = flattenedLayers.minBy(_.count(_ == '0'))
-    val part1           = minZeroLayer.count(_ == '1') * minZeroLayer.count(_ == '2')
-    println(s"Part 1: $part1")
+object Day08 extends Solution(2019, 8) {
+  type I  = List[String]
+  type O1 = Int
+  type O2 = String
 
-    val part2 = flattenedLayers.transpose // Transpose so each sub-list is based on position
+  // Given
+  private val width  = 25
+  private val height = 6
+
+  override protected[year2019] def parseInput(file: Source): List[String] = {
+    file.mkString.trim.grouped(width * height).toList
+  }
+
+  override protected[year2019] def part1(input: List[String]): Int = {
+    val minZeroLayer = input.minBy(_.count(_ == '0'))
+    minZeroLayer.count(_ == '1') * minZeroLayer.count(_ == '2')
+  }
+
+  override protected[year2019] def part2(input: List[String]): String = {
+    val image = input.transpose // Transpose so each sub-list is based on position
       .map { position => // Find the first non-two character in each position
         position
           .collectFirst {
@@ -21,7 +32,6 @@ object Day08 {
           .getOrElse('2')
       }
       .grouped(width) // Re-group by width/height
-      .toList
       .grouped(height)
       .toList
       .head         // After the above `collectFirst`, we will only have one outer list
@@ -32,6 +42,8 @@ object Day08 {
         }.mkString
       }
       .mkString("\n")
-    println(s"Part 2:\n$part2")
+
+    // Need leading newline due to how `Solution` prints
+    s"\n$image"
   }
 }
