@@ -1,11 +1,15 @@
 package io.github.aaronreidsmith.year2019
 
 import io.github.aaronreidsmith.implicits._
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Solution, using}
 
 import scala.io.Source
 
-object Day04 {
+object Day04 extends Solution(2019, 4) {
+  type I  = Range
+  type O1 = Int
+  type O2 = Int
+
   private implicit class IntOps(int: Int) {
     private lazy val string = int.toString
 
@@ -15,29 +19,20 @@ object Day04 {
       first <= second
     }
 
-    def hasDoubleDigits: Boolean = string.sliding(2).exists { pair =>
-      pair.head == pair.last
-    }
-
+    def hasDoubleDigits: Boolean      = string.sliding(2).exists(pair => pair.head == pair.last)
     def hasExactDoubleDigits: Boolean = hasDoubleDigits && string.letterOccurrences.values.exists(_ == 2)
   }
 
-  def main(args: Array[String]): Unit = {
-    val inputRange = using("2019/day04.txt")(parseInput)
-    println(s"Part 1: ${part1(inputRange)}")
-    println(s"Part 2: ${part2(inputRange)}")
-  }
-
-  private[year2019] def parseInput(file: Source): Range = {
-    val Array(min, max, _*) = file.mkString.split('-')
+  override protected[year2019] def parseInput(file: Source): Range = {
+    val Array(min, max, _*) = file.mkString.trim.split('-')
     min.toInt to max.toInt
   }
 
-  private[year2019] def part1(range: Range): Int = range.count { num =>
+  override protected[year2019] def part1(range: Range): Int = range.count { num =>
     num.hasDoubleDigits && num.alwaysIncreasing
   }
 
-  private[year2019] def part2(range: Range): Int = range.count { num =>
+  override protected[year2019] def part2(range: Range): Int = range.count { num =>
     num.hasExactDoubleDigits && num.alwaysIncreasing
   }
 }

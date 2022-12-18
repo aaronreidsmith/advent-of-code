@@ -6,7 +6,7 @@ import scala.io.Source
 
 class Day06Test extends BaseTest {
   "Day06.part1" should "work on example input" in {
-    val input = Source.fromString(
+    val input = Day06.parseInput(
       """COM)B
         |B)C
         |C)D
@@ -17,14 +17,13 @@ class Day06Test extends BaseTest {
         |D)I
         |E)J
         |J)K
-        |K)L""".stripMargin
+        |K)L""".stripMargin.asSource
     )
-    val orbits = Day06.parseInput(input)
-    Day06.part1(orbits) shouldBe 42
+    Day06.part1(input) shouldBe 42
   }
 
   "Day06.part2" should "work on example input" in {
-    val input = Source.fromString(
+    val input = Day06.parseInput(
       """COM)B
         |B)C
         |C)D
@@ -37,9 +36,8 @@ class Day06Test extends BaseTest {
         |J)K
         |K)L
         |K)YOU
-        |I)SAN""".stripMargin
+        |I)SAN""".stripMargin.asSource
     )
-    val orbits = Day06.parseInput(input)
-    Day06.part2(orbits) shouldBe 4
+    Day06.part2(input) shouldBe 4
   }
 }

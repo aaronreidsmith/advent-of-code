@@ -1,16 +1,15 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.year2019.intcode.IntCode
-import io.github.aaronreidsmith.year2019.intcode.util.IntCodeUtils
+import io.github.aaronreidsmith.Solution
 
-object Day05 extends IntCodeUtils {
-  def main(args: Array[String]): Unit = {
-    val instructions = makeInstructions("2019/day05.txt")
+import scala.io.Source
 
-    val part1 = new IntCode(instructions, Seq(1L))
-    println(s"Part 1: ${part1.run().getOutput.last}")
+object Day05 extends Solution(2019, 5) {
+  type I  = IntCode
+  type O1 = Long
+  type O2 = Long
 
-    val part2 = new IntCode(instructions, Seq(5L))
-    println(s"Part 2: ${part2.run().getOutput.last}")
-  }
+  override protected[year2019] def parseInput(file: Source): IntCode = IntCode(file)
+  override protected[year2019] def part1(input: IntCode): Long       = input.withInput(1L).allOutput.last
+  override protected[year2019] def part2(input: IntCode): Long       = input.withInput(5L).allOutput.last
 }

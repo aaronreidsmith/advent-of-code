@@ -1,30 +1,31 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Solution, using}
 
 import scala.io.Source
 
 // TODO: Adapted from Raku, so just kind of ugly
-object Day03 {
-  def main(args: Array[String]): Unit = {
-    val wires = using("2019/day03.txt")(parseInput)
-    println(s"Part 1: ${part1(wires)}")
-    println(s"Part 2: ${part2(wires)}")
-  }
+object Day03 extends Solution(2019, 3) {
+  type I  = (List[String], List[String])
+  type O1 = Int
+  type O2 = Int
 
-  private[year2019] def parseInput(file: Source): (List[String], List[String]) = {
-    val wires                   = file.mkString.split('\n').map(_.split(',').toList)
+  override protected[year2019] def parseInput(file: Source): (List[String], List[String]) = {
+    val wires                   = file.mkString.trim.split('\n').map(_.split(',').toList)
     val Array(wire1, wire2, _*) = wires
     (wire1, wire2)
   }
 
-  private[year2019] def part1(wires: (List[String], List[String])): Int = getOverlaps(wires).foldLeft(Int.MaxValue) {
-    case (currentMin, (a, b)) =>
-      val distance = a.abs + b.abs
-      if (distance > 0) currentMin.min(distance) else currentMin
+  override protected[year2019] def part1(wires: (List[String], List[String])): Int = {
+    getOverlaps(wires).foldLeft(Int.MaxValue) {
+      case (currentMin, (a, b)) =>
+        val distance = a.abs + b.abs
+        if (distance > 0) currentMin.min(distance) else currentMin
+      case (currentMin, _) => currentMin
+    }
   }
 
-  private[year2019] def part2(wires: (List[String], List[String])): Int = {
+  override protected[year2019] def part2(wires: (List[String], List[String])): Int = {
     val (wire1, wire2) = wires
     val wire1Path      = traverse(wire1)
     val wire2Path      = traverse(wire2)
