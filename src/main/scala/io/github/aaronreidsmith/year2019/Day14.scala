@@ -1,20 +1,19 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Solution, using}
 
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.math.Integral.Implicits._
 
-object Day14 {
-  def main(args: Array[String]): Unit = {
-    val input = using("2019/day14.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
+object Day14 extends Solution(2019, 14) {
+  private[year2019] type Reactions = Map[String, (Long, Map[String, Long])]
+  type I                           = Reactions
+  type O1                          = Long
+  type O2                          = Long
 
   // Adapted from https://www.reddit.com/r/adventofcode/comments/eafj32/comment/far2irk
-  private[year2019] def parseInput(file: Source): Map[String, (Long, Map[String, Long])] = {
+  override protected[year2019] def parseInput(file: Source): Reactions = {
     val chemical = "(\\d+) ([A-Z]+)".r
     file
       .getLines()
@@ -27,11 +26,32 @@ object Day14 {
       .toMap
   }
 
-  private[year2019] def part1(reactions: Map[String, (Long, Map[String, Long])], fuelAmount: Long = 1): Long = {
+  override protected[year2019] def part1(reactions: Reactions): Long = solution(reactions, 1)
+
+  // Adapted from https://www.reddit.com/r/adventofcode/comments/eafj32/comment/favii5d
+  override protected[year2019] def part2(reactions: Map[String, (Long, Map[String, Long])]): Long = {
+    val oneTrillion = 1000000000000L
+
+    @tailrec
+    def helper(fuel: Long, ore: Long): Long = if (ore > oneTrillion) {
+      fuel
+    } else {
+      val guess   = (fuel + 1) * oneTrillion / ore
+      val newFuel = guess.max(fuel + 1)
+      val newOre  = solution(reactions, newFuel + 1)
+      helper(newFuel, newOre)
+    }
+
+    val initialFuel = 1L
+    val initialOre  = solution(reactions, initialFuel + 1)
+    helper(initialFuel, initialOre)
+  }
+
+  private def solution(reactions: Reactions, fuelAmount: Long): Long = {
     def helper(
         chemical: String,
         amount: Long,
-        excess: Map[String, Long]
+        excess: Map[String, Long] = Map.empty[String, Long].withDefaultValue(0L)
     ): (Long, Map[String, Long]) = chemical match {
       case "ORE" => (amount, excess)
       case _ =>
@@ -55,25 +75,6 @@ object Day14 {
         (ore, inputExcess + (chemical -> (inputExcess(chemical) + outputExcess)))
     }
 
-    helper("FUEL", fuelAmount, Map.empty[String, Long].withDefaultValue(0L))._1
-  }
-
-  // Adapted from https://www.reddit.com/r/adventofcode/comments/eafj32/comment/favii5d
-  private[year2019] def part2(reactions: Map[String, (Long, Map[String, Long])]): Long = {
-    val oneTrillion = 1000000000000L
-
-    @tailrec
-    def helper(fuel: Long, ore: Long): Long = if (ore > oneTrillion) {
-      fuel
-    } else {
-      val guess   = (fuel + 1) * oneTrillion / ore
-      val newFuel = guess.max(fuel + 1)
-      val newOre  = part1(reactions, newFuel + 1)
-      helper(newFuel, newOre)
-    }
-
-    val initialFuel = 1L
-    val initialOre  = part1(reactions, initialFuel + 1)
-    helper(initialFuel, initialOre)
+    helper("FUEL", fuelAmount)._1
   }
 }
