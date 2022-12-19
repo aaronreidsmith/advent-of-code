@@ -2,15 +2,16 @@ val settings = new {
   val scalaVersion = "2.13.10"
 
   val libraryDependencies = Seq(
-    "com.lihaoyi"            %% "ujson"                    % "2.0.0",
-    "net.fornwall"            % "aoc"                      % "2019.12.442", // TODO: Don't rely on this
-    "org.apache.commons"      % "commons-math3"            % "3.6.1",
-    "org.apache.commons"      % "commons-text"             % "1.10.0",
-    "org.jgrapht"             % "jgrapht-core"             % "1.5.1",
-    "org.scala-lang"          % "scala-reflect"            % scalaVersion,
-    "org.scala-lang"          % "scala-compiler"           % scalaVersion,
-    "org.scala-lang.modules" %% "scala-parser-combinators" % "2.1.1",
-    "org.scalatest"          %% "scalatest"                % "3.2.14" % Test
+    "com.lihaoyi"            %% "ujson"                      % "2.0.0",
+    "net.fornwall"            % "aoc"                        % "2019.12.442", // TODO: Don't rely on this
+    "org.apache.commons"      % "commons-math3"              % "3.6.1",
+    "org.apache.commons"      % "commons-text"               % "1.10.0",
+    "org.jgrapht"             % "jgrapht-core"               % "1.5.1",
+    "org.scala-lang"          % "scala-reflect"              % scalaVersion,
+    "org.scala-lang"          % "scala-compiler"             % scalaVersion,
+    "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.4",
+    "org.scala-lang.modules" %% "scala-parser-combinators"   % "2.1.1",
+    "org.scalatest"          %% "scalatest"                  % "3.2.14" % Test
   )
 }
 
