@@ -1,15 +1,21 @@
 package io.github.aaronreidsmith.year2019
 
+import io.github.aaronreidsmith.Solution
+
 import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
-import scala.util.Using
 
-object Day22 {
-  private val dealIncrement = "^deal with increment (\\d+)$".r
-  private val cut           = "^cut (-?\\d+)$".r
+object Day22 extends Solution(2019, 22) {
+  type I  = List[String]
+  type O1 = Int
+  type O2 = BigInt
 
-  private case class Deck(cards: Vector[Int]) {
+  // Top-level so we only have to compile once
+  private val dealIncrement = """^deal with increment (\d+)$""".r
+  private val cut           = """^cut (-?\d+)$""".r
+
+  private[year2019] case class Deck(cards: Vector[Int]) {
     def cut(n: Int): Deck = {
       val newCards = if (n >= 0) cards.drop(n) ++ cards.take(n) else cards.takeRight(n.abs) ++ cards.dropRight(n.abs)
       Deck(newCards)
@@ -31,50 +37,49 @@ object Day22 {
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    val input = Using.resource(Source.fromResource("2019/day22.txt"))(_.getLines().toList)
-    val part1 = input
-      .foldLeft(Deck((0 until 10007).toVector)) { (acc, line) =>
-        line match {
-          case dealIncrement(n)      => acc.deal(n.toInt)
-          case cut(n)                => acc.cut(n.toInt)
-          case "deal into new stack" => acc.deal
-          case other                 => throw new IllegalArgumentException(s"'$other' is not a valid instruction'")
-        }
+  override protected[year2019] def parseInput(file: Source): List[String] = file.getLines().toList
+
+  override protected[year2019] def part1(input: List[String]): Int = {
+    input
+      .foldLeft(Deck((0 until 10_007).toVector)) {
+        case (acc, dealIncrement(n))      => acc.deal(n.toInt)
+        case (acc, cut(n))                => acc.cut(n.toInt)
+        case (acc, "deal into new stack") => acc.deal
+        case (acc, _)                     => acc
       }
       .cards
       .indexOf(2019)
-    println(s"Part 1: $part1")
+  }
 
-    // Adapted from https://todd.ginsberg.com/post/advent-of-code/2019/day22/
-    val part2 = {
-      val Two           = BigInt(2)
-      val NumberOfCards = BigInt(119315717514047L)
-      val Shuffles      = BigInt(101741582076661L)
-      val Target        = BigInt(2020)
+  // Adapted from https://todd.ginsberg.com/post/advent-of-code/2019/day22/
+  override protected[year2019] def part2(input: List[String]): BigInt = {
+    val two      = BigInt(2)
+    val numCards = BigInt(119315717514047L)
+    val shuffles = BigInt(101741582076661L)
+    val target   = BigInt(2020)
 
-      val memory = ArrayBuffer(BigInt(1), BigInt(0))
-      input.reverse.foreach { instruction =>
-        instruction match {
-          case dealIncrement(n) =>
-            val multiplier = BigInt(n).modPow(NumberOfCards - Two, NumberOfCards)
-            memory(0) *= multiplier
-            memory(1) *= multiplier
-          case cut(n) => memory(1) += BigInt(n)
-          case "deal into new stack" =>
-            memory(0) = -memory(0)
-            memory(1) = -(memory(1) + 1)
-          case other => throw new IllegalArgumentException(s"'$other' is not a valid instruction'")
-        }
-        memory(0) %= NumberOfCards
-        memory(1) %= NumberOfCards
+    val memory = ArrayBuffer(BigInt(1), BigInt(0))
+    input.reverse.foreach { instruction =>
+      instruction match {
+        case dealIncrement(n) =>
+          val multiplier = BigInt(n).modPow(numCards - two, numCards)
+          memory(0) *= multiplier
+          memory(1) *= multiplier
+        case cut(n) => memory(1) += BigInt(n)
+        case "deal into new stack" =>
+          memory(0) = -memory(0)
+          memory(1) = -(memory(1) + 1)
+        case other => throw new IllegalArgumentException(s"'$other' is not a valid instruction'")
       }
-      val power = memory(0).modPow(Shuffles, NumberOfCards)
-      ((power * Target) +
-        ((memory(1) * (power + NumberOfCards - 1)) *
-          (memory(0) - 1).modPow(NumberOfCards - Two, NumberOfCards)))
-        .mod(NumberOfCards)
+      memory(0) %= numCards
+      memory(1) %= numCards
     }
-    println(s"Part 2: $part2")
+    val power = memory(0).modPow(shuffles, numCards)
+    (
+      (power * target) + (
+        (memory(1) * (power + numCards - 1)) *
+          (memory(0) - 1).modPow(numCards - two, numCards)
+      )
+    ).mod(numCards)
   }
 }
