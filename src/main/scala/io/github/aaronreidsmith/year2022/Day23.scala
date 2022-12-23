@@ -11,11 +11,6 @@ object Day23 extends Solution(2022, 23) {
   type O1 = Int
   type O2 = Int
 
-  private implicit class CharOps(char: Char) {
-    def isEmpty: Boolean  = char == '.'
-    def nonEmpty: Boolean = !isEmpty
-  }
-
   override protected[year2022] def parseInput(file: Source): Grid[Char] = file.toGrid
   override protected[year2022] def part1(input: Grid[Char]): Int        = solution(input, part1 = true)
   override protected[year2022] def part2(input: Grid[Char]): Int        = solution(input, part1 = false)
@@ -36,7 +31,7 @@ object Day23 extends Solution(2022, 23) {
         for {
           x <- minX to maxX
           y <- minY to maxY
-          if grid(Point(x, y)).isEmpty
+          if grid(Point(x, y)) == '.'
         } yield 1
       }.sum
     } else if (!part1 && grid == previousGrid) {
@@ -44,25 +39,25 @@ object Day23 extends Solution(2022, 23) {
     } else {
       // First half of round
       val proposals = grid.collect {
-        case (point, char) if char.nonEmpty =>
-          val n  = grid(point.up)
-          val ne = grid(point.up.right)
-          val e  = grid(point.right)
-          val se = grid(point.down.right)
-          val s  = grid(point.down)
-          val sw = grid(point.down.left)
-          val w  = grid(point.left)
-          val nw = grid(point.up.left)
+        case (point, '#') =>
+          val nEmpty  = grid(point.up) == '.'
+          val neEmpty = grid(point.up.right) == '.'
+          val eEmpty  = grid(point.right) == '.'
+          val seEmpty = grid(point.down.right) == '.'
+          val sEmpty  = grid(point.down) == '.'
+          val swEmpty = grid(point.down.left) == '.'
+          val wEmpty  = grid(point.left) == '.'
+          val nwEmpty = grid(point.up.left) == '.'
 
-          if (Seq(n, ne, e, se, s, sw, w, nw).forall(_.isEmpty)) {
+          if (Seq(nEmpty, neEmpty, eEmpty, seEmpty, sEmpty, swEmpty, wEmpty, nwEmpty).forall(_ == true)) {
             point -> point
           } else {
             directions
               .collectFirst {
-                case North if n.isEmpty && ne.isEmpty && nw.isEmpty => point -> point.up
-                case East if e.isEmpty && ne.isEmpty && se.isEmpty  => point -> point.right
-                case South if s.isEmpty && se.isEmpty && sw.isEmpty => point -> point.down
-                case West if w.isEmpty && nw.isEmpty && sw.isEmpty  => point -> point.left
+                case North if nEmpty && neEmpty && nwEmpty => point -> point.up
+                case East if eEmpty && neEmpty && seEmpty  => point -> point.right
+                case South if sEmpty && seEmpty && swEmpty => point -> point.down
+                case West if wEmpty && nwEmpty && swEmpty  => point -> point.left
               }
               .getOrElse(point -> point)
           }
@@ -72,7 +67,7 @@ object Day23 extends Solution(2022, 23) {
       val proposalCounts = proposals.values.toSeq.occurrences
 
       val updated = grid.foldLeft(grid) {
-        case (acc, (point, char)) if char.nonEmpty =>
+        case (acc, (point, '#')) =>
           val target = proposals(point)
           if (proposalCounts(target) == 1) {
             acc ++ Map(point -> '.', target -> '#')
