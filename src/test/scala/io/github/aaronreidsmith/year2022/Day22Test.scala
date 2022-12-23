@@ -10,8 +10,7 @@ class Day22Test extends BaseTest {
     Day22.part1(input) shouldBe 190066
   }
 
-  // TODO
-//  "Day22.part2" should "work on actual input" in {
-//    Day22.part2(input) shouldBe 134170
-//  }
+  "Day22.part2" should "work on actual input" in {
+    Day22.part2(input) shouldBe 134170
+  }
 }

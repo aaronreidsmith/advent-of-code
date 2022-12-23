@@ -87,21 +87,6 @@ object Day22 extends Solution(2022, 22) {
     val E      = DE.take(2500).toMap            // (101,1) to (150,50)
     val F      = sorted.takeRight(2500).toMap   // (151,1) to (200,50)
 
-    val aToC = (101 to 150).map(Point(50, _)).zip((51 to 100).map(Point(_, 100))).toMap
-    val aToD = (1 to 50).map(Point(_, 151)).zip((150 to 101 by -1).map(Point(_, 100))).toMap
-    val aToF = (101 to 150).map(Point(1, _)).zip((1 to 50).map(Point(200, _))).toMap
-    val bToE = (1 to 50).map(Point(_, 51)).zip((150 to 101 by -1).map(Point(_, 0))).toMap
-    val bToF = (51 to 100).map(Point(1, _)).zip((200 to 152 by -1).map(Point(_, 0))).toMap
-    val cToA = aToC.map(_.swap)
-    val cToE = (51 to 100).map(Point(_, 51)).zip((1 to 50).map(Point(101, _))).toMap
-    val dToA = aToD.map(_.swap)
-    val dToF = (51 to 100).map(Point(151, _)).zip((151 to 200).map(Point(_, 50))).toMap
-    val eToB = bToE.map(_.swap)
-    val eToC = cToE.map(_.swap)
-    val fToA = aToF.map(_.swap)
-    val fToB = bToF.map(_.swap)
-    val fToD = dToF.map(_.swap)
-
     solution(
       grid,
       initialInstructions,
@@ -116,48 +101,47 @@ object Day22 extends Solution(2022, 22) {
        * D<->E, E<->F), but I've included them for completeness
        */
       (point, direction) => {
-        println(point, direction)
         val (newPoint, newDirection) = if (A.contains(point)) {
           direction match {
-            case North => (aToF(point), North)               // Walk off "A" upward, end up on "F" facing up
-            case East  => (aToD(point), West)                // Walk off "A" to the right, end up on "D" facing left
-            case South => (aToC(point), West)                // Walk off "A" downward, end up on "C" facing left
+            case North => (Point(200, point.y - 100), North) // Walk off "A" upward, end up on "F" facing up
+            case East  => (Point(151 - point.x, 100), West)  // Walk off "A" to the right, end up on "D" facing left
+            case South => (Point(point.y - 50, 100), West)   // Walk off "A" downward, end up on "C" facing left
             case West  => (point.move(direction), direction) // Walk off "A" to the left, end up on "B" facing left
           }
         } else if (B.contains(point)) {
           direction match {
-            case North => (bToF(point), East)                // Walk off "B" upward, end up on "F" facing right
+            case North => (Point(point.y + 100, 1), East)    // Walk off "B" upward, end up on "F" facing right
             case East  => (point.move(direction), direction) // Walk off "B" to the right, end up on "A" facing right
             case South => (point.move(direction), direction) // Walk off "B" downward, end up on "C" facing down
-            case West  => (bToE(point), East)                // Walk off "B" to the left, end up on "E" facing right
+            case West  => (Point(151 - point.x, 1), East)    // Walk off "B" to the left, end up on "E" facing right
           }
         } else if (C.contains(point)) {
           direction match {
             case North => (point.move(direction), direction) // Walk off "C" upward, end up on "B" facing up
-            case East  => (cToA(point), North)               // Walk off "C" to the right, end up on "A" facing up
+            case East  => (Point(50, point.x + 50), North)   // Walk off "C" to the right, end up on "A" facing up
             case South => (point.move(direction), direction) // Walk off "C" downward, end up on "D" facing down
-            case West  => (cToE(point), South)               // Walk off "C" to the left, end up on "E" facing down
+            case West  => (Point(101, point.x - 50), South)  // Walk off "C" to the left, end up on "E" facing down
           }
         } else if (D.contains(point)) {
           direction match {
             case North => (point.move(direction), direction) // Walk off "D" upward, end up on "C" facing up
-            case East  => (dToA(point), West)                // Walk off "D" to the right, end up on "A" facing left
-            case South => (dToF(point), West)                // Walk off "D" downward, end up on "F" facing left
+            case East  => (Point(151 - point.x, 150), West)  // Walk off "D" to the right, end up on "A" facing left
+            case South => (Point(point.y + 100, 50), West)   // Walk off "D" downward, end up on "F" facing left
             case West  => (point.move(direction), direction) // Walk off "D" to the left, end up on "E" facing left
           }
         } else if (E.contains(point)) {
           direction match {
-            case North => (eToC(point), East)                // Walk off "E" upward, end up on "C" facing right
+            case North => (Point(point.y + 50, 51), East)    // Walk off "E" upward, end up on "C" facing right
             case East  => (point.move(direction), direction) // Walk off "E" to the right, end up on "D" facing right
             case South => (point.move(direction), direction) // Walk off "E" downward, end up on "F" facing down
-            case West  => (eToB(point), East)                // Walk off "E" to the left, end up on "B" facing right
+            case West  => (Point(151 - point.x, 51), East)   // Walk off "E" to the left, end up on "B" facing right
           }
         } else if (F.contains(point)) {
           direction match {
             case North => (point.move(direction), direction) // Walk off "F" upward, end up on "E" facing up
-            case East  => (fToD(point), North)               // Walk off "F" to the right, end up on "D" facing up
-            case South => (fToA(point), South)               // Walk off "F" downward, end up on "A" facing down
-            case West  => (fToB(point), South)               // Walk off "F" to the left, end up on "B" facing down
+            case East  => (Point(150, point.x - 100), North) // Walk off "F" to the right, end up on "D" facing up
+            case South => (Point(1, point.y + 100), South)   // Walk off "F" downward, end up on "A" facing down
+            case West  => (Point(1, point.x - 100), South)   // Walk off "F" to the left, end up on "B" facing down
           }
         } else {
           (point, direction)
@@ -182,7 +166,7 @@ object Day22 extends Solution(2022, 22) {
         case Move(steps) :: tail =>
           val (newPos, newDirection) = (0 until steps).foldLeft((position, direction)) {
             case ((currentPosition, currentDirection), _) =>
-              val next = currentPosition.move(direction)
+              val next = currentPosition.move(currentDirection)
               grid.get(next) match {
                 case Some('#') => (currentPosition, currentDirection)     // Hit a wall, stop
                 case Some('.') => (next, currentDirection)                // Open space, continue
