@@ -1,13 +1,45 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.using
-import net.fornwall.aoc.Solver
+import io.github.aaronreidsmith.Solution
 
-// TODO: Actually solve this
-object Day21 {
-  def main(args: Array[String]): Unit = {
-    val input = using("2019/day21.txt")(_.mkString)
-    println(s"Part 1: ${Solver.solve(2019, 21, 1, input)}")
-    println(s"Part 2: ${Solver.solve(2019, 21, 2, input)}")
+import scala.io.Source
+
+object Day21 extends Solution(2019, 21) {
+  type I  = IntCode
+  type O1 = Long
+  type O2 = Long
+
+  override protected[year2019] def parseInput(file: Source): IntCode = IntCode(file)
+
+  override protected[year2019] def part1(input: IntCode): Long = solution(
+    input,
+    """NOT A T
+      |OR T J
+      |NOT B T
+      |OR T J
+      |NOT C T
+      |OR T J
+      |AND D J
+      |WALK
+      |""".stripMargin
+  )
+
+  override protected[year2019] def part2(input: IntCode): Long = solution(
+    input,
+    """NOT A J
+      |NOT B T
+      |OR T J
+      |NOT C T
+      |OR T J
+      |AND E T
+      |OR H T
+      |AND T J
+      |AND D J
+      |RUN
+      |""".stripMargin
+  )
+
+  private def solution(intCode: IntCode, script: String): Long = {
+    intCode.withInput(script.map(_.toLong): _*).allOutput.last
   }
 }
