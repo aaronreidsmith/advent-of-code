@@ -22,13 +22,13 @@ object Day07 extends Solution(2019, 7) {
   override protected[year2019] def part2(input: IntCode): Long = {
     @tailrec
     def helper(amps: Seq[IntCode], previousOutput: Long = 0L): Long = {
-      val nextAmp = amps.head.withInput(previousOutput).nextOutput
+      val nextAmp = amps.head.withAdditionalInput(previousOutput).nextOutput
       nextAmp.result match {
         case IntCode.Output(nextOutput) => helper(amps.tail :+ nextAmp, nextOutput)
         case _                          => previousOutput
       }
     }
 
-    (5L to 9L).map(input.withInput(_)).permutations.map(helper(_)).max
+    (5L to 9L).map(input.withAdditionalInput(_)).permutations.map(helper(_)).max
   }
 }

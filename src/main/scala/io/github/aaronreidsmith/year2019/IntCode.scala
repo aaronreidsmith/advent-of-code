@@ -64,8 +64,9 @@ private[year2019] case class IntCode(
     case _  => throw new IllegalArgumentException
   }
 
-  def withInput(next: Long*): IntCode = copy(input = input ++ next)
-  def nextOutput: IntCode             = Iterator.iterate(next)(_.next).dropWhile(_.result == Running).next()
+  def withInput(next: Long*): IntCode           = copy(input = Queue.from(next))
+  def withAdditionalInput(next: Long*): IntCode = copy(input = input ++ next)
+  def nextOutput: IntCode                       = Iterator.iterate(next)(_.next).dropWhile(_.result == Running).next()
   def allOutput: Seq[Long] = {
     val output = Iterator.iterate(this)(_.nextOutput).takeWhile(_.result != Halted)
     output.collect { case IntCode(_, _, _, _, Output(value)) => value }.toSeq
