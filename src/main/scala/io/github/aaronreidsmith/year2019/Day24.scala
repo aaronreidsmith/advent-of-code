@@ -1,56 +1,83 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.using
-import net.fornwall.aoc.Solver
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
-import scala.collection.mutable
+import scala.io.Source
 
-object Day24 {
-  def main(args: Array[String]): Unit = {
-    val input = using("2019/day24.txt")(_.mkString)
+object Day24 extends Solution(2019, 24) {
+  type I  = Set[Point3D]
+  type O1 = Int
+  type O2 = Int
 
-    val part1 = {
-      val seenStates = mutable.Set.empty[Map[(Int, Int), Boolean]]
+  private[year2019] case class Point3D(row: Int, col: Int, depth: Int) {
+    def neighbors: Seq[Point3D] = Seq(
+      copy(row = row - 1),
+      copy(row = row + 1),
+      copy(col = col - 1),
+      copy(col = col + 1)
+    )
+  }
 
-      @tailrec
-      def helper(state: Map[(Int, Int), Boolean]): Int = if (seenStates.contains(state)) {
-        state.foldLeft(0) {
-          case (acc, ((row, col), isBug)) if isBug =>
-            val n = (row * 5) + col
-            acc + math.pow(2, n).toInt
-          case (acc, _) => acc
+  override protected[year2019] def parseInput(file: Source): Set[Point3D] = {
+    for {
+      (line, x) <- file.getLines().zipWithIndex
+      (char, y) <- line.zipWithIndex
+      if char == '#'
+    } yield Point3D(x, y, 0)
+  }.toSet
+
+  override protected[year2019] def part1(input: Set[Point3D]): Int = {
+    @tailrec
+    def helper(grid: Set[Point3D], previous: Set[Set[Point3D]] = Set.empty): Int = {
+      val next = step(grid, neighbors2D)
+      if (previous.contains(next)) {
+        next.foldLeft(0) { (acc, point) =>
+          val n = point.col + 5 * point.row
+          acc + math.pow(2, n).toInt
         }
       } else {
-        seenStates.add(state)
-        val nextState = {
-          def numBugNeighbors(position: (Int, Int)): Int = {
-            val (row, col) = position
-            Seq((row - 1, col), (row + 1, col), (row, col - 1), (row, col + 1)).count(state.getOrElse(_, false))
-          }
-
-          state.foldLeft(state) {
-            case (acc, (position, isBug)) if isBug && numBugNeighbors(position) != 1 => acc.updated(position, false)
-            case (acc, (position, isBug)) if !isBug && Seq(1, 2).contains(numBugNeighbors(position)) =>
-              acc.updated(position, true)
-            case (acc, _) => acc
-          }
-        }
-        helper(nextState)
+        helper(next, previous + next)
       }
-
-      val initialState = {
-        for {
-          (line, row) <- input.split('\n').zipWithIndex
-          (char, col) <- line.zipWithIndex
-        } yield (row, col) -> (char == '#')
-      }.toMap
-
-      helper(initialState)
     }
-    println(s"Part 1: $part1")
 
-    // TODO: Actually solve this
-    println(s"Part 2: ${Solver.solve(2019, 24, 2, input)}")
+    helper(input)
+  }
+
+  override protected[year2019] def part2(input: Set[Point3D]): Int = {
+    val minutes = if (isTest) 10 else 200
+    Iterator.iterate(input)(step(_, neighbors3D)).drop(minutes).next().size
+  }
+
+  private def neighbors2D(point: Point3D): Seq[Point3D] = point.neighbors.filter { neighbor =>
+    0 <= neighbor.row && neighbor.row < 5 &&
+    0 <= neighbor.col && neighbor.col < 5
+  }
+
+  private def neighbors3D(point: Point3D): Seq[Point3D] = point.neighbors.flatMap {
+    case Point3D(-1, _, z) => Seq(Point3D(2, 1, z - 1))
+    case Point3D(5, _, z)  => Seq(Point3D(2, 3, z - 1))
+    case Point3D(_, -1, z) => Seq(Point3D(1, 2, z - 1))
+    case Point3D(_, 5, z)  => Seq(Point3D(3, 2, z - 1))
+    case Point3D(2, 2, _) =>
+      point match {
+        case Point3D(1, 2, z) => (0 until 5).map(Point3D(_, 0, z + 1))
+        case Point3D(3, 2, z) => (0 until 5).map(Point3D(_, 4, z + 1))
+        case Point3D(2, 1, z) => (0 until 5).map(Point3D(0, _, z + 1))
+        case Point3D(2, 3, z) => (0 until 5).map(Point3D(4, _, z + 1))
+        case _                => Seq()
+      }
+    case other => Seq(other)
+  }
+
+  private def step(grid: Set[Point3D], neighbors: Point3D => Seq[Point3D]): Set[Point3D] = {
+    val candidates = grid ++ grid.flatMap(neighbors)
+    candidates.filter { point =>
+      neighbors(point).count(grid.contains) match {
+        case 1 => true
+        case 2 => !grid.contains(point)
+        case _ => false
+      }
+    }
   }
 }
