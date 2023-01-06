@@ -1,86 +1,64 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.year2019.intcode.util.IntCodeUtils
-import io.github.aaronreidsmith.year2019.intcode.{Instructions, IntCode}
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath
-import org.jgrapht.graph.{DefaultEdge, SimpleGraph}
+import io.github.aaronreidsmith.{Point, Solution}
 
-import scala.util.Random
+import scala.collection.mutable
+import scala.io.Source
 
-object Day15 extends IntCodeUtils {
-  private val NORTH      = 1L
-  private val SOUTH      = 2L
-  private val WEST       = 3L
-  private val EAST       = 4L
-  private val DIRECTIONS = Seq(NORTH, SOUTH, WEST, EAST)
+object Day15 extends Solution(2019, 15) {
+  type I  = IntCode
+  type O1 = Int
+  type O2 = Int
 
-  private val WALL   = 0L
-  private val SPACE  = 1L
-  private val TARGET = 2L
+  override protected[year2019] def parseInput(file: Source): IntCode = IntCode(file)
 
-  private val graph = new SimpleGraph[(Int, Int), DefaultEdge](classOf[DefaultEdge])
-
-  private var farthestDistance          = 0
-  private var graphBuilt                = false
-  private var intCode: IntCode          = _
-  private var target: (Int, Int)        = _
-  private var farthestPoint: (Int, Int) = _
-
-  def main(args: Array[String]): Unit = {
-    val instructions = makeInstructions("2019/day15.txt")
-    println(s"Part 1: ${part1(instructions)}")
-    println(s"Part 2: ${part2(instructions)}")
+  override protected[year2019] def part1(input: IntCode): Int = traverse(input) match {
+    case (first, Some((target, _))) => first(target)
+    case _                          => -1
   }
 
-  private[year2019] def part1(instructions: Instructions): Int = {
-    if (!graphBuilt) {
-      buildGraph(instructions)
+  override protected[year2019] def part2(input: IntCode): Int = traverse(input) match {
+    case (_, Some((_, computer))) => traverse(computer)._1.values.max
+    case _                        => -1
+  }
+
+  private def traverse(initial: IntCode): (Map[Point, Int], Option[(Point, IntCode)]) = {
+    val neighbors = Seq(
+      (Point(0, -1), 1),
+      (Point(0, 1), 2),
+      (Point(-1, 0), 3),
+      (Point(1, 0), 4)
+    )
+
+    def move(point: Point, computer: IntCode, delta: Point, command: Int): (Point, IntCode, Long) = {
+      val nextPoint    = point + delta
+      val nextComputer = computer.withInput(command).nextOutput
+      val status = nextComputer.result match {
+        case IntCode.Output(s) => s
+        case _                 => 0L
+      }
+      (nextPoint, nextComputer, status)
     }
-    DijkstraShortestPath.findPathBetween(graph, (0, 0), target).getLength
-  }
 
-  private[year2019] def part2(instructions: Instructions): Int = {
-    if (!graphBuilt) {
-      buildGraph(instructions)
-    }
-    DijkstraShortestPath.findPathBetween(graph, (0, 0), farthestPoint).getLength
-  }
+    val cost   = mutable.Map(Point.zero -> 0)
+    val todo   = mutable.PriorityQueue((Point.zero, initial))(Ordering.by { case (point, _) => cost(point) })
+    var target = Option.empty[(Point, IntCode)]
 
-  private def buildGraph(instructions: Instructions): Unit = {
-    intCode = new IntCode(instructions, suspendOnOutput = true)
-    var position        = (0, 0)
-    var currentResponse = 0L
-    while (currentResponse != TARGET) {
-      val choice = Random.shuffle(DIRECTIONS).head
-      currentResponse = intCode.run(Seq(choice)).getOutput.last
-      currentResponse match {
-        case WALL => // Do nothing
-        case SPACE | TARGET =>
-          val (row, col) = position
-          val nextPosition = choice match {
-            case NORTH => (row - 1, col)
-            case SOUTH => (row + 1, col)
-            case WEST  => (row, col - 1)
-            case EAST  => (row, col + 1)
-            case _     => throw new IllegalArgumentException
+    while (todo.nonEmpty) {
+      val (point, computer) = todo.dequeue()
+      neighbors.foreach { neighbor =>
+        val (delta, command)                  = neighbor
+        val (nextPoint, nextComputer, status) = move(point, computer, delta, command)
+        if (status > 0 && (!cost.contains(nextPoint) || cost(point) + 1 < cost(nextPoint))) {
+          cost(nextPoint) = cost(point) + 1
+          todo.enqueue((nextPoint, nextComputer))
+          if (status == 2) {
+            target = Some((nextPoint, nextComputer))
           }
-          graph.addVertex(position)
-          graph.addVertex(nextPosition)
-          graph.addEdge(position, nextPosition)
-          graph.addEdge(nextPosition, position)
-
-          val (nextRow, nextCol) = nextPosition
-          val distance           = nextRow.abs + nextCol.abs
-          if (distance > farthestDistance) {
-            farthestPoint = nextPosition
-            farthestDistance = distance
-          }
-
-          position = nextPosition
-        case _ => throw new IllegalArgumentException
+        }
       }
     }
-    target = position
-    graphBuilt = true
+
+    (cost.toMap, target)
   }
 }
