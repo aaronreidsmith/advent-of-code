@@ -1,25 +1,38 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.using
-import io.github.aaronreidsmith.year2019.intcode.IntCode
-import io.github.aaronreidsmith.year2019.intcode.util.IntCodeUtils
-import net.fornwall.aoc.Solver
+import io.github.aaronreidsmith.Solution
 
-object Day19 extends IntCodeUtils {
-  def main(args: Array[String]): Unit = {
-    val rawInstructions = using("2019/day19.txt")(_.mkString)
-    val instructions    = makeInstructions("2019/day19.txt")
+import scala.annotation.tailrec
+import scala.io.Source
 
-    val part1 = {
-      for {
-        x <- 0 until 50
-        y <- 0 until 50
-        if new IntCode(instructions, Seq(x, y)).run().getOutput.last == 1
-      } yield 1
-    }.sum
-    println(s"Part 1: $part1")
+object Day19 extends Solution(2019, 19) {
+  type I  = IntCode
+  type O1 = Long
+  type O2 = Long
 
-    // TODO: Actually solve this
-    println(s"Part 2: ${Solver.solve(2019, 19, 2, rawInstructions)}")
+  override protected[year2019] def parseInput(file: Source): IntCode = IntCode(file)
+
+  override protected[year2019] def part1(input: IntCode): Long = {
+    for {
+      x <- 0 until 50
+      y <- 0 until 50
+    } yield input.withInput(x, y).allOutput
+  }.foldLeft(0L)(_ + _.sum)
+
+  override protected[year2019] def part2(input: IntCode): Long = {
+    def test(x: Long, y: Long): Boolean = input.withInput(x, y).allOutput.head == 1L
+
+    @tailrec
+    def helper(x: Long, y: Long): Long = {
+      val top  = test(x, y - 99)
+      val left = test(x - 99, y)
+      (top, left) match {
+        case (true, true) => 10000 * (x - 99) + (y - 99)
+        case (true, _)    => helper(x + 1, y)
+        case _            => helper(x, y + 1)
+      }
+    }
+
+    helper(99, 99)
   }
 }

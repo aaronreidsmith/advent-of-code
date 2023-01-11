@@ -3,7 +3,6 @@ val settings = new {
 
   val libraryDependencies = Seq(
     "com.lihaoyi"            %% "ujson"                      % "2.0.0",
-    "net.fornwall"            % "aoc"                        % "2019.12.442", // TODO: Don't rely on this
     "org.apache.commons"      % "commons-math3"              % "3.6.1",
     "org.apache.commons"      % "commons-text"               % "1.10.0",
     "org.jgrapht"             % "jgrapht-core"               % "1.5.1",
