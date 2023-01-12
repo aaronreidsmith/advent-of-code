@@ -1,131 +1,103 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Direction, East, North, Point, Solution, South, West, using}
 
 import scala.annotation.tailrec
+import scala.io.Source
 
-object Day12 {
-  private sealed trait TurnDirection
-  private case object Left  extends TurnDirection
-  private case object Right extends TurnDirection
+object Day12 extends Solution(2020, 12) {
+  type I  = List[String]
+  type O1 = Int
+  type O2 = Int
 
-  private sealed trait Heading {
-    def turn(direction: TurnDirection): Heading = direction match {
-      case Left  => left
-      case Right => right
-    }
-    val left: Heading
-    val right: Heading
-  }
-  private case object North extends Heading {
-    val left: Heading  = West
-    val right: Heading = East
-  }
-  private case object East extends Heading {
-    val left: Heading  = North
-    val right: Heading = South
-  }
-  private case object South extends Heading {
-    val left: Heading  = East
-    val right: Heading = West
-  }
-  private case object West extends Heading {
-    val left: Heading  = South
-    val right: Heading = North
-  }
-
-  private case class Ship(position: (Int, Int) = (0, 0), heading: Heading = East, waypoint: (Int, Int) = (-1, 10)) {
-    private val (x, y) = position
-    private val (i, j) = waypoint
-
+  private case class Ship(position: Point, heading: Direction, waypoint: Point) {
     // Part 1 methods
-    def turn(turnDirection: TurnDirection, degrees: Int): Ship = {
-      val newHeading = degrees match {
-        case 90  => heading.turn(turnDirection)
-        case 180 => heading.turn(turnDirection).turn(turnDirection)
-        case 270 => heading.turn(turnDirection).turn(turnDirection).turn(turnDirection)
-        case _   => throw new IllegalArgumentException
+    def turn(instruction: String): Ship = {
+      val direction = instruction.head
+      val degrees   = instruction.tail.toInt
+      turn(direction, degrees)
+    }
+
+    private def turn(direction: Char, degrees: Int): Ship = {
+      val newHeading = (direction, degrees) match {
+        case ('L', 90) | ('R', 270) => heading.left
+        case ('L', 270) | ('R', 90) => heading.right
+        case (_, 180)               => heading.opposite
+        case _                      => throw new IllegalArgumentException
       }
       this.copy(heading = newHeading)
     }
-    def move(value: Int): Ship = move(heading, value)
-    def move(heading: Heading, value: Int): Ship = heading match {
-      case North => this.copy(position = (x - value, y))
-      case East  => this.copy(position = (x, y + value))
-      case South => this.copy(position = (x + value, y))
-      case West  => this.copy(position = (x, y - value))
+
+    def move(instruction: String): Ship = {
+      val direction = Direction.fromChar(instruction.head)
+      val steps     = instruction.tail.toInt
+      this.copy(position = position.move(direction, steps))
     }
+
+    def moveForward(steps: Int): Ship = this.copy(position = position.move(heading, steps))
 
     // Part 2 methods
-    def rotateWaypoint(direction: TurnDirection, degrees: Int): Ship = if (degrees == 0) {
-      this
-    } else {
-      val newDegrees = degrees - 90
-      direction match {
-        case Left  => this.copy(waypoint = (-j, i)).rotateWaypoint(direction, newDegrees)
-        case Right => this.copy(waypoint = (j, -i)).rotateWaypoint(direction, newDegrees)
+    def rotateWaypoint(instruction: String): Ship = {
+      val direction = instruction.head
+      val degrees   = instruction.tail.toInt
+      rotateWaypoint(direction, degrees)
+    }
+
+    @tailrec
+    final def rotateWaypoint(direction: Char, degrees: Int): Ship = {
+      val (x, y) = waypoint.unzip
+      if (degrees == 0) {
+        this
+      } else {
+        val newDegrees = degrees - 90
+        direction match {
+          case 'L' => this.copy(waypoint = Point(-y, x)).rotateWaypoint(direction, newDegrees)
+          case 'R' => this.copy(waypoint = Point(y, -x)).rotateWaypoint(direction, newDegrees)
+          case _   => throw new IllegalArgumentException
+        }
       }
     }
-    def moveWaypoint(heading: Heading, value: Int): Ship = heading match {
-      case North => this.copy(waypoint = (i - value, j))
-      case East  => this.copy(waypoint = (i, j + value))
-      case South => this.copy(waypoint = (i + value, j))
-      case West  => this.copy(waypoint = (i, j - value))
+
+    def moveWaypoint(instruction: String): Ship = {
+      val direction = Direction.fromChar(instruction.head)
+      val steps     = instruction.tail.toInt
+      this.copy(waypoint = waypoint.move(direction, steps))
     }
+
     def moveAroundWaypoint(numberOfMoves: Int): Ship = {
+      val (x, y) = position.unzip
+      val (i, j) = waypoint.unzip
+
       val newX = x + (numberOfMoves * i)
       val newY = y + (numberOfMoves * j)
-      this.copy(position = (newX, newY))
+      this.copy(position = Point(newX, newY))
+    }
+  }
+
+  private object Ship {
+    def initial: Ship = Ship(Point.zero, East, Point(-1, 10))
+  }
+
+  override protected[year2020] def parseInput(file: Source): List[String] = file.getLines().toList
+  override protected[year2020] def part1(input: List[String]): Int        = solution(input, part2 = false)
+  override protected[year2020] def part2(input: List[String]): Int        = solution(input, part2 = true)
+
+  private def solution(input: List[String], part2: Boolean): Int = {
+    @tailrec
+    def helper(directions: List[String], ship: Ship = Ship.initial): Int = directions match {
+      case Nil => ship.position.manhattanDistance(Point.zero)
+      case instruction :: tail =>
+        val updatedShip = instruction.head match {
+          case 'N' | 'E' | 'S' | 'W' => if (part2) ship.moveWaypoint(instruction) else ship.move(instruction)
+          case 'L' | 'R'             => if (part2) ship.rotateWaypoint(instruction) else ship.turn(instruction)
+          case 'F' =>
+            val steps = instruction.tail.toInt
+            if (part2) ship.moveAroundWaypoint(steps) else ship.moveForward(steps)
+          case _ => throw new IllegalArgumentException
+        }
+        helper(tail, updatedShip)
     }
 
-    // Common methods
-    def distanceFromOrigin: Int = x.abs + y.abs
-  }
-
-  private val north = "^N(\\d+)$".r
-  private val east  = "^E(\\d+)$".r
-  private val south = "^S(\\d+)$".r
-  private val west  = "^W(\\d+)$".r
-
-  private val left    = "^L(\\d+)$".r
-  private val right   = "^R(\\d+)$".r
-  private val forward = "^F(\\d+)$".r
-
-  def main(args: Array[String]): Unit = {
-    val input = using("2020/day12.txt")(_.getLines().toList)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
-
-  @tailrec
-  private def part1(directions: List[String], ship: Ship = Ship()): Int = directions match {
-    case Nil => ship.distanceFromOrigin
-    case head :: tail =>
-      val updatedShip = head match {
-        case north(value)   => ship.move(North, value.toInt)
-        case east(value)    => ship.move(East, value.toInt)
-        case south(value)   => ship.move(South, value.toInt)
-        case west(value)    => ship.move(West, value.toInt)
-        case left(value)    => ship.turn(Left, value.toInt)
-        case right(value)   => ship.turn(Right, value.toInt)
-        case forward(value) => ship.move(value.toInt)
-      }
-      part1(tail, updatedShip)
-  }
-
-  @tailrec
-  private def part2(directions: List[String], ship: Ship = Ship()): Int = directions match {
-    case Nil => ship.distanceFromOrigin
-    case head :: tail =>
-      val updatedShip = head match {
-        case north(value)   => ship.moveWaypoint(North, value.toInt)
-        case east(value)    => ship.moveWaypoint(East, value.toInt)
-        case south(value)   => ship.moveWaypoint(South, value.toInt)
-        case west(value)    => ship.moveWaypoint(West, value.toInt)
-        case left(value)    => ship.rotateWaypoint(Left, value.toInt)
-        case right(value)   => ship.rotateWaypoint(Right, value.toInt)
-        case forward(value) => ship.moveAroundWaypoint(value.toInt)
-      }
-      part2(tail, updatedShip)
+    helper(input)
   }
 }

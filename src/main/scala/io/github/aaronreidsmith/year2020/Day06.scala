@@ -1,15 +1,23 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 
-object Day06 {
-  def main(args: Array[String]): Unit = {
-    val input = using("2020/day06.txt")(_.mkString.split("\n\n").toList)
-    val part1 = input.foldLeft(0)(_ + _.replaceAll("\n", "").toSet.size)
-    println(s"Part 1: $part1")
-    val part2 = input.foldLeft(0) { (acc, entry) =>
-      acc + entry.split('\n').map(_.toSet).reduceLeft(_.intersect(_)).size
-    }
-    println(s"Part 2: $part2")
+import scala.io.Source
+
+object Day06 extends Solution(2020, 6) {
+  type I = List[String]
+  type O1 = Int
+  type O2 = Int
+
+  override protected[year2020] def parseInput(file: Source): List[String] = {
+    file.mkString.trim.split("\n\n").toList
+  }
+
+  override protected[year2020] def part1(input: List[String]): Int = {
+    input.foldLeft(0)(_ + _.replaceAll("\n", "").toSet.size)
+  }
+
+  override protected[year2020] def part2(input: List[String]): Int = {
+    input.foldLeft(0)((acc, entry) => acc + entry.split('\n').map(_.toSet).reduceLeft(_.intersect(_)).size)
   }
 }
