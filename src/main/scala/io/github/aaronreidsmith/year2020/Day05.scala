@@ -1,37 +1,32 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
+import scala.io.Source
 
-object Day05 {
-  def main(args: Array[String]): Unit = {
-    val seats   = using("2020/day05.txt")(_.getLines().toList.map(findSeat))
-    val maxSeat = seats.max
-    println(s"Part 1: $maxSeat")
+object Day05 extends Solution(2019, 5) {
+  type I  = List[Int]
+  type O1 = Int
+  type O2 = Int
 
-    val part2 = {
-      val minSeat      = seats.min
-      val allSeats     = (minSeat to maxSeat).toSet
-      val missingSeats = allSeats.diff(seats.toSet)
-      missingSeats.head
-    }
-    println(s"Part 2: $part2")
-  }
-
-  @tailrec
-  private def binarySearch(boardingPass: String, possibleRows: List[Int], lowerSymbol: Char): Int = possibleRows match {
-    case head :: Nil => head
-    case _ =>
-      val halfwayPoint = possibleRows.size / 2
-      if (boardingPass.head == lowerSymbol) {
-        binarySearch(boardingPass.tail, possibleRows.dropRight(halfwayPoint), lowerSymbol)
-      } else {
-        binarySearch(boardingPass.tail, possibleRows.drop(halfwayPoint), lowerSymbol)
-      }
-  }
+  override protected[year2020] def parseInput(file: Source): List[Int] = file.getLines().toList.map(findSeat)
+  override protected[year2020] def part1(input: List[Int]): Int        = input.max
+  override protected[year2020] def part2(input: List[Int]): Int = (input.min to input.max).toSet.diff(input.toSet).head
 
   private def findSeat(boardingPass: String): Int = {
+    @tailrec
+    def binarySearch(boardingPass: String, possibleRows: List[Int], lowerSymbol: Char): Int = possibleRows match {
+      case head :: Nil => head
+      case _ =>
+        val halfwayPoint = possibleRows.size / 2
+        if (boardingPass.head == lowerSymbol) {
+          binarySearch(boardingPass.tail, possibleRows.dropRight(halfwayPoint), lowerSymbol)
+        } else {
+          binarySearch(boardingPass.tail, possibleRows.drop(halfwayPoint), lowerSymbol)
+        }
+    }
+
     val rowDefinition = boardingPass.take(7)
     val colDefinition = boardingPass.drop(7)
     val row           = binarySearch(rowDefinition, (0 until 128).toList, 'F')
