@@ -1,19 +1,24 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Solution, using}
 
 import scala.annotation.tailrec
 import scala.io.Source
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/kgo01p/2020_day_20_solutions/ggkdioo/
-object Day20 {
-  private[year2020] object Orientation extends Enumeration {
+object Day20 extends Solution {
+  type I  = Map[Int, TileData]
+  type O1 = Long
+  type O2 = Int
+
+  // Using an enum instead of a sealed trait so we can call Orientation.values
+  object Orientation extends Enumeration {
     type Orientation = Value
     val Normal, Normal90, Normal180, Normal270, Flipped, Flipped90, Flipped180, Flipped270 = Value
   }
   import Orientation._
 
-  private[year2020] case class TileData(lines: Vector[String]) {
+  case class TileData(lines: Vector[String]) {
     def width: Int  = lines.head.length
     def height: Int = lines.length
 
@@ -26,7 +31,7 @@ object Day20 {
     def flipVertically: TileData = this.copy(lines.map(_.reverse))
 
     def allEdges: Vector[String] = {
-      def flipped = flipVertically
+      def flipped: TileData = flipVertically
       Vector(top, right, bottom, left, flipped.top, flipped.right, flipped.bottom, flipped.left)
     }
 
@@ -68,28 +73,24 @@ object Day20 {
     }
   }
 
-  private case class OrientedTile(tileId: Int, orientation: Orientation)
+  case class OrientedTile(tileId: Int, orientation: Orientation)
 
-  def main(args: Array[String]): Unit = {
-    val input = using("2020/day20.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
+  override def parseInput(file: Source): Map[Int, TileData] = {
+    file.mkString.trim
+      .split("\n\n")
+      .foldLeft(Map.empty[Int, TileData]) { (acc, block) =>
+        val lines  = block.split("\n")
+        val tileId = lines.head.filter(_.isDigit).toInt
+        acc.updated(tileId, TileData(lines.tail.toVector))
+      }
   }
 
-  private[year2020] def parseInput(file: Source): Map[Int, TileData] = {
-    file.mkString.split("\n\n").foldLeft(Map.empty[Int, TileData]) { (acc, block) =>
-      val lines  = block.split("\n")
-      val tileId = lines.head.filter(_.isDigit).toInt
-      acc.updated(tileId, TileData(lines.tail.toVector))
-    }
-  }
-
-  private[year2020] def part1(input: Map[Int, TileData]): Long = {
+  override def part1(input: Map[Int, TileData]): Long = {
     val arranged = arrangeTiles(input)
     Seq(arranged.head.head, arranged.head.last, arranged.last.head, arranged.last.last).foldLeft(1L)(_ * _.tileId)
   }
 
-  private[year2020] def part2(input: Map[Int, TileData]): Int = {
+  override def part2(input: Map[Int, TileData]): Int = {
     val arranged = arrangeTiles(input)
     val merged   = mergeArrangement(input, arranged)
     val monster = TileData(

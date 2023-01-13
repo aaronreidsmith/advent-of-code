@@ -1,24 +1,29 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.annotations.Slow
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
+import scala.io.Source
 
-object Day15 {
-  def main(args: Array[String]): Unit = {
-    val input = using("2020/day15.txt") { file =>
-      file.mkString
-        .split(',')
-        .zipWithIndex
-        .map { case (num, index) => num.toInt -> (index + 1) }
-        .toMap
-    }
+@Slow(part2 = true)
+object Day15 extends Solution {
+  type I  = Int => Int
+  type O1 = Int
+  type O2 = Int
 
-    val solution = playGame(input, input.size + 1, 0, _)
+  override def parseInput(file: Source): Int => Int = {
+    val input = file.mkString.trim
+      .split(',')
+      .zipWithIndex
+      .map { case (num, index) => num.toInt -> (index + 1) }
+      .toMap
 
-    println(s"Part 1: ${solution(2020)}")
-    println(s"Part 2: ${solution(30_000_000)}")
+    playGame(input, input.size + 1, 0, _)
   }
+
+  override def part1(input: Int => Int): Int = input(2020)
+  override def part2(input: Int => Int): Int = input(30_000_000)
 
   @tailrec
   private def playGame(numbers: Map[Int, Int], turn: Int, number: Int, targetTurn: Int): Int = if (turn == targetTurn) {

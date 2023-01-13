@@ -1,26 +1,24 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Solution, using}
 
 import scala.io.Source
 
 // TODO: Don't really like all the `Either`s in here, but it works
-object Day19 {
-  private[year2020] sealed trait Rule
-  private[year2020] case class Letter(value: Char)                 extends Rule
-  private[year2020] case class SubRule(value: Vector[Vector[Int]]) extends Rule
+object Day19 extends Solution {
+  type I  = (Map[Int, Rule], List[String])
+  type O1 = Int
+  type O2 = Int
 
-  def main(args: Array[String]): Unit = {
-    val (rules, messages) = using("2020/day19.txt")(parseInput)
-    println(s"Part 1: ${part1(rules, messages)}")
-    println(s"Part 2: ${part2(rules, messages)}")
-  }
+  sealed trait Rule
+  case class Letter(value: Char)                 extends Rule
+  case class SubRule(value: Vector[Vector[Int]]) extends Rule
 
-  private[year2020] def parseInput(file: Source): (Map[Int, Rule], List[String]) = {
-    val Array(rawRules, rawMessages) = file.mkString.split("\n\n", 2)
+  override def parseInput(file: Source): (Map[Int, Rule], List[String]) = {
+    val Array(rawRules, rawMessages) = file.mkString.trim.split("\n\n", 2)
     val rules = rawRules.split('\n').foldLeft(Map.empty[Int, Rule]) { (acc, line) =>
-      val Array(ruleId, rawContents) = line.split(": ", 2)
-      val contents                   = rawContents.replaceAll("\"", "")
+      val Array(ruleId, rawContents, _*) = line.split(": ", 2)
+      val contents                       = rawContents.replaceAll("\"", "")
       val rule = if (contents.matches("^[a-z]$")) {
         Letter(contents.head)
       } else {
@@ -33,12 +31,14 @@ object Day19 {
     (rules, messages)
   }
 
-  private[year2020] def part1(rules: Map[Int, Rule], messages: List[String]): Int = {
-    val stack = getInitialStack(rules)
+  override def part1(input: (Map[Int, Rule], List[String])): Int = {
+    val (rules, messages) = input
+    val stack             = getInitialStack(rules)
     messages.count(message => isMatch(rules, message, stack))
   }
 
-  private[year2020] def part2(rules: Map[Int, Rule], messages: List[String]): Int = {
+  override def part2(input: (Map[Int, Rule], List[String])): Int = {
+    val (rules, messages) = input
     val updatedRules = rules ++ Map(
       8  -> SubRule(Vector(Vector(42), Vector(42, 8))),
       11 -> SubRule(Vector(Vector(42, 31), Vector(42, 11, 31)))

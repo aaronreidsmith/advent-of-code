@@ -1,11 +1,16 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 
+import scala.io.Source
 import scala.util.parsing.combinator.JavaTokenParsers
 
-object Day18 {
-  private sealed trait Parser extends JavaTokenParsers {
+object Day18 extends Solution {
+  type I  = Parser => Long
+  type O1 = Long
+  type O2 = Long
+
+  sealed trait Parser extends JavaTokenParsers {
     def expr: Parser[Long]
 
     // Concrete methods
@@ -17,36 +22,31 @@ object Day18 {
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    val input = using("2020/day18.txt")(_.getLines().toList)
-
-    val part1Parser = new Parser {
-      override def expr: Parser[Long] =
-        factor ~ rep((optionalWhitespace("+") ~ factor) | (optionalWhitespace("*") ~ factor)) ^^ {
-          case num ~ list =>
-            list.foldLeft(num) {
-              case (acc, "+" ~ y) => acc + y
-              case (acc, "*" ~ y) => acc * y
-              case (acc, _)       => acc
-            }
-        }
-    }
-
-    val part2Parser = new Parser {
-      override def expr: Parser[Long] = term ~ rep(optionalWhitespace("*") ~> term) ^^ {
-        case x ~ y => y.foldLeft(x)(_ * _)
-      }
-
-      private def term: Parser[Long] = factor ~ rep(optionalWhitespace("+") ~> factor) ^^ {
-        case x ~ y => y.foldLeft(x)(_ + _)
-      }
-    }
-
-    println(s"Part 1: ${solution(input, part1Parser)}")
-    println(s"Part 2: ${solution(input, part2Parser)}")
+  override def parseInput(file: Source): Parser => Long = {
+    val expressions = file.getLines().toList
+    parser: Parser => expressions.foldLeft(0L)((acc, line) => acc + parser.parseAll(parser.expr, line).getOrElse(0L))
   }
 
-  private def solution(expressions: List[String], parser: Parser): Long = {
-    expressions.foldLeft(0L)((acc, line) => acc + parser.parseAll(parser.expr, line).getOrElse(0L))
-  }
+  override def part1(input: Parser => Long): Long = input(new Parser {
+    override def expr: Parser[Long] = {
+      factor ~ rep((optionalWhitespace("+") ~ factor) | (optionalWhitespace("*") ~ factor)) ^^ {
+        case num ~ list =>
+          list.foldLeft(num) {
+            case (acc, "+" ~ y) => acc + y
+            case (acc, "*" ~ y) => acc * y
+            case (acc, _)       => acc
+          }
+      }
+    }
+  })
+
+  override def part2(input: Parser => Long): Long = input(new Parser {
+    override def expr: Parser[Long] = term ~ rep(optionalWhitespace("*") ~> term) ^^ {
+      case x ~ y => y.foldLeft(x)(_ * _)
+    }
+
+    private def term: Parser[Long] = factor ~ rep(optionalWhitespace("+") ~> factor) ^^ {
+      case x ~ y => y.foldLeft(x)(_ + _)
+    }
+  })
 }
