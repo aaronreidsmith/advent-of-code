@@ -1,22 +1,22 @@
 package io.github.aaronreidsmith.year2017
 
-import io.github.aaronreidsmith.{Direction, East, North, Point, Solution, South, West}
+import io.github.aaronreidsmith._
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day03 extends Solution(2017, 3) {
+object Day03 extends Solution {
   type I  = Int
   type O1 = Int
   type O2 = Int
 
-  override protected[year2017] def parseInput(file: Source): Int = file.mkString.trim.toInt
+  override def parseInput(file: Source): Int = file.mkString.trim.toInt
 
-  override protected[year2017] def part1(input: Int): Int = {
+  override def part1(input: Int): Int = {
     solution(input, Map(Point(0, 0) -> 1, Point(0, 1) -> 2), part1 = true)
   }
 
-  override protected[year2017] def part2(input: Int): Int = {
+  override def part2(input: Int): Int = {
     solution(input, Map(Point(0, 0) -> 1, Point(0, 1) -> 1), part1 = false)
   }
 

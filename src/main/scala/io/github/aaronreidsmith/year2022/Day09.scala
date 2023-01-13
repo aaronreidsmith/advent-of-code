@@ -1,15 +1,15 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.{Point, Solution, using}
+import io.github.aaronreidsmith.{Point, Solution}
 
 import scala.io.Source
 
-object Day09 extends Solution(2022, 9) {
+object Day09 extends Solution {
   type I = String
   type O1 = Int
   type O2 = Int
 
-  override protected[year2022] def parseInput(file: Source): String = {
+  override def parseInput(file: Source): String = {
     val parsed = new StringBuilder
     file.getLines().foreach { line =>
       val split     = line.split(' ')
@@ -20,8 +20,8 @@ object Day09 extends Solution(2022, 9) {
     parsed.mkString
   }
 
-  override protected[year2022] def part1(input: String): Int = solution(input, 2)
-  override protected[year2022] def part2(input: String): Int = solution(input, 10)
+  override def part1(input: String): Int = solution(input, 2)
+  override def part2(input: String): Int = solution(input, 10)
 
   private def solution(input: String, numKnots: Int): Int = {
     def moveHead(point: Point, direction: Char): Point = direction match {

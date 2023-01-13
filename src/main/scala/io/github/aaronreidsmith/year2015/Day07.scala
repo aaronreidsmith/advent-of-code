@@ -7,7 +7,7 @@ import scala.reflect.runtime.currentMirror
 import scala.tools.reflect.ToolBox
 import scala.util.parsing.combinator.JavaTokenParsers
 
-object Day07 extends Solution(2015, 7) with JavaTokenParsers {
+object Day07 extends Solution with JavaTokenParsers {
   type I  = String
   type O1 = String
   type O2 = String
@@ -31,14 +31,14 @@ object Day07 extends Solution(2015, 7) with JavaTokenParsers {
 
   private def wires(input: String): String = parse(rep(line), input).get.mkString("; ")
 
-  override protected[year2015] def parseInput(file: Source): String = file.getLines().mkString("\n")
+  override def parseInput(file: Source): String = file.getLines().mkString("\n")
 
-  override protected[year2015] def part1(input: String): String = {
+  override def part1(input: String): String = {
     val tree = s"object Part1 { ${wires(input)} }; Part1.a"
     toolBox.eval(toolBox.parse(tree)).toString
   }
 
-  override protected[year2015] def part2(input: String): String = {
+  override def part2(input: String): String = {
     val tree =
       s"""trait Base { ${wires(input)} }
          |object Part1 extends Base

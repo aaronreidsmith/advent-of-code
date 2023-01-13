@@ -4,7 +4,7 @@ import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day08 extends Solution(2019, 8) {
+object Day08 extends Solution {
   type I  = List[String]
   type O1 = Int
   type O2 = String
@@ -13,16 +13,16 @@ object Day08 extends Solution(2019, 8) {
   private val width  = 25
   private val height = 6
 
-  override protected[year2019] def parseInput(file: Source): List[String] = {
+  override def parseInput(file: Source): List[String] = {
     file.mkString.trim.grouped(width * height).toList
   }
 
-  override protected[year2019] def part1(input: List[String]): Int = {
+  override def part1(input: List[String]): Int = {
     val minZeroLayer = input.minBy(_.count(_ == '0'))
     minZeroLayer.count(_ == '1') * minZeroLayer.count(_ == '2')
   }
 
-  override protected[year2019] def part2(input: List[String]): String = {
+  override def part2(input: List[String]): String = {
     val image = input.transpose // Transpose so each sub-list is based on position
       .map { position => // Find the first non-two character in each position
         position

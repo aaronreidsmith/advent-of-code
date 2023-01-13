@@ -4,13 +4,13 @@ import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day16 extends Solution(2018, 16) {
+object Day16 extends Solution {
   type I  = (List[Scenario], String)
   type O1 = Int
   type O2 = Int
 
-  protected[year2018] case class OpCode(id: Int, a: Int, b: Int, c: Int)
-  protected[year2018] case class Scenario(before: Map[Int, Int], opCode: OpCode, after: Map[Int, Int] = Map()) {
+  case class OpCode(id: Int, a: Int, b: Int, c: Int)
+  case class Scenario(before: Map[Int, Int], opCode: OpCode, after: Map[Int, Int] = Map()) {
     lazy val instructions: Map[String, Map[Int, Int]] = Map(
       // Addition
       "addr" -> before.updated(opCode.c, before(opCode.a) + before(opCode.b)),
@@ -61,7 +61,7 @@ object Day16 extends Solution(2018, 16) {
     }
   }
 
-  override protected[year2018] def parseInput(file: Source): (List[Scenario], String) = {
+  override def parseInput(file: Source): (List[Scenario], String) = {
     val Array(samples, program, _*) = file.mkString.trim.split("\n\n\n\n")
     val scenarios = samples.split("\n\n").toList.map { scenario =>
       val Array(before, opCode, after, _*) = scenario.split('\n')
@@ -70,7 +70,7 @@ object Day16 extends Solution(2018, 16) {
     (scenarios, program)
   }
 
-  override protected[year2018] def part1(input: (List[Scenario], String)): Int = {
+  override def part1(input: (List[Scenario], String)): Int = {
     val (scenarios, _) = input
     scenarios.count { scenario =>
       val valid = scenario.all.filter(_ == scenario.after)
@@ -79,7 +79,7 @@ object Day16 extends Solution(2018, 16) {
   }
 
   // Lil hacky because I didn't wanna refactor after part 1, lol
-  override protected[year2018] def part2(input: (List[Scenario], String)): Int = {
+  override def part2(input: (List[Scenario], String)): Int = {
     def determineOpCodes(scenarios: Seq[Scenario]): Map[Int, String] = {
       val initial = (0 to 15).map(_ -> scenarios.head.instructions.keys.toSet).toMap
       scenarios

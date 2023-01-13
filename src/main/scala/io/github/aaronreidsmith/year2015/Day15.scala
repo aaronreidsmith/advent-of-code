@@ -4,12 +4,12 @@ import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day15 extends Solution(2015, 15) {
+object Day15 extends Solution {
   type I  = List[Ingredient]
   type O1 = Int
   type O2 = Int
 
-  private[year2015] case class Ingredient(
+  case class Ingredient(
       name: String,
       capacity: Int,
       durability: Int,
@@ -18,7 +18,7 @@ object Day15 extends Solution(2015, 15) {
       calories: Int
   )
 
-  private case class Cookie(ingredients: List[Ingredient]) {
+  case class Cookie(ingredients: List[Ingredient]) {
     require(ingredients.length == 100)
 
     lazy val score: Int = {
@@ -33,9 +33,9 @@ object Day15 extends Solution(2015, 15) {
     lazy val calories: Int = ingredients.foldLeft(0)(_ + _.calories)
   }
 
-  override protected[year2015] def parseInput(file: Source): List[Ingredient] = {
+  override def parseInput(file: Source): List[Ingredient] = {
     val ingredient =
-      "^(.*?): capacity (-?\\d+), durability (-?\\d+), flavor (-?\\d+), texture (-?\\d+), calories (-?\\d+)$".r
+      """^(.*?): capacity (-?\d+), durability (-?\d+), flavor (-?\d+), texture (-?\d+), calories (-?\d+)$""".r
     file.getLines().foldLeft(List.empty[Ingredient]) {
       case (acc, ingredient(name, capacity, durability, flavor, texture, calories)) =>
         Ingredient(name, capacity.toInt, durability.toInt, flavor.toInt, texture.toInt, calories.toInt) :: acc
@@ -43,7 +43,7 @@ object Day15 extends Solution(2015, 15) {
     }
   }
 
-  override protected[year2015] def part1(choices: List[Ingredient]): Int = {
+  override def part1(choices: List[Ingredient]): Int = {
     val ingredients = List.fill(100)(choices).flatten
     ingredients.combinations(100).foldLeft(0) { (currentBest, combination) =>
       val cookie = Cookie(combination)
@@ -51,7 +51,7 @@ object Day15 extends Solution(2015, 15) {
     }
   }
 
-  override protected[year2015] def part2(choices: List[Ingredient]): Int = {
+  override def part2(choices: List[Ingredient]): Int = {
     val ingredients = List.fill(100)(choices).flatten
     ingredients.combinations(100).foldLeft(0) { (currentBest, combination) =>
       val cookie = Cookie(combination)

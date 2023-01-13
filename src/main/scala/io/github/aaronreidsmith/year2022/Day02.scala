@@ -1,22 +1,22 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day02 extends Solution(2022, 2) {
+object Day02 extends Solution {
   type I = List[(Char, Char)]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2022] def parseInput(file: Source): List[(Char, Char)] = {
+  override def parseInput(file: Source): List[(Char, Char)] = {
     file
       .getLines()
       .map(line => (line.head, line.last))
       .toList
   }
 
-  override protected[year2022] def part1(rounds: List[(Char, Char)]): Int = rounds.foldLeft(0) {
+  override def part1(rounds: List[(Char, Char)]): Int = rounds.foldLeft(0) {
     case (acc, (opponent, player)) =>
       val score = (opponent, player) match {
         case ('A', 'X') => 4 // Rock, Rock (3 + 1)
@@ -34,7 +34,7 @@ object Day02 extends Solution(2022, 2) {
     case (acc, _) => acc
   }
 
-  override protected[year2022] def part2(rounds: List[(Char, Char)]): Int = rounds.foldLeft(0) {
+  override def part2(rounds: List[(Char, Char)]): Int = rounds.foldLeft(0) {
     case (acc, (opponent, outcome)) =>
       val score = (opponent, outcome) match {
         case ('A', 'X') => 3 // They chose Rock, I chose Scissors to Lose (3 + 0)

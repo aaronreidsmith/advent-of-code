@@ -5,17 +5,17 @@ import io.github.aaronreidsmith._
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day13 extends Solution(2018, 13) {
+object Day13 extends Solution {
   type I  = (Vector[String], Vector[Cart])
   type O1 = String
   type O2 = String
 
-  private[year2018] sealed trait Turn
-  private case object Left     extends Turn
-  private case object Right    extends Turn
-  private case object Straight extends Turn
+  sealed trait Turn
+  case object Left     extends Turn
+  case object Right    extends Turn
+  case object Straight extends Turn
 
-  protected[year2018] case class Cart(
+  case class Cart(
       position: Point,
       direction: Direction,
       currentTurn: Turn = Left,
@@ -29,7 +29,7 @@ object Day13 extends Solution(2018, 13) {
     }
   }
 
-  override protected[year2018] def parseInput(file: Source): (Vector[String], Vector[Cart]) = {
+  override def parseInput(file: Source): (Vector[String], Vector[Cart]) = {
     file.getLines().zipWithIndex.foldLeft((Vector.empty[String], Vector.empty[Cart])) {
       case ((track, carts), (line, row)) =>
         val newCarts = line.zipWithIndex.collect {
@@ -41,7 +41,7 @@ object Day13 extends Solution(2018, 13) {
     }
   }
 
-  override protected[year2018] def part1(input: (Vector[String], Vector[Cart])): String = {
+  override def part1(input: (Vector[String], Vector[Cart])): String = {
     val (track, initialCarts) = input
 
     @tailrec
@@ -75,7 +75,7 @@ object Day13 extends Solution(2018, 13) {
     helper(initialCarts)
   }
 
-  override protected[year2018] def part2(input: (Vector[String], Vector[Cart])): String = {
+  override def part2(input: (Vector[String], Vector[Cart])): String = {
     val (track, initialCarts) = input
 
     @tailrec

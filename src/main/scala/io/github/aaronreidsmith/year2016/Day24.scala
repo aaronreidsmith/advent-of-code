@@ -9,12 +9,12 @@ import scala.io.Source
 import scala.jdk.CollectionConverters._
 
 // The majority of this is adapted from https://www.reddit.com/r/adventofcode/comments/5k1he1/comment/dbknd6b
-object Day24 extends Solution(2016, 24) {
+object Day24 extends Solution {
   type I  = DefaultUndirectedGraph[(Point, Char), DefaultEdge]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2016] def parseInput(file: Source): DefaultUndirectedGraph[(Point, Char), DefaultEdge] = {
+  override def parseInput(file: Source): DefaultUndirectedGraph[(Point, Char), DefaultEdge] = {
     val grid  = file.toGrid
     val graph = new DefaultUndirectedGraph[(Point, Char), DefaultEdge](classOf[DefaultEdge])
     grid.foreach {
@@ -32,10 +32,10 @@ object Day24 extends Solution(2016, 24) {
     graph
   }
 
-  override protected[year2016] def part1(input: DefaultUndirectedGraph[(Point, Char), DefaultEdge]): Int = {
+  override def part1(input: DefaultUndirectedGraph[(Point, Char), DefaultEdge]): Int = {
     solution(input)._1
   }
-  override protected[year2016] def part2(input: DefaultUndirectedGraph[(Point, Char), DefaultEdge]): Int = {
+  override def part2(input: DefaultUndirectedGraph[(Point, Char), DefaultEdge]): Int = {
     solution(input)._2
   }
 

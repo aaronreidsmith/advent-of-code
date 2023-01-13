@@ -4,12 +4,12 @@ import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day02 extends Solution(2015, 2) {
+object Day02 extends Solution {
   type I  = List[Box]
   type O1 = Int
   type O2 = Int
 
-  private[year2015] case class Box(width: Int, height: Int, length: Int) {
+  case class Box(width: Int, height: Int, length: Int) {
     private lazy val lw           = length * width
     private lazy val wh           = width * height
     private lazy val hl           = height * length
@@ -22,7 +22,7 @@ object Day02 extends Solution(2015, 2) {
     lazy val ribbon: Int      = smallestPerimeter + volume
   }
 
-  override protected[year2015] def parseInput(file: Source): List[Box] = {
+  override def parseInput(file: Source): List[Box] = {
     val box = "^(\\d+)x(\\d+)x(\\d+)$".r
 
     file.getLines().foldLeft(List.empty[Box]) { (acc, line) =>
@@ -33,6 +33,6 @@ object Day02 extends Solution(2015, 2) {
       newBox :: acc
     }
   }
-  override protected[year2015] def part1(boxes: List[Box]): Int = boxes.foldLeft(0)(_ + _.surfaceArea)
-  override protected[year2015] def part2(boxes: List[Box]): Int = boxes.foldLeft(0)(_ + _.ribbon)
+  override def part1(boxes: List[Box]): Int = boxes.foldLeft(0)(_ + _.surfaceArea)
+  override def part2(boxes: List[Box]): Int = boxes.foldLeft(0)(_ + _.ribbon)
 }

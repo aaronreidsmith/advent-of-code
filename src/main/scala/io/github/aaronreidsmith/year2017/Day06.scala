@@ -1,18 +1,18 @@
 package io.github.aaronreidsmith.year2017
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.collection.mutable
 import scala.io.Source
 
-object Day06 extends Solution(2017, 6) {
+object Day06 extends Solution {
   type I  = List[Int]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2017] def parseInput(file: Source): List[Int] = file.mkString.trim.split('\t').map(_.toInt).toList
+  override def parseInput(file: Source): List[Int] = file.mkString.trim.split('\t').map(_.toInt).toList
 
-  override protected[year2017] def part1(input: List[Int]): Int = {
+  override def part1(input: List[Int]): Int = {
     val seen       = mutable.Set.empty[List[Int]]
     var state      = input
     var iterations = 0
@@ -24,7 +24,7 @@ object Day06 extends Solution(2017, 6) {
     iterations
   }
 
-  override protected[year2017] def part2(input: List[Int]): Int = {
+  override def part2(input: List[Int]): Int = {
     // Redo part 1 to get to infinite state
     val seen  = mutable.Set.empty[List[Int]]
     var state = input

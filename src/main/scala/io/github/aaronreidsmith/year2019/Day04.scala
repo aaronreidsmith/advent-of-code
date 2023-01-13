@@ -5,7 +5,7 @@ import io.github.aaronreidsmith.implicits._
 
 import scala.io.Source
 
-object Day04 extends Solution(2019, 4) {
+object Day04 extends Solution {
   type I  = Range
   type O1 = Int
   type O2 = Int
@@ -23,16 +23,16 @@ object Day04 extends Solution(2019, 4) {
     def hasExactDoubleDigits: Boolean = hasDoubleDigits && string.letterOccurrences.values.exists(_ == 2)
   }
 
-  override protected[year2019] def parseInput(file: Source): Range = {
+  override def parseInput(file: Source): Range = {
     val Array(min, max, _*) = file.mkString.trim.split('-')
     min.toInt to max.toInt
   }
 
-  override protected[year2019] def part1(range: Range): Int = range.count { num =>
+  override def part1(range: Range): Int = range.count { num =>
     num.hasDoubleDigits && num.alwaysIncreasing
   }
 
-  override protected[year2019] def part2(range: Range): Int = range.count { num =>
+  override def part2(range: Range): Int = range.count { num =>
     num.hasExactDoubleDigits && num.alwaysIncreasing
   }
 }

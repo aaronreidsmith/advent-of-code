@@ -4,7 +4,7 @@ import io.github.aaronreidsmith.{Point, Solution}
 
 import scala.io.Source
 
-object Day17 extends Solution(2019, 17) {
+object Day17 extends Solution {
   type I  = IntCode
   type O1 = Int
   type O2 = Long
@@ -16,14 +16,12 @@ object Day17 extends Solution(2019, 17) {
     }
   }
 
-  override protected[year2019] def parseInput(file: Source): IntCode = IntCode(file)
-  override protected[year2019] def part1(input: IntCode): Int = {
+  override def parseInput(file: Source): IntCode = IntCode(file)
+  override def part1(input: IntCode): Int = {
     val grid = input.allOutput.foldLeft(List(List.empty[Char])) {
       case (acc, output) if output == 10L => acc :+ Nil
       case (acc, output)                  => acc.init :+ (acc.last :+ output.toChar)
     }
-
-    // printGrid(grid)
 
     val map = {
       for {
@@ -38,7 +36,7 @@ object Day17 extends Solution(2019, 17) {
     }
   }
 
-  override protected[year2019] def part2(input: IntCode): Long = {
+  override def part2(input: IntCode): Long = {
     /* Did these all by hand based on output of `printGrid`
      *
      * Full routine: L,10,L,8,R,8,L,8,R,6,L,10,L,8,R,8,L,8,R,6,R,6,R,8,R,8,R,6,R,6,L,8,L,10,R,6,R,8,R,8,R,6,R,6,L,8,L,10,R,6,R,8,R,8,R,6,R,6,L,8,L,10,R,6,R,8,R,8,L,10,L,8,R,8,L,8,R,6

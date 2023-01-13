@@ -5,14 +5,14 @@ import io.github.aaronreidsmith.Solution
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day23 extends Solution(2019, 23) {
+object Day23 extends Solution {
   type I  = Network
   type O1 = Long
   type O2 = Long
 
-  private[year2019] case class State(computer: IntCode, input: Vector[Long], output: Vector[Long])
-  private[year2019] type NAT     = Vector[Long]
-  private[year2019] type Network = Vector[State]
+  case class State(computer: IntCode, input: Vector[Long], output: Vector[Long])
+  type NAT     = Vector[Long]
+  type Network = Vector[State]
   private implicit class NetworkOps(network: Network) {
     def step(nat: NAT): (Network, NAT) = {
       val nextNetwork = network.map { state =>
@@ -51,12 +51,12 @@ object Day23 extends Solution(2019, 23) {
     }
   }
 
-  override protected[year2019] def parseInput(file: Source): Network = {
+  override def parseInput(file: Source): Network = {
     val intCode = IntCode(file)
     Vector.tabulate(50)(n => State(intCode, Vector(n), Vector()))
   }
 
-  override protected[year2019] def part1(input: Network): Long = {
+  override def part1(input: Network): Long = {
     @tailrec
     def helper(network: Network, nat: NAT = Vector()): Long = network.step(nat) match {
       case (_, Seq(_, y))         => y
@@ -66,7 +66,7 @@ object Day23 extends Solution(2019, 23) {
     helper(input)
   }
 
-  override protected[year2019] def part2(input: Network): Long = {
+  override def part2(input: Network): Long = {
     @tailrec
     def helper(network: Network, nat: NAT = Vector(), idleCount: Int = 0, previousIdleY: Option[Long] = None): Long = {
       val (nextNetwork, nextNat, nextIdleCount, nextIdleY) = if (idleCount < 700) {

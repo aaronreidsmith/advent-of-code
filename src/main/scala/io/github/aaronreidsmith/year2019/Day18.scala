@@ -8,12 +8,12 @@ import scala.collection.mutable
 import scala.io.Source
 
 @Slow(part1 = true, part2 = true)
-object Day18 extends Solution(2019, 18) {
+object Day18 extends Solution {
   type I  = Grid[Char]
   type O1 = Int
   type O2 = Int
 
-  private case class Move(from: Point, to: Point, cost: Int, neededKeys: Set[Char])
+  case class Move(from: Point, to: Point, cost: Int, neededKeys: Set[Char])
 
   private implicit class CharOps(char: Char) {
     def isDoor: Boolean  = 'A' <= char && char <= 'Z'
@@ -22,9 +22,9 @@ object Day18 extends Solution(2019, 18) {
     def isWall: Boolean  = char == '#'
   }
 
-  override protected[year2019] def parseInput(file: Source): Grid[Char] = file.toGrid
-  override protected[year2019] def part1(input: Grid[Char]): Int        = solution(input)
-  override protected[year2019] def part2(input: Grid[Char]): Int = {
+  override def parseInput(file: Source): Grid[Char] = file.toGrid
+  override def part1(input: Grid[Char]): Int        = solution(input)
+  override def part2(input: Grid[Char]): Int = {
     val robot = input.collectFirst { case (point, char) if char.isRobot => point }.get
     val patch = Map(
       robot.up.left    -> '@',

@@ -1,17 +1,17 @@
 package io.github.aaronreidsmith.year2017
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 import io.github.aaronreidsmith.implicits._
 
 import scala.collection.mutable
 import scala.io.Source
 
-object Day12 extends Solution(2017, 12) {
+object Day12 extends Solution {
   type I  = Map[Int, List[Int]]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2017] def parseInput(file: Source): Map[Int, List[Int]] = {
+  override def parseInput(file: Source): Map[Int, List[Int]] = {
     val pipeEntry = """^(\d+) <-> (.*)""".r
     file.getLines().foldLeft(Map.empty[Int, List[Int]]) {
       case (acc, pipeEntry(pipe, neighbors)) =>
@@ -22,8 +22,8 @@ object Day12 extends Solution(2017, 12) {
     }
   }
 
-  override protected[year2017] def part1(input: Map[Int, List[Int]]): Int = findConnected(input, 0).size
-  override protected[year2017] def part2(input: Map[Int, List[Int]]): Int = {
+  override def part1(input: Map[Int, List[Int]]): Int = findConnected(input, 0).size
+  override def part2(input: Map[Int, List[Int]]): Int = {
     var groups   = 0
     val programs = input.toMutable
     while (programs.nonEmpty) {

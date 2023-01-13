@@ -5,13 +5,13 @@ import io.github.aaronreidsmith._
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day01 extends Solution(2016, 1) {
+object Day01 extends Solution {
   type I  = List[Instruction]
   type O1 = Int
   type O2 = Int
 
-  private[year2016] case class Instruction(direction: Char, steps: Int)
-  private case class State(facing: Direction, position: Point, visited: Vector[Point] = Vector()) {
+  case class Instruction(direction: Char, steps: Int)
+  case class State(facing: Direction, position: Point, visited: Vector[Point] = Vector()) {
     @tailrec
     final def move(instruction: Instruction): State = instruction.direction match {
       case 'R' =>
@@ -45,18 +45,18 @@ object Day01 extends Solution(2016, 1) {
     def origin: State = State(North, Point.zero)
   }
 
-  override protected[year2016] def parseInput(file: Source): List[Instruction] = {
+  override def parseInput(file: Source): List[Instruction] = {
     file.mkString.trim
       .split(", ")
       .map(entry => Instruction(entry.head, entry.tail.toInt))
       .toList
   }
 
-  override protected[year2016] def part1(input: List[Instruction]): Int = {
+  override def part1(input: List[Instruction]): Int = {
     traverse(input).position.manhattanDistance(Point.zero)
   }
 
-  override protected[year2016] def part2(input: List[Instruction]): Int = {
+  override def part2(input: List[Instruction]): Int = {
     @tailrec
     def helper(points: Vector[Point], seen: Set[Point] = Set()): Int = {
       val head +: tail = points

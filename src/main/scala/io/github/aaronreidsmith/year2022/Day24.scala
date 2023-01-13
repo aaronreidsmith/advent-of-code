@@ -6,7 +6,7 @@ import scala.collection.mutable
 import scala.io.Source
 
 // Adapted from https://old.reddit.com/r/adventofcode/comments/zu28ij/2022_day_24_solutions/j1gs2ap/
-object Day24 extends Solution(2022, 24) {
+object Day24 extends Solution {
   type I  = (Int, Int, Set[Blizzard], Set[Wall])
   type O1 = Int
   type O2 = Int
@@ -18,10 +18,10 @@ object Day24 extends Solution(2022, 24) {
     def mod(m: Int): Int = ((n % m) + m) % m
   }
 
-  private[year2022] case class Blizzard(x: Int, y: Int, dx: Int, dy: Int)
-  private[year2022] type Wall = (Int, Int) // Would prefer a case class, but this works nicer elsewhere
+  case class Blizzard(x: Int, y: Int, dx: Int, dy: Int)
+  type Wall = (Int, Int) // Would prefer a case class, but this works nicer elsewhere
 
-  override protected[year2022] def parseInput(file: Source): (Int, Int, Set[Blizzard], Set[Wall]) = {
+  override def parseInput(file: Source): (Int, Int, Set[Blizzard], Set[Wall]) = {
     val blizzards = mutable.Set.empty[Blizzard]
     val walls     = mutable.Set.empty[Wall]
     for {
@@ -49,12 +49,12 @@ object Day24 extends Solution(2022, 24) {
     (maxX, maxY, blizzards.toSet, walls.toSet)
   }
 
-  override protected[year2022] def part1(input: (Int, Int, Set[Blizzard], Set[Wall])): Int = {
+  override def part1(input: (Int, Int, Set[Blizzard], Set[Wall])): Int = {
     val (maxX, maxY, blizzards, walls) = input
     solution(maxX, maxY, blizzards, walls)._1
   }
 
-  override protected[year2022] def part2(input: (Int, Int, Set[Blizzard], Set[Wall])): Int = {
+  override def part2(input: (Int, Int, Set[Blizzard], Set[Wall])): Int = {
     val (maxX, maxY, blizzards, walls) = input
     solution(maxX, maxY, blizzards, walls)._2
   }

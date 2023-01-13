@@ -5,19 +5,19 @@ import io.github.aaronreidsmith.Solution
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day04 extends Solution(2016, 4) {
+object Day04 extends Solution {
   type I  = List[String]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2016] def parseInput(file: Source): List[String] = file.getLines().toList
+  override def parseInput(file: Source): List[String] = file.getLines().toList
 
-  override protected[year2016] def part1(input: List[String]): Int = input.foldLeft(0) { (acc, line) =>
+  override def part1(input: List[String]): Int = input.foldLeft(0) { (acc, line) =>
     val (_, sectorId, _) = filterAndExtract(line)
     acc + sectorId
   }
 
-  override protected[year2016] def part2(input: List[String]): Int = {
+  override def part2(input: List[String]): Int = {
     val target = if (isTest) "very encrypted name" else "northpole object storage"
     input
       .foldLeft(Vector.empty[(String, Int)]) { (acc, line) =>
@@ -36,7 +36,7 @@ object Day04 extends Solution(2016, 4) {
   }
 
   private def filterAndExtract(doorId: String): (String, Int, String) = {
-    val entry = "^([a-z-]+)-([0-9]+)\\[([a-z]+)]$".r
+    val entry = """^([a-z-]+)-([0-9]+)\[([a-z]+)]$""".r
     doorId match {
       case entry(name, sectorId, checksum) =>
         val top5 = name

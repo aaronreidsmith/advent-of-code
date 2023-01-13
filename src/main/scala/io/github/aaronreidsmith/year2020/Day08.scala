@@ -5,27 +5,27 @@ import io.github.aaronreidsmith.Solution
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day08 extends Solution(2020, 8) {
+object Day08 extends Solution {
   type I  = Vector[Cell]
   type O1 = Int
   type O2 = Int
 
-  private sealed trait RunType
-  private case object Terminal extends RunType
-  private case object Infinite extends RunType
+  sealed trait RunType
+  case object Terminal extends RunType
+  case object Infinite extends RunType
 
-  private[year2020] case class Cell(operation: String, value: Int, visited: Boolean = false)
+  case class Cell(operation: String, value: Int, visited: Boolean = false)
 
-  override protected[year2020] def parseInput(file: Source): Vector[Cell] = {
+  override def parseInput(file: Source): Vector[Cell] = {
     file.getLines().toVector.map { line =>
       val Array(operation, value, _*) = line.split(' ')
       Cell(operation, value.toInt)
     }
   }
 
-  override protected[year2020] def part1(input: Vector[Cell]): Int = accumulate(input, part2 = false)._1
+  override def part1(input: Vector[Cell]): Int = accumulate(input, part2 = false)._1
 
-  override protected[year2020] def part2(input: Vector[Cell]): Int = {
+  override def part2(input: Vector[Cell]): Int = {
     input.zipWithIndex
       .collect {
         case (cell, index) if cell.operation == "nop" =>

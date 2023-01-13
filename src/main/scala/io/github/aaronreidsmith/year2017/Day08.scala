@@ -1,17 +1,17 @@
 package io.github.aaronreidsmith.year2017
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day08 extends Solution(2017, 8) {
+object Day08 extends Solution {
   type I  = List[String]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2017] def parseInput(file: Source): List[String] = file.getLines().toList
-  override protected[year2017] def part1(input: List[String]): Int        = solution(input)._1
-  override protected[year2017] def part2(input: List[String]): Int        = solution(input)._2
+  override def parseInput(file: Source): List[String] = file.getLines().toList
+  override def part1(input: List[String]): Int        = solution(input)._1
+  override def part2(input: List[String]): Int        = solution(input)._2
 
   // Both parts of the solution require the same traversal, so might as well only do it once
   private var part1Solution = 0

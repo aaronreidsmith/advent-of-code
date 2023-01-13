@@ -7,14 +7,14 @@ import scala.io.Source
 import scala.util.control.Breaks._
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/a86jgt/comment/ec8frrd
-object Day21 extends Solution(2018, 21) {
+object Day21 extends Solution {
   type I  = List[String] // Unused
   type O1 = Long
   type O2 = Long
 
-  override protected[year2018] def parseInput(file: Source): List[String] = file.getLines().toList
-  override protected[year2018] def part1(input: List[String]): Long       = solution(input)._1
-  override protected[year2018] def part2(input: List[String]): Long       = solution(input)._2
+  override def parseInput(file: Source): List[String] = file.getLines().toList
+  override def part1(input: List[String]): Long       = solution(input)._1
+  override def part2(input: List[String]): Long       = solution(input)._2
 
   private var answer = (0L, 0L)
   private var solved = false

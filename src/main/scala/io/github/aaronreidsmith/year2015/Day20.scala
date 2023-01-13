@@ -4,14 +4,14 @@ import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day20 extends Solution(2015, 20) {
+object Day20 extends Solution {
   type I  = Int
   type O1 = Int
   type O2 = Int
 
-  override protected[year2015] def parseInput(file: Source): Int = file.mkString.trim.toInt
+  override def parseInput(file: Source): Int = file.mkString.trim.toInt
 
-  override protected[year2015] def part1(input: Int): Int = {
+  override def part1(input: Int): Int = {
     def presents(houseNumber: Int): Int = (1 to math.sqrt(houseNumber).toInt)
       .foldLeft(Set.empty[Int]) {
         case (acc, n) if houseNumber % n == 0 => acc ++ Set(n, houseNumber / n)
@@ -21,7 +21,7 @@ object Day20 extends Solution(2015, 20) {
     solution(input, presents)
   }
 
-  override protected[year2015] def part2(input: Int): Int = {
+  override def part2(input: Int): Int = {
     def presents(houseNumber: Int): Int = (1 to 50).foldLeft(0) {
       case (acc, i) if i <= houseNumber && houseNumber % i == 0 => acc + (houseNumber / i)
       case (acc, _) => acc

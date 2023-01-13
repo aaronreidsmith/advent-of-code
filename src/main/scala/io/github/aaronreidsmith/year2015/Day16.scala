@@ -4,12 +4,12 @@ import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day16 extends Solution(2015, 16) {
+object Day16 extends Solution {
   type I  = List[Sue]
   type O1 = Int
   type O2 = Int
 
-  private[year2015] case class Sue(
+  case class Sue(
       number: Int,
       children: Option[Int] = None,
       cats: Option[Int] = None,
@@ -23,18 +23,18 @@ object Day16 extends Solution(2015, 16) {
       perfumes: Option[Int] = None
   )
 
-  override protected[year2015] def parseInput(file: Source): List[Sue] = {
-    val sue         = "^Sue (\\d+): (.*)$".r
-    val children    = "^children: (\\d+)$".r
-    val cats        = "^cats: (\\d+)$".r
-    val samoyeds    = "^samoyeds: (\\d+)$".r
-    val pomeranians = "^pomeranians: (\\d+)$".r
-    val akitas      = "^akitas: (\\d+)$".r
-    val vizslas     = "^vizslas: (\\d+)$".r
-    val goldfish    = "^goldfish: (\\d+)$".r
-    val trees       = "^trees: (\\d+)$".r
-    val cars        = "^cars: (\\d+)$".r
-    val perfumes    = "^perfumes: (\\d+)$".r
+  override def parseInput(file: Source): List[Sue] = {
+    val sue         = """^Sue (\d+): (.*)$""".r
+    val children    = """^children: (\d+)$""".r
+    val cats        = """^cats: (\d+)$""".r
+    val samoyeds    = """^samoyeds: (\d+)$""".r
+    val pomeranians = """^pomeranians: (\d+)$""".r
+    val akitas      = """^akitas: (\d+)$""".r
+    val vizslas     = """^vizslas: (\d+)$""".r
+    val goldfish    = """^goldfish: (\d+)$""".r
+    val trees       = """^trees: (\d+)$""".r
+    val cars        = """^cars: (\d+)$""".r
+    val perfumes    = """^perfumes: (\d+)$""".r
 
     file.getLines().foldLeft(List.empty[Sue]) {
       case (acc, sue(num, characteristics)) =>
@@ -54,45 +54,49 @@ object Day16 extends Solution(2015, 16) {
           }
         }
         newSue :: acc
-      case _ => throw new IllegalArgumentException
+      case (acc, _) => acc
     }
   }
 
-  override protected[year2015] def part1(sues: List[Sue]): Int = sues
-    .filter { sue =>
-      val childCheck      = sue.children.fold(true)(_ == 3)
-      val catCheck        = sue.cats.fold(true)(_ == 7)
-      val samoyedCheck    = sue.samoyeds.fold(true)(_ == 2)
-      val pomeranianCheck = sue.pomeranians.fold(true)(_ == 3)
-      val akitaCheck      = sue.akitas.fold(true)(_ == 0)
-      val vizslaCheck     = sue.vizslas.fold(true)(_ == 0)
-      val goldfishCheck   = sue.goldfish.fold(true)(_ == 5)
-      val treeCheck       = sue.trees.fold(true)(_ == 3)
-      val carCheck        = sue.cars.fold(true)(_ == 2)
-      val perfumeCheck    = sue.perfumes.fold(true)(_ == 1)
+  override def part1(sues: List[Sue]): Int = {
+    sues
+      .filter { sue =>
+        val childCheck      = sue.children.fold(true)(_ == 3)
+        val catCheck        = sue.cats.fold(true)(_ == 7)
+        val samoyedCheck    = sue.samoyeds.fold(true)(_ == 2)
+        val pomeranianCheck = sue.pomeranians.fold(true)(_ == 3)
+        val akitaCheck      = sue.akitas.fold(true)(_ == 0)
+        val vizslaCheck     = sue.vizslas.fold(true)(_ == 0)
+        val goldfishCheck   = sue.goldfish.fold(true)(_ == 5)
+        val treeCheck       = sue.trees.fold(true)(_ == 3)
+        val carCheck        = sue.cars.fold(true)(_ == 2)
+        val perfumeCheck    = sue.perfumes.fold(true)(_ == 1)
 
-      childCheck && catCheck && samoyedCheck && pomeranianCheck && akitaCheck &&
-      vizslaCheck && goldfishCheck && treeCheck && carCheck && perfumeCheck
-    }
-    .head
-    .number
+        childCheck && catCheck && samoyedCheck && pomeranianCheck && akitaCheck &&
+          vizslaCheck && goldfishCheck && treeCheck && carCheck && perfumeCheck
+      }
+      .head
+      .number
+  }
 
-  override protected[year2015] def part2(sues: List[Sue]): Int = sues
-    .filter { sue =>
-      val childCheck      = sue.children.fold(true)(_ == 3)
-      val catCheck        = sue.cats.fold(true)(_ > 7)
-      val samoyedCheck    = sue.samoyeds.fold(true)(_ == 2)
-      val pomeranianCheck = sue.pomeranians.fold(true)(_ < 3)
-      val akitaCheck      = sue.akitas.fold(true)(_ == 0)
-      val vizslaCheck     = sue.vizslas.fold(true)(_ == 0)
-      val goldfishCheck   = sue.goldfish.fold(true)(_ < 5)
-      val treeCheck       = sue.trees.fold(true)(_ > 3)
-      val carCheck        = sue.cars.fold(true)(_ == 2)
-      val perfumeCheck    = sue.perfumes.fold(true)(_ == 1)
+  override def part2(sues: List[Sue]): Int = {
+    sues
+      .filter { sue =>
+        val childCheck      = sue.children.fold(true)(_ == 3)
+        val catCheck        = sue.cats.fold(true)(_ > 7)
+        val samoyedCheck    = sue.samoyeds.fold(true)(_ == 2)
+        val pomeranianCheck = sue.pomeranians.fold(true)(_ < 3)
+        val akitaCheck      = sue.akitas.fold(true)(_ == 0)
+        val vizslaCheck     = sue.vizslas.fold(true)(_ == 0)
+        val goldfishCheck   = sue.goldfish.fold(true)(_ < 5)
+        val treeCheck       = sue.trees.fold(true)(_ > 3)
+        val carCheck        = sue.cars.fold(true)(_ == 2)
+        val perfumeCheck    = sue.perfumes.fold(true)(_ == 1)
 
-      childCheck && catCheck && samoyedCheck && pomeranianCheck && akitaCheck &&
-      vizslaCheck && goldfishCheck && treeCheck && carCheck && perfumeCheck
-    }
-    .head
-    .number
+        childCheck && catCheck && samoyedCheck && pomeranianCheck && akitaCheck &&
+          vizslaCheck && goldfishCheck && treeCheck && carCheck && perfumeCheck
+      }
+      .head
+      .number
+  }
 }

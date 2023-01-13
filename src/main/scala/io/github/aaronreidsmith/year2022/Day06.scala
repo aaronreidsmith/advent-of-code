@@ -1,17 +1,17 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day06 extends Solution(2022, 6) {
+object Day06 extends Solution {
   type I = String
   type O1 = Int
   type O2 = Int
 
-  override protected[year2022] def parseInput(file: Source): String = file.mkString
-  override protected[year2022] def part1(input: String): Int        = solution(input, 4)
-  override protected[year2022] def part2(input: String): Int        = solution(input, 14)
+  override def parseInput(file: Source): String = file.mkString
+  override def part1(input: String): Int        = solution(input, 4)
+  override def part2(input: String): Int        = solution(input, 14)
 
   private def solution(input: String, markerSize: Int): Int = input.zipWithIndex
     .sliding(markerSize)

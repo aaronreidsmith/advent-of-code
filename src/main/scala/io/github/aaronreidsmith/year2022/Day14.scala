@@ -5,18 +5,18 @@ import io.github.aaronreidsmith.{Grid, Point, Solution}
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day14 extends Solution(2022, 14) {
+object Day14 extends Solution {
   type I  = Grid[Tile]
   type O1 = Int
   type O2 = Int
 
-  private[year2022] sealed trait Tile
-  private case object Air  extends Tile
-  private case object Rock extends Tile
-  private case object Sand extends Tile
+  sealed trait Tile
+  case object Air  extends Tile
+  case object Rock extends Tile
+  case object Sand extends Tile
 
   // We switch x and y to play nice with our Point class
-  override protected[year2022] def parseInput(file: Source): Grid[Tile] = {
+  override def parseInput(file: Source): Grid[Tile] = {
     val point = """^(\d+),(\d+)$""".r
     file
       .getLines()
@@ -38,12 +38,12 @@ object Day14 extends Solution(2022, 14) {
       .withDefaultValue(Air)
   }
 
-  override protected[year2022] def part1(input: Grid[Tile]): Int = {
+  override def part1(input: Grid[Tile]): Int = {
     val maxDepth = input.keys.map(_.x).max
     settle(input, maxDepth).values.count(_ == Sand)
   }
 
-  override protected[year2022] def part2(input: Grid[Tile]): Int = {
+  override def part2(input: Grid[Tile]): Int = {
     val maxDepth = input.keys.map(_.x).max + 2
     // 0 to 1000 is arbitrary. Really only needs to be |maxDepth| in either direction from 500
     val floor = (0 to 1000).map(Point(maxDepth, _) -> Rock)

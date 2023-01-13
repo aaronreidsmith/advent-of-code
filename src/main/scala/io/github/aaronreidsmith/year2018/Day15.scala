@@ -11,16 +11,16 @@ import scala.io.Source
 // Adapted from https://git.io/Jn2WO. Works for part 2 but not part 1??? Had to use this for part 1:
 // https://www.reddit.com/r/adventofcode/comments/a6chwa/2018_day_15_solutions/ebtwcqr
 @Slow(part1 = true, part2 = true)
-object Day15 extends Solution(2018, 15) {
+object Day15 extends Solution {
   type I  = (Grid[Square], List[Creature])
   type O1 = Int
   type O2 = Int
 
-  private[year2018] sealed trait Square
-  private[year2018] case class Creature(position: Point, isGoblin: Boolean, health: Int = 200) extends Square
-  private case object Empty                                                                    extends Square
+  sealed trait Square
+  case class Creature(position: Point, isGoblin: Boolean, health: Int = 200) extends Square
+  case object Empty                                                                    extends Square
 
-  override protected[year2018] def parseInput(file: Source): (Grid[Square], List[Creature]) = {
+  override def parseInput(file: Source): (Grid[Square], List[Creature]) = {
     val grid = file.toGrid.collect {
       case (point, char) if char == '.' => point -> Empty
       case (point, char) if char == 'E' => point -> Creature(point, isGoblin = false)
@@ -30,12 +30,12 @@ object Day15 extends Solution(2018, 15) {
     (grid, initial)
   }
 
-  override protected[year2018] def part1(input: (Grid[Square], List[Creature])): Int = {
+  override def part1(input: (Grid[Square], List[Creature])): Int = {
     val (grid, initial) = input
     combat(grid, initial, initial)._1
   }
 
-  override protected[year2018] def part2(input: (Grid[Square], List[Creature])): Int = {
+  override def part2(input: (Grid[Square], List[Creature])): Int = {
     val (grid, initial) = input
     Iterator
       .from(4)

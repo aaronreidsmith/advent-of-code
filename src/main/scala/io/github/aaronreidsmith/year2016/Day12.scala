@@ -1,14 +1,14 @@
 package io.github.aaronreidsmith.year2016
 
+import io.github.aaronreidsmith.Solution
 import io.github.aaronreidsmith.annotations.Slow
-import io.github.aaronreidsmith.{Solution, using}
 
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
 @Slow(part2 = true)
-object Day12 extends Solution(2016, 12) {
+object Day12 extends Solution {
   type I  = Vector[String]
   type O1 = Int
   type O2 = Int
@@ -24,11 +24,11 @@ object Day12 extends Solution(2016, 12) {
     }
   }
 
-  override protected[year2016] def parseInput(file: Source): Vector[String] = file.getLines().toVector
-  override protected[year2016] def part1(input: Vector[String]): Int = {
+  override def parseInput(file: Source): Vector[String] = file.getLines().toVector
+  override def part1(input: Vector[String]): Int = {
     solution(input, Map("a" -> 0, "b" -> 0, "c" -> 0, "d" -> 0))
   }
-  override protected[year2016] def part2(input: Vector[String]): Int = {
+  override def part2(input: Vector[String]): Int = {
     solution(input, Map("a" -> 0, "b" -> 0, "c" -> 1, "d" -> 0))
   }
 

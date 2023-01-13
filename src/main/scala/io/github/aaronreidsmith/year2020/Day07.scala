@@ -1,15 +1,15 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day07 extends Solution(2020, 7) {
+object Day07 extends Solution {
   type I  = Map[Bag, Rule]
   type O1 = Int
   type O2 = Int
 
-  private[year2020] case class Bag(adjective: String, color: String) {
+  case class Bag(adjective: String, color: String) {
     def containsTarget(target: Bag, rules: Map[Bag, Rule]): Boolean = {
       val rule = rules(this)
       rule.contents.exists { pair =>
@@ -24,11 +24,11 @@ object Day07 extends Solution(2020, 7) {
     }
   }
 
-  private[year2020] case class Rule(bag: Bag, contents: Array[(Bag, Int)])
+  case class Rule(bag: Bag, contents: Array[(Bag, Int)])
 
   private val target = Bag("shiny", "gold")
 
-  override protected[year2020] def parseInput(file: Source): Map[Bag, Rule] = {
+  override def parseInput(file: Source): Map[Bag, Rule] = {
     file.getLines().foldLeft(Map.empty[Bag, Rule]) { (acc, line) =>
       val Array(bagDesc, contentsString, _*) = line.split(" contain ")
       val Array(adjective, color, _*)        = bagDesc.split(' ')
@@ -46,6 +46,6 @@ object Day07 extends Solution(2020, 7) {
     }
   }
 
-  override protected[year2020] def part1(input: Map[Bag, Rule]): Int = input.keys.count(_.containsTarget(target, input))
-  override protected[year2020] def part2(input: Map[Bag, Rule]): Int = target.getContents(input)
+  override def part1(input: Map[Bag, Rule]): Int = input.keys.count(_.containsTarget(target, input))
+  override def part2(input: Map[Bag, Rule]): Int = target.getContents(input)
 }

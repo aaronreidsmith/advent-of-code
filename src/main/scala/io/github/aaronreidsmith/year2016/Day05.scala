@@ -10,14 +10,14 @@ import scala.collection.mutable
 import scala.io.Source
 
 @Slow(part1 = true, part2 = true)
-object Day05 extends Solution(2016, 5) {
+object Day05 extends Solution {
   type I  = String
   type O1 = String
   type O2 = String
 
-  override protected[year2016] def parseInput(file: Source): String = file.mkString.trim
+  override def parseInput(file: Source): String = file.mkString.trim
 
-  override protected[year2016] def part1(doorId: String): String = {
+  override def part1(doorId: String): String = {
     val password = new StringBuilder
     @tailrec
     def helper(index: Int): String = {
@@ -36,7 +36,7 @@ object Day05 extends Solution(2016, 5) {
   }
 
   // Adapted from https://github.com/bahuljain/scala-fun/blob/master/src/adventcode2016/Day5.scala
-  override protected[year2016] def part2(doorId: String): String = {
+  override def part2(doorId: String): String = {
     val password = mutable.Map.empty[Int, Char]
     @tailrec
     def helper(index: Int): String = if (password.size >= 8) {

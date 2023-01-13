@@ -1,18 +1,18 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.collection.immutable.{Queue, SortedMap}
 import scala.collection.mutable
 import scala.io.Source
 
-object Day11 extends Solution(2022, 11) {
+object Day11 extends Solution {
   type I  = (SortedMap[Int, Monkey], Long)
   type O1 = Long
   type O2 = Long
 
-  private[year2022] trait Monkey {
+  trait Monkey {
     // Abstract API
     val initialItems: Queue[Long] // Needed so we can "reset" the state between parts 1 and 2
     def operate(old: Long, mod: Long): Long
@@ -26,7 +26,7 @@ object Day11 extends Solution(2022, 11) {
     }
   }
 
-  override protected[year2022] def parseInput(file: Source): (SortedMap[Int, Monkey], Long) = {
+  override def parseInput(file: Source): (SortedMap[Int, Monkey], Long) = {
     val monkey = """Monkey (\d):
                    |  Starting items: ([\d, ]+)
                    |  Operation: new = old (\+|\*) (\d+|old)
@@ -55,14 +55,14 @@ object Day11 extends Solution(2022, 11) {
     }
   }
 
-  override protected[year2022] def part1(input: (SortedMap[Int, Monkey], Long)): Long = solution(input._1, 0L, 20)
-  override protected[year2022] def part2(input: (SortedMap[Int, Monkey], Long)): Long = {
+  override def part1(input: (SortedMap[Int, Monkey], Long)): Long = solution(input._1, 0L, 20)
+  override def part2(input: (SortedMap[Int, Monkey], Long)): Long = {
     val (monkeys, mod) = input
     monkeys.values.foreach(_.reset())
     solution(monkeys, mod, 10_000)
   }
 
-  protected[year2022] def solution(monkeys: SortedMap[Int, Monkey], mod: Long, iterations: Int): Long = {
+  def solution(monkeys: SortedMap[Int, Monkey], mod: Long, iterations: Int): Long = {
     val counts = mutable.Map.from(monkeys.keys.map(_ -> 0L))
 
     @tailrec

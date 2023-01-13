@@ -7,12 +7,12 @@ import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
 import scala.io.Source
 import scala.jdk.CollectionConverters._
 
-object Day06 extends Solution(2019, 6) {
+object Day06 extends Solution {
   type I  = DefaultUndirectedGraph[String, DefaultEdge]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2019] def parseInput(file: Source): DefaultUndirectedGraph[String, DefaultEdge] = {
+  override def parseInput(file: Source): DefaultUndirectedGraph[String, DefaultEdge] = {
     val graph = new DefaultUndirectedGraph[String, DefaultEdge](classOf[DefaultEdge])
     file.getLines().foreach { line =>
       val Array(inner, outer, _*) = line.split(')')
@@ -23,13 +23,13 @@ object Day06 extends Solution(2019, 6) {
     graph
   }
 
-  override protected[year2019] def part1(orbits: DefaultUndirectedGraph[String, DefaultEdge]): Int = {
+  override def part1(orbits: DefaultUndirectedGraph[String, DefaultEdge]): Int = {
     orbits.vertexSet().asScala.foldLeft(0) { (acc, vertex) =>
       acc + DijkstraShortestPath.findPathBetween(orbits, vertex, "COM").getLength
     }
   }
 
-  override protected[year2019] def part2(orbits: DefaultUndirectedGraph[String, DefaultEdge]): Int = {
+  override def part2(orbits: DefaultUndirectedGraph[String, DefaultEdge]): Int = {
     DijkstraShortestPath.findPathBetween(orbits, "YOU", "SAN").getLength - 2
   }
 }

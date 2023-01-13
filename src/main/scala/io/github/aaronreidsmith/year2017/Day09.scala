@@ -1,18 +1,18 @@
 package io.github.aaronreidsmith.year2017
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day09 extends Solution(2017, 9) {
+object Day09 extends Solution {
   type I  = String
   type O1 = Int
   type O2 = Int
 
-  override protected[year2017] def parseInput(file: Source): String = file.mkString.trim
-  override protected[year2017] def part1(input: String): Int        = solution(input)._1
-  override protected[year2017] def part2(input: String): Int        = solution(input)._2
+  override def parseInput(file: Source): String = file.mkString.trim
+  override def part1(input: String): Int        = solution(input)._1
+  override def part2(input: String): Int        = solution(input)._2
 
   // Both parts require the same traversal, so might as well only do it once
   private var part1Solution = 0

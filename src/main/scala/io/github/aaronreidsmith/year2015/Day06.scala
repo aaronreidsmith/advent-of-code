@@ -5,20 +5,20 @@ import io.github.aaronreidsmith.{Point, Solution}
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day06 extends Solution(2015, 6) {
+object Day06 extends Solution {
   type I  = List[Instruction]
   type O1 = Int
   type O2 = Int
 
-  private[year2015] sealed trait Instruction
-  private[year2015] case class TurnOn(start: Point, end: Point)  extends Instruction
-  private[year2015] case class TurnOff(start: Point, end: Point) extends Instruction
-  private[year2015] case class Toggle(start: Point, end: Point)  extends Instruction
+  sealed trait Instruction
+  case class TurnOn(start: Point, end: Point)  extends Instruction
+  case class TurnOff(start: Point, end: Point) extends Instruction
+  case class Toggle(start: Point, end: Point)  extends Instruction
 
-  override protected[year2015] def parseInput(file: Source): List[Instruction] = {
-    val turnOn  = "^turn on (\\d+),(\\d+) through (\\d+),(\\d+)$".r
-    val turnOff = "^turn off (\\d+),(\\d+) through (\\d+),(\\d+)$".r
-    val toggle  = "^toggle (\\d+),(\\d+) through (\\d+),(\\d+)$".r
+  override def parseInput(file: Source): List[Instruction] = {
+    val turnOn  = """^turn on (\d+),(\d+) through (\d+),(\d+)$""".r
+    val turnOff = """^turn off (\d+),(\d+) through (\d+),(\d+)$""".r
+    val toggle  = """^toggle (\d+),(\d+) through (\d+),(\d+)$""".r
     file
       .getLines()
       .foldLeft(Vector.empty[Instruction]) {
@@ -30,7 +30,7 @@ object Day06 extends Solution(2015, 6) {
       .toList
   }
 
-  override protected[year2015] def part1(input: List[Instruction]): Int = {
+  override def part1(input: List[Instruction]): Int = {
     val lights = Array.fill(1000)(Array.fill(1000)(false))
 
     @tailrec
@@ -64,7 +64,7 @@ object Day06 extends Solution(2015, 6) {
     helper(input)
   }
 
-  override protected[year2015] def part2(input: List[Instruction]): Int = {
+  override def part2(input: List[Instruction]): Int = {
     val lights = Array.fill(1000)(Array.fill(1000)(0))
 
     @tailrec

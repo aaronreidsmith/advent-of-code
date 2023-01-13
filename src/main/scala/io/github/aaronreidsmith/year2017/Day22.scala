@@ -1,23 +1,23 @@
 package io.github.aaronreidsmith.year2017
 
+import io.github.aaronreidsmith._
 import io.github.aaronreidsmith.implicits.SourceOps
-import io.github.aaronreidsmith.{Direction, Grid, North, Point, Solution}
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day22 extends Solution(2017, 22) {
+object Day22 extends Solution {
   type I  = (Node, Grid[State])
   type O1 = Int
   type O2 = Int
 
-  private[year2017] sealed trait State
-  private case object Clean    extends State
-  private case object Weakened extends State
-  private case object Flagged  extends State
-  private case object Infected extends State
+  sealed trait State
+  case object Clean    extends State
+  case object Weakened extends State
+  case object Flagged  extends State
+  case object Infected extends State
 
-  private object State {
+  object State {
     def apply(char: Char): State = char match {
       case '.' => Clean
       case 'W' => Weakened
@@ -27,16 +27,16 @@ object Day22 extends Solution(2017, 22) {
     }
   }
 
-  private[year2017] case class Node(position: Point, direction: Direction)
+  case class Node(position: Point, direction: Direction)
 
-  override protected[year2017] def parseInput(file: Source): (Node, Grid[State]) = {
+  override def parseInput(file: Source): (Node, Grid[State]) = {
     val grid   = file.toGrid.view.mapValues(State(_)).toMap.withDefaultValue(Clean)
     val middle = grid.keySet.map(_.x).size / 2
     val start  = Node(Point(middle, middle), North)
     (start, grid)
   }
 
-  override protected[year2017] def part1(input: (Node, Grid[State])): Int = {
+  override def part1(input: (Node, Grid[State])): Int = {
     val (initialNode, initialGrid) = input
 
     @tailrec
@@ -63,7 +63,7 @@ object Day22 extends Solution(2017, 22) {
     helper(initialNode, initialGrid)
   }
 
-  override protected[year2017] def part2(input: (Node, Grid[State])): Int = {
+  override def part2(input: (Node, Grid[State])): Int = {
     val (initialNode, initialGrid) = input
 
     @tailrec

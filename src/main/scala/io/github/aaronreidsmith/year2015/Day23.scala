@@ -5,24 +5,24 @@ import io.github.aaronreidsmith.Solution
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day23 extends Solution(2015, 23) {
+object Day23 extends Solution {
   type I = Vector[String]
   type O1 = Int
   type O2 = Int
 
-  private case class Computer(a: Int = 0, b: Int = 0)
+  case class Computer(a: Int = 0, b: Int = 0)
 
-  override protected[year2015] def parseInput(file: Source): Vector[String] = file.getLines().toVector
-  override protected[year2015] def part1(instruction: Vector[String]): Int  = solution(instruction, Computer())
-  override protected[year2015] def part2(instructions: Vector[String]): Int = solution(instructions, Computer(a = 1))
+  override def parseInput(file: Source): Vector[String] = file.getLines().toVector
+  override def part1(instruction: Vector[String]): Int  = solution(instruction, Computer())
+  override def part2(instructions: Vector[String]): Int = solution(instructions, Computer(a = 1))
 
   private def solution(instructions: Vector[String], initialComputer: Computer): Int = {
     val hlf = "^hlf (.*)$".r
     val tpl = "^tpl (.*)$".r
     val inc = "^inc (.*)$".r
-    val jmp = "^jmp ([+-]\\d+)$".r
-    val jie = "^jie (.*?), ([+-]\\d+)$".r
-    val jio = "^jio (.*?), ([+-]\\d+)$".r
+    val jmp = """^jmp ([+-]\d+)$""".r
+    val jie = """^jie (.*?), ([+-]\d+)$""".r
+    val jio = """^jio (.*?), ([+-]\d+)$""".r
 
     @tailrec
     def helper(computer: Computer, pointer: Int = 0): Int =

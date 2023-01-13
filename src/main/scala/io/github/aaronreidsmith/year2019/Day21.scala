@@ -4,14 +4,14 @@ import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day21 extends Solution(2019, 21) {
+object Day21 extends Solution {
   type I  = IntCode
   type O1 = Long
   type O2 = Long
 
-  override protected[year2019] def parseInput(file: Source): IntCode = IntCode(file)
+  override def parseInput(file: Source): IntCode = IntCode(file)
 
-  override protected[year2019] def part1(input: IntCode): Long = solution(
+  override def part1(input: IntCode): Long = solution(
     input,
     """NOT A T
       |OR T J
@@ -24,7 +24,7 @@ object Day21 extends Solution(2019, 21) {
       |""".stripMargin
   )
 
-  override protected[year2019] def part2(input: IntCode): Long = solution(
+  override def part2(input: IntCode): Long = solution(
     input,
     """NOT A J
       |NOT B T

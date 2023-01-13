@@ -4,24 +4,24 @@ import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day21 extends Solution(2016, 21) {
+object Day21 extends Solution {
   type I  = List[String]
   type O1 = String
   type O2 = String
 
-  override protected[year2016] def parseInput(file: Source): List[String] = file.getLines().toList
-  override protected[year2016] def part1(input: List[String]): String     = scramble("abcdefgh", input)
-  override protected[year2016] def part2(input: List[String]): String = {
+  override def parseInput(file: Source): List[String] = file.getLines().toList
+  override def part1(input: List[String]): String     = scramble("abcdefgh", input)
+  override def part2(input: List[String]): String = {
     "abcdefgh".permutations.find(scramble(_, input) == "fbgdceah").get
   }
 
   // Define these top-level so we only have to compile once
-  private val swapPosition    = "^swap position (\\d+) with position (\\d+)$".r
+  private val swapPosition    = """^swap position (\d+) with position (\d+)$""".r
   private val swapLetter      = "^swap letter (.*) with letter (.*)$".r
-  private val rotate          = "^rotate (.*) (\\d+) steps?$".r
+  private val rotate          = """^rotate (.*) (\d+) steps?$""".r
   private val rotateWithBasis = "^rotate based on position of letter (.*)$".r
-  private val reverse         = "^reverse positions (\\d+) through (\\d+)$".r
-  private val move            = "^move position (\\d+) to position (\\d+)$".r
+  private val reverse         = """^reverse positions (\d+) through (\d+)$""".r
+  private val move            = """^move position (\d+) to position (\d+)$""".r
   private def scramble(original: String, operations: List[String]): String = operations.foldLeft(original) {
     case (acc, swapPosition(x, y)) =>
       val a = acc.charAt(x.toInt)

@@ -1,22 +1,22 @@
 package io.github.aaronreidsmith.year2017
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day25 extends Solution(2017, 25) {
+object Day25 extends Solution {
   type I  = (Char, Int, Map[Char, State])
   type O1 = Int
   type O2 = Nothing
 
-  private[year2017] sealed trait State {
+  sealed trait State {
     def nextValue(current: Int): Int
     def positionDelta(current: Int): Int
     def nextState(current: Int): Char
   }
 
-  override protected[year2017] def parseInput(file: Source): (Char, Int, Map[Char, State]) = {
+  override def parseInput(file: Source): (Char, Int, Map[Char, State]) = {
     def delta(direction: String): Int = if (direction == "left") -1 else 1
 
     val header = """Begin in state ([A-Z]).
@@ -47,7 +47,7 @@ object Day25 extends Solution(2017, 25) {
     (startingState.head, steps.toInt, states)
   }
 
-  override protected[year2017] def part1(input: (Char, Int, Map[Char, State])): Int = {
+  override def part1(input: (Char, Int, Map[Char, State])): Int = {
     val (start, steps, states) = input
 
     @tailrec

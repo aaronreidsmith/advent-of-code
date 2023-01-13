@@ -2,17 +2,16 @@ package io.github.aaronreidsmith.year2018
 
 import io.github.aaronreidsmith.Solution
 import io.github.aaronreidsmith.annotations.Slow
-import io.github.aaronreidsmith.year2018.Day14.part1
 
 import scala.io.Source
 
 @Slow(part2 = true)
-object Day14 extends Solution(2018, 14) {
+object Day14 extends Solution {
   type I  = Int
   type O1 = String
   type O2 = Int
 
-  private case class State(
+  case class State(
       recipes: Vector[Char] = Vector('3', '7'),
       pointer1: Int = 0,
       pointer2: Int = 1,
@@ -29,9 +28,9 @@ object Day14 extends Solution(2018, 14) {
     }
   }
 
-  override protected[year2018] def parseInput(file: Source): Int = file.mkString.trim.toInt
+  override def parseInput(file: Source): Int = file.mkString.trim.toInt
 
-  override protected[year2018] def part1(endCondition: Int): String = {
+  override def part1(endCondition: Int): String = {
     val finalState = Iterator
       .iterate(State())(_.next(endCondition.toString.length))
       .find(state => state.recipes.length >= endCondition + 10)
@@ -39,7 +38,7 @@ object Day14 extends Solution(2018, 14) {
     finalState.recipes.mkString.slice(endCondition, endCondition + 10)
   }
 
-  override protected[year2018] def part2(endCondition: Int): Int = {
+  override def part2(endCondition: Int): Int = {
     val endConditionString = endCondition.toString
     val endConditionRegex  = endConditionString.r
     val finalState = Iterator

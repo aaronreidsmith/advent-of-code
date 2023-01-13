@@ -1,18 +1,18 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day09 extends Solution(2020, 9) {
+object Day09 extends Solution {
   type I  = Vector[Long]
   type O1 = Long
   type O2 = Long
 
-  override protected[year2020] def parseInput(file: Source): Vector[Long] = file.getLines().toVector.map(_.toLong)
+  override def parseInput(file: Source): Vector[Long] = file.getLines().toVector.map(_.toLong)
 
-  override protected[year2020] def part1(input: Vector[Long]): Long = {
+  override def part1(input: Vector[Long]): Long = {
     @tailrec
     def helper(windowStart: Int): Long = {
       val windowEnd          = windowStart + (if (isTest) 5 else 24)
@@ -28,7 +28,7 @@ object Day09 extends Solution(2020, 9) {
     helper(0)
   }
 
-  override protected[year2020] def part2(input: Vector[Long]): Long = {
+  override def part2(input: Vector[Long]): Long = {
     val target   = part1(input)
     val reversed = input.reverse
 

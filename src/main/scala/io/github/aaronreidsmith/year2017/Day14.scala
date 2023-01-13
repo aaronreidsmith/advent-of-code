@@ -7,12 +7,12 @@ import scala.annotation.tailrec
 import scala.io.Source
 
 @Slow(part2 = true)
-object Day14 extends Solution(2017, 14) {
+object Day14 extends Solution {
   type I  = Vector[Point]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2017] def parseInput(file: Source): Vector[Point] = {
+  override def parseInput(file: Source): Vector[Point] = {
     // The functions below are modified from day 10. There was a bug where not all returned strings were 32 characters,
     // so that has been fixed
     @tailrec
@@ -66,9 +66,9 @@ object Day14 extends Solution(2017, 14) {
     }
   }
 
-  override protected[year2017] def part1(input: Vector[Point]): Int = input.toSet.size
+  override def part1(input: Vector[Point]): Int = input.toSet.size
 
-  override protected[year2017] def part2(input: Vector[Point]): Int = {
+  override def part2(input: Vector[Point]): Int = {
     def fillRegion(square: Point, unusedSquares: Set[Point]): Set[Point] = {
       val neighbors = square.immediateNeighbors.filter(unusedSquares.contains)
       Set(square) ++ neighbors.flatMap(fillRegion(_, unusedSquares - square -- neighbors))

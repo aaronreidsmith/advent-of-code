@@ -1,18 +1,16 @@
 package io.github.aaronreidsmith.year2022
 
 import io.github.aaronreidsmith.Solution
-import io.github.aaronreidsmith.annotations.Slow
 
 import scala.io.Source
-import scala.collection.parallel.CollectionConverters._
 
 // Adapted from https://old.reddit.com/r/adventofcode/comments/zpihwi/2022_day_19_solutions/j0w0mx3/
-object Day19 extends Solution(2022, 19) {
+object Day19 extends Solution {
   type I  = List[Blueprint]
   type O1 = Int
   type O2 = Int
 
-  private case class Resources(ore: Int = 0, clay: Int = 0, obsidian: Int = 0, geode: Int = 0) {
+  case class Resources(ore: Int = 0, clay: Int = 0, obsidian: Int = 0, geode: Int = 0) {
     def +(other: Resources): Resources = Resources(
       ore + other.ore,
       clay + other.clay,
@@ -30,7 +28,7 @@ object Day19 extends Solution(2022, 19) {
     }
   }
 
-  private[year2022] case class Blueprint(
+  case class Blueprint(
       id: Int,
       oreOre: Int,
       clayOre: Int,
@@ -42,7 +40,7 @@ object Day19 extends Solution(2022, 19) {
     def maxOre: Int = Seq(oreOre, clayOre, obsidianOre, geodeOre).max
   }
 
-  override protected[year2022] def parseInput(file: Source): List[Blueprint] = {
+  override def parseInput(file: Source): List[Blueprint] = {
     val blueprint =
       """Blueprint (\d+): Each ore robot costs (\d+) ore. Each clay robot costs (\d+) ore. Each obsidian robot costs (\d+) ore and (\d+) clay. Each geode robot costs (\d+) ore and (\d+) obsidian.""".stripMargin.r
     file.getLines().toList.collect {
@@ -59,8 +57,8 @@ object Day19 extends Solution(2022, 19) {
     }
   }
 
-  override protected[year2022] def part1(input: List[Blueprint]): Int = input.foldLeft(0)(_ + maximize(_, 24))
-  override protected[year2022] def part2(input: List[Blueprint]): Int = input.take(3).foldLeft(1)(_ * maximize(_, 32)) / 6 // Not sure why we have to divide by 6 here
+  override def part1(input: List[Blueprint]): Int = input.foldLeft(0)(_ + maximize(_, 24))
+  override def part2(input: List[Blueprint]): Int = input.take(3).foldLeft(1)(_ * maximize(_, 32)) / 6 // Not sure why we have to divide by 6 here
 
   // Only want to compile these once
   private val zero        = Resources()

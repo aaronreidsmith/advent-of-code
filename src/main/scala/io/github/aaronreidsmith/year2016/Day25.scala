@@ -8,7 +8,7 @@ import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
 @Slow(part1 = true)
-object Day25 extends Solution(2016, 25) {
+object Day25 extends Solution {
   type I  = Vector[String]
   type O1 = Int
   type O2 = Nothing
@@ -24,8 +24,8 @@ object Day25 extends Solution(2016, 25) {
     }
   }
 
-  override protected[year2016] def parseInput(file: Source): Vector[String] = file.getLines().toVector
-  override protected[year2016] def part1(input: Vector[String]): Int = {
+  override def parseInput(file: Source): Vector[String] = file.getLines().toVector
+  override def part1(input: Vector[String]): Int = {
     Iterator.from(0).find(i => solution(input, Map("a" -> i, "b" -> 0, "c" -> 0, "d" -> 0))).get
   }
 

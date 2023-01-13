@@ -5,19 +5,19 @@ import io.github.aaronreidsmith.Solution
 import scala.io.Source
 import scala.math.Integral.Implicits._
 
-object Day16 extends Solution(2019, 16) {
+object Day16 extends Solution {
   type I  = Vector[Int]
   type O1 = String
   type O2 = String
 
-  override protected[year2019] def parseInput(file: Source): Vector[Int] = file.mkString.trim.map(_.asDigit).toVector
+  override def parseInput(file: Source): Vector[Int] = file.mkString.trim.map(_.asDigit).toVector
 
-  override protected[year2019] def part1(input: Vector[Int]): String = {
+  override def part1(input: Vector[Int]): String = {
     Iterator.iterate(input)(naiveFft).drop(100).next().take(8).mkString
   }
 
   // Adapted from https://git.io/J1CzO
-  override protected[year2019] def part2(input: Vector[Int]): String = {
+  override def part2(input: Vector[Int]): String = {
     val start         = input.take(7).mkString.toInt
     val (whole, part) = (input.length * 10000 - start) /% input.length // https://stackoverflow.com/a/46459182
     val tail          = (input.takeRight(part) ++ Vector.fill(whole)(input).flatten).toBuffer

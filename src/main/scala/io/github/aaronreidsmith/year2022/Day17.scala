@@ -5,7 +5,7 @@ import io.github.aaronreidsmith.{Point, Solution}
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day17 extends Solution(2022, 17) {
+object Day17 extends Solution {
   type I  = State
   type O1 = Int
   type O2 = Long
@@ -18,7 +18,7 @@ object Day17 extends Solution(2022, 17) {
     Set(Point(0, 0), Point(1, 0), Point(0, 1), Point(1, 1))               // Square
   )
 
-  private[year2022] case class State(
+  case class State(
       wind: Iterator[Char],
       grid: Set[Point] = Set.tabulate(8)(Point(_, 0)),
       shapes: Iterator[Set[Point]] = Iterator.continually(allShapes).flatten,
@@ -36,14 +36,14 @@ object Day17 extends Solution(2022, 17) {
     }
   }
 
-  override protected[year2022] def parseInput(file: Source): State = {
+  override def parseInput(file: Source): State = {
     val wind = file.mkString.trim
     State(Iterator.continually(wind).flatten)
   }
 
-  override protected[year2022] def part1(input: State): Int = tetris(input).drop(2022).next().height
+  override def part1(input: State): Int = tetris(input).drop(2022).next().height
 
-  override protected[year2022] def part2(input: State): Long = {
+  override def part2(input: State): Long = {
     val guess       = 1000
     val height      = tetris(input).slice(1, 10 * guess + 1).map(_.height).toSeq
     val delta       = height.sliding(2).map(_.reduceRight(_ - _)).toSeq

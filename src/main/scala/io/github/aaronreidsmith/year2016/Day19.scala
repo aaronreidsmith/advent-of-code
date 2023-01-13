@@ -6,7 +6,7 @@ import java.util
 import scala.io.Source
 
 // This a very Java way to do this, but it works 🤷
-object Day19 extends Solution(2016, 19) {
+object Day19 extends Solution {
   type I  = Int
   type O1 = Int
   type O2 = Int
@@ -19,9 +19,9 @@ object Day19 extends Solution(2016, 19) {
   }
   private var start: Elf = _
 
-  override protected[year2016] def parseInput(file: Source): Int = file.mkString.trim.toInt
+  override def parseInput(file: Source): Int = file.mkString.trim.toInt
 
-  override protected[year2016] def part1(input: Int): Int = {
+  override def part1(input: Int): Int = {
     (1 to input).foreach { number =>
       val newElf = new Elf
       newElf.number = number
@@ -52,7 +52,7 @@ object Day19 extends Solution(2016, 19) {
   }
 
   // Adapted from https://www.reddit.com/r/adventofcode/comments/5j4lp1/comment/dbdf9mn
-  override protected[year2016] def part2(input: Int): Int = {
+  override def part2(input: Int): Int = {
     val left  = new util.LinkedList[Int]
     val right = new util.LinkedList[Int]
     (1 to input).foreach { elf =>

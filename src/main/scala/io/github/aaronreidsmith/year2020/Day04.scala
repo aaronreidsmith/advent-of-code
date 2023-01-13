@@ -4,7 +4,7 @@ import io.github.aaronreidsmith._
 
 import scala.io.Source
 
-object Day04 extends Solution(2020, 4) {
+object Day04 extends Solution {
   type I  = List[Map[String, String]]
   type O1 = Int
   type O2 = Int
@@ -18,7 +18,7 @@ object Day04 extends Solution(2020, 4) {
   private val hairColor  = """^#[a-z0-9]{6}$""".r
   private val passportId = """^(\d{9})$""".r
 
-  override protected[year2020] def parseInput(file: Source): List[Map[String, String]] = {
+  override def parseInput(file: Source): List[Map[String, String]] = {
     file.mkString.trim.split("\n\n").toList.map { entry =>
       entry
         .split("\\s")
@@ -29,8 +29,8 @@ object Day04 extends Solution(2020, 4) {
     }
   }
 
-  override protected[year2020] def part1(input: List[Map[String, String]]): Int = input.count(isValid(_))
-  override protected[year2020] def part2(input: List[Map[String, String]]): Int = input.count(isValid(_, checkValues = true))
+  override def part1(input: List[Map[String, String]]): Int = input.count(isValid(_))
+  override def part2(input: List[Map[String, String]]): Int = input.count(isValid(_, checkValues = true))
 
   private def isValid(credentials: Map[String, String], checkValues: Boolean = false): Boolean = {
     val keys      = credentials.keySet

@@ -5,18 +5,18 @@ import io.github.aaronreidsmith.Solution
 import scala.io.Source
 
 // TODO: Adapted from Raku, so just kind of ugly
-object Day03 extends Solution(2019, 3) {
+object Day03 extends Solution {
   type I  = (List[String], List[String])
   type O1 = Int
   type O2 = Int
 
-  override protected[year2019] def parseInput(file: Source): (List[String], List[String]) = {
+  override def parseInput(file: Source): (List[String], List[String]) = {
     val wires                   = file.mkString.trim.split('\n').map(_.split(',').toList)
     val Array(wire1, wire2, _*) = wires
     (wire1, wire2)
   }
 
-  override protected[year2019] def part1(wires: (List[String], List[String])): Int = {
+  override def part1(wires: (List[String], List[String])): Int = {
     getOverlaps(wires).foldLeft(Int.MaxValue) {
       case (currentMin, (a, b)) =>
         val distance = a.abs + b.abs
@@ -25,7 +25,7 @@ object Day03 extends Solution(2019, 3) {
     }
   }
 
-  override protected[year2019] def part2(wires: (List[String], List[String])): Int = {
+  override def part2(wires: (List[String], List[String])): Int = {
     val (wire1, wire2) = wires
     val wire1Path      = traverse(wire1)
     val wire2Path      = traverse(wire2)
@@ -48,10 +48,10 @@ object Day03 extends Solution(2019, 3) {
 
   private def traverse(initialDirections: List[String]): Set[((Int, Int), Int)] = {
     // Only want to compile these once...
-    val up    = "^U(\\d+)$".r
-    val down  = "^D(\\d+)$".r
-    val left  = "^L(\\d+)$".r
-    val right = "^R(\\d+)$".r
+    val up    = """^U(\d+)$""".r
+    val down  = """^D(\d+)$""".r
+    val left  = """^L(\d+)$""".r
+    val right = """^R(\d+)$""".r
 
     def helper(directions: List[String], position: (Int, Int) = (0, 0), pathLength: Int = 0): Set[((Int, Int), Int)] = {
       val (x, y) = position

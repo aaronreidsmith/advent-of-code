@@ -4,16 +4,16 @@ import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day20 extends Solution(2022, 20) {
+object Day20 extends Solution {
   type I  = Vector[Int]
   type O1 = Long
   type O2 = Long
 
-  private case class Node(value: Long, var prev: Node, var next: Node)
+  case class Node(value: Long, var prev: Node, var next: Node)
 
-  override protected[year2022] def parseInput(file: Source): Vector[Int] = file.getLines().toVector.map(_.toInt)
-  override protected[year2022] def part1(input: Vector[Int]): Long       = solution(input, 1, 1)
-  override protected[year2022] def part2(input: Vector[Int]): Long       = solution(input, 811589153L, 10)
+  override def parseInput(file: Source): Vector[Int] = file.getLines().toVector.map(_.toInt)
+  override def part1(input: Vector[Int]): Long       = solution(input, 1, 1)
+  override def part2(input: Vector[Int]): Long       = solution(input, 811589153L, 10)
 
   private def buildNodes(input: Vector[Int], key: Long): Vector[Node] = {
     val nodes = input.map(n => Node(n * key, null, null))

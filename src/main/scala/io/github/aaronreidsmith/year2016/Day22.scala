@@ -4,12 +4,12 @@ import io.github.aaronreidsmith.{Point, Solution}
 
 import scala.io.Source
 
-object Day22 extends Solution(2016, 22) {
+object Day22 extends Solution {
   type I  = Map[Point, Node]
   type O1 = Int
   type O2 = Int
 
-  protected[year2016] case class Node(used: Int, available: Int) {
+  case class Node(used: Int, available: Int) {
     private val totalSpace = used + available
 
     def isEmpty: Boolean  = used == 0
@@ -22,7 +22,7 @@ object Day22 extends Solution(2016, 22) {
     }
   }
 
-  override protected[year2016] def parseInput(file: Source): Map[Point, Node] = {
+  override def parseInput(file: Source): Map[Point, Node] = {
     val nodeEntry = "^/dev/grid/node-x(\\d+)-y(\\d+)\\s+\\d+T\\s+(\\d+)T\\s+(\\d+)T\\s+\\d+%$".r
 
     file
@@ -36,13 +36,13 @@ object Day22 extends Solution(2016, 22) {
       }
   }
 
-  override protected[year2016] def part1(input: Map[Point, Node]): Int = input.values.foldLeft(0) {
+  override def part1(input: Map[Point, Node]): Int = input.values.foldLeft(0) {
     case (acc, node) if node.nonEmpty =>
       acc + input.values.count(other => other != node && node.used <= other.available)
     case (acc, _) => acc
   }
 
-  override protected[year2016] def part2(input: Map[Point, Node]): Int = {
+  override def part2(input: Map[Point, Node]): Int = {
     def printGrid(grid: Map[Point, Node]): Unit = {
       var row = 0
       grid.toSeq

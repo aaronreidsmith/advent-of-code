@@ -4,16 +4,16 @@ import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day13 extends Solution(2015, 13) {
+object Day13 extends Solution {
   type I = List[Person]
   type O1 = Int
   type O2 = Int
 
-  private[year2015] case class Person(name: String, rules: Map[String, Int])
+  case class Person(name: String, rules: Map[String, Int])
 
-  override protected[year2015] def parseInput(file: Source): List[Person] = {
-    val gain = "^(.*?) would gain (\\d+) happiness units by sitting next to (.*?)\\.$".r
-    val lose = "^(.*?) would lose (\\d+) happiness units by sitting next to (.*?)\\.$".r
+  override def parseInput(file: Source): List[Person] = {
+    val gain = """^(.*?) would gain (\d+) happiness units by sitting next to (.*?)\.$""".r
+    val lose = """^(.*?) would lose (\d+) happiness units by sitting next to (.*?)\.$""".r
 
     file
       .getLines()
@@ -29,15 +29,15 @@ object Day13 extends Solution(2015, 13) {
               case Some(person) => acc.updated(name, person.copy(rules = person.rules.updated(neighbor, -value.toInt)))
               case None         => acc.updated(name, Person(name, Map(neighbor -> -value.toInt)))
             }
-          case _ => throw new IllegalArgumentException
+          case _ => acc
         }
       }
       .values
       .toList
   }
 
-  override protected[year2015] def part1(rules: List[Person]): Int = solution(rules)
-  override protected[year2015] def part2(rules: List[Person]): Int = {
+  override def part1(rules: List[Person]): Int = solution(rules)
+  override def part2(rules: List[Person]): Int = {
     val updatedRules = rules.map(person => person.copy(rules = person.rules.updated("Aaron", 0)))
     val me           = Person("Aaron", rules.map(_.name -> 0).toMap)
     solution(me :: updatedRules)

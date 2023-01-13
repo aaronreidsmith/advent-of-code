@@ -1,20 +1,20 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.math.Integral.Implicits._
 
-object Day14 extends Solution(2019, 14) {
-  private[year2019] type Reactions = Map[String, (Long, Map[String, Long])]
-  type I                           = Reactions
-  type O1                          = Long
-  type O2                          = Long
+object Day14 extends Solution {
+  type Reactions = Map[String, (Long, Map[String, Long])]
+  type I         = Reactions
+  type O1        = Long
+  type O2        = Long
 
   // Adapted from https://www.reddit.com/r/adventofcode/comments/eafj32/comment/far2irk
-  override protected[year2019] def parseInput(file: Source): Reactions = {
-    val chemical = "(\\d+) ([A-Z]+)".r
+  override def parseInput(file: Source): Reactions = {
+    val chemical = """(\d+) ([A-Z]+)""".r
     file
       .getLines()
       .map { line =>
@@ -26,10 +26,10 @@ object Day14 extends Solution(2019, 14) {
       .toMap
   }
 
-  override protected[year2019] def part1(reactions: Reactions): Long = solution(reactions, 1)
+  override def part1(reactions: Reactions): Long = solution(reactions, 1)
 
   // Adapted from https://www.reddit.com/r/adventofcode/comments/eafj32/comment/favii5d
-  override protected[year2019] def part2(reactions: Map[String, (Long, Map[String, Long])]): Long = {
+  override def part2(reactions: Map[String, (Long, Map[String, Long])]): Long = {
     val oneTrillion = 1000000000000L
 
     @tailrec

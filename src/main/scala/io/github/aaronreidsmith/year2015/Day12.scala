@@ -5,17 +5,17 @@ import io.github.aaronreidsmith.Solution
 import scala.collection.mutable
 import scala.io.Source
 
-object Day12 extends Solution(2015, 12) {
+object Day12 extends Solution {
   type I  = String
   type O1 = Int
   type O2 = Int
 
-  override protected[year2015] def parseInput(file: Source): String = file.mkString.trim
-  override protected[year2015] def part1(input: String): Int = {
-    val number = "-?\\d+".r
+  override def parseInput(file: Source): String = file.mkString.trim
+  override def part1(input: String): Int = {
+    val number = """-?\d+""".r
     number.findAllIn(input).foldLeft(0)(_ + _.toInt)
   }
-  override protected[year2015] def part2(input: String): Int = {
+  override def part2(input: String): Int = {
     def sumValues(values: mutable.Buffer[ujson.Value]): Int = values.foldLeft(0)((acc, json) => acc + helper(json))
 
     def helper(json: ujson.Value): Int = json match {

@@ -6,16 +6,16 @@ import scala.collection.mutable
 import scala.io.Source
 
 // TODO: Adapted from my Python solution, so v mutable
-object Day10 extends Solution(2016, 10) {
+object Day10 extends Solution {
   type I  = (Map[Int, Vector[Int]], Map[Int, ((String, Int), (String, Int))])
   type O1 = Int
   type O2 = Int
 
-  override protected[year2016] def parseInput(
+  override def parseInput(
       file: Source
   ): (Map[Int, Vector[Int]], Map[Int, ((String, Int), (String, Int))]) = {
-    val valueEntry = "^value (\\d+) goes to bot (\\d+)$".r
-    val botEntry   = "^bot (\\d+) gives low to (bot|output) (\\d+) and high to (bot|output) (\\d+)$".r
+    val valueEntry = """^value (\d+) goes to bot (\d+)$""".r
+    val botEntry   = """^bot (\d+) gives low to (bot|output) (\d+) and high to (bot|output) (\d+)$""".r
     file.getLines().foldLeft((Map.empty[Int, Vector[Int]], Map.empty[Int, ((String, Int), (String, Int))])) {
       case ((botAcc, pipelineAcc), valueEntry(value, rawBotId)) =>
         val botId    = rawBotId.toInt
@@ -30,15 +30,12 @@ object Day10 extends Solution(2016, 10) {
     }
   }
 
-  override protected[year2016] def part1(
-      input: (Map[Int, Vector[Int]], Map[Int, ((String, Int), (String, Int))])
-  ): Int = {
+  override def part1(input: (Map[Int, Vector[Int]], Map[Int, ((String, Int), (String, Int))])): Int = {
     val (bots, pipeline) = input
     solution(bots, pipeline)._1
   }
-  override protected[year2016] def part2(
-      input: (Map[Int, Vector[Int]], Map[Int, ((String, Int), (String, Int))])
-  ): Int = {
+
+  override def part2(input: (Map[Int, Vector[Int]], Map[Int, ((String, Int), (String, Int))])): Int = {
     val (bots, pipeline) = input
     solution(bots, pipeline)._2
   }

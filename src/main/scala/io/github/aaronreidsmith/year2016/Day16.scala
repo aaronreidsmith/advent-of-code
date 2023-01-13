@@ -5,14 +5,14 @@ import io.github.aaronreidsmith.Solution
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day16 extends Solution(2016, 16) {
+object Day16 extends Solution {
   type I  = String
   type O1 = String
   type O2 = String
 
-  override protected[year2016] def parseInput(file: Source): String = file.mkString.trim
-  override protected[year2016] def part1(input: String): String     = checksum(modifiedDragon(input, 272))
-  override protected[year2016] def part2(input: String): String     = checksum(modifiedDragon(input, 35651584))
+  override def parseInput(file: Source): String = file.mkString.trim
+  override def part1(input: String): String     = checksum(modifiedDragon(input, 272))
+  override def part2(input: String): String     = checksum(modifiedDragon(input, 35651584))
 
   @tailrec
   private def modifiedDragon(a: String, targetLength: Int): String = if (a.length >= targetLength) {

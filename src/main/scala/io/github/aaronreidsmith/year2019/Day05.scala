@@ -4,12 +4,12 @@ import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-object Day05 extends Solution(2019, 5) {
+object Day05 extends Solution {
   type I  = IntCode
   type O1 = Long
   type O2 = Long
 
-  override protected[year2019] def parseInput(file: Source): IntCode = IntCode(file)
-  override protected[year2019] def part1(input: IntCode): Long       = input.withInput(1L).allOutput.last
-  override protected[year2019] def part2(input: IntCode): Long       = input.withInput(5L).allOutput.last
+  override def parseInput(file: Source): IntCode = IntCode(file)
+  override def part1(input: IntCode): Long       = input.withInput(1L).allOutput.last
+  override def part2(input: IntCode): Long       = input.withInput(5L).allOutput.last
 }

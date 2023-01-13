@@ -5,19 +5,19 @@ import io.github.aaronreidsmith.{Point, Solution}
 import scala.collection.mutable
 import scala.io.Source
 
-object Day15 extends Solution(2019, 15) {
+object Day15 extends Solution {
   type I  = IntCode
   type O1 = Int
   type O2 = Int
 
-  override protected[year2019] def parseInput(file: Source): IntCode = IntCode(file)
+  override def parseInput(file: Source): IntCode = IntCode(file)
 
-  override protected[year2019] def part1(input: IntCode): Int = traverse(input) match {
+  override def part1(input: IntCode): Int = traverse(input) match {
     case (first, Some((target, _))) => first(target)
     case _                          => -1
   }
 
-  override protected[year2019] def part2(input: IntCode): Int = traverse(input) match {
+  override def part2(input: IntCode): Int = traverse(input) match {
     case (_, Some((_, computer))) => traverse(computer)._1.values.max
     case _                        => -1
   }

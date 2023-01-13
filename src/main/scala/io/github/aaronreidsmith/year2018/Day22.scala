@@ -7,14 +7,14 @@ import org.jgrapht.graph.{DefaultUndirectedWeightedGraph, DefaultWeightedEdge}
 import scala.collection.mutable
 import scala.io.Source
 
-object Day22 extends Solution(2018, 22) {
+object Day22 extends Solution {
   type I  = (Map[Point, Region], Point)
   type O1 = Int
   type O2 = Int
 
   case class Region(geologicalIndex: Int, erosionLevel: Int, riskLevel: Int)
 
-  override protected[year2018] def parseInput(file: Source): (Map[Point, Region], Point) = {
+  override def parseInput(file: Source): (Map[Point, Region], Point) = {
     val List(depthLine, targetLine, _*) = file.getLines().toList
     val depth                           = depthLine.split(": ").last.toInt
     val Array(targetX, targetY, _*)     = targetLine.split(": ").last.split(',').map(_.toInt)
@@ -38,7 +38,7 @@ object Day22 extends Solution(2018, 22) {
     (grid.toMap, target)
   }
 
-  override protected[year2018] def part1(input: (Map[Point, Region], Point)): Int = {
+  override def part1(input: (Map[Point, Region], Point)): Int = {
     val (grid, target) = input
     for {
       x <- 0 to target.x
@@ -46,7 +46,7 @@ object Day22 extends Solution(2018, 22) {
     } yield grid(Point(x, y)).riskLevel
   }.sum
 
-  override protected[year2018] def part2(input: (Map[Point, Region], Point)): Int = {
+  override def part2(input: (Map[Point, Region], Point)): Int = {
     val (grid, target)         = input
     val (rocky, wet, narrow)   = (0, 1, 2)
     val (torch, gear, neither) = (0, 1, 2)

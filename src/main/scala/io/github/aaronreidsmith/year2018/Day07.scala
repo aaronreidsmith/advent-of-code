@@ -7,12 +7,12 @@ import scala.collection.mutable
 import scala.io.Source
 
 // TODO: Adapted from Raku solution
-object Day07 extends Solution(2018, 7) {
+object Day07 extends Solution {
   type I  = Map[Char, Set[Char]]
   type O1 = String
   type O2 = Int
 
-  override protected[year2018] def parseInput(file: Source): Map[Char, Set[Char]] = {
+  override def parseInput(file: Source): Map[Char, Set[Char]] = {
     val regex = "^Step ([A-Z]) must be finished before step ([A-Z]) can begin.$".r
 
     val fromFile = file.getLines().foldLeft(Map.empty[Char, Set[Char]]) {
@@ -30,8 +30,8 @@ object Day07 extends Solution(2018, 7) {
     fromFile + (last -> Set.empty)
   }
 
-  override protected[year2018] def part1(input: Map[Char, Set[Char]]): String = solution(input, 1)._1
-  override protected[year2018] def part2(input: Map[Char, Set[Char]]): Int    = solution(input, 5)._2
+  override def part1(input: Map[Char, Set[Char]]): String = solution(input, 1)._1
+  override def part2(input: Map[Char, Set[Char]]): Int    = solution(input, 5)._2
 
   private def solution(dependencies: Map[Char, Set[Char]], numWorkers: Int): (String, Int) = {
     var duration    = 0

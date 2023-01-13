@@ -1,16 +1,16 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.collection.mutable
 import scala.io.Source
 
-object Day05 extends Solution(2022, 5) {
+object Day05 extends Solution {
   type I = (Map[Int, String], List[String])
   type O1 = String
   type O2 = String
 
-  override protected[year2022] def parseInput(file: Source): (Map[Int, String], List[String]) = {
+  override def parseInput(file: Source): (Map[Int, String], List[String]) = {
     val Array(stackString, instructionString, _*) = file.mkString.split("\n\n")
 
     // Transpose our stacks and then parse them into map like this: Map(1 -> 'NZ', 2 -> 'DCM', 3 -> 'P')
@@ -32,8 +32,8 @@ object Day05 extends Solution(2022, 5) {
     (parsedStacks, instructionString.split('\n').toList)
   }
 
-  override protected[year2022] def part1(input: (Map[Int, String], List[String])): String = solution(input, part2 = false)
-  override protected[year2022] def part2(input: (Map[Int, String], List[String])): String = solution(input, part2 = true)
+  override def part1(input: (Map[Int, String], List[String])): String = solution(input, part2 = false)
+  override def part2(input: (Map[Int, String], List[String])): String = solution(input, part2 = true)
 
   private def solution(input: (Map[Int, String], List[String]), part2: Boolean): String = {
     val (originalStacks, instructions) = input

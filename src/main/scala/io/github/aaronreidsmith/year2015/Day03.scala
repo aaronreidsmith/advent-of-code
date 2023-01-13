@@ -5,14 +5,14 @@ import io.github.aaronreidsmith.{Point, Solution}
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day03 extends Solution(2015, 3) {
+object Day03 extends Solution {
   type I  = String
   type O1 = Int
   type O2 = Int
 
-  override protected[year2015] def parseInput(file: Source): String = file.mkString.trim
+  override def parseInput(file: Source): String = file.mkString.trim
 
-  override protected[year2015] def part1(instructions: String): Int = {
+  override def part1(instructions: String): Int = {
     val (_, seenHouses) = instructions.foldLeft(Point.zero, Set(Point.zero)) {
       case ((point, seen), char) =>
         val nextPos = nextPosition(point, char)
@@ -22,7 +22,7 @@ object Day03 extends Solution(2015, 3) {
     seenHouses.size
   }
 
-  override protected[year2015] def part2(instructions: String): Int = {
+  override def part2(instructions: String): Int = {
     @tailrec
     def helper(
         pointer: Int = 0,

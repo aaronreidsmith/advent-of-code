@@ -4,14 +4,14 @@ import io.github.aaronreidsmith.{Point, Solution}
 
 import scala.io.Source
 
-object Day11 extends Solution(2018, 11) {
+object Day11 extends Solution {
   type I  = Int
   type O1 = String
   type O2 = String
 
   // Since a fuel cell is just a point with some other methods, we just extend our Point class
-  private[year2018] type FuelCell = Point
-  private object FuelCell {
+  type FuelCell = Point
+  object FuelCell {
     def apply(x: Int, y: Int): FuelCell = Point(x, y)
   }
 
@@ -25,9 +25,9 @@ object Day11 extends Solution(2018, 11) {
     }
   }
 
-  override protected[year2018] def parseInput(file: Source): Int = file.mkString.trim.toInt
+  override def parseInput(file: Source): Int = file.mkString.trim.toInt
 
-  override protected[year2018] def part1(input: Int): String = {
+  override def part1(input: Int): String = {
     val grid = for {
       x <- 1 to 300
       y <- 1 to 300
@@ -38,7 +38,7 @@ object Day11 extends Solution(2018, 11) {
   }
 
   // Adapted from https://www.reddit.com/r/adventofcode/comments/a53r6i/2018_day_11_solutions/ebjogd7?utm_source=share&utm_medium=web2x&context=3
-  override protected[year2018] def part2(input: Int): String = {
+  override def part2(input: Int): String = {
     var bestX          = Int.MinValue
     var bestY          = Int.MinValue
     var bestSize       = Int.MinValue

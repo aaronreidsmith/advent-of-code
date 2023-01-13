@@ -8,14 +8,14 @@ import java.security.MessageDigest
 import scala.io.Source
 
 @Slow(part1 = true, part2 = true)
-object Day14 extends Solution(2016, 14) {
+object Day14 extends Solution {
   type I  = String
   type O1 = Int
   type O2 = Int
 
-  override protected[year2016] def parseInput(file: Source): String = file.mkString.trim
-  override protected[year2016] def part1(input: String): Int        = solution(input, md5)
-  override protected[year2016] def part2(input: String): Int        = solution(input, stretchedMd5)
+  override def parseInput(file: Source): String = file.mkString.trim
+  override def part1(input: String): Int        = solution(input, md5)
+  override def part2(input: String): Int        = solution(input, stretchedMd5)
 
   private def solution(salt: String, md5Generator: String => String): Int = {
     val md5s = LazyList.from(0).map(i => md5Generator(s"$salt$i"))

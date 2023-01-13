@@ -7,7 +7,7 @@ import scala.annotation.tailrec
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
-object Day23 extends Solution(2017, 23) {
+object Day23 extends Solution {
   type I  = Vector[String]
   type O1 = Int
   type O2 = Int
@@ -18,9 +18,9 @@ object Day23 extends Solution(2017, 23) {
   private val mul = "^mul (.*) (.*)$".r
   private val jnz = "^jnz (.*) (.*)$".r
 
-  override protected[year2017] def parseInput(file: Source): Vector[String] = file.getLines().toVector
+  override def parseInput(file: Source): Vector[String] = file.getLines().toVector
 
-  override protected[year2017] def part1(input: Vector[String]): Int = {
+  override def part1(input: Vector[String]): Int = {
     @tailrec
     def helper(
         position: Int,
@@ -45,7 +45,7 @@ object Day23 extends Solution(2017, 23) {
           val updatedRegisters = registers + (register -> (existingValue * factor))
           helper(position + 1, updatedRegisters, mulsSeen + 1)
         case jnz(value, offset) =>
-          val jump  = getValue(registers, offset).toInt
+          val jump  = getValue(registers, offset)
           val check = getValue(registers, value)
           val delta = if (check != 0) jump else 1
           helper(position + delta, registers, mulsSeen)

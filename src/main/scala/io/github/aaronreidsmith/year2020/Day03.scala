@@ -5,17 +5,17 @@ import io.github.aaronreidsmith.{Point, Solution}
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day03 extends Solution(2020, 3) {
+object Day03 extends Solution {
   type I  = List[LazyList[Char]]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2020] def parseInput(file: Source): List[LazyList[Char]] = file.getLines().toList.map { line =>
+  override def parseInput(file: Source): List[LazyList[Char]] = file.getLines().toList.map { line =>
     LazyList.continually(line).flatten
   }
 
-  override protected[year2020] def part1(input: List[LazyList[Char]]): Int = traverse(input, (1, 3))
-  override protected[year2020] def part2(input: List[LazyList[Char]]): Int = {
+  override def part1(input: List[LazyList[Char]]): Int = traverse(input, (1, 3))
+  override def part2(input: List[LazyList[Char]]): Int = {
     Seq((1, 1), (1, 3), (1, 5), (1, 7), (2, 1)).foldLeft(1)(_ * traverse(input, _))
   }
 

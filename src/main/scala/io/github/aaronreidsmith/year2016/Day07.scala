@@ -5,14 +5,14 @@ import io.github.aaronreidsmith.Solution
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day07 extends Solution(2016, 7) {
+object Day07 extends Solution {
   type I  = List[String]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2016] def parseInput(file: Source): List[String] = file.getLines().toList
-  override protected[year2016] def part1(input: List[String]): Int        = input.count(supportsTls)
-  override protected[year2016] def part2(input: List[String]): Int        = input.count(supportsSsl)
+  override def parseInput(file: Source): List[String] = file.getLines().toList
+  override def part1(input: List[String]): Int        = input.count(supportsTls)
+  override def part2(input: List[String]): Int        = input.count(supportsSsl)
 
   private def matchesAbba(entry: String): Boolean = entry.sliding(4).exists { quartet =>
     val Array(a, b, c, d, _*) = quartet.split("")

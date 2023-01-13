@@ -1,16 +1,16 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.{Point, Solution, using}
+import io.github.aaronreidsmith.{Point, Solution}
 
 import scala.collection.SortedMap
 import scala.io.Source
 
-object Day08 extends Solution(2022, 8) {
+object Day08 extends Solution {
   type I  = SortedMap[Point, Int]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2022] def parseInput(file: Source): SortedMap[Point, Int] = {
+  override def parseInput(file: Source): SortedMap[Point, Int] = {
     val pairs = for {
       (line, row) <- file.getLines().zipWithIndex
       (char, col) <- line.zipWithIndex
@@ -18,7 +18,7 @@ object Day08 extends Solution(2022, 8) {
     SortedMap.from(pairs)
   }
 
-  override protected[year2022] def part1(input: SortedMap[Point, Int]): Int = input.foldLeft(0) {
+  override def part1(input: SortedMap[Point, Int]): Int = input.foldLeft(0) {
     case (acc, (position, treeHeight)) =>
       val (left, right, up, down) = treesOfInterest(input, position)
       if (
@@ -35,7 +35,7 @@ object Day08 extends Solution(2022, 8) {
     case (acc, _) => acc
   }
 
-  override protected[year2022] def part2(input: SortedMap[Point, Int]): Int = {
+  override def part2(input: SortedMap[Point, Int]): Int = {
     def viewingDistance(trees: Vector[Int], height: Int): Int = if (trees.forall(_ < height)) {
       trees.size
     } else {

@@ -5,20 +5,20 @@ import io.github.aaronreidsmith.{Point, Solution}
 import scala.io.Source
 
 // TODO: Adapted from Raku solution
-object Day06 extends Solution(2018, 6) {
+object Day06 extends Solution {
   type I  = List[Coordinate]
   type O1 = Int
   type O2 = Int
 
-  private[year2018] case class Coordinate(position: Point, var area: Int = 0, var edge: Boolean = false)
+  case class Coordinate(position: Point, var area: Int = 0, var edge: Boolean = false)
 
-  override protected[year2018] def parseInput(file: Source): List[Coordinate] = file.getLines().toList.map { line =>
+  override def parseInput(file: Source): List[Coordinate] = file.getLines().toList.map { line =>
     val Array(x, y, _*) = line.split(", ")
     Coordinate(Point(x.toInt, y.toInt))
   }
 
-  override protected[year2018] def part1(coordinates: List[Coordinate]): Int = solution(coordinates)._1
-  override protected[year2018] def part2(coordinates: List[Coordinate]): Int = solution(coordinates)._2
+  override def part1(coordinates: List[Coordinate]): Int = solution(coordinates)._1
+  override def part2(coordinates: List[Coordinate]): Int = solution(coordinates)._2
 
   private var answer = (0, 0)
   private var solved = false

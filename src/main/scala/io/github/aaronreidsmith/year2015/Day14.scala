@@ -5,12 +5,12 @@ import io.github.aaronreidsmith.Solution
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day14 extends Solution(2015, 14) {
+object Day14 extends Solution {
   type I  = List[Reindeer]
   type O1 = Int
   type O2 = Int
 
-  private[year2015] case class Reindeer(
+  case class Reindeer(
       name: String,
       speed: Int,
       moveTime: Int,
@@ -24,16 +24,16 @@ object Day14 extends Solution(2015, 14) {
 
   private val maxTime = if (isTest) 1000 else 2503
 
-  override protected[year2015] def parseInput(file: Source): List[Reindeer] = {
-    val reindeerEntry = "^(.*?) can fly (\\d+) km/s for (\\d+) seconds, but then must rest for (\\d+) seconds\\.$".r
+  override def parseInput(file: Source): List[Reindeer] = {
+    val reindeerEntry = """^(.*?) can fly (\d+) km/s for (\d+) seconds, but then must rest for (\d+) seconds\.$""".r
     file.getLines().foldLeft(List.empty[Reindeer]) {
       case (acc, reindeerEntry(name, speed, moveTime, restTime)) =>
         Reindeer(name, speed.toInt, moveTime.toInt, restTime.toInt) :: acc
-      case _ => throw new IllegalArgumentException
+      case (acc, _) => acc
     }
   }
 
-  override protected[year2015] def part1(input: List[Reindeer]): Int = {
+  override def part1(input: List[Reindeer]): Int = {
     @tailrec
     def helper(reindeer: List[Reindeer], currentTime: Int = 0): Int = {
       if (currentTime >= maxTime) {
@@ -63,7 +63,7 @@ object Day14 extends Solution(2015, 14) {
     helper(input)
   }
 
-  override protected[year2015] def part2(input: List[Reindeer]): Int = {
+  override def part2(input: List[Reindeer]): Int = {
     @tailrec
     def helper(reindeer: List[Reindeer], currentTime: Int = 0): Int = {
       if (currentTime >= maxTime) {

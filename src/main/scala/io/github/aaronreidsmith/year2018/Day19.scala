@@ -6,16 +6,16 @@ import org.apache.commons.math3.primes.Primes
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.jdk.CollectionConverters._
-import scala.util.{Failure, Success, Try, Using}
+import scala.util.{Failure, Success, Try}
 
-object Day19 extends Solution(2018, 19) {
+object Day19 extends Solution {
   type I  = Vector[String]
   type O1 = Int
   type O2 = Long
 
-  override protected[year2018] def parseInput(file: Source): Vector[String] = file.getLines().toVector
+  override def parseInput(file: Source): Vector[String] = file.getLines().toVector
 
-  override protected[year2018] def part1(input: Vector[String]): Int = {
+  override def part1(input: Vector[String]): Int = {
     val instructionPointer = input.head.last.asDigit
     val instructions       = input.tail
 
@@ -60,7 +60,7 @@ object Day19 extends Solution(2018, 19) {
   }
 
   // Adapted from https://www.reddit.com/r/adventofcode/comments/a7j9zc/comment/ec3w9wy
-  override protected[year2018] def part2(input: Vector[String]): Long = {
+  override def part2(input: Vector[String]): Long = {
     val Seq(a, b, _*)     = Seq(22, 24).map(index => input(index).split(' ')(2).toInt)
     val numberToFactorize = 10551236 + a * 22 + b
     Primes.primeFactors(numberToFactorize).asScala.foldLeft(1L) { (acc, primeFactor) =>

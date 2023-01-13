@@ -7,12 +7,12 @@ import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.io.Source
 
-object Day12 extends Solution(2019, 12) {
+object Day12 extends Solution {
   type I  = Vector[Moon]
   type O1 = Int
   type O2 = Long
 
-  private[year2019] case class Point3(x: Int = 0, y: Int = 0, z: Int = 0) {
+  case class Point3(x: Int = 0, y: Int = 0, z: Int = 0) {
     def +(other: Point3): Point3 = this.copy(x = this.x + other.x, y = this.y + other.y, z = this.z + other.z)
     def compare(other: Point3): Point3 = {
       val xChange = other.x.compare(this.x)
@@ -23,7 +23,7 @@ object Day12 extends Solution(2019, 12) {
     def energy: Int = x.abs + y.abs + z.abs
   }
 
-  private[year2019] case class Moon(position: Point3, velocity: Point3 = Point3()) {
+  case class Moon(position: Point3, velocity: Point3 = Point3()) {
     def applyGravity(other: Moon): Moon = this.copy(velocity = this.velocity + this.position.compare(other.position))
     def applyVelocity: Moon             = this.copy(position = this.position + this.velocity)
     def kineticEnergy: Int              = velocity.energy
@@ -31,14 +31,14 @@ object Day12 extends Solution(2019, 12) {
     def totalEnergy: Int                = potentialEnergy * kineticEnergy
   }
 
-  override protected[year2019] def parseInput(file: Source): Vector[Moon] = {
-    val moon = "^<x=\\s*(-?\\d+), y=\\s*(-?\\d+), z=\\s*(-?\\d+)>$".r
+  override def parseInput(file: Source): Vector[Moon] = {
+    val moon = """^<x=\s*(-?\d+), y=\s*(-?\d+), z=\s*(-?\d+)>$""".r
     file.getLines().toVector.collect {
       case moon(x, y, z) => Moon(Point3(x.toInt, y.toInt, z.toInt))
     }
   }
 
-  override protected[year2019] def part1(input: Vector[Moon]): Int = {
+  override def part1(input: Vector[Moon]): Int = {
     val iterations = if (isTest) 10 else 1000
 
     @tailrec
@@ -54,7 +54,7 @@ object Day12 extends Solution(2019, 12) {
   }
 
   // Adapted from https://git.io/J1O9W
-  override protected[year2019] def part2(moons: Vector[Moon]): Long = {
+  override def part2(moons: Vector[Moon]): Long = {
     // Doesn't work with ArithmeticUtils.lcm for some reason, so had to define my own
     def lcm(a: Long, b: Long): Long = a * b / ArithmeticUtils.gcd(a, b)
 

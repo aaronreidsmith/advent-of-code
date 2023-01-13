@@ -5,21 +5,21 @@ import io.github.aaronreidsmith.Solution
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day19 extends Solution(2019, 19) {
+object Day19 extends Solution {
   type I  = IntCode
   type O1 = Long
   type O2 = Long
 
-  override protected[year2019] def parseInput(file: Source): IntCode = IntCode(file)
+  override def parseInput(file: Source): IntCode = IntCode(file)
 
-  override protected[year2019] def part1(input: IntCode): Long = {
+  override def part1(input: IntCode): Long = {
     for {
       x <- 0 until 50
       y <- 0 until 50
     } yield input.withInput(x, y).allOutput
   }.foldLeft(0L)(_ + _.sum)
 
-  override protected[year2019] def part2(input: IntCode): Long = {
+  override def part2(input: IntCode): Long = {
     def test(x: Long, y: Long): Boolean = input.withInput(x, y).allOutput.head == 1L
 
     @tailrec

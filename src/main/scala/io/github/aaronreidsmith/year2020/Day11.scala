@@ -8,20 +8,20 @@ import scala.io.Source
 import scala.util.control.Breaks.{break, breakable}
 
 // TODO: This is adapted from some Python code, so it is _not_ super idiomatic
-object Day11 extends Solution(2020, 11) {
+object Day11 extends Solution {
   type I  = Grid[Char]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2020] def parseInput(file: Source): Grid[Char] = {
+  override def parseInput(file: Source): Grid[Char] = {
     file.toGrid
   }
 
-  override protected[year2020] def part1(input: Grid[Char]): Int = {
+  override def part1(input: Grid[Char]): Int = {
     solution(input, minOccupancy = 4, onlyImmediate = true)
   }
 
-  override protected[year2020] def part2(input: Grid[Char]): Int = {
+  override def part2(input: Grid[Char]): Int = {
     solution(input, minOccupancy = 5, onlyImmediate = false)
   }
 

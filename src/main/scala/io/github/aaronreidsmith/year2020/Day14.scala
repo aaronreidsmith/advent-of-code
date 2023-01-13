@@ -3,8 +3,13 @@ package io.github.aaronreidsmith.year2020
 import io.github.aaronreidsmith.using
 
 object Day14 {
-  private val mask   = "^mask = (.*)$".r
-  private val memory = "^mem\\[(\\d+)] = (\\d+)$".r
+  type I = List[String]
+  type O1 = Long
+  type O2 = Long
+
+  // Only want to compile these once
+  private val mask   = """^mask = (.*)$""".r
+  private val memory = """^mem\[(\d+)] = (\d+)$""".r
 
   def main(args: Array[String]): Unit = {
     val input = using("2020/day14.txt")(_.getLines().toList)

@@ -28,7 +28,7 @@ import scala.io.Source
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-private[year2019] case class IntCode(
+case class IntCode(
     ip: Long,
     relativeBase: Long,
     memory: Map[Long, Long],
@@ -74,7 +74,7 @@ private[year2019] case class IntCode(
 
 }
 
-private[year2019] object IntCode {
+object IntCode {
   private val powers = Map(1 -> 100, 2 -> 1000, 3 -> 10000)
 
   sealed trait State

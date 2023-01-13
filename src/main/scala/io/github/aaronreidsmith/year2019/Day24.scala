@@ -5,12 +5,12 @@ import io.github.aaronreidsmith.Solution
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day24 extends Solution(2019, 24) {
+object Day24 extends Solution {
   type I  = Set[Point3D]
   type O1 = Int
   type O2 = Int
 
-  private[year2019] case class Point3D(row: Int, col: Int, depth: Int) {
+  case class Point3D(row: Int, col: Int, depth: Int) {
     def neighbors: Seq[Point3D] = Seq(
       copy(row = row - 1),
       copy(row = row + 1),
@@ -19,7 +19,7 @@ object Day24 extends Solution(2019, 24) {
     )
   }
 
-  override protected[year2019] def parseInput(file: Source): Set[Point3D] = {
+  override def parseInput(file: Source): Set[Point3D] = {
     for {
       (line, x) <- file.getLines().zipWithIndex
       (char, y) <- line.zipWithIndex
@@ -27,7 +27,7 @@ object Day24 extends Solution(2019, 24) {
     } yield Point3D(x, y, 0)
   }.toSet
 
-  override protected[year2019] def part1(input: Set[Point3D]): Int = {
+  override def part1(input: Set[Point3D]): Int = {
     @tailrec
     def helper(grid: Set[Point3D], previous: Set[Set[Point3D]] = Set.empty): Int = {
       val next = step(grid, neighbors2D)
@@ -44,7 +44,7 @@ object Day24 extends Solution(2019, 24) {
     helper(input)
   }
 
-  override protected[year2019] def part2(input: Set[Point3D]): Int = {
+  override def part2(input: Set[Point3D]): Int = {
     val minutes = if (isTest) 10 else 200
     Iterator.iterate(input)(step(_, neighbors3D)).drop(minutes).next().size
   }

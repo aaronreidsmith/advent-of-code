@@ -5,14 +5,14 @@ import io.github.aaronreidsmith.Solution
 import scala.collection.mutable
 import scala.io.Source
 
-object Day16 extends Solution(2022, 16) {
+object Day16 extends Solution {
   type I  = (Map[String, Valve], Map[String, Map[String, Int]], Set[String])
   type O1 = Int
   type O2 = Int
 
-  private[year2022] case class Valve(flow: Int, neighbors: List[String])
+  case class Valve(flow: Int, neighbors: List[String])
 
-  override protected[year2022] def parseInput(
+  override def parseInput(
       file: Source
   ): (Map[String, Valve], Map[String, Map[String, Int]], Set[String]) = {
     val entry = """^Valve ([A-Z]{2}) has flow rate=(\d+); tunnels? leads? to valves? (.*)$""".r
@@ -26,7 +26,7 @@ object Day16 extends Solution(2022, 16) {
     (valves, distances, toVisit)
   }
 
-  override protected[year2022] def part1(
+  override def part1(
       input: (Map[String, Valve], Map[String, Map[String, Int]], Set[String])
   ): Int = {
     val (valves, distances, toVisit) = input
@@ -45,7 +45,7 @@ object Day16 extends Solution(2022, 16) {
     helper("AA")
   }
 
-  override protected[year2022] def part2(
+  override def part2(
       input: (Map[String, Valve], Map[String, Map[String, Int]], Set[String])
   ): Int = {
     val (valves, distances, toVisit) = input

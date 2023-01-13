@@ -1,24 +1,24 @@
 package io.github.aaronreidsmith.year2019
 
 import io.github.aaronreidsmith.implicits.SourceOps
-import io.github.aaronreidsmith.{Grid, Point, Solution, using}
+import io.github.aaronreidsmith.{Grid, Point, Solution}
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath
-import org.jgrapht.graph.{DefaultEdge, SimpleGraph}
+import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
 
 import scala.io.Source
 
 // It's ugly, but it works 🤷
-object Day20 extends Solution(2019, 20) {
+object Day20 extends Solution {
   type I  = Grid[Tile]
   type O1 = Int
   type O2 = Int
 
-  private[year2019] sealed trait Tile
-  private case object Wall                                              extends Tile
-  private case object Path                                              extends Tile
-  private case class Portal(label: String, isInterior: Boolean = false) extends Tile
+  sealed trait Tile
+  case object Wall                                              extends Tile
+  case object Path                                              extends Tile
+  case class Portal(label: String, isInterior: Boolean = false) extends Tile
 
-  override protected[year2019] def parseInput(file: Source): Map[Point, Tile] = {
+  override def parseInput(file: Source): Map[Point, Tile] = {
     val raw = file.toGrid.withDefaultValue('#')
     raw
       .map {
@@ -60,8 +60,8 @@ object Day20 extends Solution(2019, 20) {
       .withDefaultValue(Wall)
   }
 
-  override protected[year2019] def part1(grid: Grid[Tile]): Int = {
-    val graph = new SimpleGraph[Point, DefaultEdge](classOf[DefaultEdge])
+  override def part1(grid: Grid[Tile]): Int = {
+    val graph = new DefaultUndirectedGraph[Point, DefaultEdge](classOf[DefaultEdge])
     grid.foreach {
       case (_, Wall) => // Skip walls
       case (point, tile) =>
@@ -85,8 +85,8 @@ object Day20 extends Solution(2019, 20) {
     DijkstraShortestPath.findPathBetween(graph, start, end).getLength
   }
 
-  override protected[year2019] def part2(grid: Grid[Tile]): Int = {
-    val graph = new SimpleGraph[(Int, Int, Int), DefaultEdge](classOf[DefaultEdge])
+  override def part2(grid: Grid[Tile]): Int = {
+    val graph = new DefaultUndirectedGraph[(Int, Int, Int), DefaultEdge](classOf[DefaultEdge])
     (0 until 30).foreach { level =>
       grid.foreach {
         case (_, Wall) => // Skip walls

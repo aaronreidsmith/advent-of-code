@@ -5,7 +5,7 @@ import io.github.aaronreidsmith.Solution
 import java.util.concurrent.atomic.AtomicInteger
 import scala.io.Source
 
-object Day17 extends Solution(2015, 17) {
+object Day17 extends Solution {
   type I  = List[Container]
   type O1 = Int
   type O2 = Int
@@ -14,17 +14,14 @@ object Day17 extends Solution(2015, 17) {
   private val targetLiters      = if (isTest) 25 else 150
 
   // This whole class is only used so we can have duplicate container sizes when using `combinations`
-  private[year2015] case class Container(size: Int) {
+  case class Container(size: Int) {
     private val _hashCode        = hashCodeGenerator.getAndIncrement()
     override def hashCode(): Int = _hashCode
   }
 
-  override protected[year2015] def parseInput(file: Source): List[Container] = {
-    file.getLines().toList.map(line => Container(line.toInt))
-  }
-  override protected[year2015] def part1(containers: List[Container]): Int =
-    getValidCombinations(containers, targetLiters).length
-  override protected[year2015] def part2(containers: List[Container]): Int = {
+  override def parseInput(file: Source): List[Container] = file.getLines().toList.map(line => Container(line.toInt))
+  override def part1(containers: List[Container]): Int   = getValidCombinations(containers, targetLiters).length
+  override def part2(containers: List[Container]): Int = {
     val validCombinations = getValidCombinations(containers, targetLiters)
     val minContainers = validCombinations.foldLeft(Int.MaxValue) { (currentMin, combination) =>
       currentMin.min(combination.size)

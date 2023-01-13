@@ -1,19 +1,19 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.{Direction, East, Grid, North, Point, Solution, South, West}
+import io.github.aaronreidsmith._
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day22 extends Solution(2022, 22) {
+object Day22 extends Solution {
   type I  = (Grid[Char], List[Instruction])
   type O1 = Int
   type O2 = Int
 
-  private[year2022] sealed trait Instruction
-  private case object Left            extends Instruction
-  private case object Right           extends Instruction
-  private case class Move(steps: Int) extends Instruction
+  sealed trait Instruction
+  case object Left            extends Instruction
+  case object Right           extends Instruction
+  case class Move(steps: Int) extends Instruction
 
   private implicit class DirectionOps(direction: Direction) {
     def toInt: Int = direction match {
@@ -24,7 +24,7 @@ object Day22 extends Solution(2022, 22) {
     }
   }
 
-  override protected[year2022] def parseInput(file: Source): (Grid[Char], List[Instruction]) = {
+  override def parseInput(file: Source): (Grid[Char], List[Instruction]) = {
     val Array(rawGrid, rawInstructions, _*) = file.mkString.stripTrailing().split("\n\n")
 
     val grid = {
@@ -54,7 +54,7 @@ object Day22 extends Solution(2022, 22) {
     (grid, interleaved)
   }
 
-  override protected[year2022] def part1(input: (Grid[Char], List[Instruction])): Int = {
+  override def part1(input: (Grid[Char], List[Instruction])): Int = {
     val (grid, initialInstructions) = input
     solution(
       grid,
@@ -73,7 +73,7 @@ object Day22 extends Solution(2022, 22) {
     )
   }
 
-  override protected[year2022] def part2(input: (Grid[Char], List[Instruction])): Int = {
+  override def part2(input: (Grid[Char], List[Instruction])): Int = {
     val (grid, initialInstructions) = input
 
     // Get our sections

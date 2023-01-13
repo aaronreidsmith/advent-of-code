@@ -1,19 +1,19 @@
 package io.github.aaronreidsmith.year2022
 
+import io.github.aaronreidsmith._
 import io.github.aaronreidsmith.implicits._
-import io.github.aaronreidsmith.{Direction, East, Grid, North, Point, Solution, South, West}
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day23 extends Solution(2022, 23) {
+object Day23 extends Solution {
   type I  = Grid[Char]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2022] def parseInput(file: Source): Grid[Char] = file.toGrid
-  override protected[year2022] def part1(input: Grid[Char]): Int        = solution(input, part1 = true)
-  override protected[year2022] def part2(input: Grid[Char]): Int        = solution(input, part1 = false)
+  override def parseInput(file: Source): Grid[Char] = file.toGrid
+  override def part1(input: Grid[Char]): Int        = solution(input, part1 = true)
+  override def part2(input: Grid[Char]): Int        = solution(input, part1 = false)
 
   private def solution(input: Grid[Char], part1: Boolean): Int = {
     @tailrec

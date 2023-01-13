@@ -2,24 +2,24 @@ package io.github.aaronreidsmith.year2019
 
 import io.github.aaronreidsmith.{Point, Solution}
 
-import scala.io.Source
 import scala.annotation.tailrec
+import scala.io.Source
 
-object Day13 extends Solution(2019, 13) {
+object Day13 extends Solution {
   type I  = IntCode
   type O1 = Int
   type O2 = Long
 
-  override protected[year2019] def parseInput(file: Source): IntCode = IntCode(file)
+  override def parseInput(file: Source): IntCode = IntCode(file)
 
-  override protected[year2019] def part1(input: IntCode): Int = {
+  override def part1(input: IntCode): Int = {
     input.allOutput.zipWithIndex.count {
       case (value, index) if (index + 1) % 3 == 0 => value == 2
       case _ => false
     }
   }
 
-  override protected[year2019] def part2(input: IntCode): Long = {
+  override def part2(input: IntCode): Long = {
     def take(intCode: IntCode, amount: Int): (IntCode, Seq[Long]) = {
       val raw    = Iterator.iterate(intCode)(_.nextOutput).slice(1, amount + 1).toSeq
       val output = raw.map(_.result).collect { case IntCode.Output(value) => value }

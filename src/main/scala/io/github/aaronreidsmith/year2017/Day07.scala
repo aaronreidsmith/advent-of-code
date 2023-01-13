@@ -1,24 +1,24 @@
 package io.github.aaronreidsmith.year2017
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.io.Source
 
-object Day07 extends Solution(2017, 7) {
+object Day07 extends Solution {
   type I  = (Map[String, Node], Set[String])
   type O1 = String
   type O2 = Int
 
-  private[year2017] case class Node(
+  case class Node(
       name: String,
       weight: Int,
       children: Seq[Node] = Seq(),
       childString: Option[String] = None
   )
 
-  override protected[year2017] def parseInput(file: Source): (Map[String, Node], Set[String]) = {
+  override def parseInput(file: Source): (Map[String, Node], Set[String]) = {
     val noChildren   = """^(\S+) \((\d+)\)$""".r
     val withChildren = """^(\S+) \((\d+)\) -> (.*)$""".r
     val allNodes = file.getLines().foldLeft(Map.empty[String, Node]) {
@@ -47,12 +47,12 @@ object Day07 extends Solution(2017, 7) {
     (mappedNodes, childNodes.toSet)
   }
 
-  override protected[year2017] def part1(input: (Map[String, Node], Set[String])): String = {
+  override def part1(input: (Map[String, Node], Set[String])): String = {
     val (nodes, childNodes) = input
     nodes.keySet.diff(childNodes).head
   }
 
-  override protected[year2017] def part2(input: (Map[String, Node], Set[String])): Int = {
+  override def part2(input: (Map[String, Node], Set[String])): Int = {
     def getWeight(node: Node): Int = node.weight + node.children.foldLeft(0)((acc, n) => acc + getWeight(n))
 
     def findOutlier(weights: Seq[Int]): Int = weights

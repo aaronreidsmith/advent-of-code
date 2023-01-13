@@ -6,7 +6,7 @@ import org.apache.commons.math3.util.ArithmeticUtils
 import scala.io.Source
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/e8m1z3/comment/faeb25d
-object Day10 extends Solution(2019, 10) {
+object Day10 extends Solution {
   type I  = Set[Point]
   type O1 = Int
   type O2 = Int
@@ -19,7 +19,7 @@ object Day10 extends Solution(2019, 10) {
     }
   }
 
-  override protected[year2019] def parseInput(file: Source): Set[Point] = {
+  override def parseInput(file: Source): Set[Point] = {
     for {
       (line, row) <- file.getLines().zipWithIndex
       (char, col) <- line.zipWithIndex
@@ -27,9 +27,9 @@ object Day10 extends Solution(2019, 10) {
     } yield Point(row, col)
   }.toSet
 
-  override protected[year2019] def part1(asteroids: Set[Point]): Int = findStationCoordinates(asteroids)._2.size
+  override def part1(asteroids: Set[Point]): Int = findStationCoordinates(asteroids)._2.size
 
-  override protected[year2019] def part2(asteroids: Set[Point]): Int = {
+  override def part2(asteroids: Set[Point]): Int = {
     val (station, targets) = findStationCoordinates(asteroids)
     val target = station + targets.toIndexedSeq
       .map(asteroid => (math.atan2(asteroid.y, asteroid.x), asteroid))

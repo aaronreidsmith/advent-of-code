@@ -8,7 +8,7 @@ import org.jgrapht.graph.{DefaultDirectedGraph, DefaultEdge}
 import scala.io.Source
 import scala.jdk.CollectionConverters._
 
-object Day12 extends Solution(2022, 12) {
+object Day12 extends Solution {
   type I  = DefaultDirectedGraph[(Point, Char), DefaultEdge]
   type O1 = Int
   type O2 = Int
@@ -21,7 +21,7 @@ object Day12 extends Solution(2022, 12) {
     }
   }
 
-  override protected[year2022] def parseInput(file: Source): DefaultDirectedGraph[(Point, Char), DefaultEdge] = {
+  override def parseInput(file: Source): DefaultDirectedGraph[(Point, Char), DefaultEdge] = {
     val graph = new DefaultDirectedGraph[(Point, Char), DefaultEdge](classOf[DefaultEdge])
     val grid  = file.toGrid
     grid.foreach {
@@ -43,14 +43,14 @@ object Day12 extends Solution(2022, 12) {
     graph
   }
 
-  override protected[year2022] def part1(input: DefaultDirectedGraph[(Point, Char), DefaultEdge]): Int = {
+  override def part1(input: DefaultDirectedGraph[(Point, Char), DefaultEdge]): Int = {
     val vertices = input.vertexSet().asScala
     val start    = vertices.find(_._2 == 'S').get
     val end      = vertices.find(_._2 == 'E').get
     DijkstraShortestPath.findPathBetween(input, start, end).getLength
   }
 
-  override protected[year2022] def part2(input: DefaultDirectedGraph[(Point, Char), DefaultEdge]): Int = {
+  override def part2(input: DefaultDirectedGraph[(Point, Char), DefaultEdge]): Int = {
     val vertices = input.vertexSet().asScala
     val end      = vertices.find(_._2 == 'E').get
     vertices.foldLeft(Int.MaxValue) {

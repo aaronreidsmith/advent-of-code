@@ -6,12 +6,12 @@ import org.apache.commons.math3.complex.Complex
 import scala.io.Source
 
 // Adapted from https://old.reddit.com/r/adventofcode/comments/zrav4h/2022_day_21_solutions/j138aav/
-object Day21 extends Solution(2022, 21) {
+object Day21 extends Solution {
   type I  = Map[String, Node]
   type O1 = Long
   type O2 = Long
 
-  private[year2022] case class Node(
+  case class Node(
       name: String,
       raw: String,
       var value: Option[Complex] = None,
@@ -28,7 +28,7 @@ object Day21 extends Solution(2022, 21) {
     })
   }
 
-  override protected[year2022] def parseInput(file: Source): Map[String, Node] = {
+  override def parseInput(file: Source): Map[String, Node] = {
     val nodes = file.getLines().foldLeft(Map.empty[String, Node]) { (acc, line) =>
       val Array(name, raw, _*) = line.split(": ")
       acc.updated(name, Node(name, raw))
@@ -52,9 +52,9 @@ object Day21 extends Solution(2022, 21) {
     nodes
   }
 
-  override protected[year2022] def part1(input: Map[String, Node]): Long = input("root").evaluate.getReal.toLong
+  override def part1(input: Map[String, Node]): Long = input("root").evaluate.getReal.toLong
 
-  override protected[year2022] def part2(input: Map[String, Node]): Long = {
+  override def part2(input: Map[String, Node]): Long = {
     val root = input("root")
     input("humn").value = Some(new Complex(0, 1))
     val (solve, const) = root.rhs.evaluate match {

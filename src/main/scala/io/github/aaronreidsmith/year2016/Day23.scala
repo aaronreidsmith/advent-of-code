@@ -6,7 +6,7 @@ import scala.annotation.tailrec
 import scala.io.Source
 import scala.util.Try
 
-object Day23 extends Solution(2016, 23) {
+object Day23 extends Solution {
   type I  = Vector[String]
   type O1 = Int
   type O2 = Int
@@ -16,9 +16,9 @@ object Day23 extends Solution(2016, 23) {
       Try(str.toInt).getOrElse(registers.getOrElse(str, throw new IllegalArgumentException(str)))
   }
 
-  override protected[year2016] def parseInput(file: Source): Vector[String] = file.getLines().toVector
+  override def parseInput(file: Source): Vector[String] = file.getLines().toVector
 
-  override protected[year2016] def part1(input: Vector[String]): Int = {
+  override def part1(input: Vector[String]): Int = {
     val cpy = "^cpy (.*) (.*)$".r
     val inc = "^inc (.*)$".r
     val dec = "^dec (.*)$".r
@@ -77,7 +77,7 @@ object Day23 extends Solution(2016, 23) {
   }
 
   // Adapted from https://www.reddit.com/r/adventofcode/comments/5jvbzt/2016_day_23_solutions/dbjbqtq
-  override protected[year2016] def part2(input: Vector[String]): Int = {
+  override def part2(input: Vector[String]): Int = {
     @tailrec
     def factorial(n: Int, acc: Int = 1): Int = if (n == 1) acc else factorial(n - 1, acc * n)
 

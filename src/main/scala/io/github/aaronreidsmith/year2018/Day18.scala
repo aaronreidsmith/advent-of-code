@@ -7,7 +7,7 @@ import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.io.Source
 
-object Day18 extends Solution(2018, 18) {
+object Day18 extends Solution {
   type I  = Grid[Square]
   type O1 = Int
   type O2 = Int
@@ -33,20 +33,20 @@ object Day18 extends Solution(2018, 18) {
     }
   }
 
-  private[year2018] sealed trait Square
-  private case object OpenGround extends Square
-  private case object Trees      extends Square
-  private case object Lumberyard extends Square
+  sealed trait Square
+  case object OpenGround extends Square
+  case object Trees      extends Square
+  case object Lumberyard extends Square
 
-  override protected[year2018] def parseInput(file: Source): Grid[Square] = file.toGrid.view.mapValues {
+  override def parseInput(file: Source): Grid[Square] = file.toGrid.view.mapValues {
     case '|' => Trees
     case '#' => Lumberyard
     case _   => OpenGround
   }.toMap
 
-  override protected[year2018] def part1(input: Grid[Square]): Int = simulate(input, 10)
+  override def part1(input: Grid[Square]): Int = simulate(input, 10)
 
-  override protected[year2018] def part2(input: Grid[Square]): Int = {
+  override def part2(input: Grid[Square]): Int = {
     val seenStates     = mutable.Set.empty[Grid[Square]]
     var startedUpState = Map.empty[Point, Square]
     var startUpCycles  = 0

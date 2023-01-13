@@ -5,12 +5,12 @@ import io.github.aaronreidsmith.Solution
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day12 extends Solution(2018, 12) {
+object Day12 extends Solution {
   type I  = (Map[Int, Char], Map[String, Char])
   type O1 = Int
   type O2 = Long
 
-  override protected[year2018] def parseInput(file: Source): (Map[Int, Char], Map[String, Char]) = {
+  override def parseInput(file: Source): (Map[Int, Char], Map[String, Char]) = {
     val Array(initialStateString, rulesString, _*) = file.mkString.trim.split("\n\n")
     val initialState = initialStateString.filter(char => char == '#' || char == '.').zipWithIndex.map(_.swap).toMap
     val rule         = "^(.*) => (.*)$".r
@@ -22,8 +22,8 @@ object Day12 extends Solution(2018, 12) {
     (initialState, rules)
   }
 
-  override protected[year2018] def part1(input: (Map[Int, Char], Map[String, Char])): Int  = solution(input, 20)._1
-  override protected[year2018] def part2(input: (Map[Int, Char], Map[String, Char])): Long = solution(input, 1000)._2
+  override def part1(input: (Map[Int, Char], Map[String, Char])): Int  = solution(input, 20)._1
+  override def part2(input: (Map[Int, Char], Map[String, Char])): Long = solution(input, 1000)._2
 
   private def solution(input: (Map[Int, Char], Map[String, Char]), iterations: Int): (Int, Long) = {
     val (initialState, rules) = input

@@ -1,16 +1,16 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.{Direction, East, North, Point, Solution, South, West, using}
+import io.github.aaronreidsmith.{Direction, East, Point, Solution}
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day12 extends Solution(2020, 12) {
+object Day12 extends Solution {
   type I  = List[String]
   type O1 = Int
   type O2 = Int
 
-  private case class Ship(position: Point, heading: Direction, waypoint: Point) {
+  case class Ship(position: Point, heading: Direction, waypoint: Point) {
     // Part 1 methods
     def turn(instruction: String): Ship = {
       val direction = instruction.head
@@ -74,13 +74,13 @@ object Day12 extends Solution(2020, 12) {
     }
   }
 
-  private object Ship {
+  object Ship {
     def initial: Ship = Ship(Point.zero, East, Point(-1, 10))
   }
 
-  override protected[year2020] def parseInput(file: Source): List[String] = file.getLines().toList
-  override protected[year2020] def part1(input: List[String]): Int        = solution(input, part2 = false)
-  override protected[year2020] def part2(input: List[String]): Int        = solution(input, part2 = true)
+  override def parseInput(file: Source): List[String] = file.getLines().toList
+  override def part1(input: List[String]): Int        = solution(input, part2 = false)
+  override def part2(input: List[String]): Int        = solution(input, part2 = true)
 
   private def solution(input: List[String], part2: Boolean): Int = {
     @tailrec

@@ -7,12 +7,12 @@ import scala.io.Source
 import scala.util.Random
 
 // Copied from my Raku solution, so could probably be cleaned up
-object Day22 extends Solution(2015, 22) {
+object Day22 extends Solution {
   type I  = GameState
   type O1 = Int
   type O2 = Int
 
-  private[year2015] case class GameState(
+  case class GameState(
       bossHp: Int,
       bossAttack: Int,
       playerHp: Int = 50,
@@ -71,29 +71,29 @@ object Day22 extends Solution(2015, 22) {
     def nextTurn: GameState = this.copy(turn = turn.next)
   }
 
-  private[year2015] sealed trait Spell { val manaCost: Int }
-  private[year2015] case object MagicMissile extends Spell { val manaCost: Int = 53  }
-  private[year2015] case object Drain        extends Spell { val manaCost: Int = 73  }
-  private[year2015] case object Shield       extends Spell { val manaCost: Int = 113 }
-  private[year2015] case object Poison       extends Spell { val manaCost: Int = 173 }
-  private[year2015] case object Recharge     extends Spell { val manaCost: Int = 229 }
+  sealed trait Spell { val manaCost: Int }
+  case object MagicMissile extends Spell { val manaCost: Int = 53  }
+  case object Drain        extends Spell { val manaCost: Int = 73  }
+  case object Shield       extends Spell { val manaCost: Int = 113 }
+  case object Poison       extends Spell { val manaCost: Int = 173 }
+  case object Recharge     extends Spell { val manaCost: Int = 229 }
 
-  private[year2015] sealed trait Turn { val next: Turn }
-  private[year2015] case object Boss   extends Turn { val next: Turn = Player }
-  private[year2015] case object Player extends Turn { val next: Turn = Boss   }
-  private[year2015] type Winner = Turn
+  sealed trait Turn { val next: Turn }
+  case object Boss   extends Turn { val next: Turn = Player }
+  case object Player extends Turn { val next: Turn = Boss   }
+  type Winner = Turn
 
-  override protected[year2015] def parseInput(file: Source): GameState = {
+  override def parseInput(file: Source): GameState = {
     val List(bossHp, bossAttack, _*) = file.getLines().toList.map(line => line.filter(_.isDigit).toInt)
     GameState(bossHp, bossAttack)
   }
 
-  override protected[year2015] def part1(gameState: GameState): Int = {
+  override def part1(gameState: GameState): Int = {
     val regularMode = gameState.copy(hardMode = false) // Ensure hard mode is disabled
     solution(regularMode, 10000)
   }
 
-  override protected[year2015] def part2(gameState: GameState): Int = {
+  override def part2(gameState: GameState): Int = {
     val hardMode = gameState.copy(hardMode = true) // Ensure hard mode is enabled
     solution(hardMode, 100000)
   }

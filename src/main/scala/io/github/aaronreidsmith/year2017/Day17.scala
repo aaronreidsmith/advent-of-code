@@ -5,14 +5,14 @@ import io.github.aaronreidsmith.Solution
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day17 extends Solution(2017, 17) {
+object Day17 extends Solution {
   type I  = Int
   type O1 = Int
   type O2 = Int
 
-  override protected[year2017] def parseInput(file: Source): Int = file.mkString.trim.toInt
+  override def parseInput(file: Source): Int = file.mkString.trim.toInt
 
-  override protected[year2017] def part1(input: Int): Int = {
+  override def part1(input: Int): Int = {
     @tailrec
     def helper(
         stepCount: Int,
@@ -31,12 +31,14 @@ object Day17 extends Solution(2017, 17) {
     helper(input)
   }
 
-  override protected[year2017] def part2(stepCount: Int): Int = (1 to 50_000_000)
-    .foldLeft((0, 0)) {
-      case ((current, second), i) =>
-        val next = 1 + (current + stepCount) % i
-        (next, if (next == 1) i else second)
-      case (acc, _) => acc
-    }
-    ._2
+  override def part2(stepCount: Int): Int = {
+    (1 to 50_000_000)
+      .foldLeft((0, 0)) {
+        case ((current, second), i) =>
+          val next = 1 + (current + stepCount) % i
+          (next, if (next == 1) i else second)
+        case (acc, _) => acc
+      }
+      ._2
+  }
 }

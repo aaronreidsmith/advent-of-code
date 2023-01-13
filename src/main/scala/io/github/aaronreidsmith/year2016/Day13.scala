@@ -7,12 +7,12 @@ import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
 import scala.io.Source
 import scala.jdk.CollectionConverters._
 
-object Day13 extends Solution(2016, 13) {
+object Day13 extends Solution {
   type I  = DefaultUndirectedGraph[Point, DefaultEdge]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2016] def parseInput(file: Source): DefaultUndirectedGraph[Point, DefaultEdge] = {
+  override def parseInput(file: Source): DefaultUndirectedGraph[Point, DefaultEdge] = {
     val input = file.mkString.trim.toInt
     val graph = new DefaultUndirectedGraph[Point, DefaultEdge](classOf[DefaultEdge])
 
@@ -39,11 +39,11 @@ object Day13 extends Solution(2016, 13) {
     graph
   }
 
-  override protected[year2016] def part1(input: DefaultUndirectedGraph[Point, DefaultEdge]): Int = {
+  override def part1(input: DefaultUndirectedGraph[Point, DefaultEdge]): Int = {
     BFSShortestPath.findPathBetween(input, Point(1, 1), Point(31, 39)).getLength
   }
 
-  override protected[year2016] def part2(input: DefaultUndirectedGraph[Point, DefaultEdge]): Int = {
+  override def part2(input: DefaultUndirectedGraph[Point, DefaultEdge]): Int = {
     val start = Point(1, 1)
     input.vertexSet().asScala.count { other =>
       Option(BFSShortestPath.findPathBetween(input, start, other)) match {

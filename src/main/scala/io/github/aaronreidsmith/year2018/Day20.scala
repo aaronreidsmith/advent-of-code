@@ -3,7 +3,7 @@ package io.github.aaronreidsmith.year2018
 import io.github.aaronreidsmith.annotations.Slow
 import io.github.aaronreidsmith.{Direction, Point, Solution}
 import org.jgrapht.alg.shortestpath.BFSShortestPath
-import org.jgrapht.graph.{DefaultDirectedGraph, DefaultEdge}
+import org.jgrapht.graph.{DefaultEdge, SimpleDirectedGraph}
 
 import scala.collection.mutable
 import scala.io.Source
@@ -11,14 +11,14 @@ import scala.jdk.CollectionConverters._
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/a7uk3f/2018_day_20_solutions/ec5y3lm/
 @Slow(parsing = true)
-object Day20 extends Solution(2018, 20) {
+object Day20 extends Solution {
   type I  = List[Int]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2018] def parseInput(file: Source): List[Int] = {
+  override def parseInput(file: Source): List[Int] = {
     val paths    = file.mkString.tail.init
-    val graph    = new DefaultDirectedGraph[Point, DefaultEdge](classOf[DefaultEdge])
+    val graph    = new SimpleDirectedGraph[Point, DefaultEdge](classOf[DefaultEdge])
     val start    = Point.zero
     val position = mutable.Set(start)
     val stack    = mutable.Stack.empty[(Set[Point], Set[Point])]
@@ -58,6 +58,6 @@ object Day20 extends Solution(2018, 20) {
     }
   }
 
-  override protected[year2018] def part1(lengths: List[Int]): Int = lengths.max
-  override protected[year2018] def part2(lengths: List[Int]): Int = lengths.count(_ >= 1000)
+  override def part1(lengths: List[Int]): Int = lengths.max
+  override def part2(lengths: List[Int]): Int = lengths.count(_ >= 1000)
 }

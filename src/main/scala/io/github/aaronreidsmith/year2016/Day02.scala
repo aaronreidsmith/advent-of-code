@@ -5,7 +5,7 @@ import io.github.aaronreidsmith.Solution
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day02 extends Solution(2016, 2){
+object Day02 extends Solution{
   type I  = List[List[Char]]
   type O1 = String
   type O2 = String
@@ -118,9 +118,9 @@ object Day02 extends Solution(2016, 2){
     override val partTwoUp: Character = B
   }
 
-  override protected[year2016] def parseInput(file: Source): List[List[Char]] = file.getLines().toList.map(_.toList)
+  override def parseInput(file: Source): List[List[Char]] = file.getLines().toList.map(_.toList)
 
-  override protected[year2016] def part1(input: List[List[Char]]): String = {
+  override def part1(input: List[List[Char]]): String = {
     val output = new StringBuilder
     @tailrec
     def helper(instructions: List[List[Char]], currentNum: Character = Five): String = {
@@ -147,7 +147,7 @@ object Day02 extends Solution(2016, 2){
     helper(input)
   }
 
-  override protected[year2016] def part2(input: List[List[Char]]): String = {
+  override def part2(input: List[List[Char]]): String = {
     val output = new StringBuilder
     @tailrec
     def helper(instructions: List[List[Char]], currentNum: Character = Five): String = {

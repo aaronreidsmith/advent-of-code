@@ -7,7 +7,7 @@ import scala.collection.mutable
 import scala.io.Source
 import scala.util.Try
 
-object Day25 extends Solution(2019, 25) {
+object Day25 extends Solution {
   type I  = IntCode
   type O1 = Int
   type O2 = Nothing
@@ -47,9 +47,9 @@ object Day25 extends Solution(2019, 25) {
     }
   }
 
-  override protected[year2019] def parseInput(file: Source): IntCode = IntCode(file)
+  override def parseInput(file: Source): IntCode = IntCode(file)
 
-  override protected[year2019] def part1(input: IntCode): Int = {
+  override def part1(input: IntCode): Int = {
     // Not a general solution; only works with my input. To play the game yourself, set `autoSolve` to `false` below
     val commands = mutable.Queue(
       "north",

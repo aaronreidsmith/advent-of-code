@@ -6,7 +6,7 @@ import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
-object Day22 extends Solution(2019, 22) {
+object Day22 extends Solution {
   type I  = List[String]
   type O1 = Int
   type O2 = BigInt
@@ -15,7 +15,7 @@ object Day22 extends Solution(2019, 22) {
   private val dealIncrement = """^deal with increment (\d+)$""".r
   private val cut           = """^cut (-?\d+)$""".r
 
-  private[year2019] case class Deck(cards: Vector[Int]) {
+  case class Deck(cards: Vector[Int]) {
     def cut(n: Int): Deck = {
       val newCards = if (n >= 0) cards.drop(n) ++ cards.take(n) else cards.takeRight(n.abs) ++ cards.dropRight(n.abs)
       Deck(newCards)
@@ -37,9 +37,9 @@ object Day22 extends Solution(2019, 22) {
     }
   }
 
-  override protected[year2019] def parseInput(file: Source): List[String] = file.getLines().toList
+  override def parseInput(file: Source): List[String] = file.getLines().toList
 
-  override protected[year2019] def part1(input: List[String]): Int = {
+  override def part1(input: List[String]): Int = {
     input
       .foldLeft(Deck((0 until 10_007).toVector)) {
         case (acc, dealIncrement(n))      => acc.deal(n.toInt)
@@ -52,7 +52,7 @@ object Day22 extends Solution(2019, 22) {
   }
 
   // Adapted from https://todd.ginsberg.com/post/advent-of-code/2019/day22/
-  override protected[year2019] def part2(input: List[String]): BigInt = {
+  override def part2(input: List[String]): BigInt = {
     val two      = BigInt(2)
     val numCards = BigInt(119315717514047L)
     val shuffles = BigInt(101741582076661L)

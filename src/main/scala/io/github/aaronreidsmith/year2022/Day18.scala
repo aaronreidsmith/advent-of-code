@@ -7,12 +7,12 @@ import scala.collection.mutable
 import scala.io.Source
 
 @Slow(part2 = true)
-object Day18 extends Solution(2022, 18) {
+object Day18 extends Solution {
   type I  = Set[Cube]
   type O1 = Int
   type O2 = Int
 
-  private[year2022] case class Cube(x: Int, y: Int, z: Int) {
+  case class Cube(x: Int, y: Int, z: Int) {
     def neighbors: Set[Cube] = Set(
       this.copy(x = x - 1),
       this.copy(x = x + 1),
@@ -23,19 +23,19 @@ object Day18 extends Solution(2022, 18) {
     )
   }
 
-  override protected[year2022] def parseInput(file: Source): Set[Cube] = {
+  override def parseInput(file: Source): Set[Cube] = {
     file.getLines().foldLeft(Set.empty[Cube]) { (acc, line) =>
       val Array(x, y, z, _*) = line.split(',')
       acc + Cube(x.toInt, y.toInt, z.toInt)
     }
   }
 
-  override protected[year2022] def part1(input: Set[Cube]): Int = {
+  override def part1(input: Set[Cube]): Int = {
     input.foldLeft(0)((acc, cube) => acc + cube.neighbors.count(!input.contains(_)))
   }
 
   // Adapted from https://old.reddit.com/r/adventofcode/comments/zoqhvy/2022_day_18_solutions/j0oul0u/
-  override protected[year2022] def part2(input: Set[Cube]): Int = {
+  override def part2(input: Set[Cube]): Int = {
     val (xs, ys, zs) = input.unzip3(cube => (cube.x, cube.y, cube.z))
     // Have to pad our ranges for movement
     val xRange = -1 to xs.max + 1

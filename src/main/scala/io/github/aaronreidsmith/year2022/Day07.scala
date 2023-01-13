@@ -1,16 +1,16 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.collection.mutable
 import scala.io.Source
 
-object Day07 extends Solution(2022, 7) {
+object Day07 extends Solution {
   type I = (Set[String], Map[String, Int])
   type O1 = Int
   type O2 = Int
 
-  override protected[year2022] def parseInput(file: Source): (Set[String], Map[String, Int]) = {
+  override def parseInput(file: Source): (Set[String], Map[String, Int]) = {
     // Output variables
     val structure   = mutable.Map.empty[String, Int]
     val directories = mutable.Set("/")
@@ -36,7 +36,7 @@ object Day07 extends Solution(2022, 7) {
     (directories.toSet, structure.toMap)
   }
 
-  override protected[year2022] def part1(input: (Set[String], Map[String, Int])): Int = {
+  override def part1(input: (Set[String], Map[String, Int])): Int = {
     val (directories, files) = input
     directories.foldLeft(0) { (acc, directory) =>
       val size = directorySize(files, directory)
@@ -44,7 +44,7 @@ object Day07 extends Solution(2022, 7) {
     }
   }
 
-  override protected[year2022] def part2(input: (Set[String], Map[String, Int])): Int = {
+  override def part2(input: (Set[String], Map[String, Int])): Int = {
     val (directories, files) = input
 
     val totalSpace     = 70000000 // Given

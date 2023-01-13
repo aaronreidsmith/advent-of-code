@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2017
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.collection.mutable
@@ -8,7 +8,7 @@ import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
-object Day18 extends Solution(2017, 18) {
+object Day18 extends Solution {
   type I  = Vector[String]
   type O1 = Long
   type O2 = Int
@@ -22,9 +22,9 @@ object Day18 extends Solution(2017, 18) {
   private val rcv = "^rcv (.*)$".r
   private val jgz = "^jgz (.*) (.*)$".r
 
-  override protected[year2017] def parseInput(file: Source): Vector[String] = file.getLines().toVector
+  override def parseInput(file: Source): Vector[String] = file.getLines().toVector
 
-  override protected[year2017] def part1(initialInstructions: Vector[String]): Long = {
+  override def part1(initialInstructions: Vector[String]): Long = {
     def getValue(registers: Map[String, Long], maybeValue: String): Long = Try(maybeValue.toInt) match {
       case Success(value) => value
       case Failure(_)     => registers.getOrElse(maybeValue, 0)
@@ -83,7 +83,7 @@ object Day18 extends Solution(2017, 18) {
   }
 
   // TODO: Copied from my Python solution, so v mutable
-  override protected[year2017] def part2(instructions: Vector[String]): Int = {
+  override def part2(instructions: Vector[String]): Int = {
     class Program(pid: Long, var other: Program, instructions: Vector[String]) {
       val registers: mutable.Map[String, Long] = mutable.Map("p" -> pid).withDefaultValue(0)
       var ip: Long                             = 0

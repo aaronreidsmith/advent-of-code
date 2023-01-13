@@ -1,27 +1,27 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.{Grid, Point, Solution, using}
+import io.github.aaronreidsmith.{Grid, Point, Solution}
 
 import scala.io.Source
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/a6wpup/2018_day_17_solutions/ebyws5k/
-object Day17 extends Solution(2018, 17) {
+object Day17 extends Solution {
   type I  = Grid[Tile]
   type O1 = Int
   type O2 = Int
 
-  private[year2018] sealed trait Tile
-  private[year2018] sealed trait WaterTile extends Tile
+  sealed trait Tile
+  sealed trait WaterTile extends Tile
 
-  private[year2018] case object Sand     extends Tile
-  private[year2018] case object Clay     extends Tile
-  private[year2018] case object Flowing  extends WaterTile
-  private[year2018] case object Settling extends WaterTile
-  private[year2018] case object Settled  extends WaterTile
+  case object Sand     extends Tile
+  case object Clay     extends Tile
+  case object Flowing  extends WaterTile
+  case object Settling extends WaterTile
+  case object Settled  extends WaterTile
 
   // The input use x increasing to the right and y increasing downward, but my `Point` class uses x increasing downward
   // and y increasing to the right, so I had to swap them (made this very confusing)
-  override protected[year2018] def parseInput(file: Source): Grid[Tile] = {
+  override def parseInput(file: Source): Grid[Tile] = {
     val xEntry = """^x=(\d+), y=(\d+)..(\d+)$""".r
     val yEntry = """^y=(\d+), x=(\d+)..(\d+)$""".r
     file.getLines().foldLeft(Map.empty[Point, Tile].withDefaultValue(Sand)) {
@@ -31,7 +31,7 @@ object Day17 extends Solution(2018, 17) {
     }
   }
 
-  override protected[year2018] def part1(tiles: Grid[Tile]): Int = {
+  override def part1(tiles: Grid[Tile]): Int = {
     val depths   = tiles.keys.map(_.x)
     val minDepth = depths.min
     val maxDepth = depths.max
@@ -41,7 +41,7 @@ object Day17 extends Solution(2018, 17) {
     }
   }
 
-  override protected[year2018] def part2(tiles: Grid[Tile]): Int = {
+  override def part2(tiles: Grid[Tile]): Int = {
     val depths   = tiles.keys.map(_.x)
     val minDepth = depths.min
     val maxDepth = depths.max

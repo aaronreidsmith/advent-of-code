@@ -1,19 +1,18 @@
 package io.github.aaronreidsmith.year2017
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day10 extends Solution(2017, 10) {
+object Day10 extends Solution {
   type I  = String
   type O1 = Int
   type O2 = String
 
-  override protected[year2017] def parseInput(file: Source): String = file.mkString.trim
-
-  override protected[year2017] def part1(input: String): Int = solution(input.split(',').toVector.map(_.toInt))._1
-  override protected[year2017] def part2(input: String): String = {
+  override def parseInput(file: Source): String = file.mkString.trim
+  override def part1(input: String): Int        = solution(input.split(',').toVector.map(_.toInt))._1
+  override def part2(input: String): String = {
     val modified = Vector.fill(64)(input.map(_.toInt).toVector ++ Vector(17, 31, 73, 47, 23)).flatten
     solution(modified)._2
   }

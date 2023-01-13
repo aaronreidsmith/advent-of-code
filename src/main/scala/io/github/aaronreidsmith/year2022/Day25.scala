@@ -5,13 +5,13 @@ import io.github.aaronreidsmith.Solution
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day25 extends Solution(2022, 25) {
+object Day25 extends Solution {
   type I  = List[String]
   type O1 = String
   type O2 = Nothing
 
-  override protected[year2022] def parseInput(file: Source): List[String] = file.getLines().toList
-  override protected[year2022] def part1(input: List[String]): String = {
+  override def parseInput(file: Source): List[String] = file.getLines().toList
+  override def part1(input: List[String]): String = {
     val decimal = input.foldLeft(0L)(_ + snafuToDecimal(_))
     decimalToSnafu(decimal)
   }

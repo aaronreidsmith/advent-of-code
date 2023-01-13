@@ -1,26 +1,28 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
+import io.github.aaronreidsmith.annotations.Slow
 
 import java.math.BigInteger
 import java.security.MessageDigest
 import scala.io.Source
 
-object Day04 extends Solution(2015, 4) {
+@Slow(part2 = true)
+object Day04 extends Solution {
   type I  = String
   type O1 = Int
   type O2 = Int
 
-  override protected[year2015] def parseInput(file: Source): String = file.mkString.trim
+  override def parseInput(file: Source): String = file.mkString.trim
 
-  override protected[year2015] def part1(input: String): Int = LazyList
+  override def part1(input: String): Int = Iterator
     .from(1)
     .collectFirst {
       case i if md5(s"$input$i").startsWith("00000") => i
     }
     .getOrElse(-1)
 
-  override protected[year2015] def part2(input: String): Int = LazyList
+  override def part2(input: String): Int = Iterator
     .from(1)
     .collectFirst {
       case i if md5(s"$input$i").startsWith("000000") => i

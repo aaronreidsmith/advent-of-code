@@ -2,19 +2,19 @@ package io.github.aaronreidsmith.year2015
 
 import io.github.aaronreidsmith.Solution
 import org.jgrapht.alg.shortestpath.AllDirectedPaths
-import org.jgrapht.graph.{DefaultWeightedEdge, SimpleDirectedWeightedGraph}
+import org.jgrapht.graph.{DefaultWeightedEdge, DefaultDirectedWeightedGraph}
 
 import scala.io.Source
 import scala.jdk.CollectionConverters._
 
-object Day09 extends Solution(2015, 9) {
-  type I = SimpleDirectedWeightedGraph[String, DefaultWeightedEdge]
+object Day09 extends Solution {
+  type I  = DefaultDirectedWeightedGraph[String, DefaultWeightedEdge]
   type O1 = Int
   type O2 = Int
 
-  override protected[year2015] def parseInput(file: Source): SimpleDirectedWeightedGraph[String, DefaultWeightedEdge] = {
+  override def parseInput(file: Source): DefaultDirectedWeightedGraph[String, DefaultWeightedEdge] = {
     val entry = "^(.*) to (.*) = (\\d+)$".r
-    val graph = new SimpleDirectedWeightedGraph[String, DefaultWeightedEdge](classOf[DefaultWeightedEdge])
+    val graph = new DefaultDirectedWeightedGraph[String, DefaultWeightedEdge](classOf[DefaultWeightedEdge])
     file.getLines().foreach {
       case entry(start, end, weight) =>
         // Make sure we have both vertices
@@ -33,12 +33,12 @@ object Day09 extends Solution(2015, 9) {
     graph
   }
 
-  override protected[year2015] def part1(graph: SimpleDirectedWeightedGraph[String, DefaultWeightedEdge]): Int =
-    allPathWeights(graph).min.toInt
-  override protected[year2015] def part2(graph: SimpleDirectedWeightedGraph[String, DefaultWeightedEdge]): Int =
-    allPathWeights(graph).max.toInt
+  // format: off
+  override def part1(graph: DefaultDirectedWeightedGraph[String, DefaultWeightedEdge]): Int = allPathWeights(graph).min.toInt
+  override def part2(graph: DefaultDirectedWeightedGraph[String, DefaultWeightedEdge]): Int = allPathWeights(graph).max.toInt
+  // format: on
 
-  private def allPathWeights(graph: SimpleDirectedWeightedGraph[String, DefaultWeightedEdge]): Vector[Double] = {
+  private def allPathWeights(graph: DefaultDirectedWeightedGraph[String, DefaultWeightedEdge]): Vector[Double] = {
     val nodes            = graph.vertexSet().asScala
     val targetPathLength = nodes.size - 1 // edges = nodes - 1
     val allDirectedPaths = new AllDirectedPaths(graph)

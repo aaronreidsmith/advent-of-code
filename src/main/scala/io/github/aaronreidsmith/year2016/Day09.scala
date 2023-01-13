@@ -6,14 +6,14 @@ import scala.annotation.tailrec
 import scala.io.Source
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/5hbygy/comment/dazb5db
-object Day09 extends Solution(2016, 9) {
+object Day09 extends Solution {
   type I  = String
   type O1 = Int
   type O2 = Long
 
-  override protected[year2016] def parseInput(file: Source): String = file.mkString.trim
+  override def parseInput(file: Source): String = file.mkString.trim
 
-  override protected[year2016] def part1(input: String): Int = {
+  override def part1(input: String): Int = {
     @tailrec
     def decompress(content: List[Char], count: Int = 0): Int = content match {
       case Nil => count
@@ -30,7 +30,7 @@ object Day09 extends Solution(2016, 9) {
     decompress(input.toList)
   }
 
-  override protected[year2016] def part2(input: String): Long = {
+  override def part2(input: String): Long = {
     def decompress(content: List[Char], count: Long = 0L): Long = content match {
       case Nil => count
       case '(' :: _ =>

@@ -6,7 +6,7 @@ import io.github.aaronreidsmith.implicits._
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day18 extends Solution(2015, 18) {
+object Day18 extends Solution {
   type I  = Grid[Char]
   type O1 = Int
   type O2 = Int
@@ -14,9 +14,9 @@ object Day18 extends Solution(2015, 18) {
   private val part1Iterations = if (isTest) 4 else 100
   private val part2Iterations = if (isTest) 5 else 100
 
-  override protected[year2015] def parseInput(file: Source): Grid[Char] = file.toGrid
-  override protected[year2015] def part1(grid: Grid[Char]): Int         = solution(grid, part1Iterations, Seq(), 0)
-  override protected[year2015] def part2(grid: Grid[Char]): Int = {
+  override def parseInput(file: Source): Grid[Char] = file.toGrid
+  override def part1(grid: Grid[Char]): Int         = solution(grid, part1Iterations, Seq(), 0)
+  override def part2(grid: Grid[Char]): Int = {
     val (rows, cols) = grid.keys.unzip
     val corners = for {
       row <- Seq(rows.min, rows.max)

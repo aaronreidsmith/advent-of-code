@@ -1,12 +1,12 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.Solution
 
 import scala.collection.mutable
 import scala.io.Source
 
 // TODO: Adapted from my Python solution, so a decent amount of mutability
-object Day09 extends Solution(2018, 9) {
+object Day09 extends Solution {
   type I = (Int, Int)
   type O1 = Long
   type O2 = Long
@@ -24,18 +24,18 @@ object Day09 extends Solution(2018, 9) {
     }
   }
 
-  override protected[year2018] def parseInput(file: Source): (Int, Int) = {
-    val regex                         = "^(\\d+) players; last marble is worth (\\d+) points$".r
+  override def parseInput(file: Source): (Int, Int) = {
+    val regex                         = """^(\d+) players; last marble is worth (\d+) points$""".r
     val regex(maxPlayers, lastMarble) = file.mkString.trim
     (maxPlayers.toInt, lastMarble.toInt)
   }
 
-  override protected[year2018] def part1(input: (Int, Int)): Long = {
+  override def part1(input: (Int, Int)): Long = {
     val (maxPlayers, lastMarble) = input
     playGame(maxPlayers, lastMarble)
   }
 
-  override protected[year2018] def part2(input: (Int, Int)): Long = {
+  override def part2(input: (Int, Int)): Long = {
     val (maxPlayers, lastMarble) = input
     playGame(maxPlayers, lastMarble * 100)
   }

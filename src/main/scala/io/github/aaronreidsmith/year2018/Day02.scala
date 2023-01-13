@@ -5,20 +5,20 @@ import io.github.aaronreidsmith.implicits._
 
 import scala.io.Source
 
-object Day02 extends Solution(2018, 2) {
+object Day02 extends Solution {
   type I = List[String]
   type O1 = Int
   type O2 = String
 
-  override protected[year2018] def parseInput(file: Source): List[String] = file.getLines().toList
+  override def parseInput(file: Source): List[String] = file.getLines().toList
 
-  override protected[year2018] def part1(words: List[String]): Int = {
+  override def part1(words: List[String]): Int = {
     val dupes = words.count(_.letterOccurrences.values.exists(_ == 2))
     val trips = words.count(_.letterOccurrences.values.exists(_ == 3))
     dupes * trips
   }
 
-  override protected[year2018] def part2(words: List[String]): String = {
+  override def part2(words: List[String]): String = {
     def differingIndices(wordA: String, wordB: String): Vector[Int] =
       wordA.zip(wordB).zipWithIndex.foldLeft(Vector.empty[Int]) {
         case (acc, ((a, b), index)) if a != b => acc :+ index
