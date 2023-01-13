@@ -1,38 +1,44 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.{Solution, using}
 
 import scala.annotation.tailrec
 import scala.collection.mutable
+import scala.io.Source
 
-object Day22 {
-  def main(args: Array[String]): Unit = {
-    val (player1, player2) = using("2020/day22.txt") { file =>
-      val Array(p1Raw, p2Raw) = file.mkString.split("\n\n", 2)
-      val p1                  = p1Raw.split('\n').toVector.tail.map(_.toInt)
-      val p2                  = p2Raw.split('\n').toVector.tail.map(_.toInt)
-      (p1, p2)
-    }
-    println(s"Part 1: ${part1(player1, player2)}")
-    println(s"Part 2: ${part2(player1, player2)}")
+object Day22 extends Solution {
+  type I  = (Vector[Int], Vector[Int])
+  type O1 = Int
+  type O2 = Int
+
+  override def parseInput(file: Source): (Vector[Int], Vector[Int]) = {
+    val Array(p1, p2, _*) = file.mkString.trim
+      .split("\n\n")
+      .map(player => player.split('\n').toVector.tail.map(_.toInt))
+    (p1, p2)
   }
 
-  @tailrec
-  private def part1(player1: Vector[Int], player2: Vector[Int]): Int = if (player1.isEmpty) {
-    calculateScore(player2)
-  } else if (player2.isEmpty) {
-    calculateScore(player1)
-  } else {
-    val player1Card = player1.head
-    val player2Card = player2.head
-    if (player1Card > player2Card) {
-      part1(player1.tail :+ player1Card :+ player2Card, player2.tail)
+  override def part1(input: (Vector[Int], Vector[Int])): Int = {
+    @tailrec
+    def helper(player1: Vector[Int], player2: Vector[Int]): Int = if (player1.isEmpty) {
+      calculateScore(player2)
+    } else if (player2.isEmpty) {
+      calculateScore(player1)
     } else {
-      part1(player1.tail, player2.tail :+ player2Card :+ player1Card)
+      val player1Card = player1.head
+      val player2Card = player2.head
+      if (player1Card > player2Card) {
+        helper(player1.tail :+ player1Card :+ player2Card, player2.tail)
+      } else {
+        helper(player1.tail, player2.tail :+ player2Card :+ player1Card)
+      }
     }
+
+    val (p1, p2) = input
+    helper(p1, p2)
   }
 
-  private def part2(player1: Vector[Int], player2: Vector[Int]): Int = {
+  override def part2(input: (Vector[Int], Vector[Int])): Int = {
     // TODO: This is copied from Python and not idiomatic
     def helper(player1: mutable.Buffer[Int], player2: mutable.Buffer[Int]): (Seq[Int], Seq[Int]) = {
       val seen = mutable.Set.empty[(Vector[Int], Vector[Int])]
@@ -66,11 +72,13 @@ object Day22 {
       (player1.toSeq, player2.toSeq)
     }
 
-    val (p1, p2) = helper(player1.toBuffer, player2.toBuffer)
+    val (player1, player2) = input
+    val (p1, p2)           = helper(player1.toBuffer, player2.toBuffer)
     calculateScore(p1 ++ p2)
   }
 
   private def calculateScore(deck: Seq[Int]): Int = deck.reverse.zipWithIndex.foldLeft(0) {
     case (acc, (value, index)) => acc + ((index + 1) * value)
+    case (acc, _)              => acc
   }
 }

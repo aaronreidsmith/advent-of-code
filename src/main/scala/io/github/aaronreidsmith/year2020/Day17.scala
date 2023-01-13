@@ -1,12 +1,16 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 
 import scala.collection.mutable
 import scala.io.Source
 
 // TODO: Adapted from Python solution, so a fair bit of mutability
-object Day17 {
+object Day17 extends Solution {
+  type I = List[String]
+  type O1 = Int
+  type O2 = Int
+
   private implicit class ListOps(list: List[Int]) {
     // Used to mimic Python's itertools.product
     def combinationsWithRepeats(n: Int): List[List[Int]] = n match {
@@ -25,15 +29,9 @@ object Day17 {
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    val initialState = using("2020/day17.txt")(parseInput)
-    println(s"Part 1: ${part1(initialState)}")
-    println(s"Part 2: ${part2(initialState)}")
-  }
-
-  private[year2020] def parseInput(file: Source): List[String] = file.getLines().toList
-  private[year2020] def part1(initialState: List[String]): Int = solution(initialState, 3)
-  private[year2020] def part2(initialState: List[String]): Int = solution(initialState, 4)
+  override def parseInput(file: Source): List[String] = file.getLines().toList
+  override def part1(initialState: List[String]): Int = solution(initialState, 3)
+  override def part2(initialState: List[String]): Int = solution(initialState, 4)
 
   private def solution(initial: List[String], dimensions: Int): Int = {
     val space   = mutable.Map.empty[List[Int], Char].withDefaultValue('.')
