@@ -12,8 +12,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Slow {
     boolean parsing() default false;
-
     boolean part1() default false;
-
     boolean part2() default false;
 }
