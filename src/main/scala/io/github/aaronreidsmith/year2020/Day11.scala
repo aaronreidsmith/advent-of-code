@@ -13,17 +13,9 @@ object Day11 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  override def parseInput(file: Source): Grid[Char] = {
-    file.toGrid
-  }
-
-  override def part1(input: Grid[Char]): Int = {
-    solution(input, minOccupancy = 4, onlyImmediate = true)
-  }
-
-  override def part2(input: Grid[Char]): Int = {
-    solution(input, minOccupancy = 5, onlyImmediate = false)
-  }
+  override def parseInput(file: Source): Grid[Char] = file.toGrid
+  override def part1(input: Grid[Char]): Int        = solution(input, minOccupancy = 4, onlyImmediate = true)
+  override def part2(input: Grid[Char]): Int        = solution(input, minOccupancy = 5, onlyImmediate = false)
 
   private def solution(state: Grid[Char], minOccupancy: Int, onlyImmediate: Boolean): Int = {
     val directions = Seq(
@@ -65,9 +57,9 @@ object Day11 extends Solution {
         case (position, currentSeat) =>
           val occNeighbors = occupiedNeighbors(previousState, position)
           currentSeat match {
-            case 'L' if occNeighbors == 0 => position -> '#'
+            case 'L' if occNeighbors == 0            => position -> '#'
             case '#' if occNeighbors >= minOccupancy => position -> 'L'
-            case _ => position -> currentSeat
+            case _                                   => position -> currentSeat
           }
       }
       if (newState == previousState) newState.values.count(_ == '#') else helper(newState)

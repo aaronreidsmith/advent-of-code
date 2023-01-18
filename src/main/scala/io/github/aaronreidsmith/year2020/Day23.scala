@@ -1,20 +1,18 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.using
+import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
 // TODO: Copied directly from my Raku solution, so a lot of mutability
-object Day23 {
-  def main(args: Array[String]): Unit = {
-    val input = using("2020/day23.txt")(parseInput)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
+object Day23 extends Solution {
+  type I  = Seq[Int]
+  type O1 = String
+  type O2 = Long
 
-  private[year2020] def parseInput(file: Source): Seq[Int] = file.mkString.map(_.asDigit)
+  override def parseInput(file: Source): Seq[Int] = file.mkString.trim.map(_.asDigit)
 
-  private[year2020] def part1(input: Seq[Int]): String = {
+  override def part1(input: Seq[Int]): String = {
     val ring     = Array.fill(input.size + 1)(0)
     var current  = -1
     var previous = -1
@@ -41,8 +39,8 @@ object Day23 {
         destination = if (destination == 0) ring.length - 1 else (destination - 1) % 10
       }
 
-      val newCurrent = ring(pointer)
-      val newPointer = ring(destination)
+      val newCurrent     = ring(pointer)
+      val newPointer     = ring(destination)
       val newDestination = ring(current)
 
       ring(current) = newCurrent
@@ -59,10 +57,10 @@ object Day23 {
       output ++= current.toString
       current = ring(current)
     }
-    output.mkString
+    output.result()
   }
 
-  private[year2020] def part2(input: Seq[Int]): Long = {
+  override def part2(input: Seq[Int]): Long = {
     val ring     = Array.fill(1_000_001)(0)
     var current  = -1
     var previous = -1

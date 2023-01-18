@@ -25,15 +25,7 @@ object Day11 extends Solution {
         part1Solution = coordinate.distanceFrom(FlatCoordinate.zero)
         solved = true
       case head :: tail =>
-        val newCoordinate = head match {
-          case "n"  => coordinate.north
-          case "ne" => coordinate.northEast
-          case "se" => coordinate.southEast
-          case "s"  => coordinate.south
-          case "sw" => coordinate.southWest
-          case "nw" => coordinate.northWest
-          case _    => throw new IllegalArgumentException
-        }
+        val newCoordinate   = coordinate.move(head)
         val currentDistance = newCoordinate.distanceFrom(FlatCoordinate.zero)
         part2Solution = part2Solution.max(currentDistance)
         helper(tail, newCoordinate)

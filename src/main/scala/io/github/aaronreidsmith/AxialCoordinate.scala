@@ -6,6 +6,7 @@ sealed trait AxialCoordinate {
   def q: Int
   def r: Int
   def neighbors: Seq[Self]
+  def move(direction: String): Self
 
   def s: Int = -q - r
   def distanceFrom(that: Self): Int = {
@@ -24,6 +25,15 @@ case class FlatCoordinate(q: Int, r: Int) extends AxialCoordinate {
   def northWest: FlatCoordinate = FlatCoordinate(q - 1, r)
 
   def neighbors: Seq[FlatCoordinate] = Seq(north, northEast, southEast, south, southWest, northWest)
+  def move(direction: String): FlatCoordinate = direction.toLowerCase match {
+    case "n"   => north
+    case "ne"  => northEast
+    case "se"  => southEast
+    case "s"   => south
+    case "sw"  => southWest
+    case "nw"  => northWest
+    case other => throw new IllegalArgumentException(other)
+  }
 }
 
 object FlatCoordinate {
@@ -41,6 +51,15 @@ case class PointyCoordinate(q: Int, r: Int) extends AxialCoordinate {
   def northWest: PointyCoordinate = PointyCoordinate(q, r - 1)
 
   def neighbors: Seq[PointyCoordinate] = Seq(northEast, east, southEast, southWest, west, northWest)
+  def move(direction: String): PointyCoordinate = direction.toLowerCase match {
+    case "ne"  => northEast
+    case "e"   => east
+    case "se"  => southEast
+    case "sw"  => southWest
+    case "w"   => west
+    case "nw"  => northWest
+    case other => throw new IllegalArgumentException(other)
+  }
 }
 
 object PointyCoordinate {
