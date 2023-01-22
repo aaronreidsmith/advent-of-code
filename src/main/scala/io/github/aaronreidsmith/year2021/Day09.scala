@@ -1,41 +1,36 @@
 package io.github.aaronreidsmith.year2021
 
+import io.github.aaronreidsmith.implicits.SourceOps
+import io.github.aaronreidsmith.{Grid, Point, Solution}
+
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.util.Using
 
-object Day09 {
-  private implicit class Tuple2IntOps(tuple: (Int, Int)) {
-    def neighbors: Seq[(Int, Int)] = {
-      val (row, col) = tuple
-      Seq((row - 1, col), (row + 1, col), (row, col - 1), (row, col + 1))
+object Day09 extends Solution {
+  type I  = Grid[Int]
+  type O1 = Int
+  type O2 = Int
+
+  private implicit class GridOps(grid: Grid[Int]) {
+    def neighborsAreHigher(position: Point, height: Int): Boolean = {
+      position.immediateNeighbors.forall(pos => grid.get(pos).forall(_ > height))
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    val input = Using.resource(Source.fromResource("2021/day09.txt"))(_.getLines().toList)
-    val grid = {
-      for {
-        (line, row)   <- input.zipWithIndex
-        (height, col) <- line.zipWithIndex
-      } yield (row, col) -> height.asDigit
-    }.toMap
+  override def parseInput(file: Source): Grid[Int] = file.toGrid.view.mapValues(_.asDigit).toMap
 
-    def neighborsAreHigher(position: (Int, Int), height: Int): Boolean = {
-      position.neighbors.forall(pos => grid.get(pos).forall(_ > height))
-    }
+  override def part1(input: Grid[Int]): Int = input.foldLeft(0) {
+    case (acc, (position, height)) if input.neighborsAreHigher(position, height) => acc + height + 1
+    case (acc, _)                                                                => acc
+  }
 
-    val part1 = grid.foldLeft(0) {
-      case (acc, (position, height)) if neighborsAreHigher(position, height) => acc + height + 1
-      case (acc, _)                                                          => acc
-    }
-    println(s"Part 1: $part1")
-
+  override def part2(input: Grid[Int]): Int = {
     @tailrec
-    def findBasin(currentBasin: Seq[(Int, Int)]): Seq[(Int, Int)] = {
+    def findBasin(currentBasin: Seq[Point]): Seq[Point] = {
       val updatedBasin = currentBasin.foldLeft(currentBasin) { (acc, position) =>
-        val unseenNeighbors = position.neighbors.collect {
-          case neighbor if grid.get(neighbor).exists(_ < 9) && !acc.contains(neighbor) => neighbor
+        val unseenNeighbors = position.immediateNeighbors.collect {
+          case neighbor if input.get(neighbor).exists(_ < 9) && !acc.contains(neighbor) => neighbor
         }
         acc ++ unseenNeighbors
       }
@@ -43,14 +38,13 @@ object Day09 {
       if (updatedBasin.size == currentBasin.size) currentBasin else findBasin(updatedBasin)
     }
 
-    val part2 = grid
+    input
       .collect {
-        case (position, height) if neighborsAreHigher(position, height) => findBasin(Seq(position)).size
+        case (position, height) if input.neighborsAreHigher(position, height) => findBasin(Seq(position)).size
       }
       .toSeq
       .sorted
       .takeRight(3)
       .product
-    println(s"Part 2: $part2")
   }
 }

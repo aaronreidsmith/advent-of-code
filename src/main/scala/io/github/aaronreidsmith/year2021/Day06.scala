@@ -1,11 +1,16 @@
 package io.github.aaronreidsmith.year2021
 
-import scala.io.Source
-import scala.util.Using
+import io.github.aaronreidsmith.Solution
 
-object Day06 {
-  def main(args: Array[String]): Unit = {
-    val input        = Using.resource(Source.fromResource("2021/day06.txt"))(_.mkString.split(',').map(_.toLong))
+import scala.io.Source
+
+object Day06 extends Solution {
+  type I  = Int => Long
+  type O1 = Long
+  type O2 = Long
+
+  override def parseInput(file: Source): Int => Long = {
+    val input        = file.mkString.trim.split(',').map(_.toLong)
     val emptyFishMap = (0L to 8L).map(_ -> 0L).toMap
     val fishMap      = input.foldLeft(emptyFishMap)((acc, n) => acc.updated(n, acc(n) + 1))
 
@@ -15,9 +20,9 @@ object Day06 {
       rotated ++ updatedItems
     }
 
-    def nthGeneration(n: Int): Map[Long, Long] = (0 until n).foldLeft(fishMap)((acc, _) => nextGeneration(acc))
-
-    println(s"Part 1: ${nthGeneration(80).values.sum}")
-    println(s"Part 1: ${nthGeneration(256).values.sum}")
+    (n: Int) => (0 until n).foldLeft(fishMap)((acc, _) => nextGeneration(acc)).values.sum
   }
+
+  override def part1(input: Int => Long): Long = input(80)
+  override def part2(input: Int => Long): Long = input(256)
 }
