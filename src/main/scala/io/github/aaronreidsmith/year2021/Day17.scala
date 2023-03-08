@@ -1,14 +1,20 @@
 package io.github.aaronreidsmith.year2021
 
+import io.github.aaronreidsmith.{Point, Solution}
+
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.util.Using
 
-object Day17 {
-  private val targetArea = "^target area: x=(\\d+)..(\\d+), y=(-?\\d+)..(-?\\d+)".r
+object Day17 extends Solution {
+  type I  = IndexedSeq[Int]
+  type O1 = Int
+  type O2 = Int
 
-  def main(args: Array[String]): Unit = {
-    val targetArea(xMin, xMax, yMin, yMax) = Using.resource(Source.fromResource("2021/day17.txt"))(_.mkString)
+  // parseInput just brute forces all the trajectories since there are so few
+  override def parseInput(file: Source): IndexedSeq[Int] = {
+    val targetArea                         = "^target area: x=(\\d+)..(\\d+), y=(-?\\d+)..(-?\\d+)".r
+    val targetArea(xMin, xMax, yMin, yMax) = file.mkString.trim
 
     val xRange = xMin.toInt to xMax.toInt
     val yRange = yMin.toInt to yMax.toInt
@@ -35,15 +41,12 @@ object Day17 {
       maxHeight(newXVelocity, newYVelocity, newXPosition, newYPosition, newMaxHeight)
     }
 
-    val maxHeights = for {
+    for {
       xVelocity <- 0 to xRange.max
       yVelocity <- yRange.min to 1000
     } yield maxHeight(xVelocity, yVelocity)
-
-    val part1 = maxHeights.max
-    println(s"Part 1: $part1")
-
-    val part2 = maxHeights.count(_ != Int.MinValue)
-    println(s"Part 2: $part2")
   }
+
+  override def part1(input: IndexedSeq[Int]): Int = input.max
+  override def part2(input: IndexedSeq[Int]): Int = input.count(_ != Int.MinValue)
 }
