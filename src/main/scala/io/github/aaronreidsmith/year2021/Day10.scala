@@ -1,10 +1,16 @@
 package io.github.aaronreidsmith.year2021
 
+import io.github.aaronreidsmith.Solution
+
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.util.Using
 
-object Day10 {
+object Day10 extends Solution {
+  type I  = List[String]
+  type O1 = Int
+  type O2 = Long
+
   private val mappings = Map(
     '(' -> ')',
     ')' -> '(',
@@ -17,13 +23,9 @@ object Day10 {
   )
   private val openings = Set('(', '[', '{', '<')
 
-  def main(args: Array[String]): Unit = {
-    val input = Using.resource(Source.fromResource("2021/day10.txt"))(_.getLines().toList)
-    println(s"Part 1: ${part1(input)}")
-    println(s"Part 2: ${part2(input)}")
-  }
+  override def parseInput(file: Source): List[String] = file.getLines().toList
 
-  private def part1(input: List[String]): Int = {
+  override def part1(input: List[String]): Int = {
     val scoreMap = Map(')' -> 3, ']' -> 57, '}' -> 1197, '>' -> 25137)
 
     @tailrec
@@ -41,7 +43,7 @@ object Day10 {
     input.foldLeft(0)(_ + helper(_))
   }
 
-  private def part2(input: List[String]): Long = {
+  override def part2(input: List[String]): Long = {
     val scoreMap = Map(')' -> 1L, ']' -> 2L, '}' -> 3L, '>' -> 4L)
 
     @tailrec

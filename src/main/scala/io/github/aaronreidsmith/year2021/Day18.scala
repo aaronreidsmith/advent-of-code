@@ -1,12 +1,18 @@
 package io.github.aaronreidsmith.year2021
 
+import io.github.aaronreidsmith.Solution
+
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.util.Using
 import scala.util.parsing.combinator.JavaTokenParsers
 
-object Day18 extends JavaTokenParsers {
-  private sealed trait Number {
+object Day18 extends Solution with JavaTokenParsers {
+  type I  = Seq[Number]
+  type O1 = Int
+  type O2 = Int
+
+  sealed trait Number {
     private def explode(number: Number): Option[Number] = {
       def helper(num: Number, depth: Int = 0): Option[(Option[Int], Number, Option[Int])] = num match {
         case Literal(_)                                        => None
@@ -52,31 +58,45 @@ object Day18 extends JavaTokenParsers {
     def addRight(addValue: Int): Number
     def magnitude: Int
   }
-  private case class Literal(value: Int) extends Number {
+
+  case class Literal(value: Int) extends Number {
     def addLeft(addValue: Int): Number  = Literal(value + addValue)
     def addRight(addValue: Int): Number = Literal(value + addValue)
     def magnitude: Int                  = value
   }
-  private case class Pair(left: Number, right: Number) extends Number {
+
+  case class Pair(left: Number, right: Number) extends Number {
     def addLeft(addValue: Int): Number  = this.copy(left = left.addLeft(addValue))
     def addRight(addValue: Int): Number = this.copy(right = right.addRight(addValue))
     def magnitude: Int                  = (3 * left.magnitude) + (2 * right.magnitude)
   }
 
-  def main(args: Array[String]): Unit = {
-    val input = Using.resource(Source.fromResource("2021/day18.txt"))(_.getLines().toSeq.map(parseNumber))
-    val part1 = input.reduceLeft(_ + _).magnitude
-    println(s"Part 1: $part1")
-    val part2 = input.combinations(2).map(_.reduceLeft(_ + _).magnitude).max
-    println(s"Part 2: $part2")
-  }
-
-  private def parseNumber(string: String): Number = {
+  override def parseInput(file: Source): Seq[Number] = file.getLines().toSeq.map { line =>
     def number: Parser[Number] = {
       wholeNumber ^^ (_.toInt) ^^ Literal.apply |
         "[" ~> number ~ "," ~ number <~ "]" ^^ { case left ~ _ ~ right => Pair(left, right) }
     }
 
-    parseAll(number, string).get
+    parseAll(number, line).get
+  }
+
+  override def part1(input: Seq[Number]): Int = input.reduceLeft(_ + _).magnitude
+
+  override def part2(input: Seq[Number]): Int = {
+    /* Use this method because order matters and .combinations gives wrong result. Example:
+     *
+     * List(1, 2, 3).combinations(2).toList == List(List(1, 2), List(1, 3), List(2, 3))
+     *
+     * The above expression doesn't yield List(2, 1), List(3, 1), or List(3, 2) which are needed to get the right answer here
+     */
+    var currentMax = Int.MinValue
+    for {
+      left  <- input
+      right <- input
+      if left != right
+    } {
+      currentMax = currentMax.max((left + right).magnitude)
+    }
+    currentMax
   }
 }

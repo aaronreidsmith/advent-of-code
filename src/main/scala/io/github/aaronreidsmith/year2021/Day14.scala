@@ -21,8 +21,8 @@ object Day14 {
   }
 
   private def solution(template: String, rules: Map[String, String], iterations: Int): Long = {
-    val pairs: mutable.Map[String, Long] = mutable.Map(template.sliding(2).toSeq.map(_ -> 1L): _*)
-    val chars: mutable.Map[Char, Long]   = mutable.Map(template.map(char => char -> template.count(_ == char).toLong): _*)
+    val pairs = mutable.Map(template.sliding(2).toSeq.map(_ -> 1L): _*)
+    val chars = mutable.Map(template.map(char => char -> template.count(_ == char).toLong): _*)
     (1 to iterations).foreach { _ =>
       val pairsCopy = Map.from(pairs)
       pairsCopy.foreach {

@@ -4,7 +4,6 @@ import io.github.aaronreidsmith.{Point, Solution}
 
 import scala.annotation.tailrec
 import scala.io.Source
-import scala.util.Using
 
 object Day17 extends Solution {
   type I  = IndexedSeq[Int]
