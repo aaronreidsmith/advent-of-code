@@ -18,13 +18,13 @@ object Day15 extends Solution {
 
   sealed trait Square
   case class Creature(position: Point, isGoblin: Boolean, health: Int = 200) extends Square
-  case object Empty                                                                    extends Square
+  case object Empty                                                          extends Square
 
   override def parseInput(file: Source): (Grid[Square], List[Creature]) = {
     val grid = file.toGrid.collect {
-      case (point, char) if char == '.' => point -> Empty
-      case (point, char) if char == 'E' => point -> Creature(point, isGoblin = false)
-      case (point, char) if char == 'G' => point -> Creature(point, isGoblin = true)
+      case (point, '.') => point -> Empty
+      case (point, 'E') => point -> Creature(point, isGoblin = false)
+      case (point, 'G') => point -> Creature(point, isGoblin = true)
     }
     val initial = grid.collect { case (_, creature: Creature) => creature }.toList.sortBy(_.position)
     (grid, initial)

@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2021
 
-import io.github.aaronreidsmith.{Point, Solution, using}
 import io.github.aaronreidsmith.implicits.point2Tuple2
+import io.github.aaronreidsmith.{Point, Solution}
 
 import scala.io.Source
 

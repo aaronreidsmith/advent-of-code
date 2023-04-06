@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.{PointyCoordinate, Solution, using}
+import io.github.aaronreidsmith.{PointyCoordinate, Solution}
 
 import scala.collection.mutable
 import scala.io.Source

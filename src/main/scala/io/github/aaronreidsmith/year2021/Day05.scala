@@ -3,7 +3,6 @@ package io.github.aaronreidsmith.year2021
 import io.github.aaronreidsmith.{Point, Solution}
 
 import scala.io.Source
-import scala.util.Using
 
 object Day05 extends Solution {
   type I  = List[String]

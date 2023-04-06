@@ -4,7 +4,6 @@ import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
-import scala.util.Using
 import scala.util.parsing.combinator.JavaTokenParsers
 
 object Day18 extends Solution with JavaTokenParsers {

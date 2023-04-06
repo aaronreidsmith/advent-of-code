@@ -4,7 +4,6 @@ import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
-import scala.util.Using
 
 object Day10 extends Solution {
   type I  = List[String]

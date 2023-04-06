@@ -3,7 +3,6 @@ package io.github.aaronreidsmith.year2021
 import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
-import scala.util.Using
 
 object Day07 extends Solution {
   type I  = Boolean => Int

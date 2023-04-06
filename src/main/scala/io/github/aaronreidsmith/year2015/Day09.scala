@@ -2,7 +2,7 @@ package io.github.aaronreidsmith.year2015
 
 import io.github.aaronreidsmith.Solution
 import org.jgrapht.alg.shortestpath.AllDirectedPaths
-import org.jgrapht.graph.{DefaultWeightedEdge, DefaultDirectedWeightedGraph}
+import org.jgrapht.graph.{DefaultDirectedWeightedGraph, DefaultWeightedEdge}
 
 import scala.io.Source
 import scala.jdk.CollectionConverters._

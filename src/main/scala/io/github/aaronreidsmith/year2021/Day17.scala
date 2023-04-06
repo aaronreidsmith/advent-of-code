@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2021
 
-import io.github.aaronreidsmith.{Point, Solution}
+import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source

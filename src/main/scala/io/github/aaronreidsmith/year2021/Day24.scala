@@ -4,7 +4,6 @@ import io.github.aaronreidsmith.Solution
 
 import scala.collection.mutable
 import scala.io.Source
-import scala.util.Using
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/rnejv5/comment/hpsobsi
 object Day24 extends Solution {

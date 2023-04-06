@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.annotations.Slow
 import io.github.aaronreidsmith.Solution
+import io.github.aaronreidsmith.annotations.Slow
 
 import scala.annotation.tailrec
 import scala.io.Source

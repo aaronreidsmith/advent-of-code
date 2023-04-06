@@ -1,9 +1,8 @@
 package io.github.aaronreidsmith.year2021
 
-import io.github.aaronreidsmith.{East, North, Point, Solution, South}
+import io.github.aaronreidsmith._
 
 import scala.io.Source
-import scala.util.Using
 
 object Day02 extends Solution {
   type I  = List[String]

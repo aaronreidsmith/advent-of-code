@@ -5,7 +5,6 @@ import io.github.aaronreidsmith.{Grid, Point, Solution}
 
 import scala.annotation.tailrec
 import scala.io.Source
-import scala.util.Using
 
 object Day20 extends Solution {
   type I  = (Vector[Char], Grid[Char])

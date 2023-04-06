@@ -5,7 +5,6 @@ import io.github.aaronreidsmith.Solution
 import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.io.Source
-import scala.util.Using
 
 object Day21 extends Solution {
   type I  = (Int, Int)
