@@ -1,27 +1,36 @@
 package io.github.aaronreidsmith.year2021
 
-import scala.io.Source
-import scala.util.Using
+import io.github.aaronreidsmith.Solution
 
-object Day12 {
-  def main(args: Array[String]): Unit = {
-    val input = Using.resource(Source.fromResource("2021/day12.txt")) { file =>
-      val segments = file.getLines().toList.map(_.split('-')).flatMap {
+import scala.io.Source
+
+object Day12 extends Solution {
+  type I  = Map[String, Set[String]]
+  type O1 = Int
+  type O2 = Int
+
+  private val start = "start"
+  private val end   = "end"
+
+  override def parseInput(file: Source): Map[String, Set[String]] = {
+    file
+      .getLines()
+      .toList
+      .map(_.split('-'))
+      .flatMap {
         case Array(start, end) => Set((start, end), (end, start))
+        case _                 => Set()
       }
-      segments
-        .groupBy { case (start, _) => start }
-        .map {
-          case (start, neighbors) => start -> neighbors.map { case (_, end) => end }.toSet
-        }
-    }
-    val start          = "start"
-    val initialVisited = Set(start)
-    println(s"Part 1: ${countPaths(start, input, initialVisited, isSmallCaveVisitedTwice = true)}")
-    println(s"Part 2: ${countPaths(start, input, initialVisited, isSmallCaveVisitedTwice = false)}")
+      .groupBy { case (start, _) => start }
+      .map { case (start, neighbors) => start -> neighbors.map { case (_, end) => end }.toSet }
   }
 
-  private def isSmall(cave: String): Boolean = cave.head.isLower
+  override def part1(input: Map[String, Set[String]]): Int = solution(input, true)
+  override def part2(input: Map[String, Set[String]]): Int = solution(input, false)
+
+  private def solution(caves: Map[String, Set[String]], isSmallCaveVisitedTwice: Boolean): Int = {
+    countPaths(start, caves, Set(start), isSmallCaveVisitedTwice)
+  }
 
   private def countPaths(
       cave: String,
@@ -29,8 +38,8 @@ object Day12 {
       visited: Set[String],
       isSmallCaveVisitedTwice: Boolean
   ): Int = {
-    val neighbors = if (isSmallCaveVisitedTwice) caves(cave) -- visited else caves(cave) - "start"
-    if (cave == "end") {
+    val neighbors = if (isSmallCaveVisitedTwice) caves(cave) -- visited else caves(cave) - start
+    if (cave == end) {
       1
     } else if (neighbors.isEmpty) {
       0
@@ -42,4 +51,6 @@ object Day12 {
       }
     }
   }
+
+  private def isSmall(cave: String): Boolean = cave.head.isLower
 }

@@ -1,74 +1,69 @@
 package io.github.aaronreidsmith.year2021
 
+import io.github.aaronreidsmith.Solution
+import io.github.aaronreidsmith.implicits.IteratorOps
+
 import scala.annotation.tailrec
 import scala.io.Source
-import scala.util.Using
 
 // Adapted from https://git.io/JD9nN
-object Day19 {
-  type Beacon = (Int, Int, Int)
-  implicit class BeaconOps(beacon: Beacon) {
-    val (x, y, z)                   = beacon
-    def +(that: Beacon): Beacon     = (x + that.x, y + that.y, z + that.z)
-    def -(that: Beacon): Beacon     = (x - that.x, y - that.y, z - that.z)
+object Day19 extends Solution {
+  type I  = List[Scanner]
+  type O1 = Int
+  type O2 = Int
+
+  case class Beacon(x: Int, y: Int, z: Int) {
+    def +(that: Beacon): Beacon     = copy(x + that.x, y + that.y, z + that.z)
+    def -(that: Beacon): Beacon     = copy(x - that.x, y - that.y, z - that.z)
     def distance(that: Beacon): Int = (x - that.x).abs + (y - that.y).abs + (z - that.z).abs
     def orientations: Seq[Beacon] = Seq(
-      (x, y, z),
-      (-y, x, z),
-      (-x, -y, z),
-      (y, -x, z),
-      (-x, y, -z),
-      (y, x, -z),
-      (x, -y, -z),
-      (-y, -x, -z),
-      (-z, y, x),
-      (-z, x, -y),
-      (-z, -y, -x),
-      (-z, -x, y),
-      (z, y, -x),
-      (z, x, y),
-      (z, -y, x),
-      (z, -x, -y),
-      (x, -z, y),
-      (-y, -z, x),
-      (-x, -z, -y),
-      (y, -z, -x),
-      (x, z, -y),
-      (-y, z, -x),
-      (-x, z, y),
-      (y, z, x)
+      this,
+      copy(x = -y, y = x),
+      copy(x = -x, y = -y),
+      copy(x = y, y = -x),
+      copy(x = -x, z = -z),
+      copy(x = y, y = x, z = -z),
+      copy(y = -y, z = -z),
+      copy(x = -y, y = -x, z = -z),
+      copy(x = -z, z = x),
+      copy(x = -z, y = x, z = -y),
+      copy(x = -z, y = -y, z = -x),
+      copy(x = -z, y = -x, z = y),
+      copy(x = z, z = -x),
+      copy(x = z, y = x, z = y),
+      copy(x = z, y = -y, z = x),
+      copy(x = z, y = -x, z = -y),
+      copy(y = -z, z = y),
+      copy(x = -y, y = -z, z = x),
+      copy(x = -x, y = -z, z = -y),
+      copy(x = y, y = -z, z = -x),
+      copy(y = z, z = -y),
+      copy(x = -y, y = z, z = -x),
+      copy(x = -x, y = z, z = y),
+      copy(x = y, y = z, z = x)
     )
   }
+
   type Scanner = Set[Beacon]
   implicit class ScannerOps(scanner: Scanner) {
     def orientations: Seq[Scanner] = scanner.toSeq.map(_.orientations).transpose.map(_.toSet)
   }
-  implicit class IteratorOps[T](it: Iterator[T]) {
-    def headOption: Option[T]    = it.nextOption()
-    def occurrences: Map[T, Int] = it.to(LazyList).groupMapReduce(identity)(_ => 1)(_ + _)
+
+  override def parseInput(file: Source): List[Scanner] = file.mkString.trim.split("\n\n").toList.map { entry =>
+    entry.split('\n').tail.foldLeft(Set.empty[Beacon]) { (acc, line) =>
+      val Array(x, y, z, _*) = line.split(',')
+      acc + Beacon(x.toInt, y.toInt, z.toInt)
+    }
   }
 
-  def main(args: Array[String]): Unit = {
-    val input = Using.resource(Source.fromResource("2021/day19.txt")) { file =>
-      val scanners = file.mkString.split("\n\n")
-      scanners.toList.map { entry =>
-        entry.split('\n').tail.foldLeft(Set.empty[Beacon]) { (acc, line) =>
-          val Array(x, y, z, _*) = line.split(',')
-          acc + ((x.toInt, y.toInt, z.toInt))
-        }
-      }
-    }
-    val (beacons, scannerPositions) = solution(input)
-    val part1                       = beacons.size
-    println(s"Part 1: $part1")
-    val part2 = scannerPositions.combinations(2).foldLeft(Int.MinValue) {
-      case (acc, Seq(point1, point2)) => acc.max(point1.distance(point2))
-      case (acc, _)                   => acc
-    }
-    println(s"Part 2: $part2")
-  }
+  override def part1(input: List[Scanner]): Int = solution(input)._1
+  override def part2(input: List[Scanner]): Int = solution(input)._2
 
-  private def solution(input: Seq[Scanner]): (Scanner, Seq[Beacon]) = {
+  // Orienting the beacons is expensive, so only want to do it once
+  private var part1Answer = 0
+  private var part2Answer = 0
+  private var solved      = false
+  private def solution(input: Seq[Scanner]): (Int, Int) = {
     def matchScanner(beacons: Scanner, scanner: Scanner): Option[(Scanner, Beacon)] = {
       for {
         orientedScanner <- scanner.orientations.iterator
@@ -107,6 +102,15 @@ object Day19 {
       }
     }
 
-    helper(input.tail, Set.empty, input.head, Set((0, 0, 0)))
+    if (!solved) {
+      val (beacons, scannerPositions) = helper(input.tail, Set.empty, input.head, Set(Beacon(0, 0, 0)))
+      part1Answer = beacons.size
+      part2Answer = scannerPositions.combinations(2).foldLeft(Int.MinValue) {
+        case (acc, Seq(point1, point2)) => acc.max(point1.distance(point2))
+        case (acc, _)                   => acc
+      }
+      solved = true
+    }
+    (part1Answer, part2Answer)
   }
 }

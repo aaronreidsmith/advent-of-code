@@ -8,8 +8,18 @@ package object implicits {
   // So we can unzip a Seq[Point]
   implicit def point2Tuple2(point: Point): (Int, Int) = (point.x, point.y)
 
+  implicit class IteratorOps[T](it: Iterator[T]) {
+    def headOption: Option[T]    = it.nextOption()
+    def occurrences: Map[T, Int] = LazyList.from(it).occurrences
+  }
+
   implicit class MapOps[K, V](map: Map[K, V]) {
     def toMutable: mutable.Map[K, V] = mutable.Map.from(map)
+  }
+
+
+  implicit class SeqOps[T](seq: Seq[T]) {
+    def occurrences: Map[T, Int] = seq.groupMapReduce(identity)(_ => 1)(_ + _)
   }
 
   implicit class SetOps[T](set: Set[T]) {
@@ -28,9 +38,5 @@ package object implicits {
   implicit class StringOps(string: String) {
     def letterOccurrences: Map[Char, Int] = string.toSeq.occurrences
     def toGrid: Grid[Char]                = Source.fromString(string).toGrid
-  }
-
-  implicit class SeqOps[T](seq: Seq[T]) {
-    def occurrences: Map[T, Int] = seq.groupMapReduce(identity)(_ => 1)(_ + _)
   }
 }

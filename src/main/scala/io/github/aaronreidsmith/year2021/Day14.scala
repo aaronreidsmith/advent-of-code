@@ -1,28 +1,31 @@
 package io.github.aaronreidsmith.year2021
 
+import io.github.aaronreidsmith.Solution
+
 import scala.collection.mutable
 import scala.io.Source
-import scala.util.Using
 
-object Day14 {
-  def main(args: Array[String]): Unit = {
-    val input                         = Using.resource(Source.fromResource("2021/day14.txt"))(_.mkString)
-    val Array(template, rawRules, _*) = input.split("\n\n")
-    val rules = rawRules
-      .split('\n')
-      .map { line =>
-        val Array(key, value, _*) = line.split(" -> ")
-        key -> value
-      }
-      .toMap
+object Day14 extends Solution {
+  type I  = (String, Map[String, String])
+  type O1 = Long
+  type O2 = Long
 
-    println(s"Part 1: ${solution(template, rules, 10)}")
-    println(s"Part 2: ${solution(template, rules, 40)}")
+  override def parseInput(file: Source): (String, Map[String, String]) = {
+    val Array(template, rawRules, _*) = file.mkString.trim.split("\n\n")
+    val rules = rawRules.split('\n').foldLeft(Map.empty[String, String]) { (acc, line) =>
+      val Array(key, value, _*) = line.split(" -> ")
+      acc + (key -> value)
+    }
+    (template, rules)
   }
 
-  private def solution(template: String, rules: Map[String, String], iterations: Int): Long = {
-    val pairs = mutable.Map(template.sliding(2).toSeq.map(_ -> 1L): _*)
-    val chars = mutable.Map(template.map(char => char -> template.count(_ == char).toLong): _*)
+  override def part1(input: (String, Map[String, String])): Long = solution(input, 10)
+  override def part2(input: (String, Map[String, String])): Long = solution(input, 40)
+
+  private def solution(input: (String, Map[String, String]), iterations: Int): Long = {
+    val (template, rules) = input
+    val pairs             = mutable.Map(template.sliding(2).toSeq.map(_ -> 1L): _*)
+    val chars             = mutable.Map(template.map(char => char -> template.count(_ == char).toLong): _*)
     (1 to iterations).foreach { _ =>
       val pairsCopy = Map.from(pairs)
       pairsCopy.foreach {

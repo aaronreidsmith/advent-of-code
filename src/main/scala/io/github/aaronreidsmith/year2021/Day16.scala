@@ -1,16 +1,21 @@
 package io.github.aaronreidsmith.year2021
 
-import scala.io.Source
-import scala.util.Using
+import io.github.aaronreidsmith.Solution
 
-object Day16 {
+import scala.io.Source
+
+object Day16 extends Solution {
+  type I  = Packet
+  type O1 = Int
+  type O2 = Long
+
   private type Bits = List[Boolean]
-  implicit class BitsOps(bits: Bits) {
+  private implicit class BitsOps(bits: Bits) {
     def toInt: Int   = toLong.toInt
     def toLong: Long = bits.foldLeft(0L)((acc, bit) => (acc << 1) | (if (bit) 1 else 0))
   }
 
-  private object Packet {
+  object Packet {
     private val hexMap = Map(
       '0' -> List(false, false, false, false),
       '1' -> List(false, false, false, true),
@@ -90,23 +95,18 @@ object Day16 {
     }
   }
 
-  private sealed trait Packet { val version: Int }
-  private case class Literal(version: Int, value: Long)                            extends Packet
-  private case class Operator(version: Int, typeId: Int, subPackets: List[Packet]) extends Packet
+  sealed trait Packet { val version: Int }
+  case class Literal(version: Int, value: Long)                            extends Packet
+  case class Operator(version: Int, typeId: Int, subPackets: List[Packet]) extends Packet
 
-  def main(args: Array[String]): Unit = {
-    val input  = Using.resource(Source.fromResource("2021/day16.txt"))(_.mkString)
-    val packet = Packet(input)
-    println(s"Part 1: ${part1(packet)}")
-    println(s"Part 2: ${part2(packet)}")
-  }
+  override def parseInput(file: Source): Packet = Packet(file.mkString.trim)
 
-  private def part1(packet: Packet): Int = packet match {
+  override def part1(packet: Packet): Int = packet match {
     case Literal(version, _)              => version
     case Operator(version, _, subPackets) => version + subPackets.foldLeft(0)((acc, sub) => acc + part1(sub))
   }
 
-  private def part2(packet: Packet): Long = packet match {
+  override def part2(packet: Packet): Long = packet match {
     case Literal(_, value) => value
     case Operator(_, typeId, subPackets) =>
       val subValues = subPackets.map(part2)
