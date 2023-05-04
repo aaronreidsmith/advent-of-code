@@ -5,12 +5,10 @@ import org.scalatest.tags.Slow
 
 @Slow
 class Day04Test extends BaseTest {
-  "Day04.part1" should "work on example input" in {
-    Day04.part1("abcdef") shouldBe 609043
-    Day04.part1("pqrstuv") shouldBe 1048970
-  }
-
-  "Day04.part2" should "work on example input" in {
-    Day04.part2("abcdef") shouldBe 6742839
-  }
+  override val suite: Suite = Suite(
+    Seq("abcdef", "pqrstuv"),
+    Seq(609043, 1048970),
+    Seq("abcdef"),
+    Seq(6742839)
+  )
 }

@@ -3,13 +3,6 @@ package io.github.aaronreidsmith.year2015
 import io.github.aaronreidsmith.BaseTest
 
 class Day02Test extends BaseTest {
-  "Day02.part1" should "work on example input" in {
-    Day02.part1(List(Day02.Box(2, 3, 4))) shouldBe 58
-    Day02.part1(List(Day02.Box(1, 1, 10))) shouldBe 43
-  }
-
-  "Day02.part2" should "work on example input" in {
-    Day02.part2(List(Day02.Box(2, 3, 4))) shouldBe 34
-    Day02.part2(List(Day02.Box(1, 1, 10))) shouldBe 14
-  }
+  private val input         = Seq(List(Day02.Box(2, 3, 4)), List(Day02.Box(1, 1, 10)))
+  override val suite: Suite = Suite(input, Seq(58, 43), Seq(34, 14))
 }
