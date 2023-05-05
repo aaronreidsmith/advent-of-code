@@ -1,9 +1,9 @@
 package io.github.aaronreidsmith
 
-import org.scalatest.tags.Slow
-import org.scalatest.{Ignore, ParallelTestExecution, Tag}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.tags.Slow
+import org.scalatest.{Ignore, ParallelTestExecution, Tag}
 
 import scala.io.Source
 import scala.reflect.runtime.universe

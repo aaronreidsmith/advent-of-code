@@ -2,7 +2,10 @@ package io.github.aaronreidsmith;
 
 import org.scalatest.TagAnnotation;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Simple tag that allows us to run certain tests locally but not on CI. This is useful for tests that are
