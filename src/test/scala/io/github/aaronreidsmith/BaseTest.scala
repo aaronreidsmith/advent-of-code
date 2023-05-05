@@ -1,16 +1,26 @@
 package io.github.aaronreidsmith
 
-import org.scalatest.ParallelTestExecution
+import org.scalatest.tags.Slow
+import org.scalatest.{Ignore, ParallelTestExecution, Tag}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 import scala.io.Source
 import scala.reflect.runtime.universe
 
+// TODO: This file is a mess. Clean it up
 trait BaseTest extends AnyFlatSpec with Matchers with ParallelTestExecution {
+  // Implemented by actual tests
+  val suite: Suite
+
+  // TODO: A lot of this is also in 'Solution'. Can we refactor?
   private val year          = getClass.getName.split("year")(1).take(4).toInt
   private val day           = getClass.getName.split("Day")(1).take(2).toInt
   private val runtimeMirror = universe.runtimeMirror(getClass.getClassLoader)
+  private val annotation    = Option(getClass.getAnnotation(classOf[annotations.Slow]))
+  private val part1Slow     = Tag(if (annotation.fold(false)(_.part1())) classOf[Slow].getName else "")
+  private val part2Slow     = Tag(if (annotation.fold(false)(_.part2())) classOf[Slow].getName else "")
+  private val has2Parts     = Tag(if (day < 25) "" else classOf[Ignore].getName)
 
   // This is protected so we can expose its internal types
   protected val mainInstance: Solution = {
@@ -22,7 +32,11 @@ trait BaseTest extends AnyFlatSpec with Matchers with ParallelTestExecution {
   protected lazy val fileInput: mainInstance.I = using(f"$year/day$day%02d.txt")(mainInstance.parseInput)
 
   protected implicit class TestStringOps(str: String) {
-    def asSource: Source = Source.fromString(str)
+    def parsed: mainInstance.I = mainInstance.parseInput(Source.fromString(str))
+  }
+
+  protected implicit class TestSeqOps(seq: Seq[String]) {
+    def parsed: Seq[mainInstance.I] = seq.map(_.parsed)
   }
 
   // This is defined here instead of its own file to make the calling/implementing API a little easier, since we have
@@ -89,16 +103,13 @@ trait BaseTest extends AnyFlatSpec with Matchers with ParallelTestExecution {
     }
   }
 
-  // TODO: Make this required to implement by implementing classes
-  val suite: Suite = Suite(Seq(), Seq(), Seq(), Seq())
-
-  s"Year $year Day $day part 1" should "work" in {
+  s"Year $year Day $day part 1" should "work" taggedAs part1Slow in {
     suite.part1Input.zip(suite.part1Expected).foreach {
       case (input, expected) => mainInstance.part1(input) shouldBe expected
     }
   }
 
-  s"Year $year Day $day part 2" should "work" in {
+  s"Year $year Day $day part 2" should "work" taggedAs (part2Slow, has2Parts) in {
     suite.part2Input.zip(suite.part2Expected).foreach {
       case (input, expected) => mainInstance.part2(input) shouldBe expected
     }

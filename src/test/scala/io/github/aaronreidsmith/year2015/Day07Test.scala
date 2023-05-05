@@ -5,5 +5,5 @@ import org.scalatest.tags.Slow
 
 @Slow
 class Day07Test extends BaseTest {
-  override val suite: Suite = Suite(fileInput, "46065", "14134")
+  val suite: Suite = Suite(fileInput, "46065", "14134")
 }

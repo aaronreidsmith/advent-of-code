@@ -16,7 +16,7 @@ class Day05Test extends BaseTest {
     "uurcxstgmygtbstg", // Naughty
     "ieodomkazucvgmuy"  // Naughty
   )
-  override val suite: Suite = Suite(
+  val suite: Suite = Suite(
     Seq(part1Input),
     Seq(2),
     Seq(part2Input),

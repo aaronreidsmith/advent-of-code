@@ -4,7 +4,7 @@ import io.github.aaronreidsmith.BaseTest
 import io.github.aaronreidsmith.implicits.StringOps
 
 class Day18Test extends BaseTest {
-  override val suite: Suite = Suite(
+  val suite: Suite = Suite(
     """.#.#.#
       |...##.
       |#....#

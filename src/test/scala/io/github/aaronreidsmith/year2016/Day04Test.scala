@@ -3,7 +3,7 @@ package io.github.aaronreidsmith.year2016
 import io.github.aaronreidsmith.BaseTest
 
 class Day04Test extends BaseTest {
-  override val suite: Suite = Suite(
+  val suite: Suite = Suite(
     Seq(
       List(
         "aaaaa-bbb-z-y-x-123[abxyz]",

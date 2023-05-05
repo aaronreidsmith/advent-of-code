@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.{BaseTest, using}
+import io.github.aaronreidsmith.BaseTest
 
 class Day06Test extends BaseTest {
-  override val suite: Suite = Suite(fileInput, "easter", "advent")
+  val suite: Suite = Suite(fileInput, "easter", "advent")
 }
