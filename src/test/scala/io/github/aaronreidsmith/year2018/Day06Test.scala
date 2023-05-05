@@ -1,15 +1,7 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.{BaseTest, using}
+import io.github.aaronreidsmith.BaseTest
 
 class Day06Test extends BaseTest {
-  private val input = using("2018/day06.txt")(Day06.parseInput)
-
-  "Day06.part1" should "work for actual input" in {
-    Day06.part1(input) shouldBe 17
-  }
-
-  "Day06.part2" should "work for actual input" in {
-    Day06.part2(input) shouldBe 16
-  }
+  val suite: Suite = Suite(fileInput, 17, 16)
 }
