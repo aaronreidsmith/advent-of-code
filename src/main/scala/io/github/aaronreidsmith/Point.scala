@@ -46,10 +46,10 @@ case class Point(x: Int, y: Int) {
 object Point {
   given ordering: Ordering[Point] with {
     override def compare(left: Point, right: Point): Int = left.x.compareTo(right.x) match {
-      case 0 => left.y.compareTo(right.y)
+      case 0     => left.y.compareTo(right.y)
       case other => other
     }
   }
-  
+
   def zero: Point = Point(0, 0)
 }

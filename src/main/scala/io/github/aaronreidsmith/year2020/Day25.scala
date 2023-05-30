@@ -6,7 +6,7 @@ import scala.annotation.tailrec
 import scala.io.Source
 
 object Day25 extends Solution {
-  type I = (Long, Long)
+  type I  = (Long, Long)
   type O1 = Long
   type O2 = Nothing
 
@@ -22,7 +22,7 @@ object Day25 extends Solution {
     def helper(handshake: Long, target: Long): Long = if (target == doorKey) {
       handshake
     } else {
-      val newTarget = (target * 7) % 20201227
+      val newTarget    = (target * 7)          % 20201227
       val newHandshake = (handshake * cardKey) % 20201227
       helper(newHandshake, newTarget)
     }

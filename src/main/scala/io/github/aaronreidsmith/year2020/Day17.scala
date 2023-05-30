@@ -7,7 +7,7 @@ import scala.io.Source
 
 // TODO: Adapted from Python solution, so a fair bit of mutability
 object Day17 extends Solution {
-  type I = List[String]
+  type I  = List[String]
   type O1 = Int
   type O2 = Int
 
@@ -34,7 +34,7 @@ object Day17 extends Solution {
   override def part2(initialState: List[String]): Int = solution(initialState, 4)
 
   private def solution(initial: List[String], dimensions: Int): Int = {
-    val space   = mutable.Map.empty[List[Int], Char].withDefaultValue('.')
+    val space = mutable.Map.empty[List[Int], Char].withDefaultValue('.')
     for {
       (line, x)  <- initial.zipWithIndex
       (state, y) <- line.zipWithIndex

@@ -6,7 +6,7 @@ import io.github.aaronreidsmith.implicits.letterOccurrences
 import scala.io.Source
 
 object Day02 extends Solution {
-  type I = List[String]
+  type I  = List[String]
   type O1 = Int
   type O2 = String
 

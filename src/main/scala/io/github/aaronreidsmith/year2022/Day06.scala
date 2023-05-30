@@ -5,7 +5,7 @@ import io.github.aaronreidsmith.Solution
 import scala.io.Source
 
 object Day06 extends Solution {
-  type I = String
+  type I  = String
   type O1 = Int
   type O2 = Int
 

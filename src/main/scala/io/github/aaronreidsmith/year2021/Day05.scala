@@ -10,7 +10,7 @@ object Day05 extends Solution {
   type O2 = Int
 
   private val entry = """^(\d+),(\d+) -> (\d+),(\d+)$""".r
-  extension(list: List[String]) {
+  extension (list: List[String]) {
     def toVents(includeDiagonals: Boolean): Map[Point, Int] = {
       list.foldLeft(Map.empty[Point, Int].withDefaultValue(0)) {
         case (acc, entry(x1Str, y1Str, x2Str, y2Str)) =>

@@ -42,7 +42,7 @@ object Day16 extends Solution {
 
   private val before = """^Before:\s+\[(\d), (\d), (\d), (\d)]$""".r
   private val opcode = """^(\d+) (\d) (\d) (\d)$""".r
-  private val after = """^After:\s+\[(\d), (\d), (\d), (\d)]$""".r
+  private val after  = """^After:\s+\[(\d), (\d), (\d), (\d)]$""".r
   extension (str: String) {
     def toAfter: Map[Int, Int] = str match {
       case after(r0, r1, r2, r3) => Map(0 -> r0.toInt, 1 -> r1.toInt, 2 -> r2.toInt, 3 -> r3.toInt)

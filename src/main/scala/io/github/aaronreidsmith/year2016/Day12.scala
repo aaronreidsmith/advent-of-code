@@ -12,14 +12,14 @@ object Day12 extends Solution {
   type I  = Vector[String]
   type O1 = Int
   type O2 = Int
-  
+
   extension (string: String) {
     def toIntOrValue(registers: Map[String, Int]): Int = Try(string.toInt) match {
       case Success(int) => int
       case Failure(_) =>
         registers.get(string) match {
           case Some(int) => int
-          case None => throw new IllegalArgumentException(string)
+          case None      => throw new IllegalArgumentException(string)
         }
     }
   }

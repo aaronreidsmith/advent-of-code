@@ -5,7 +5,7 @@ import io.github.aaronreidsmith.Solution
 import scala.io.Source
 
 object Day02 extends Solution {
-  type I = List[(Char, Char)]
+  type I  = List[(Char, Char)]
   type O1 = Int
   type O2 = Int
 
@@ -28,7 +28,7 @@ object Day02 extends Solution {
         case ('C', 'X') => 7 // Scissors, Rock (6 + 1)
         case ('C', 'Y') => 2 // Scissors, Paper (0 + 2)
         case ('C', 'Z') => 6 // Scissors, Scissors (3 + 3)
-        case _ => throw new IllegalArgumentException
+        case _          => throw new IllegalArgumentException
       }
       acc + score
   }

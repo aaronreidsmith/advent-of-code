@@ -7,7 +7,7 @@ import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
 import scala.io.Source
 
 object Day25 extends Solution {
-  type I = List[Star]
+  type I  = List[Star]
   type O1 = Int
   type O2 = Nothing
 

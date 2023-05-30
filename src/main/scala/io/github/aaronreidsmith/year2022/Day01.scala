@@ -5,7 +5,7 @@ import io.github.aaronreidsmith.Solution
 import scala.io.Source
 
 object Day01 extends Solution {
-  type I = Seq[Seq[Int]]
+  type I  = Seq[Seq[Int]]
   type O1 = Int
   type O2 = Int
 

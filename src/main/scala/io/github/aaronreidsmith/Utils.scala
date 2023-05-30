@@ -5,4 +5,4 @@ import scala.util.Using
 
 type Grid[T] = Map[Point, T]
 
-def usingFile[T](resourceName: String)(body: Source => T): T = Using.resource(Source.fromResource(resourceName))(body) 
+def usingFile[T](resourceName: String)(body: Source => T): T = Using.resource(Source.fromResource(resourceName))(body)

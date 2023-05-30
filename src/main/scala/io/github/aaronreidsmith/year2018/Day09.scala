@@ -7,7 +7,7 @@ import scala.io.Source
 
 // TODO: Adapted from my Python solution, so a decent amount of mutability
 object Day09 extends Solution {
-  type I = (Int, Int)
+  type I  = (Int, Int)
   type O1 = Long
   type O2 = Long
 

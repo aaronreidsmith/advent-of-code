@@ -58,7 +58,9 @@ object Day19 extends Solution {
   }
 
   override def part1(input: List[Blueprint]): Int = input.foldLeft(0)(_ + maximize(_, 24))
-  override def part2(input: List[Blueprint]): Int = input.take(3).foldLeft(1)(_ * maximize(_, 32)) / 6 // Not sure why we have to divide by 6 here
+  override def part2(input: List[Blueprint]): Int = {
+    input.take(3).foldLeft(1)(_ * maximize(_, 32)) / 6 // Not sure why we have to divide by 6 here
+  }
 
   // Only want to compile these once
   private val zero        = Resources()

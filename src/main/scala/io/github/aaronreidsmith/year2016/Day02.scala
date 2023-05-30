@@ -5,7 +5,7 @@ import io.github.aaronreidsmith.Solution
 import scala.annotation.tailrec
 import scala.io.Source
 
-object Day02 extends Solution{
+object Day02 extends Solution {
   type I  = List[List[Char]]
   type O1 = String
   type O2 = String

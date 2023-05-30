@@ -9,10 +9,10 @@ object Day08 extends Solution {
   type I  = List[String]
   type O1 = Int
   type O2 = Int
-  
+
   extension (string: String) {
     def memoryLength: Int = {
-      val it = string.drop(1).dropRight(1).iterator
+      val it  = string.drop(1).dropRight(1).iterator
       val out = new StringBuilder
       while (it.hasNext) {
         val char = it.next()

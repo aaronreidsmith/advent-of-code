@@ -5,7 +5,7 @@ import io.github.aaronreidsmith.Solution
 import scala.io.Source
 
 object Day13 extends Solution {
-  type I = List[Person]
+  type I  = List[Person]
   type O1 = Int
   type O2 = Int
 
