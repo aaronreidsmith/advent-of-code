@@ -41,8 +41,8 @@ object Day05 extends Solution {
     @tailrec
     def helper(index: Int): String = if (password.size >= 8) {
       password.toList
-        .sortBy { case (i, _) => i }
-        .map { case (_, char) => char }
+        .sortBy((i, _) => i)
+        .map((_, char) => char)
         .mkString
     } else {
       val hash           = md5(s"$doorId$index")

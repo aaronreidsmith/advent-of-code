@@ -5,7 +5,7 @@ import io.github.aaronreidsmith.implicits.toGrid
 
 import scala.annotation.tailrec
 import scala.io.Source
-import scala.util.control.Breaks.{break, breakable}
+import util.boundary, boundary.break
 
 // TODO: This is adapted from some Python code, so it is _not_ super idiomatic
 object Day11 extends Solution {
@@ -33,7 +33,7 @@ object Day11 extends Solution {
       def neighbor(direction: Point): Char = {
         var next        = pos
         var returnValue = '.'
-        breakable {
+        boundary {
           while (true) {
             next += direction
             ferry.get(next) match {

@@ -45,8 +45,8 @@ object Day24 extends Solution {
   private def solution(graph: DefaultUndirectedGraph[(Point, Char), DefaultEdge]): (Int, Int) = {
     if (!solved) {
       val vertices          = graph.vertexSet().asScala
-      val start             = vertices.find { case (_, char) => char == '0' }.get
-      val targets           = vertices.filter { case (_, char) => char != '.' && char != '0' }.toVector.sortBy(_._2)
+      val start             = vertices.find((_, char) => char == '0').get
+      val targets           = vertices.filter((_, char) => char != '.' && char != '0').toVector.sortBy(_._2)
       val distancesFromZero = targets.map(target => BFSShortestPath.findPathBetween(graph, start, target).getLength)
       val segments          = distancesFromZero.size
       val allDistances = {

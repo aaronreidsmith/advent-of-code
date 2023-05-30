@@ -43,9 +43,9 @@ object Day04 extends Solution {
           .replace("-", "")
           .groupBy(identity)
           .toList
-          .sortBy { case (char, occurrences) => (-occurrences.length, char) }
+          .sortBy((char, occurrences) => (-occurrences.length, char))
           .take(5)
-          .map { case (char, _) => char }
+          .map((char, _) => char)
           .mkString
         val filteredId = if (checksum == top5) sectorId.toInt else 0
         (name, filteredId, checksum)

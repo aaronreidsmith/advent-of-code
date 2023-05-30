@@ -208,7 +208,7 @@ object Day20 extends Solution {
 
     def mergeRow(row: Vector[TileData]): Vector[String] = {
       def mergeHorizontally(left: Vector[String], right: Vector[String]): Vector[String] = {
-        left.zip(right).map { case (a, b) => a + b }
+        left.zip(right).map((a, b) => a + b)
       }
 
       row.map(_.lines).reduceLeft(mergeHorizontally)

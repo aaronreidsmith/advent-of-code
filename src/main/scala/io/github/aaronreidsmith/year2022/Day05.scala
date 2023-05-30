@@ -63,8 +63,8 @@ object Day05 extends Solution {
     }
 
     updated.toList
-      .sortBy { case (num, _) => num }
-      .map { case (_, stack) => stack.head }
+      .sortBy((num, _) => num)
+      .map((_, stack) => stack.head)
       .mkString
   }
 }

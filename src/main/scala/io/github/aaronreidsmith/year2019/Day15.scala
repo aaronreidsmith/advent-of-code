@@ -41,7 +41,7 @@ object Day15 extends Solution {
     }
 
     val cost   = mutable.Map(Point.zero -> 0)
-    val todo   = mutable.PriorityQueue((Point.zero, initial))(Ordering.by { case (point, _) => cost(point) })
+    val todo   = mutable.PriorityQueue((Point.zero, initial))(Ordering.by((point, _) => cost(point)))
     var target = Option.empty[(Point, IntCode)]
 
     while (todo.nonEmpty) {

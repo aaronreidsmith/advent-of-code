@@ -48,14 +48,13 @@ object Day22 extends Solution {
     def printGrid(grid: Map[Point, Node]): Unit = {
       var row = 0
       grid.toSeq
-        .sortBy { case (position, _) => (position.x, position.y) }
-        .foreach {
-          case (pos, node) =>
-            if (pos.x != row) {
-              row += 1
-              println()
-            }
-            print(s"$node ")
+        .sortBy((position, _) => (position.x, position.y))
+        .foreach { (pos, node) =>
+          if (pos.x != row) {
+            row += 1
+            println()
+          }
+          print(s"$node ")
         }
     }
 

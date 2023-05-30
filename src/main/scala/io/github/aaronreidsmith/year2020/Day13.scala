@@ -30,7 +30,7 @@ object Day13 extends Solution {
   override def part2(input: Notes): Long = {
     val buses   = input.buses.zipWithIndex.filterNot(_._1 == "x")
     val times   = buses.map(_._1.toLong)
-    val offsets = buses.map { case (busId, index) => busId.toLong - index }
+    val offsets = buses.map((busId, index) => busId.toLong - index)
     // https://brilliant.org/wiki/chinese-remainder-theorem
     val N = times.product
     val x = offsets.zip(times).foldLeft(0L) {

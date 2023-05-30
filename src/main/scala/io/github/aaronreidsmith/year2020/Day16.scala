@@ -72,17 +72,15 @@ object Day16 extends Solution {
 
     val finalFields = mutable.Map.empty[String, Int]
     while (finalFields.size != numberOfFields) {
-      possibleFields.foreach {
-        case (name, possibleIndices) =>
-          if (possibleIndices.size == 1) {
-            val index = possibleIndices.head
-            finalFields.update(name, index)
-            possibleFields.remove(name)
-            possibleFields.foreach {
-              case (nameToUpdate, indicesToUpdate) =>
-                possibleFields.update(nameToUpdate, indicesToUpdate.filterNot(_ == index))
-            }
+      possibleFields.foreach { (name, possibleIndices) =>
+        if (possibleIndices.size == 1) {
+          val index = possibleIndices.head
+          finalFields.update(name, index)
+          possibleFields.remove(name)
+          possibleFields.foreach { (nameToUpdate, indicesToUpdate) =>
+            possibleFields.update(nameToUpdate, indicesToUpdate.filterNot(_ == index))
           }
+        }
       }
     }
 

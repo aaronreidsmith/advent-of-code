@@ -55,13 +55,12 @@ object Day17 extends Solution {
         active.update(neighbor, updated)
       }
 
-      active.foreach {
-        case (cube, activeNeighbors) =>
-          if (space(cube) == '#' && !Seq(2, 3).contains(activeNeighbors)) {
-            space.update(cube, '.')
-          } else if (space(cube) == '.' && activeNeighbors == 3) {
-            space.update(cube, '#')
-          }
+      active.foreach { (cube, activeNeighbors) =>
+        if (space(cube) == '#' && !Seq(2, 3).contains(activeNeighbors)) {
+          space.update(cube, '.')
+        } else if (space(cube) == '.' && activeNeighbors == 3) {
+          space.update(cube, '#')
+        }
       }
     }
 

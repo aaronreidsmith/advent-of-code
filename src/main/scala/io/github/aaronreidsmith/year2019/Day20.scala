@@ -105,10 +105,9 @@ object Day20 extends Solution {
             }
           }
           graph.addVertex((x, y, level))
-          possibleNeighbors.foreach {
-            case (nX, nY, nLevel) =>
-              graph.addVertex((nX, nY, nLevel))
-              graph.addEdge((x, y, level), (nX, nY, nLevel))
+          possibleNeighbors.foreach { (nX, nY, nLevel) =>
+            graph.addVertex((nX, nY, nLevel))
+            graph.addEdge((x, y, level), (nX, nY, nLevel))
           }
       }
     }

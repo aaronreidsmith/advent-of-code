@@ -24,20 +24,19 @@ object Day12 extends Solution {
   override def parseInput(file: Source): DefaultDirectedGraph[(Point, Char), DefaultEdge] = {
     val graph = new DefaultDirectedGraph[(Point, Char), DefaultEdge](classOf[DefaultEdge])
     val grid  = file.toGrid
-    grid.foreach {
-      case (point, char) =>
-        // Always add this vertex
-        graph.addVertex((point, char))
+    grid.foreach { (point, char) =>
+      // Always add this vertex
+      graph.addVertex((point, char))
 
-        // Only add neighbor vertices/edges if we can reach them
-        for {
-          neighbor     <- point.immediateNeighbors
-          neighborChar <- grid.get(neighbor)
-          if neighborChar.elevation <= char.elevation + 1
-        } {
-          graph.addVertex((neighbor, neighborChar))
-          graph.addEdge((point, char), (neighbor, neighborChar))
-        }
+      // Only add neighbor vertices/edges if we can reach them
+      for {
+        neighbor     <- point.immediateNeighbors
+        neighborChar <- grid.get(neighbor)
+        if neighborChar.elevation <= char.elevation + 1
+      } {
+        graph.addVertex((neighbor, neighborChar))
+        graph.addEdge((point, char), (neighbor, neighborChar))
+      }
     }
 
     graph

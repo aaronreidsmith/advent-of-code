@@ -24,8 +24,8 @@ object Day20 extends Solution {
 
   override def part1(input: Vector[(Long, Long)]): Long = {
     input
-      .find { case (start, end) => start > end + 1 }
-      .map { case (_, end) => end + 1 }
+      .find((start, end) => start > end + 1)
+      .map((_, end) => end + 1)
       .getOrElse(-1)
   }
 
