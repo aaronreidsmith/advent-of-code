@@ -17,7 +17,7 @@ val settings = new {
 
 // Root options
 libraryDependencies ++= settings.libraryDependencies
-scalacOptions ++= Seq("-deprecation", "-Wunused:imports", "-Wunused:privates", "-Wunused:locals")
+scalacOptions ++= Seq("-deprecation", "-no-indent", "-Wunused:imports", "-Wunused:privates", "-Wunused:locals")
 scalaVersion := settings.scalaVersion
 
 // Compile options
