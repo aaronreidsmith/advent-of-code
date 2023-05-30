@@ -9,44 +9,44 @@ object Day05 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  private implicit class ListOps(list: List[String]) {
-    private val entry = """^(\d+),(\d+) -> (\d+),(\d+)$""".r
+  private val entry = """^(\d+),(\d+) -> (\d+),(\d+)$""".r
+  extension(list: List[String]) {
+    def toVents(includeDiagonals: Boolean): Map[Point, Int] = {
+      list.foldLeft(Map.empty[Point, Int].withDefaultValue(0)) {
+        case (acc, entry(x1Str, y1Str, x2Str, y2Str)) =>
+          val x1 = x1Str.toInt
+          val y1 = y1Str.toInt
+          val x2 = x2Str.toInt
+          val y2 = y2Str.toInt
 
-    def toVents(includeDiagonals: Boolean): Map[Point, Int] = list.foldLeft(Map.empty[Point, Int].withDefaultValue(0)) {
-      case (acc, entry(x1Str, y1Str, x2Str, y2Str)) =>
-        val x1 = x1Str.toInt
-        val y1 = y1Str.toInt
-        val x2 = x2Str.toInt
-        val y2 = y2Str.toInt
-
-        if (x1 == x2) { // Horizontal
-          val range = if (y1 < y2) y1 to y2 else y1 to y2 by -1
-          range.foldLeft(acc) { (innerAcc, y) =>
-            val position = Point(x1, y)
-            val old      = innerAcc(position)
-            innerAcc.updated(position, old + 1)
-          }
-        } else if (y1 == y2) { // Vertical
-          val range = if (x1 < x2) x1 to x2 else x1 to x2 by -1
-          range.foldLeft(acc) { (innerAcc, x) =>
-            val position = Point(x, y1)
-            val old      = innerAcc(position)
-            innerAcc.updated(position, old + 1)
-          }
-        } else if (includeDiagonals) { // Diagonals
-          val xRange = if (x1 < x2) x1 to x2 else x1 to x2 by -1
-          val yRange = if (y1 < y2) y1 to y2 else y1 to y2 by -1
-          xRange.zip(yRange).foldLeft(acc) {
-            case (innerAcc, (x, y)) =>
-              val position = Point(x, y)
+          if (x1 == x2) { // Horizontal
+            val range = if (y1 < y2) y1 to y2 else y1 to y2 by -1
+            range.foldLeft(acc) { (innerAcc, y) =>
+              val position = Point(x1, y)
               val old      = innerAcc(position)
               innerAcc.updated(position, old + 1)
-            case (innerAcc, _) => innerAcc
+            }
+          } else if (y1 == y2) { // Vertical
+            val range = if (x1 < x2) x1 to x2 else x1 to x2 by -1
+            range.foldLeft(acc) { (innerAcc, x) =>
+              val position = Point(x, y1)
+              val old      = innerAcc(position)
+              innerAcc.updated(position, old + 1)
+            }
+          } else if (includeDiagonals) { // Diagonals
+            val xRange = if (x1 < x2) x1 to x2 else x1 to x2 by -1
+            val yRange = if (y1 < y2) y1 to y2 else y1 to y2 by -1
+            xRange.zip(yRange).foldLeft(acc) {
+              case (innerAcc, (x, y)) =>
+                val position = Point(x, y)
+                val old      = innerAcc(position)
+                innerAcc.updated(position, old + 1)
+            }
+          } else {
+            acc
           }
-        } else {
-          acc
-        }
-      case (acc, _) => acc
+        case (acc, _) => acc
+      }
     }
   }
 

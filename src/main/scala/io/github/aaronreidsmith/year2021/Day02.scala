@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2021
 
-import io.github.aaronreidsmith._
+import io.github.aaronreidsmith.*
 
 import scala.io.Source
 

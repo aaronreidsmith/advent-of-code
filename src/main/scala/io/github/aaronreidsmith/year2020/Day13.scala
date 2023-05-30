@@ -12,7 +12,7 @@ object Day13 extends Solution {
   case class Notes(arrivalTime: Int, buses: Seq[String])
 
   override def parseInput(file: Source): Notes = {
-    val Array(arrivalTimeRaw, busesRaw, _*) = file.mkString.trim.split('\n')
+    val Array(arrivalTimeRaw, busesRaw, _*) = file.mkString.trim.split('\n'): @unchecked
     Notes(arrivalTimeRaw.toInt, busesRaw.split(',').toSeq)
   }
 
@@ -36,7 +36,6 @@ object Day13 extends Solution {
     val x = offsets.zip(times).foldLeft(0L) {
       case (acc, (offset, departTime)) =>
         acc + offset * (N / departTime) * BigInt(N / departTime).modPow(-1, departTime).toLong
-      case (acc, _) => acc
     }
     x % N
   }

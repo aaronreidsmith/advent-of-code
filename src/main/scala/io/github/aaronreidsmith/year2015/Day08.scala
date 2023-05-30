@@ -9,10 +9,10 @@ object Day08 extends Solution {
   type I  = List[String]
   type O1 = Int
   type O2 = Int
-
-  private implicit class StringOps(string: String) {
+  
+  extension (string: String) {
     def memoryLength: Int = {
-      val it  = string.drop(1).dropRight(1).iterator
+      val it = string.drop(1).dropRight(1).iterator
       val out = new StringBuilder
       while (it.hasNext) {
         val char = it.next()
@@ -39,7 +39,6 @@ object Day08 extends Solution {
   override def part1(input: List[String]): Int = {
     val (chars, memory) = input.foldLeft((0, 0)) {
       case ((charAcc, memAcc), line) => (charAcc + line.length, memAcc + line.memoryLength)
-      case (acc, _)                  => acc
     }
     chars - memory
   }
@@ -47,7 +46,6 @@ object Day08 extends Solution {
   override def part2(input: List[String]): Int = {
     val (reEncoded, chars) = input.foldLeft((0, 0)) {
       case ((reEncodedAcc, charsAcc), line) => (reEncodedAcc + line.reEncodedLength, charsAcc + line.length)
-      case (acc, _)                         => acc
     }
     reEncoded - chars
   }

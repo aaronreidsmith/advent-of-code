@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2019
 
 import io.github.aaronreidsmith.Solution
-import io.github.aaronreidsmith.implicits._
+import io.github.aaronreidsmith.implicits.letterOccurrences
 
 import scala.io.Source
 
@@ -10,8 +10,8 @@ object Day04 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  private implicit class IntOps(int: Int) {
-    private lazy val string = int.toString
+  extension (int: Int) {
+    private def string = int.toString
 
     def alwaysIncreasing: Boolean = string.sliding(2).forall { pair =>
       val first  = pair.head.asDigit
@@ -24,7 +24,7 @@ object Day04 extends Solution {
   }
 
   override def parseInput(file: Source): Range = {
-    val Array(min, max, _*) = file.mkString.trim.split('-')
+    val Array(min, max, _*) = file.mkString.trim.split('-'): @unchecked
     min.toInt to max.toInt
   }
 

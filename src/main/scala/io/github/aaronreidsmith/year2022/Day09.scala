@@ -56,7 +56,6 @@ object Day09 extends Solution {
           case (acc, knot) => acc.updated(knot, moveKnot(knots(knot), acc(knot - 1)))
         }
         (newState, seen + newState(numKnots - 1))
-      case (acc, _) => acc
     }
     visited.size
   }

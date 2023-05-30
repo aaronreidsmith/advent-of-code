@@ -12,7 +12,7 @@ object Day03 extends Solution {
 
   override def parseInput(file: Source): (List[String], List[String]) = {
     val wires                   = file.mkString.trim.split('\n').map(_.split(',').toList)
-    val Array(wire1, wire2, _*) = wires
+    val Array(wire1, wire2, _*) = wires: @unchecked
     (wire1, wire2)
   }
 
@@ -21,7 +21,6 @@ object Day03 extends Solution {
       case (currentMin, (a, b)) =>
         val distance = a.abs + b.abs
         if (distance > 0) currentMin.min(distance) else currentMin
-      case (currentMin, _) => currentMin
     }
   }
 

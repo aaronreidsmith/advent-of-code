@@ -31,7 +31,6 @@ object Day02 extends Solution {
         case _ => throw new IllegalArgumentException
       }
       acc + score
-    case (acc, _) => acc
   }
 
   override def part2(rounds: List[(Char, Char)]): Int = rounds.foldLeft(0) {
@@ -49,6 +48,5 @@ object Day02 extends Solution {
         case _          => throw new IllegalArgumentException
       }
       acc + score
-    case (acc, _) => acc
   }
 }

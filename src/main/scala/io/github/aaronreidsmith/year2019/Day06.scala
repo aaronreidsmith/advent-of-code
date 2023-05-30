@@ -5,7 +5,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath
 import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
 
 import scala.io.Source
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 object Day06 extends Solution {
   type I  = DefaultUndirectedGraph[String, DefaultEdge]
@@ -15,7 +15,7 @@ object Day06 extends Solution {
   override def parseInput(file: Source): DefaultUndirectedGraph[String, DefaultEdge] = {
     val graph = new DefaultUndirectedGraph[String, DefaultEdge](classOf[DefaultEdge])
     file.getLines().foreach { line =>
-      val Array(inner, outer, _*) = line.split(')')
+      val Array(inner, outer, _*) = line.split(')'): @unchecked
       graph.addVertex(inner)
       graph.addVertex(outer)
       graph.addEdge(outer, inner)

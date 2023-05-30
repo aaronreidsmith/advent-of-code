@@ -1,6 +1,5 @@
 package io.github.aaronreidsmith.year2021
 
-import io.github.aaronreidsmith.implicits.point2Tuple2
 import io.github.aaronreidsmith.{Point, Solution}
 
 import scala.io.Source
@@ -25,11 +24,11 @@ object Day13 extends Solution {
     val verticalFold   = """^fold along x=(\d+)$""".r
     val horizontalFold = """^fold along y=(\d+)$""".r
 
-    val Array(rawPoints, rawFolds, _*) = file.mkString.trim.split("\n\n")
+    val Array(rawPoints, rawFolds, _*) = file.mkString.trim.split("\n\n"): @unchecked
     val grid = rawPoints
       .split('\n')
       .map { line =>
-        val Array(x, y, _*) = line.split(',')
+        val Array(x, y, _*) = line.split(','): @unchecked
         Point(x.toInt, y.toInt)
       }
       .toSet
@@ -51,7 +50,7 @@ object Day13 extends Solution {
   override def part2(input: (Set[Point], List[Fold])): String = {
     val (grid, folds) = input
     val folded        = folds.foldLeft(grid)((acc, fold) => acc.map(fold.mirror))
-    val (xs, ys)      = folded.unzip
+    val (xs, ys)      = folded.unzip(point => (point.x, point.y))
     val output        = new StringBuilder("\n")
     (0 to ys.max).foreach { y =>
       (0 to xs.max).foreach { x =>

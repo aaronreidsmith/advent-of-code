@@ -18,7 +18,7 @@ object Day15 extends Solution {
       previous #:: generator(next, factor)
     }
 
-    val aStart :: bStart :: _ = file.getLines().toList.map(_.filter(_.isDigit).toLong)
+    val aStart :: bStart :: _ = file.getLines().toList.map(_.filter(_.isDigit).toLong): @unchecked
     (generator(aStart, 16807L), generator(bStart, 48271L))
   }
 

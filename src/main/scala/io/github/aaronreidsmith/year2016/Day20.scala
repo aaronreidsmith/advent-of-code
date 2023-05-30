@@ -14,7 +14,7 @@ object Day20 extends Solution {
       .getLines()
       .toVector
       .map { line =>
-        val Array(start, end, _*) = line.split('-')
+        val Array(start, end, _*) = line.split('-'): @unchecked
         (start.toLong, end.toLong)
       }
       .unzip
@@ -30,9 +30,6 @@ object Day20 extends Solution {
   }
 
   override def part2(input: Vector[(Long, Long)]): Long = {
-    input.foldLeft(0L) {
-      case (acc, (start, end)) => acc + math.max(0, start - end - 1)
-      case (acc, _)            => acc
-    }
+    input.foldLeft(0L) { case (acc, (start, end)) => acc + math.max(0, start - end - 1) }
   }
 }

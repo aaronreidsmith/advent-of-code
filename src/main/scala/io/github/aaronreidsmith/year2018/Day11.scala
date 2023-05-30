@@ -10,12 +10,12 @@ object Day11 extends Solution {
   type O2 = String
 
   // Since a fuel cell is just a point with some other methods, we just extend our Point class
-  type FuelCell = Point
+  opaque type FuelCell = Point
   object FuelCell {
     def apply(x: Int, y: Int): FuelCell = Point(x, y)
   }
 
-  private implicit class FuelCellOps(fuelCell: FuelCell) {
+  extension (fuelCell: FuelCell) {
     def powerLevel(gridSerialNumber: Int): Int = {
       val rackId         = fuelCell.x + 10
       val initPowerLevel = (rackId * fuelCell.y) + gridSerialNumber

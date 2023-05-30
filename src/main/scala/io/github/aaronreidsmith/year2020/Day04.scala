@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith._
+import io.github.aaronreidsmith.*
 
 import scala.io.Source
 
@@ -23,7 +23,7 @@ object Day04 extends Solution {
       entry
         .split("\\s")
         .foldLeft(Map.empty[String, String]) { (acc, pair) =>
-          val Array(key, value, _*) = pair.split(':')
+          val Array(key, value, _*) = pair.split(':'): @unchecked
           acc + (key -> value)
         }
     }

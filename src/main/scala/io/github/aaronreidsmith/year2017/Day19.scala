@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2017
 
-import io.github.aaronreidsmith._
-import io.github.aaronreidsmith.implicits.SourceOps
+import io.github.aaronreidsmith.*
+import io.github.aaronreidsmith.implicits.toGrid
 
 import scala.annotation.tailrec
 import scala.io.Source

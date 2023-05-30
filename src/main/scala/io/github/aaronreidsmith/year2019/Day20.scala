@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.implicits.SourceOps
 import io.github.aaronreidsmith.{Grid, Point, Solution}
+import io.github.aaronreidsmith.implicits.toGrid
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath
 import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
 
@@ -78,7 +78,6 @@ object Day20 extends Solution {
         graph.addVertex(point)
         possibleNeighbors.foreach(graph.addVertex)
         possibleNeighbors.foreach(graph.addEdge(point, _))
-      case _ => throw new IllegalArgumentException
     }
     val start = grid.collectFirst { case (point, Portal(label, _)) if label == "AA" => point }.get
     val end   = grid.collectFirst { case (point, Portal(label, _)) if label == "ZZ" => point }.get
@@ -91,7 +90,7 @@ object Day20 extends Solution {
       grid.foreach {
         case (_, Wall) => // Skip walls
         case (point, tile) =>
-          val (x, y) = point.unzip
+          val (x, y) = point.asPair
           val possibleNeighbors = point.immediateNeighbors.collect {
             case neighbor if grid(neighbor) != Wall => (neighbor.x, neighbor.y, level)
           } ++ {
@@ -111,11 +110,10 @@ object Day20 extends Solution {
               graph.addVertex((nX, nY, nLevel))
               graph.addEdge((x, y, level), (nX, nY, nLevel))
           }
-        case _ => throw new IllegalArgumentException
       }
     }
-    val (startX, startY) = grid.collectFirst { case (point, Portal(label, _)) if label == "AA" => point }.get.unzip
-    val (endX, endY)     = grid.collectFirst { case (point, Portal(label, _)) if label == "ZZ" => point }.get.unzip
+    val (startX, startY) = grid.collectFirst { case (point, Portal(label, _)) if label == "AA" => point }.get.asPair
+    val (endX, endY)     = grid.collectFirst { case (point, Portal(label, _)) if label == "ZZ" => point }.get.asPair
     DijkstraShortestPath.findPathBetween(graph, (startX, startY, 0), (endX, endY, 0)).getLength
   }
 }

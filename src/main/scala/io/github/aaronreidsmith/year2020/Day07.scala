@@ -20,7 +20,6 @@ object Day07 extends Solution {
 
     def getContents(rules: Map[Bag, Rule]): Int = rules(this).contents.foldLeft(0) {
       case (acc, (bag, quantity)) => acc + quantity + (quantity * bag.getContents(rules))
-      case (acc, _)               => acc
     }
   }
 
@@ -30,14 +29,14 @@ object Day07 extends Solution {
 
   override def parseInput(file: Source): Map[Bag, Rule] = {
     file.getLines().foldLeft(Map.empty[Bag, Rule]) { (acc, line) =>
-      val Array(bagDesc, contentsString, _*) = line.split(" contain ")
-      val Array(adjective, color, _*)        = bagDesc.split(' ')
+      val Array(bagDesc, contentsString, _*) = line.split(" contain "): @unchecked
+      val Array(adjective, color, _*)        = bagDesc.split(' '): @unchecked
       val bag                                = Bag(adjective, color)
       val contents = contentsString match {
         case "no other bags." => Array.empty[(Bag, Int)]
         case _ =>
           contentsString.split(", ").map { entry =>
-            val Array(quantity, adjective, color, _*) = entry.split(' ')
+            val Array(quantity, adjective, color, _*) = entry.split(' '): @unchecked
             (Bag(adjective, color), quantity.toInt)
           }
       }

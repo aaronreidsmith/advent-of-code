@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith._
+import io.github.aaronreidsmith.*
 
 import scala.annotation.tailrec
 import scala.io.Source
@@ -15,7 +15,7 @@ object Day22 extends Solution {
   case object Right           extends Instruction
   case class Move(steps: Int) extends Instruction
 
-  private implicit class DirectionOps(direction: Direction) {
+  extension (direction: Direction) {
     def toInt: Int = direction match {
       case East  => 0
       case South => 1
@@ -25,7 +25,7 @@ object Day22 extends Solution {
   }
 
   override def parseInput(file: Source): (Grid[Char], List[Instruction]) = {
-    val Array(rawGrid, rawInstructions, _*) = file.mkString.stripTrailing().split("\n\n")
+    val Array(rawGrid, rawInstructions, _*) = file.mkString.stripTrailing().split("\n\n"): @unchecked
 
     val grid = {
       for {
@@ -172,7 +172,6 @@ object Day22 extends Solution {
                 case Some('.') => (next, currentDirection)                // Open space, continue
                 case _         => wrap(currentPosition, currentDirection) // Wrap based on input function
               }
-            case (acc, _) => acc
           }
           helper(newPos, tail, newDirection)
       }

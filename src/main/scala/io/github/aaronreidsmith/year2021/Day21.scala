@@ -11,7 +11,7 @@ object Day21 extends Solution {
   type O1 = Int
   type O2 = Long
 
-  private implicit class PositionOps(position: Int) {
+  extension (position: Int) {
     def next(moves: Int): Int = {
       val newPos = (position + moves) % 10
       if (newPos == 0) 10 else newPos
@@ -19,7 +19,7 @@ object Day21 extends Solution {
   }
 
   override def parseInput(file: Source): (Int, Int) = {
-    val List(player1, player2, _*) = file.getLines().map(_.split(": ").last.toInt).toList
+    val List(player1, player2, _*) = file.getLines().map(_.split(": ").last.toInt).toList: @unchecked
     (player1, player2)
   }
 
@@ -49,7 +49,6 @@ object Day21 extends Solution {
             val newPos1  = pos1.next(move)
             val (w2, w1) = helper(pos2, newPos1, score2, score1 + newPos1)
             (wins1 + n * w1, wins2 + n * w2)
-          case (acc, _) => acc
         }
       }
     )

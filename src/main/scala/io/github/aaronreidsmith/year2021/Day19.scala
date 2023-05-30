@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2021
 
 import io.github.aaronreidsmith.Solution
-import io.github.aaronreidsmith.implicits.IteratorOps
+import io.github.aaronreidsmith.implicits.{headOption, occurrences}
 
 import scala.annotation.tailrec
 import scala.io.Source
@@ -44,14 +44,14 @@ object Day19 extends Solution {
     )
   }
 
-  type Scanner = Set[Beacon]
-  implicit class ScannerOps(scanner: Scanner) {
+  opaque type Scanner = Set[Beacon]
+  extension (scanner: Scanner) {
     def orientations: Seq[Scanner] = scanner.toSeq.map(_.orientations).transpose.map(_.toSet)
   }
 
   override def parseInput(file: Source): List[Scanner] = file.mkString.trim.split("\n\n").toList.map { entry =>
     entry.split('\n').tail.foldLeft(Set.empty[Beacon]) { (acc, line) =>
-      val Array(x, y, z, _*) = line.split(',')
+      val Array(x, y, z, _*) = line.split(','): @unchecked
       acc + Beacon(x.toInt, y.toInt, z.toInt)
     }
   }

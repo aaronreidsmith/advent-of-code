@@ -13,7 +13,7 @@ object Day17 extends Solution {
   // parseInput just brute forces all the trajectories since there are so few
   override def parseInput(file: Source): IndexedSeq[Int] = {
     val targetArea                         = "^target area: x=(\\d+)..(\\d+), y=(-?\\d+)..(-?\\d+)".r
-    val targetArea(xMin, xMax, yMin, yMax) = file.mkString.trim
+    val targetArea(xMin, xMax, yMin, yMax) = file.mkString.trim: @unchecked
 
     val xRange = xMin.toInt to xMax.toInt
     val yRange = yMin.toInt to yMax.toInt

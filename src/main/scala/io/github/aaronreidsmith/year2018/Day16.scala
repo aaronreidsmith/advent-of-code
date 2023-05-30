@@ -40,11 +40,10 @@ object Day16 extends Solution {
     def all: Seq[Map[Int, Int]] = instructions.values.toSeq
   }
 
-  implicit class StringOps(str: String) {
-    private val before = """^Before:\s+\[(\d), (\d), (\d), (\d)]$""".r
-    private val opcode = """^(\d+) (\d) (\d) (\d)$""".r
-    private val after  = """^After:\s+\[(\d), (\d), (\d), (\d)]$""".r
-
+  private val before = """^Before:\s+\[(\d), (\d), (\d), (\d)]$""".r
+  private val opcode = """^(\d+) (\d) (\d) (\d)$""".r
+  private val after = """^After:\s+\[(\d), (\d), (\d), (\d)]$""".r
+  extension (str: String) {
     def toAfter: Map[Int, Int] = str match {
       case after(r0, r1, r2, r3) => Map(0 -> r0.toInt, 1 -> r1.toInt, 2 -> r2.toInt, 3 -> r3.toInt)
       case _                     => throw new IllegalArgumentException
@@ -62,9 +61,9 @@ object Day16 extends Solution {
   }
 
   override def parseInput(file: Source): (List[Scenario], String) = {
-    val Array(samples, program, _*) = file.mkString.trim.split("\n\n\n\n")
+    val Array(samples, program, _*) = file.mkString.trim.split("\n\n\n\n"): @unchecked
     val scenarios = samples.split("\n\n").toList.map { scenario =>
-      val Array(before, opCode, after, _*) = scenario.split('\n')
+      val Array(before, opCode, after, _*) = scenario.split('\n'): @unchecked
       Scenario(before.toBefore, opCode.toOpCode, after.toAfter)
     }
     (scenarios, program)

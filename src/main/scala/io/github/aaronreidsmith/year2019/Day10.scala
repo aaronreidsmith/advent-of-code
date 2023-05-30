@@ -11,7 +11,7 @@ object Day10 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  private implicit class PointOps(point: Point) {
+  extension (point: Point) {
     def visibleFrom(points: List[Point]): Set[Point] = points.foldLeft(Set.empty[Point]) { (acc, p) =>
       val Point(dx, dy) = p - point
       val gcd           = ArithmeticUtils.gcd(dx, dy)
@@ -49,6 +49,5 @@ object Day10 extends Solution {
         } else {
           (currentStation, currentTargets)
         }
-      case (acc, _) => acc
     }
 }

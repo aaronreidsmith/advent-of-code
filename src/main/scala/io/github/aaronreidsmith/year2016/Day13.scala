@@ -5,7 +5,7 @@ import org.jgrapht.alg.shortestpath.BFSShortestPath
 import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
 
 import scala.io.Source
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 object Day13 extends Solution {
   type I  = DefaultUndirectedGraph[Point, DefaultEdge]

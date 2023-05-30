@@ -19,7 +19,7 @@ object Day03 extends Solution {
   }
 
   override def part2(input: List[String]): Int = input.grouped(3).foldLeft(0) { (acc, triplet) =>
-    val a :: b :: c :: _ = triplet
+    val a :: b :: c :: _ = triplet: @unchecked
     val badge            = a.intersect(b).intersect(c).head
     acc + priority(badge)
   }

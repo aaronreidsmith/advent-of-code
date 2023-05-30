@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2021
 
-import io.github.aaronreidsmith.implicits.SourceOps
 import io.github.aaronreidsmith.{Grid, Point, Solution}
+import io.github.aaronreidsmith.implicits.toGrid
 
 import scala.annotation.tailrec
 import scala.io.Source
@@ -11,7 +11,7 @@ object Day09 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  private implicit class GridOps(grid: Grid[Int]) {
+  extension (grid: Grid[Int]) {
     def neighborsAreHigher(position: Point, height: Int): Boolean = {
       position.immediateNeighbors.forall(pos => grid.get(pos).forall(_ > height))
     }

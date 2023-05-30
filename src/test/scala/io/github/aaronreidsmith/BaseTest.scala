@@ -29,7 +29,7 @@ trait BaseTest extends AnyFlatSpec with Matchers with ParallelTestExecution {
   }
 
   // Lazy because not all tests use the input from files
-  protected lazy val fileInput: mainInstance.I = using(f"$year/day$day%02d.txt")(mainInstance.parseInput)
+  protected lazy val fileInput: mainInstance.I = usingFile(f"$year/day$day%02d.txt")(mainInstance.parseInput)
 
   protected implicit class TestStringOps(str: String) {
     def parsed: mainInstance.I = mainInstance.parseInput(Source.fromString(str))

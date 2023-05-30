@@ -84,22 +84,4 @@ object Day20 extends Solution {
 
     helper(input)
   }
-
-  @tailrec
-  private def part2(particles: List[Particle], previousCollisionCount: Int = -1, zeroCollisionCount: Int = 0): Int =
-    // If we don't see collisions for 1000 iterations, we assume we don't have any more
-    if (previousCollisionCount == 0 && zeroCollisionCount >= 1000) {
-      particles.size
-    } else {
-      val updatedParticles = particles.map(_.next)
-      val withCollisionsRemoved = updatedParticles.filterNot { particle =>
-        updatedParticles.exists(other => other.id != particle.id && other.position == particle.position)
-      }
-      val difference = updatedParticles.size - withCollisionsRemoved.size
-      part2(
-        withCollisionsRemoved,
-        difference,
-        if (previousCollisionCount == 0 && difference == 0) zeroCollisionCount + 1 else 0
-      )
-    }
 }

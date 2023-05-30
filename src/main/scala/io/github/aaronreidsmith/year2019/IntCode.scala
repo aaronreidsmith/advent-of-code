@@ -35,7 +35,7 @@ case class IntCode(
     input: Queue[Long],
     result: IntCode.State
 ) {
-  import IntCode._
+  import IntCode.*
 
   private def read(offset: Int): Long = (memory(ip) / powers(offset)) % 10 match {
     case 0 => memory(memory(ip + offset))
@@ -89,7 +89,6 @@ object IntCode {
       .zipWithIndex
       .foldLeft(Map.empty[Long, Long]) {
         case (acc, (value, index)) => acc.updated(index.toLong, value.toLong)
-        case (acc, _)              => acc
       }
     IntCode(0, 0, memory.withDefaultValue(0L), Queue.empty[Long], Initial)
   }

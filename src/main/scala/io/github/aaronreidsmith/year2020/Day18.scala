@@ -11,12 +11,12 @@ object Day18 extends Solution {
   type O2 = Long
 
   sealed trait Parser extends JavaTokenParsers {
-    def expr: Parser[Long]
+    def expr: this.Parser[Long]
 
     // Concrete methods
-    def factor: Parser[Long] = number | optionalWhitespace("(") ~> expr <~ optionalWhitespace(")")
-    def number: Parser[Long] = wholeNumber ^^ (_.toLong)
-    def optionalWhitespace[T](p: => Parser[T]): Parser[T] = {
+    def factor: this.Parser[Long] = number | optionalWhitespace("(") ~> expr <~ optionalWhitespace(")")
+    def number: this.Parser[Long] = wholeNumber ^^ (_.toLong)
+    def optionalWhitespace[T](p: => this.Parser[T]): this.Parser[T] = {
       val optionalWhiteSpaceRegex = """\s*""".r
       optionalWhiteSpaceRegex ~> p <~ optionalWhiteSpaceRegex
     }
@@ -24,11 +24,11 @@ object Day18 extends Solution {
 
   override def parseInput(file: Source): Parser => Long = {
     val expressions = file.getLines().toList
-    parser: Parser => expressions.foldLeft(0L)((acc, line) => acc + parser.parseAll(parser.expr, line).getOrElse(0L))
+    (parser: Parser) => expressions.foldLeft(0L)((acc, line) => acc + parser.parseAll(parser.expr, line).getOrElse(0L))
   }
 
   override def part1(input: Parser => Long): Long = input(new Parser {
-    override def expr: Parser[Long] = {
+    override def expr: this.Parser[Long] = {
       factor ~ rep((optionalWhitespace("+") ~ factor) | (optionalWhitespace("*") ~ factor)) ^^ {
         case num ~ list =>
           list.foldLeft(num) {
@@ -41,11 +41,11 @@ object Day18 extends Solution {
   })
 
   override def part2(input: Parser => Long): Long = input(new Parser {
-    override def expr: Parser[Long] = term ~ rep(optionalWhitespace("*") ~> term) ^^ {
+    override def expr: this.Parser[Long] = term ~ rep(optionalWhitespace("*") ~> term) ^^ {
       case x ~ y => y.foldLeft(x)(_ * _)
     }
 
-    private def term: Parser[Long] = factor ~ rep(optionalWhitespace("+") ~> factor) ^^ {
+    private def term: this.Parser[Long] = factor ~ rep(optionalWhitespace("+") ~> factor) ^^ {
       case x ~ y => y.foldLeft(x)(_ + _)
     }
   })

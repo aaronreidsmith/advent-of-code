@@ -37,7 +37,7 @@ object Day21 extends Solution {
 
     def flatten[R](implicit asSquare: T => Square[R]): Square[R] = Square(
       twoDimensional.flatMap { row =>
-        row.map(_.twoDimensional).transpose.map(_.flatten)
+        row.map(item => asSquare(item).twoDimensional).transpose.map(_.flatten)
       }
     )
 

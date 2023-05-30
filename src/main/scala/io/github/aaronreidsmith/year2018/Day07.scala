@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2018
 
 import io.github.aaronreidsmith.Solution
-import io.github.aaronreidsmith.implicits.MapOps
+import io.github.aaronreidsmith.implicits.toMutable
 
 import scala.collection.mutable
 import scala.io.Source

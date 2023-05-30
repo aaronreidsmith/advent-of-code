@@ -1,19 +1,19 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.implicits.SourceOps
 import io.github.aaronreidsmith.{Point, Solution}
+import io.github.aaronreidsmith.implicits.toGrid
 import org.jgrapht.alg.shortestpath.{BFSShortestPath, DijkstraShortestPath}
 import org.jgrapht.graph.{DefaultDirectedGraph, DefaultEdge}
 
 import scala.io.Source
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 object Day12 extends Solution {
   type I  = DefaultDirectedGraph[(Point, Char), DefaultEdge]
   type O1 = Int
   type O2 = Int
 
-  private implicit class CharOps(char: Char) {
+  extension (char: Char) {
     def elevation: Char = char match {
       case 'S'   => 'a'
       case 'E'   => 'z'

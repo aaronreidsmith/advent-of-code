@@ -40,11 +40,16 @@ case class Point(x: Int, y: Int) {
 
   def manhattanDistance(that: Point): Int = (this.x - that.x).abs + (this.y - that.y).abs
 
-  def unzip: (Int, Int) = (x, y)
+  def asPair: (Int, Int) = (x, y)
 }
 
 object Point {
-  implicit val ordering: Ordering[Point] = Ordering.by(unapply)
-
+  given ordering: Ordering[Point] with {
+    override def compare(left: Point, right: Point): Int = left.x.compareTo(right.x) match {
+      case 0 => left.y.compareTo(right.y)
+      case other => other
+    }
+  }
+  
   def zero: Point = Point(0, 0)
 }

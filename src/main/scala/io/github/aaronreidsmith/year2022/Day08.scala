@@ -32,7 +32,6 @@ object Day08 extends Solution {
       } else {
         acc
       }
-    case (acc, _) => acc
   }
 
   override def part2(input: SortedMap[Point, Int]): Int = {

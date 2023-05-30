@@ -3,7 +3,7 @@ package io.github.aaronreidsmith.year2015
 import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
-import scala.reflect.runtime.currentMirror
+import scala.reflect.runtime.universe
 import scala.tools.reflect.ToolBox
 import scala.util.parsing.combinator.JavaTokenParsers
 
@@ -27,7 +27,7 @@ object Day07 extends Solution with JavaTokenParsers {
     case source ~ target => s"lazy val $target = $source"
   }
 
-  private val toolBox = currentMirror.mkToolBox()
+  private val toolBox = universe.runtimeMirror(getClass.getClassLoader).mkToolBox()
 
   private def wires(input: String): String = parse(rep(line), input).get.mkString("; ")
 

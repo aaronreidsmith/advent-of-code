@@ -18,7 +18,7 @@ object Day08 extends Solution {
 
   override def parseInput(file: Source): Vector[Cell] = {
     file.getLines().toVector.map { line =>
-      val Array(operation, value, _*) = line.split(' ')
+      val Array(operation, value, _*) = line.split(' '): @unchecked
       Cell(operation, value.toInt)
     }
   }

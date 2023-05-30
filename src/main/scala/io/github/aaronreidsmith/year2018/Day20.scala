@@ -7,7 +7,7 @@ import org.jgrapht.graph.{DefaultEdge, SimpleDirectedGraph}
 
 import scala.collection.mutable
 import scala.io.Source
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/a7uk3f/2018_day_20_solutions/ec5y3lm/
 @Slow(parsing = true)

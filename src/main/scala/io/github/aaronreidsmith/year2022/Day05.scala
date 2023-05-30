@@ -11,7 +11,7 @@ object Day05 extends Solution {
   type O2 = String
 
   override def parseInput(file: Source): (Map[Int, String], List[String]) = {
-    val Array(stackString, instructionString, _*) = file.mkString.split("\n\n")
+    val Array(stackString, instructionString, _*) = file.mkString.split("\n\n"): @unchecked
 
     // Transpose our stacks and then parse them into map like this: Map(1 -> 'NZ', 2 -> 'DCM', 3 -> 'P')
     val stacks     = stackString.split('\n').toList

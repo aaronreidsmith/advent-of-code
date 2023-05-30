@@ -11,9 +11,9 @@ object Day14 extends Solution {
   type O2 = Long
 
   override def parseInput(file: Source): (String, Map[String, String]) = {
-    val Array(template, rawRules, _*) = file.mkString.trim.split("\n\n")
+    val Array(template, rawRules, _*) = file.mkString.trim.split("\n\n"): @unchecked
     val rules = rawRules.split('\n').foldLeft(Map.empty[String, String]) { (acc, line) =>
-      val Array(key, value, _*) = line.split(" -> ")
+      val Array(key, value, _*) = line.split(" -> "): @unchecked
       acc + (key -> value)
     }
     (template, rules)

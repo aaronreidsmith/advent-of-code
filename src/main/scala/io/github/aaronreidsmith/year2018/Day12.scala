@@ -11,7 +11,7 @@ object Day12 extends Solution {
   type O2 = Long
 
   override def parseInput(file: Source): (Map[Int, Char], Map[String, Char]) = {
-    val Array(initialStateString, rulesString, _*) = file.mkString.trim.split("\n\n")
+    val Array(initialStateString, rulesString, _*) = file.mkString.trim.split("\n\n"): @unchecked
     val initialState = initialStateString.filter(char => char == '#' || char == '.').zipWithIndex.map(_.swap).toMap
     val rule         = "^(.*) => (.*)$".r
     val rules = rulesString.split('\n').foldLeft(Map.empty[String, Char]) {

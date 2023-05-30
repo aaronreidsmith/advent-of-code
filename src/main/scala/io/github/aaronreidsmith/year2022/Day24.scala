@@ -14,7 +14,7 @@ object Day24 extends Solution {
   // Took a long time to track down this bug...
   // Java/Scala's modulo is different than Python's (where this solution was adapted from).
   // See: https://dreamix.eu/blog/java/modulo-problem-in-java
-  private implicit class IntOps(n: Int) {
+  extension (n: Int) {
     def mod(m: Int): Int = ((n % m) + m) % m
   }
 

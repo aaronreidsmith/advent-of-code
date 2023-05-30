@@ -1,8 +1,8 @@
 package io.github.aaronreidsmith.year2018
 
 import io.github.aaronreidsmith.annotations.Slow
-import io.github.aaronreidsmith.implicits.SourceOps
 import io.github.aaronreidsmith.{Grid, Point, Solution}
+import io.github.aaronreidsmith.implicits.toGrid
 
 import scala.annotation.tailrec
 import scala.io.Source

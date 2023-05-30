@@ -30,7 +30,7 @@ object Day21 extends Solution {
 
   override def parseInput(file: Source): Map[String, Node] = {
     val nodes = file.getLines().foldLeft(Map.empty[String, Node]) { (acc, line) =>
-      val Array(name, raw, _*) = line.split(": ")
+      val Array(name, raw, _*) = line.split(": "): @unchecked
       acc.updated(name, Node(name, raw))
     }
 
@@ -39,7 +39,7 @@ object Day21 extends Solution {
       if (node.raw.forall(_.isDigit)) {
         node.value = Some(new Complex(node.raw.toDouble))
       } else {
-        val Array(lhs, op, rhs, _*) = node.raw.split(' ')
+        val Array(lhs, op, rhs, _*) = node.raw.split(' '): @unchecked
         node.lhs = nodes(lhs)
         node.op = op
         node.rhs = nodes(rhs)

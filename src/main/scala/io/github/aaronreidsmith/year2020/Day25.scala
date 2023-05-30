@@ -11,7 +11,7 @@ object Day25 extends Solution {
   type O2 = Nothing
 
   override def parseInput(file: Source): (Long, Long) = {
-    val Seq(cardKey, doorKey, _*) = file.getLines().map(_.toLong).toSeq
+    val Seq(cardKey, doorKey, _*) = file.getLines().map(_.toLong).toSeq: @unchecked
     (cardKey, doorKey)
   }
 

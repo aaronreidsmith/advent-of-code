@@ -11,7 +11,7 @@ object Day17 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  private implicit class ListOps(list: List[Int]) {
+  extension (list: List[Int]) {
     // Used to mimic Python's itertools.product
     def combinationsWithRepeats(n: Int): List[List[Int]] = n match {
       case 0 => List(Nil)

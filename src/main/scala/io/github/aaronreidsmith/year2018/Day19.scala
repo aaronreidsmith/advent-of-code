@@ -5,7 +5,7 @@ import org.apache.commons.math3.primes.Primes
 
 import scala.annotation.tailrec
 import scala.io.Source
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 import scala.util.{Failure, Success, Try}
 
 object Day19 extends Solution {
@@ -26,7 +26,7 @@ object Day19 extends Solution {
         val withInstructionPointerUpdated = registers.updated(instructionPointer, ipValue)
         Try(instructions(ipValue)) match {
           case Success(instruction) =>
-            val Array(instructionType, aStr, bStr, cStr, _*) = instruction.split(' ')
+            val Array(instructionType, aStr, bStr, cStr, _*) = instruction.split(' '): @unchecked
             val a                                            = aStr.toInt
             val b                                            = bStr.toInt
             val c                                            = cStr.toInt
@@ -61,7 +61,7 @@ object Day19 extends Solution {
 
   // Adapted from https://www.reddit.com/r/adventofcode/comments/a7j9zc/comment/ec3w9wy
   override def part2(input: Vector[String]): Long = {
-    val Seq(a, b, _*)     = Seq(22, 24).map(index => input(index).split(' ')(2).toInt)
+    val Seq(a, b, _*)     = Seq(22, 24).map(index => input(index).split(' ')(2).toInt): @unchecked
     val numberToFactorize = 10551236 + a * 22 + b
     Primes.primeFactors(numberToFactorize).asScala.foldLeft(1L) { (acc, primeFactor) =>
       acc * ((math.pow(primeFactor.toDouble, 2).toLong - 1) / (primeFactor - 1))

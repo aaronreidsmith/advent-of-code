@@ -19,7 +19,7 @@ object Day24 extends Solution {
 
   override def parseInput(file: Source): Set[Component] = {
     file.getLines().foldLeft(Set.empty[Component]) { (acc, line) =>
-      val Array(left, right, _*) = line.split('/')
+      val Array(left, right, _*) = line.split('/'): @unchecked
       acc + Component(left.toInt, right.toInt)
     }
   }
