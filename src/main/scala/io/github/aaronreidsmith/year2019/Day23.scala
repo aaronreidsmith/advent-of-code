@@ -11,8 +11,8 @@ object Day23 extends Solution {
   type O2 = Long
 
   case class State(computer: IntCode, input: Vector[Long], output: Vector[Long])
-  type NAT     = Vector[Long]
-  type Network = Vector[State]
+  opaque type NAT     = Vector[Long]
+  opaque type Network = Vector[State]
   extension (network: Network) {
     def step(nat: NAT): (Network, NAT) = {
       val nextNetwork = network.map { state =>

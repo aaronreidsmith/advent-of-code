@@ -12,8 +12,9 @@ object Day23 extends Solution {
   type O2 = Int
 
   extension (str: String) {
-    def toIntOrValue(registers: Map[String, Int]): Int =
+    def toIntOrValue(registers: Map[String, Int]): Int = {
       Try(str.toInt).getOrElse(registers.getOrElse(str, throw new IllegalArgumentException(str)))
+    }
   }
 
   override def parseInput(file: Source): Vector[String] = file.getLines().toVector

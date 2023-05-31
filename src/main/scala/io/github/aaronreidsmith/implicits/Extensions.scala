@@ -5,10 +5,6 @@ import io.github.aaronreidsmith.{Grid, Point}
 import scala.collection.mutable
 import scala.io.Source
 
-extension (points: Iterable[Point]) {
-  def foo: (Iterable[Int], Iterable[Int]) = points.unzip(point => (point.x, point.y))
-}
-
 extension [T](it: Iterator[T]) {
   def headOption: Option[T]    = it.nextOption()
   def occurrences: Map[T, Int] = LazyList.from(it).occurrences

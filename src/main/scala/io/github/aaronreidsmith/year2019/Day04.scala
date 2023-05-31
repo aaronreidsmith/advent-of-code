@@ -11,7 +11,8 @@ object Day04 extends Solution {
   type O2 = Int
 
   extension (int: Int) {
-    private def string = int.toString
+    // TODO: We used to be able to use 'val' in implicit classes, but that is gone in extension methods
+    private inline def string = int.toString
 
     def alwaysIncreasing: Boolean = string.sliding(2).forall { pair =>
       val first  = pair.head.asDigit

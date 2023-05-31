@@ -19,7 +19,7 @@ object Day24 extends Solution {
   }
 
   case class Blizzard(x: Int, y: Int, dx: Int, dy: Int)
-  type Wall = (Int, Int) // Would prefer a case class, but this works nicer elsewhere
+  opaque type Wall = (Int, Int) // Would prefer a case class, but this works nicer elsewhere
 
   override def parseInput(file: Source): (Int, Int, Set[Blizzard], Set[Wall]) = {
     val blizzards = mutable.Set.empty[Blizzard]
