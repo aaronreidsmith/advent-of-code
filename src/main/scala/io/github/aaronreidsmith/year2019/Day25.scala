@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.{Solution, using}
+import io.github.aaronreidsmith.{Solution, usingFile}
 
 import scala.annotation.tailrec
 import scala.collection.mutable
@@ -12,7 +12,7 @@ object Day25 extends Solution {
   type O1 = Int
   type O2 = Nothing
 
-  private implicit class IntCodeOps(intCode: IntCode) {
+  extension (intCode: IntCode) {
     def describeSurroundings(printOutput: Boolean): Either[Int, IntCode] = {
       @tailrec
       def helper(computer: IntCode, message: String): Either[Int, IntCode] = {
@@ -40,7 +40,7 @@ object Day25 extends Solution {
   // Override this so if the user exits it doesn't output a wrong answer
   override def run(): Unit = {
     println("Year 2019, Day 25")
-    val input  = using("2019/day25.txt")(parseInput)
+    val input  = usingFile("2019/day25.txt")(parseInput)
     val answer = part1(input)
     if (answer != -1) {
       println(s"Part 1: $answer")

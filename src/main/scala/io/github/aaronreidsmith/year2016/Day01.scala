@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith._
+import io.github.aaronreidsmith.*
 
 import scala.annotation.tailrec
 import scala.io.Source
@@ -59,7 +59,7 @@ object Day01 extends Solution {
   override def part2(input: List[Instruction]): Int = {
     @tailrec
     def helper(points: Vector[Point], seen: Set[Point] = Set()): Int = {
-      val head +: tail = points
+      val head +: tail = points: @unchecked
       if (seen.contains(head)) {
         head.manhattanDistance(Point.zero)
       } else {

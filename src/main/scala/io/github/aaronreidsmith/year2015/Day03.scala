@@ -17,7 +17,6 @@ object Day03 extends Solution {
       case ((point, seen), char) =>
         val nextPos = nextPosition(point, char)
         (nextPos, seen + nextPos)
-      case (acc, _) => acc
     }
     seenHouses.size
   }

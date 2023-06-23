@@ -11,9 +11,9 @@ object Day14 extends Solution {
   type O2 = Long
 
   override def parseInput(file: Source): (String, Map[String, String]) = {
-    val Array(template, rawRules, _*) = file.mkString.trim.split("\n\n")
+    val Array(template, rawRules, _*) = file.mkString.trim.split("\n\n"): @unchecked
     val rules = rawRules.split('\n').foldLeft(Map.empty[String, String]) { (acc, line) =>
-      val Array(key, value, _*) = line.split(" -> ")
+      val Array(key, value, _*) = line.split(" -> "): @unchecked
       acc + (key -> value)
     }
     (template, rules)
@@ -28,26 +28,25 @@ object Day14 extends Solution {
     val chars             = mutable.Map(template.map(char => char -> template.count(_ == char).toLong): _*)
     (1 to iterations).foreach { _ =>
       val pairsCopy = Map.from(pairs)
-      pairsCopy.foreach {
-        case (pair, count) =>
-          val first        = pair.head
-          val second       = pair.tail
-          val inserted     = rules(pair)
-          val insertedChar = inserted.head
+      pairsCopy.foreach { (pair, count) =>
+        val first        = pair.head
+        val second       = pair.tail
+        val inserted     = rules(pair)
+        val insertedChar = inserted.head
 
-          val existingPairCount = pairs.getOrElse(pair, 1L)
-          pairs.update(pair, existingPairCount - count)
+        val existingPairCount = pairs.getOrElse(pair, 1L)
+        pairs.update(pair, existingPairCount - count)
 
-          val firstNewPairKey   = s"$first$inserted"
-          val firstNewPairCount = pairs.getOrElse(firstNewPairKey, 0L)
-          pairs.update(firstNewPairKey, firstNewPairCount + count)
+        val firstNewPairKey   = s"$first$inserted"
+        val firstNewPairCount = pairs.getOrElse(firstNewPairKey, 0L)
+        pairs.update(firstNewPairKey, firstNewPairCount + count)
 
-          val secondNewPairKey   = s"$inserted$second"
-          val secondNewPairCount = pairs.getOrElse(secondNewPairKey, 0L)
-          pairs.update(secondNewPairKey, secondNewPairCount + count)
+        val secondNewPairKey   = s"$inserted$second"
+        val secondNewPairCount = pairs.getOrElse(secondNewPairKey, 0L)
+        pairs.update(secondNewPairKey, secondNewPairCount + count)
 
-          val insertedCharCount = chars.getOrElse(insertedChar, 0L)
-          chars.update(insertedChar, insertedCharCount + count)
+        val insertedCharCount = chars.getOrElse(insertedChar, 0L)
+        chars.update(insertedChar, insertedCharCount + count)
       }
     }
     chars.values.max - chars.values.min

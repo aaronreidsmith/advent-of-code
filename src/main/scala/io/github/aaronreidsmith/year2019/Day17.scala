@@ -2,6 +2,7 @@ package io.github.aaronreidsmith.year2019
 
 import io.github.aaronreidsmith.{Point, Solution}
 
+import scala.annotation.nowarn
 import scala.io.Source
 
 object Day17 extends Solution {
@@ -9,7 +10,7 @@ object Day17 extends Solution {
   type O1 = Int
   type O2 = Long
 
-  private implicit class PointOps(point: Point) {
+  extension (point: Point) {
     def isIntersection(map: Map[Point, Char]): Boolean = {
       val grid = map.withDefaultValue('.')
       grid(point) == '#' && point.immediateNeighbors.forall(grid(_) == '#')
@@ -58,6 +59,7 @@ object Day17 extends Solution {
     updated.withInput(userInput: _*).allOutput.last
   }
 
+  @nowarn
   private def printGrid(grid: Seq[Seq[Char]]): Unit = {
     println(grid.map(_.mkString).mkString("\n"))
   }

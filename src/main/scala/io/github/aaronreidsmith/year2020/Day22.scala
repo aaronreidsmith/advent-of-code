@@ -14,7 +14,7 @@ object Day22 extends Solution {
   override def parseInput(file: Source): (Vector[Int], Vector[Int]) = {
     val Array(p1, p2, _*) = file.mkString.trim
       .split("\n\n")
-      .map(player => player.split('\n').toVector.tail.map(_.toInt))
+      .map(player => player.split('\n').toVector.tail.map(_.toInt)): @unchecked
     (p1, p2)
   }
 
@@ -79,6 +79,5 @@ object Day22 extends Solution {
 
   private def calculateScore(deck: Seq[Int]): Int = deck.reverse.zipWithIndex.foldLeft(0) {
     case (acc, (value, index)) => acc + ((index + 1) * value)
-    case (acc, _)              => acc
   }
 }

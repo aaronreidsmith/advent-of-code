@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2019
 
 import io.github.aaronreidsmith.annotations.Slow
-import io.github.aaronreidsmith.implicits.SourceOps
+import io.github.aaronreidsmith.implicits.toGrid
 import io.github.aaronreidsmith.{Grid, Point, Solution}
 
 import scala.collection.mutable
@@ -15,7 +15,7 @@ object Day18 extends Solution {
 
   case class Move(from: Point, to: Point, cost: Int, neededKeys: Set[Char])
 
-  private implicit class CharOps(char: Char) {
+  extension (char: Char) {
     def isDoor: Boolean  = 'A' <= char && char <= 'Z'
     def isKey: Boolean   = 'a' <= char && char <= 'z'
     def isRobot: Boolean = char == '@'
@@ -97,16 +97,9 @@ object Day18 extends Solution {
         .foldLeft(result) {
           case (currResult, Move(from, to, cost, _)) =>
             helper(remainingKeys - to, robots - from + to, collectedKeys + tunnels(to), total + cost, currResult)
-          case (currResult, _) => currResult
         }
     }
 
     helper(keys, robots)
   }
-
-  //  def main(args: Array[String]): Unit = {
-  //    val input = using("2019/day18.txt")(_.mkString)
-  //    println(s"Part 1: ${Solver.solve(2019, 18, 1, input)}")
-  //    println(s"Part 2: ${Solver.solve(2019, 18, 2, input)}")
-  //  }
 }

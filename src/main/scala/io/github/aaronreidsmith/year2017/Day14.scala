@@ -61,7 +61,6 @@ object Day14 extends Solution {
       val binary  = hash.map(toBinary).mkString
       binary.zipWithIndex.foldLeft(Vector.empty[Point]) {
         case (acc, (char, index)) => if (char == '1') acc :+ Point(row, index) else acc
-        case (acc, _)             => acc
       }
     }
   }

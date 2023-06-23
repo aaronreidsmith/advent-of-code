@@ -1,12 +1,12 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.implicits.SourceOps
+import io.github.aaronreidsmith.implicits.toGrid
 import io.github.aaronreidsmith.{Point, Solution}
 import org.jgrapht.alg.shortestpath.BFSShortestPath
 import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
 
 import scala.io.Source
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 // The majority of this is adapted from https://www.reddit.com/r/adventofcode/comments/5k1he1/comment/dbknd6b
 object Day24 extends Solution {
@@ -45,8 +45,8 @@ object Day24 extends Solution {
   private def solution(graph: DefaultUndirectedGraph[(Point, Char), DefaultEdge]): (Int, Int) = {
     if (!solved) {
       val vertices          = graph.vertexSet().asScala
-      val start             = vertices.find { case (_, char) => char == '0' }.get
-      val targets           = vertices.filter { case (_, char) => char != '.' && char != '0' }.toVector.sortBy(_._2)
+      val start             = vertices.find((_, char) => char == '0').get
+      val targets           = vertices.filter((_, char) => char != '.' && char != '0').toVector.sortBy(_._2)
       val distancesFromZero = targets.map(target => BFSShortestPath.findPathBetween(graph, start, target).getLength)
       val segments          = distancesFromZero.size
       val allDistances = {
@@ -64,7 +64,6 @@ object Day24 extends Solution {
             case (acc, _)         => acc
           }
           (part1Acc.min(distance), part2Acc.min(distance + distancesFromZero(path.last)))
-        case (acc, _) => acc
       }
       solved = true
     }

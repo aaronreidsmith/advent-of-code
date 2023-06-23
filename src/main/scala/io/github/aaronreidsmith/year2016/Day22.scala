@@ -2,6 +2,7 @@ package io.github.aaronreidsmith.year2016
 
 import io.github.aaronreidsmith.{Point, Solution}
 
+import scala.annotation.nowarn
 import scala.io.Source
 
 object Day22 extends Solution {
@@ -43,17 +44,17 @@ object Day22 extends Solution {
   }
 
   override def part2(input: Map[Point, Node]): Int = {
+    @nowarn
     def printGrid(grid: Map[Point, Node]): Unit = {
       var row = 0
       grid.toSeq
-        .sortBy { case (position, _) => (position.x, position.y) }
-        .foreach {
-          case (pos, node) =>
-            if (pos.x != row) {
-              row += 1
-              println()
-            }
-            print(s"$node ")
+        .sortBy((position, _) => (position.x, position.y))
+        .foreach { (pos, node) =>
+          if (pos.x != row) {
+            row += 1
+            println()
+          }
+          print(s"$node ")
         }
     }
 

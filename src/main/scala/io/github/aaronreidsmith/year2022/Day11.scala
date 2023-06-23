@@ -69,15 +69,14 @@ object Day11 extends Solution {
     def helper(turn: Int): Long = if (turn >= iterations) {
       counts.values.toVector.sorted.takeRight(2).product
     } else {
-      monkeys.foreach {
-        case (monkeyId, monkey) =>
-          while (monkey.items.nonEmpty) {
-            val item        = monkey.items.dequeue()
-            val operated    = monkey.operate(item, mod)
-            val newMonkeyId = monkey.test(operated)
-            monkeys(newMonkeyId).items.enqueue(operated)
-            counts.update(monkeyId, counts(monkeyId) + 1)
-          }
+      monkeys.foreach { (monkeyId, monkey) =>
+        while (monkey.items.nonEmpty) {
+          val item        = monkey.items.dequeue()
+          val operated    = monkey.operate(item, mod)
+          val newMonkeyId = monkey.test(operated)
+          monkeys(newMonkeyId).items.enqueue(operated)
+          counts.update(monkeyId, counts(monkeyId) + 1)
+        }
       }
       helper(turn + 1)
     }

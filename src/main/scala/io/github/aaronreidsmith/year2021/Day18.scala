@@ -51,7 +51,7 @@ object Day18 extends Solution with JavaTokenParsers {
       }
       helper(this)
     }
-    def +(that: Number): Number = Pair(this, that).reduce
+    infix def +(that: Number): Number = Pair(this, that).reduce
 
     def addLeft(addValue: Int): Number
     def addRight(addValue: Int): Number

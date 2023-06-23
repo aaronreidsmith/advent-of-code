@@ -12,11 +12,10 @@ object Day20 extends Solution {
   type O2 = Int
 
   // Using an enum instead of a sealed trait so we can call Orientation.values
-  object Orientation extends Enumeration {
-    type Orientation = Value
-    val Normal, Normal90, Normal180, Normal270, Flipped, Flipped90, Flipped180, Flipped270 = Value
+  enum Orientation {
+    case Normal, Normal90, Normal180, Normal270, Flipped, Flipped90, Flipped180, Flipped270
   }
-  import Orientation._
+  import Orientation.*
 
   case class TileData(lines: Vector[String]) {
     def width: Int  = lines.head.length
@@ -209,7 +208,7 @@ object Day20 extends Solution {
 
     def mergeRow(row: Vector[TileData]): Vector[String] = {
       def mergeHorizontally(left: Vector[String], right: Vector[String]): Vector[String] = {
-        left.zip(right).map { case (a, b) => a + b }
+        left.zip(right).map((a, b) => a + b)
       }
 
       row.map(_.lines).reduceLeft(mergeHorizontally)

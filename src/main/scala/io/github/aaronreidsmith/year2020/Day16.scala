@@ -13,14 +13,14 @@ object Day16 extends Solution {
   type O2        = Long
 
   override def parseInput(file: Source): (TrainInfo, Ticket, Vector[Ticket]) = {
-    val Array(trainText, myTicketText, otherTicketText, _*) = file.mkString.trim.split("\n\n")
+    val Array(trainText, myTicketText, otherTicketText, _*) = file.mkString.trim.split("\n\n"): @unchecked
 
     val trainInfo = trainText
       .split('\n')
       .map { line =>
-        val Array(name, info, _*) = line.split(": ")
+        val Array(name, info, _*) = line.split(": "): @unchecked
         val ranges = info.split(" or ").foldLeft(Set.empty[Int]) { (acc, range) =>
-          val Array(start, end, _*) = range.split("-")
+          val Array(start, end, _*) = range.split("-"): @unchecked
           acc ++ (start.toInt to end.toInt)
         }
         name -> ranges
@@ -72,17 +72,15 @@ object Day16 extends Solution {
 
     val finalFields = mutable.Map.empty[String, Int]
     while (finalFields.size != numberOfFields) {
-      possibleFields.foreach {
-        case (name, possibleIndices) =>
-          if (possibleIndices.size == 1) {
-            val index = possibleIndices.head
-            finalFields.update(name, index)
-            possibleFields.remove(name)
-            possibleFields.foreach {
-              case (nameToUpdate, indicesToUpdate) =>
-                possibleFields.update(nameToUpdate, indicesToUpdate.filterNot(_ == index))
-            }
+      possibleFields.foreach { (name, possibleIndices) =>
+        if (possibleIndices.size == 1) {
+          val index = possibleIndices.head
+          finalFields.update(name, index)
+          possibleFields.remove(name)
+          possibleFields.foreach { (nameToUpdate, indicesToUpdate) =>
+            possibleFields.update(nameToUpdate, indicesToUpdate.filterNot(_ == index))
           }
+        }
       }
     }
 

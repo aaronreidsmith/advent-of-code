@@ -1,12 +1,12 @@
 package io.github.aaronreidsmith.year2018
 
 import io.github.aaronreidsmith.Solution
-import io.github.aaronreidsmith.implicits._
+import io.github.aaronreidsmith.implicits.letterOccurrences
 
 import scala.io.Source
 
 object Day02 extends Solution {
-  type I = List[String]
+  type I  = List[String]
   type O1 = Int
   type O2 = String
 

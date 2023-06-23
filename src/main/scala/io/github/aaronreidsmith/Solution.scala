@@ -45,7 +45,7 @@ trait Solution extends Runnable {
       }
     }
 
-    val input = using(f"$year/day$day%02d.txt")(parseInput)
+    val input = usingFile(f"$year/day$day%02d.txt")(parseInput)
     println(s"Part 1: ${part1(input)}")
 
     if (day < 25) {

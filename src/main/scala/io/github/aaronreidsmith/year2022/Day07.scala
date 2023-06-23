@@ -6,7 +6,7 @@ import scala.collection.mutable
 import scala.io.Source
 
 object Day07 extends Solution {
-  type I = (Set[String], Map[String, Int])
+  type I  = (Set[String], Map[String, Int])
   type O1 = Int
   type O2 = Int
 

@@ -26,7 +26,7 @@ object Day11 extends Solution {
     val twoOrMorePairs = password
       .sliding(2)
       .zipWithIndex
-      .filter { case (pair, _) => pair.head == pair.last }
+      .filter((pair, _) => pair.head == pair.last)
       .toList
       .combinations(2)
       .exists {

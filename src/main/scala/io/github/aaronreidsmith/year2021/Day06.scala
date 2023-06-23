@@ -15,7 +15,7 @@ object Day06 extends Solution {
     val fishMap      = input.foldLeft(emptyFishMap)((acc, n) => acc.updated(n, acc(n) + 1))
 
     def nextGeneration(fish: Map[Long, Long]): Map[Long, Long] = {
-      val rotated      = fish.map { case (k, v) => k - 1 -> v }
+      val rotated      = fish.map((k, v) => k - 1 -> v)
       val updatedItems = Map(-1L -> 0L, 6L -> (rotated(6) + rotated(-1)), 8L -> rotated(-1))
       rotated ++ updatedItems
     }

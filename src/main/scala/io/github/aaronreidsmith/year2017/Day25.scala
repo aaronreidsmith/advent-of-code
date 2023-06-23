@@ -32,7 +32,7 @@ object Day25 extends Solution {
                   |    - Continue with state ([A-Z]).""".stripMargin.r
 
     val input                        = file.mkString.trim.split("\n\n")
-    val header(startingState, steps) = input.head
+    val header(startingState, steps) = input.head: @unchecked
     val states = input.tail.foldLeft(Map.empty[Char, State]) {
       case (acc, state(in, writeIf0, moveIf0, continueIf0, writeIf1, moveIf1, continueIf1)) =>
         val newState = new State {

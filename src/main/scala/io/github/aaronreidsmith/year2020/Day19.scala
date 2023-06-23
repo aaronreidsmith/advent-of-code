@@ -17,7 +17,7 @@ object Day19 extends Solution {
   override def parseInput(file: Source): (Map[Int, Rule], List[String]) = {
     val Array(rawRules, rawMessages) = file.mkString.trim.split("\n\n", 2)
     val rules = rawRules.split('\n').foldLeft(Map.empty[Int, Rule]) { (acc, line) =>
-      val Array(ruleId, rawContents, _*) = line.split(": ", 2)
+      val Array(ruleId, rawContents, _*) = line.split(": ", 2): @unchecked
       val contents                       = rawContents.replaceAll("\"", "")
       val rule = if (contents.matches("^[a-z]$")) {
         Letter(contents.head)
@@ -58,7 +58,7 @@ object Day19 extends Solution {
     } else if (stack.isEmpty || message.isEmpty) {
       stack.isEmpty && message.isEmpty
     } else {
-      val entry +: remaining = stack
+      val entry +: remaining = stack: @unchecked
       entry match {
         case Left(value) => value == message.head && isMatch(rules, message.tail, remaining)
         case Right(ruleId) =>

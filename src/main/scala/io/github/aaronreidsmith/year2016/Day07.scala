@@ -15,7 +15,7 @@ object Day07 extends Solution {
   override def part2(input: List[String]): Int        = input.count(supportsSsl)
 
   private def matchesAbba(entry: String): Boolean = entry.sliding(4).exists { quartet =>
-    val Array(a, b, c, d, _*) = quartet.split("")
+    val Array(a, b, c, d, _*) = quartet.split(""): @unchecked
     a == d && b == c && a != b
   }
 
@@ -45,13 +45,13 @@ object Day07 extends Solution {
     val (noBrackets, inBrackets) = split(ip)
     val abaSequences = noBrackets.flatMap { entry =>
       entry.sliding(3).flatMap { triplet =>
-        val Array(a, b, c, _*) = triplet.split("")
+        val Array(a, b, c, _*) = triplet.split(""): @unchecked
         if (a == c && a != b) Some(triplet) else None
       }
     }
     inBrackets.exists { entry =>
       entry.sliding(3).exists { triplet =>
-        val Array(a, b, c, _*) = triplet.split("")
+        val Array(a, b, c, _*) = triplet.split(""): @unchecked
         a == c && a != b && abaSequences.contains(s"$b$a$b")
       }
     }

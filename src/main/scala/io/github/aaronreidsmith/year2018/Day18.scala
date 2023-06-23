@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith.implicits.SourceOps
+import io.github.aaronreidsmith.implicits.toGrid
 import io.github.aaronreidsmith.{Grid, Point, Solution}
 
 import scala.annotation.tailrec
@@ -12,7 +12,7 @@ object Day18 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  private implicit class GridOps(grid: Grid[Square]) {
+  extension (grid: Grid[Square]) {
     def next: Grid[Square] = grid.foldLeft(grid) {
       case (acc, (position, OpenGround)) =>
         val adjacent = position.neighbors.flatMap(grid.get)

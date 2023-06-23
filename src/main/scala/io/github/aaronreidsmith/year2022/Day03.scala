@@ -5,7 +5,7 @@ import io.github.aaronreidsmith.Solution
 import scala.io.Source
 
 object Day03 extends Solution {
-  type I = List[String]
+  type I  = List[String]
   type O1 = Int
   type O2 = Int
 
@@ -19,7 +19,7 @@ object Day03 extends Solution {
   }
 
   override def part2(input: List[String]): Int = input.grouped(3).foldLeft(0) { (acc, triplet) =>
-    val a :: b :: c :: _ = triplet
+    val a :: b :: c :: _ = triplet: @unchecked
     val badge            = a.intersect(b).intersect(c).head
     acc + priority(badge)
   }

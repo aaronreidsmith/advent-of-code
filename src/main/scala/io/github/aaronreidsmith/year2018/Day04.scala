@@ -46,7 +46,7 @@ object Day04 extends Solution {
 
   override def part1(input: List[Entry]): Int = {
     val guardShifts                                = getGuardShifts(input)
-    val (mostAsleepGuard, mostAsleepGuardSchedule) = guardShifts.maxBy { case (_, schedule) => schedule(-1) }
+    val (mostAsleepGuard, mostAsleepGuardSchedule) = guardShifts.maxBy((_, schedule) => schedule(-1))
     val mostAsleepMinute                           = mostAsleepGuardSchedule.removed(-1).maxBy(_._2)._1
     mostAsleepGuard * mostAsleepMinute
   }
@@ -58,14 +58,13 @@ object Day04 extends Solution {
       "minute-most-asleep-key"   -> -1,
       "minute-most-asleep-value" -> -1
     )
-    guardShifts.foreach {
-      case (id, minutesAsleep) =>
-        val (minuteMostAsleepKey, minuteMostAsleepValue) = minutesAsleep.filterNot(_._1 == -1).maxBy(_._2)
-        if (minuteMostAsleepValue > mostAsleepGuard("minute-most-asleep-value")) {
-          mostAsleepGuard.update("id", id)
-          mostAsleepGuard.update("minute-most-asleep-key", minuteMostAsleepKey)
-          mostAsleepGuard.update("minute-most-asleep-value", minuteMostAsleepValue)
-        }
+    guardShifts.foreach { (id, minutesAsleep) =>
+      val (minuteMostAsleepKey, minuteMostAsleepValue) = minutesAsleep.filterNot(_._1 == -1).maxBy(_._2)
+      if (minuteMostAsleepValue > mostAsleepGuard("minute-most-asleep-value")) {
+        mostAsleepGuard.update("id", id)
+        mostAsleepGuard.update("minute-most-asleep-key", minuteMostAsleepKey)
+        mostAsleepGuard.update("minute-most-asleep-value", minuteMostAsleepValue)
+      }
     }
     mostAsleepGuard("id") * mostAsleepGuard("minute-most-asleep-key")
   }

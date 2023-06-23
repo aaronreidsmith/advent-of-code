@@ -4,7 +4,7 @@ import io.github.aaronreidsmith.Solution
 
 import scala.annotation.tailrec
 import scala.io.Source
-import scala.math.Integral.Implicits._
+import scala.math.Integral.Implicits.*
 
 object Day14 extends Solution {
   type Reactions = Map[String, (Long, Map[String, Long])]
@@ -69,7 +69,6 @@ object Day14 extends Solution {
           case ((ore, excess), (inputChemical, inputAmount)) =>
             val (inputOre, inputExcess) = helper(inputChemical, reactionRepeat * inputAmount, excess)
             (ore + inputOre, inputExcess)
-          case (acc, _) => acc
         }
 
         (ore, inputExcess + (chemical -> (inputExcess(chemical) + outputExcess)))

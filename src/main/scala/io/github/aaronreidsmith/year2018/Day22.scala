@@ -15,9 +15,9 @@ object Day22 extends Solution {
   case class Region(geologicalIndex: Int, erosionLevel: Int, riskLevel: Int)
 
   override def parseInput(file: Source): (Map[Point, Region], Point) = {
-    val List(depthLine, targetLine, _*) = file.getLines().toList
+    val List(depthLine, targetLine, _*) = file.getLines().toList: @unchecked
     val depth                           = depthLine.split(": ").last.toInt
-    val Array(targetX, targetY, _*)     = targetLine.split(": ").last.split(',').map(_.toInt)
+    val Array(targetX, targetY, _*)     = targetLine.split(": ").last.split(',').map(_.toInt): @unchecked
     val target                          = Point(targetX, targetY)
     val grid                            = mutable.Map.empty[Point, Region]
     for {

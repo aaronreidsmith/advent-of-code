@@ -10,7 +10,7 @@ object Day25 extends Solution {
   type O2 = Nothing
 
   override def parseInput(file: Source): (Int, Int) = {
-    val Array(row, col, _*) = file.mkString.trim.split(',')
+    val Array(row, col, _*) = file.mkString.trim.split(','): @unchecked
     (row.toInt, col.toInt)
   }
 

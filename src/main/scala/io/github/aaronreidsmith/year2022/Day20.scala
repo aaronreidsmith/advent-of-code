@@ -17,10 +17,9 @@ object Day20 extends Solution {
 
   private def buildNodes(input: Vector[Int], key: Long): Vector[Node] = {
     val nodes = input.map(n => Node(n * key, null, null))
-    nodes.zipWithIndex.foreach {
-      case (node, i) =>
-        node.prev = nodes((i - 1 + nodes.size) % nodes.size)
-        node.next = nodes((i + 1) % nodes.size)
+    nodes.zipWithIndex.foreach { (node, i) =>
+      node.prev = nodes((i - 1 + nodes.size) % nodes.size)
+      node.next = nodes((i + 1) % nodes.size)
     }
     nodes
   }

@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith._
-import io.github.aaronreidsmith.implicits._
+import io.github.aaronreidsmith.*
+import io.github.aaronreidsmith.implicits.{occurrences, toGrid}
 
 import scala.annotation.tailrec
 import scala.io.Source
@@ -23,7 +23,7 @@ object Day23 extends Solution {
         directions: Vector[Direction] = Vector(North, South, West, East),
         iteration: Int = 0
     ): Int = if (part1 && iteration >= 10) {
-      val (xs, ys)     = grid.keys.unzip
+      val (xs, ys)     = grid.keys.unzip(_.asPair)
       val (minX, maxX) = (xs.min, xs.max)
       val (minY, maxY) = (ys.min, ys.max)
 

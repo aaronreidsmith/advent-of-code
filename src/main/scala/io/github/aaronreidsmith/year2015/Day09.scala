@@ -5,7 +5,7 @@ import org.jgrapht.alg.shortestpath.AllDirectedPaths
 import org.jgrapht.graph.{DefaultDirectedWeightedGraph, DefaultWeightedEdge}
 
 import scala.io.Source
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 object Day09 extends Solution {
   type I  = DefaultDirectedWeightedGraph[String, DefaultWeightedEdge]

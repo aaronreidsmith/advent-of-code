@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2017
 
-import io.github.aaronreidsmith._
+import io.github.aaronreidsmith.*
 
 import scala.annotation.tailrec
 import scala.io.Source

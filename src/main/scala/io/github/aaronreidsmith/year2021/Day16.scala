@@ -10,7 +10,7 @@ object Day16 extends Solution {
   type O2 = Long
 
   private type Bits = List[Boolean]
-  private implicit class BitsOps(bits: Bits) {
+  extension (bits: Bits) {
     def toInt: Int   = toLong.toInt
     def toLong: Long = bits.foldLeft(0L)((acc, bit) => (acc << 1) | (if (bit) 1 else 0))
   }
@@ -42,7 +42,7 @@ object Day16 extends Solution {
     }
 
     private def parseLiteral(bits: Bits): (Bits, Bits) = {
-      val (prefix :: groupBits, remaining1) = bits.splitAt(5)
+      val (prefix :: groupBits, remaining1) = bits.splitAt(5): @unchecked
       if (prefix) {
         val (tailBits, remaining2) = parseLiteral(remaining1)
         (groupBits ++ tailBits, remaining2)
@@ -78,7 +78,7 @@ object Day16 extends Solution {
           val value                   = valueBits.toLong
           (Literal(version, value), remaining3)
         case _ =>
-          val lengthType :: remaining3 = remaining2
+          val lengthType :: remaining3 = remaining2: @unchecked
           if (lengthType) {
             val (numberBits, remaining4) = remaining3.splitAt(11)
             val number                   = numberBits.toInt
@@ -116,13 +116,13 @@ object Day16 extends Solution {
         case 2 => subValues.min
         case 3 => subValues.max
         case 5 =>
-          val a :: b :: _ = subValues
+          val a :: b :: _ = subValues: @unchecked
           if (a > b) 1 else 0
         case 6 =>
-          val a :: b :: _ = subValues
+          val a :: b :: _ = subValues: @unchecked
           if (a < b) 1 else 0
         case 7 =>
-          val a :: b :: _ = subValues
+          val a :: b :: _ = subValues: @unchecked
           if (a == b) 1 else 0
         case _ => throw new IllegalArgumentException
       }

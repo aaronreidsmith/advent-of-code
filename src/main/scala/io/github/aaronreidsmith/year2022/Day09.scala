@@ -5,7 +5,7 @@ import io.github.aaronreidsmith.{Point, Solution}
 import scala.io.Source
 
 object Day09 extends Solution {
-  type I = String
+  type I  = String
   type O1 = Int
   type O2 = Int
 
@@ -56,7 +56,6 @@ object Day09 extends Solution {
           case (acc, knot) => acc.updated(knot, moveKnot(knots(knot), acc(knot - 1)))
         }
         (newState, seen + newState(numKnots - 1))
-      case (acc, _) => acc
     }
     visited.size
   }

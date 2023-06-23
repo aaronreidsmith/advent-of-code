@@ -45,7 +45,6 @@ object Day10 extends Solution {
       val (xMin, xMax, yMin, yMax) = mutablePoints.foldLeft((Int.MaxValue, Int.MinValue, Int.MaxValue, Int.MinValue)) {
         case ((currXMin, currXMax, currYMin, currYMax), point) =>
           (currXMin.min(point.x), currXMax.max(point.x), currYMin.min(point.y), currYMax.max(point.y))
-        case (acc, _) => acc
       }
 
       (yMin to yMax).foreach { y =>

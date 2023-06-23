@@ -73,7 +73,7 @@ object Day16 extends Solution {
         val perfumeCheck    = sue.perfumes.fold(true)(_ == 1)
 
         childCheck && catCheck && samoyedCheck && pomeranianCheck && akitaCheck &&
-          vizslaCheck && goldfishCheck && treeCheck && carCheck && perfumeCheck
+        vizslaCheck && goldfishCheck && treeCheck && carCheck && perfumeCheck
       }
       .head
       .number
@@ -94,7 +94,7 @@ object Day16 extends Solution {
         val perfumeCheck    = sue.perfumes.fold(true)(_ == 1)
 
         childCheck && catCheck && samoyedCheck && pomeranianCheck && akitaCheck &&
-          vizslaCheck && goldfishCheck && treeCheck && carCheck && perfumeCheck
+        vizslaCheck && goldfishCheck && treeCheck && carCheck && perfumeCheck
       }
       .head
       .number

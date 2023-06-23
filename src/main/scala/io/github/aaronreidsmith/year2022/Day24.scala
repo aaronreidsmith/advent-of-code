@@ -14,12 +14,12 @@ object Day24 extends Solution {
   // Took a long time to track down this bug...
   // Java/Scala's modulo is different than Python's (where this solution was adapted from).
   // See: https://dreamix.eu/blog/java/modulo-problem-in-java
-  private implicit class IntOps(n: Int) {
+  extension (n: Int) {
     def mod(m: Int): Int = ((n % m) + m) % m
   }
 
   case class Blizzard(x: Int, y: Int, dx: Int, dy: Int)
-  type Wall = (Int, Int) // Would prefer a case class, but this works nicer elsewhere
+  opaque type Wall = (Int, Int) // Would prefer a case class, but this works nicer elsewhere
 
   override def parseInput(file: Source): (Int, Int, Set[Blizzard], Set[Wall]) = {
     val blizzards = mutable.Set.empty[Blizzard]

@@ -84,7 +84,7 @@ object Day22 extends Solution {
   type Winner = Turn
 
   override def parseInput(file: Source): GameState = {
-    val List(bossHp, bossAttack, _*) = file.getLines().toList.map(line => line.filter(_.isDigit).toInt)
+    val List(bossHp, bossAttack, _*) = file.getLines().toList.map(line => line.filter(_.isDigit).toInt): @unchecked
     GameState(bossHp, bossAttack)
   }
 

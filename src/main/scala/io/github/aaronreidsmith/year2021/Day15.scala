@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2021
 
 import io.github.aaronreidsmith.annotations.Slow
-import io.github.aaronreidsmith.implicits.SourceOps
+import io.github.aaronreidsmith.implicits.toGrid
 import io.github.aaronreidsmith.{Grid, Point, Solution}
 
 import scala.annotation.tailrec
@@ -16,7 +16,7 @@ object Day15 extends Solution {
   override def parseInput(file: Source): Grid[Int] = file.toGrid.view.mapValues(_.asDigit).toMap
   override def part1(input: Grid[Int]): Int        = solution(input)
   override def part2(input: Grid[Int]): Int = {
-    val (maxRow, maxCol) = input.keys.maxBy(point => point.x + point.y).unzip
+    val (maxRow, maxCol) = input.keys.maxBy(point => point.x + point.y).asPair
     val (height, width)  = (maxRow + 1, maxCol + 1)
     val expandedInput = Vector
       .tabulate(5, 5) { (x, y) =>

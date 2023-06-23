@@ -13,13 +13,13 @@ object Day12 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  private implicit class RichString(str: String) {
-    def toIntOrValue(registers: Map[String, Int]): Int = Try(str.toInt) match {
+  extension (string: String) {
+    def toIntOrValue(registers: Map[String, Int]): Int = Try(string.toInt) match {
       case Success(int) => int
       case Failure(_) =>
-        registers.get(str) match {
+        registers.get(string) match {
           case Some(int) => int
-          case None      => throw new IllegalArgumentException(str)
+          case None      => throw new IllegalArgumentException(string)
         }
     }
   }

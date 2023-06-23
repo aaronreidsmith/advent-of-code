@@ -1,19 +1,19 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.implicits.SourceOps
+import io.github.aaronreidsmith.implicits.toGrid
 import io.github.aaronreidsmith.{Point, Solution}
 import org.jgrapht.alg.shortestpath.{BFSShortestPath, DijkstraShortestPath}
 import org.jgrapht.graph.{DefaultDirectedGraph, DefaultEdge}
 
 import scala.io.Source
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 object Day12 extends Solution {
   type I  = DefaultDirectedGraph[(Point, Char), DefaultEdge]
   type O1 = Int
   type O2 = Int
 
-  private implicit class CharOps(char: Char) {
+  extension (char: Char) {
     def elevation: Char = char match {
       case 'S'   => 'a'
       case 'E'   => 'z'
@@ -24,20 +24,19 @@ object Day12 extends Solution {
   override def parseInput(file: Source): DefaultDirectedGraph[(Point, Char), DefaultEdge] = {
     val graph = new DefaultDirectedGraph[(Point, Char), DefaultEdge](classOf[DefaultEdge])
     val grid  = file.toGrid
-    grid.foreach {
-      case (point, char) =>
-        // Always add this vertex
-        graph.addVertex((point, char))
+    grid.foreach { (point, char) =>
+      // Always add this vertex
+      graph.addVertex((point, char))
 
-        // Only add neighbor vertices/edges if we can reach them
-        for {
-          neighbor     <- point.immediateNeighbors
-          neighborChar <- grid.get(neighbor)
-          if neighborChar.elevation <= char.elevation + 1
-        } {
-          graph.addVertex((neighbor, neighborChar))
-          graph.addEdge((point, char), (neighbor, neighborChar))
-        }
+      // Only add neighbor vertices/edges if we can reach them
+      for {
+        neighbor     <- point.immediateNeighbors
+        neighborChar <- grid.get(neighbor)
+        if neighborChar.elevation <= char.elevation + 1
+      } {
+        graph.addVertex((neighbor, neighborChar))
+        graph.addEdge((point, char), (neighbor, neighborChar))
+      }
     }
 
     graph

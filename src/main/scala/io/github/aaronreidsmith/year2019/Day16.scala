@@ -3,7 +3,7 @@ package io.github.aaronreidsmith.year2019
 import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
-import scala.math.Integral.Implicits._
+import scala.math.Integral.Implicits.*
 
 object Day16 extends Solution {
   type I  = Vector[Int]

@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith._
-import io.github.aaronreidsmith.implicits._
+import io.github.aaronreidsmith.implicits.toGrid
+import io.github.aaronreidsmith.{Grid, Point, Solution}
 
 import scala.annotation.tailrec
 import scala.io.Source
@@ -17,7 +17,7 @@ object Day18 extends Solution {
   override def parseInput(file: Source): Grid[Char] = file.toGrid
   override def part1(grid: Grid[Char]): Int         = solution(grid, part1Iterations, Seq(), 0)
   override def part2(grid: Grid[Char]): Int = {
-    val (rows, cols) = grid.keys.unzip
+    val (rows, cols) = grid.keys.unzip(_.asPair)
     val corners = for {
       row <- Seq(rows.min, rows.max)
       col <- Seq(cols.min, cols.max)

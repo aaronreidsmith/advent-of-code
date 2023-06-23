@@ -56,7 +56,6 @@ object Day06 extends Solution {
               val current = lights(x)(y)
               lights(x)(y) = !current
             }
-          case _ => throw new IllegalArgumentException
         }
         helper(rest)
     }
@@ -90,7 +89,6 @@ object Day06 extends Solution {
               x <- start.x to end.x
               y <- start.y to end.y
             } lights(x)(y) += 2
-          case _ => throw new IllegalArgumentException
         }
         helper(rest)
     }

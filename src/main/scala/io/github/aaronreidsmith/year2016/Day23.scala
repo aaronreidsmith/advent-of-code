@@ -11,9 +11,10 @@ object Day23 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  private implicit class RichString(str: String) {
-    def toIntOrValue(registers: Map[String, Int]): Int =
+  extension (str: String) {
+    def toIntOrValue(registers: Map[String, Int]): Int = {
       Try(str.toInt).getOrElse(registers.getOrElse(str, throw new IllegalArgumentException(str)))
+    }
   }
 
   override def parseInput(file: Source): Vector[String] = file.getLines().toVector

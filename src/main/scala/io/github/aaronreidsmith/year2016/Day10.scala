@@ -54,7 +54,7 @@ object Day10 extends Solution {
       while (bots.nonEmpty) {
         bots.foreach {
           case (botId, chips) if chips.length == 2 =>
-            val Vector(low, high, _*) = bots.remove(botId).getOrElse(Vector()).sorted
+            val Vector(low, high, _*) = bots.remove(botId).getOrElse(Vector()).sorted: @unchecked
             if (low == 17 && high == 61) {
               part1Answer = botId
             }

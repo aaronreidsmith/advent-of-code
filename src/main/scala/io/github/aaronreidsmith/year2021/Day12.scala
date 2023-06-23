@@ -21,8 +21,8 @@ object Day12 extends Solution {
         case Array(start, end) => Set((start, end), (end, start))
         case _                 => Set()
       }
-      .groupBy { case (start, _) => start }
-      .map { case (start, neighbors) => start -> neighbors.map { case (_, end) => end }.toSet }
+      .groupBy((start, _) => start)
+      .map((start, neighbors) => start -> neighbors.map((_, end) => end).toSet)
   }
 
   override def part1(input: Map[String, Set[String]]): Int = solution(input, true)

@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2021
 
 import io.github.aaronreidsmith.Solution
-import io.github.aaronreidsmith.implicits.IteratorOps
+import io.github.aaronreidsmith.implicits.{headOption, occurrences}
 
 import scala.annotation.tailrec
 import scala.io.Source
@@ -13,9 +13,9 @@ object Day19 extends Solution {
   type O2 = Int
 
   case class Beacon(x: Int, y: Int, z: Int) {
-    def +(that: Beacon): Beacon     = copy(x + that.x, y + that.y, z + that.z)
-    def -(that: Beacon): Beacon     = copy(x - that.x, y - that.y, z - that.z)
-    def distance(that: Beacon): Int = (x - that.x).abs + (y - that.y).abs + (z - that.z).abs
+    infix def +(that: Beacon): Beacon = copy(x + that.x, y + that.y, z + that.z)
+    infix def -(that: Beacon): Beacon = copy(x - that.x, y - that.y, z - that.z)
+    def distance(that: Beacon): Int   = (x - that.x).abs + (y - that.y).abs + (z - that.z).abs
     def orientations: Seq[Beacon] = Seq(
       this,
       copy(x = -y, y = x),
@@ -44,14 +44,14 @@ object Day19 extends Solution {
     )
   }
 
-  type Scanner = Set[Beacon]
-  implicit class ScannerOps(scanner: Scanner) {
+  opaque type Scanner = Set[Beacon]
+  extension (scanner: Scanner) {
     def orientations: Seq[Scanner] = scanner.toSeq.map(_.orientations).transpose.map(_.toSet)
   }
 
   override def parseInput(file: Source): List[Scanner] = file.mkString.trim.split("\n\n").toList.map { entry =>
     entry.split('\n').tail.foldLeft(Set.empty[Beacon]) { (acc, line) =>
-      val Array(x, y, z, _*) = line.split(',')
+      val Array(x, y, z, _*) = line.split(','): @unchecked
       acc + Beacon(x.toInt, y.toInt, z.toInt)
     }
   }

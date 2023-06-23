@@ -10,7 +10,7 @@ object Day08 extends Solution {
   type O2 = Int
 
   override def parseInput(file: Source): Seq[(Seq[String], Seq[String])] = file.getLines().toSeq.map { line =>
-    val Array(inputs, outputs, _*) = line.split(" \\| ").map(_.split(' ').toSeq)
+    val Array(inputs, outputs, _*) = line.split(" \\| ").map(_.split(' ').toSeq): @unchecked
     (inputs, outputs)
   }
 
@@ -18,7 +18,6 @@ object Day08 extends Solution {
     val easyDigits = Set(2, 3, 4, 7)
     input.foldLeft(0) {
       case (acc, (_, outputs)) => acc + outputs.count(output => easyDigits.contains(output.length))
-      case (acc, _)            => acc
     }
   }
 
@@ -48,7 +47,6 @@ object Day08 extends Solution {
           string.sorted -> overlapMapping(key)
         }.toMap
         acc + outputs.map(output => localMapping(output.sorted)).mkString.toInt
-      case (acc, _) => acc
     }
   }
 }

@@ -6,7 +6,7 @@ import scala.annotation.tailrec
 import scala.io.Source
 
 object Day23 extends Solution {
-  type I = Vector[String]
+  type I  = Vector[String]
   type O1 = Int
   type O2 = Int
 

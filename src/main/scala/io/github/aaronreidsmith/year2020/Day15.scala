@@ -16,7 +16,7 @@ object Day15 extends Solution {
     val input = file.mkString.trim
       .split(',')
       .zipWithIndex
-      .map { case (num, index) => num.toInt -> (index + 1) }
+      .map((num, index) => num.toInt -> (index + 1))
       .toMap
 
     playGame(input, input.size + 1, 0, _)

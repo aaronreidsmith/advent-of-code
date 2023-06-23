@@ -12,7 +12,7 @@ object Day05 extends Solution {
 
   override def parseInput(file: Source): List[Int] = file.getLines().toList.map(findSeat)
   override def part1(input: List[Int]): Int        = input.max
-  override def part2(input: List[Int]): Int = (input.min to input.max).toSet.diff(input.toSet).head
+  override def part2(input: List[Int]): Int        = (input.min to input.max).toSet.diff(input.toSet).head
 
   private def findSeat(boardingPass: String): Int = {
     @tailrec

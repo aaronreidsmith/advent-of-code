@@ -33,7 +33,7 @@ object Day07 extends Solution {
       childNodes.add(name)
 
       val node     = allNodes(name)
-      val children = node.childString.map(_.split(", ").map(getChildren)).getOrElse(Array())
+      val children = node.childString.map(_.split(", ").map(getChildren)).getOrElse(Array.empty[Node])
       Node(node.name, node.weight, children.toSeq, node.childString)
     }
 

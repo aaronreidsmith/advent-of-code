@@ -1,7 +1,6 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith._
-import io.github.aaronreidsmith.implicits._
+import io.github.aaronreidsmith.*
 import io.github.aaronreidsmith.year2019.IntCode.Output
 
 import scala.annotation.tailrec
@@ -16,7 +15,7 @@ object Day11 extends Solution {
   override def part1(input: IntCode): Int        = paintHull(input).size
   override def part2(input: IntCode): String = {
     val paint    = paintHull(input, panels = Map(Point.zero -> 1L).withDefaultValue(0L))
-    val (xs, ys) = paint.keys.unzip
+    val (xs, ys) = paint.keys.unzip(point => (point.x, point.y))
     val output   = new StringBuilder("\n")
     (xs.min to xs.max).foreach { x =>
       (ys.min to ys.max).foreach { y =>

@@ -23,7 +23,7 @@ object Day03 extends Solution {
   }
 
   private def isTriangle(triple: List[Int]): Boolean = {
-    val a :: b :: c :: _ = triple
+    val a :: b :: c :: _ = triple: @unchecked
     (a + b) > c && (a + c) > b && (b + c) > a
   }
 }

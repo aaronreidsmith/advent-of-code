@@ -148,7 +148,8 @@ object Day21 extends Solution {
     List(DamagePlusOne, DamagePlusTwo, DamagePlusThree, DefensePlusOne, DefensePlusTwo, DefensePlusThree)
 
   override def parseInput(file: Source): Boss = {
-    val Array(bossHp, bossDamage, bossArmor, _*) = file.mkString.trim.split('\n').map(_.split(": ").last.toInt)
+    val Array(bossHp, bossDamage, bossArmor, _*) =
+      file.mkString.trim.split('\n').map(_.split(": ").last.toInt): @unchecked
     Boss(bossHp, bossArmor, bossDamage)
   }
 

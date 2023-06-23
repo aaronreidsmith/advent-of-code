@@ -24,18 +24,17 @@ object Day10 extends Solution {
       var count   = 1
 
       val lastIndex = currentNum.tail.length - 1
-      currentNum.tail.zipWithIndex.foreach {
-        case (digit, index) =>
-          if (digit == current) {
-            count += 1
-          } else {
+      currentNum.tail.zipWithIndex.foreach { (digit, index) =>
+        if (digit == current) {
+          count += 1
+        } else {
+          builder ++= s"$count$current"
+          current = digit
+          count = 1
+          if (index == lastIndex) {
             builder ++= s"$count$current"
-            current = digit
-            count = 1
-            if (index == lastIndex) {
-              builder ++= s"$count$current"
-            }
           }
+        }
       }
       solution(builder.toString(), iterations, currentIteration + 1)
     }

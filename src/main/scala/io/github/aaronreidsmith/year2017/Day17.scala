@@ -37,7 +37,6 @@ object Day17 extends Solution {
         case ((current, second), i) =>
           val next = 1 + (current + stepCount) % i
           (next, if (next == 1) i else second)
-        case (acc, _) => acc
       }
       ._2
   }

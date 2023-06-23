@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2021
 
-import io.github.aaronreidsmith.implicits.SourceOps
+import io.github.aaronreidsmith.implicits.toGrid
 import io.github.aaronreidsmith.{Grid, Point, Solution}
 
 import scala.annotation.tailrec
@@ -22,7 +22,7 @@ object Day11 extends Solution {
 
     def nextState(grid: Grid[Int]): Grid[Int] = {
       val firstPass = grid.view.mapValues(_ + 1).toMap
-      val flashes   = findFlashes(firstPass, firstPass.filter { case (_, value) => value > 9 }.keySet)
+      val flashes   = findFlashes(firstPass, firstPass.filter((_, value) => value > 9).keySet)
       firstPass.map {
         case (position, value) =>
           position -> (if (flashes.contains(position)) 0 else value + position.neighbors.count(flashes.contains))

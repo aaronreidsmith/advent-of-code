@@ -13,7 +13,7 @@ object Day25 extends Solution {
   type O1 = Int
   type O2 = Nothing
 
-  private implicit class RichString(str: String) {
+  extension (str: String) {
     def toIntOrValue(registers: Map[String, Int]): Int = Try(str.toInt) match {
       case Success(int) => int
       case Failure(_) =>

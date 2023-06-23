@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2018
 
-import io.github.aaronreidsmith._
+import io.github.aaronreidsmith.*
 
 import scala.annotation.tailrec
 import scala.io.Source
@@ -37,7 +37,6 @@ object Day13 extends Solution {
         }
         val updatedLine = line.replaceAll("[\\^v]", "|").replaceAll("[<>]", "-")
         (track :+ updatedLine, carts ++ newCarts)
-      case (acc, _) => acc
     }
   }
 

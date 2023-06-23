@@ -6,12 +6,12 @@ import scala.collection.mutable
 import scala.io.Source
 
 object Day05 extends Solution {
-  type I = (Map[Int, String], List[String])
+  type I  = (Map[Int, String], List[String])
   type O1 = String
   type O2 = String
 
   override def parseInput(file: Source): (Map[Int, String], List[String]) = {
-    val Array(stackString, instructionString, _*) = file.mkString.split("\n\n")
+    val Array(stackString, instructionString, _*) = file.mkString.split("\n\n"): @unchecked
 
     // Transpose our stacks and then parse them into map like this: Map(1 -> 'NZ', 2 -> 'DCM', 3 -> 'P')
     val stacks     = stackString.split('\n').toList
@@ -63,8 +63,8 @@ object Day05 extends Solution {
     }
 
     updated.toList
-      .sortBy { case (num, _) => num }
-      .map { case (_, stack) => stack.head }
+      .sortBy((num, _) => num)
+      .map((_, stack) => stack.head)
       .mkString
   }
 }

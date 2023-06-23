@@ -7,11 +7,11 @@ import scala.io.Source
 
 // TODO: Adapted from my Python solution, so a decent amount of mutability
 object Day09 extends Solution {
-  type I = (Int, Int)
+  type I  = (Int, Int)
   type O1 = Long
   type O2 = Long
 
-  private implicit class ArrayDequeOps(deque: mutable.ArrayDeque[Long]) {
+  extension (deque: mutable.ArrayDeque[Long]) {
     // https://docs.python.org/3/library/collections.html#collections.deque.rotate
     def rotate(n: Int): Unit = if (n > 0) {
       (n until 0 by -1).foreach { _ =>
@@ -26,7 +26,7 @@ object Day09 extends Solution {
 
   override def parseInput(file: Source): (Int, Int) = {
     val regex                         = """^(\d+) players; last marble is worth (\d+) points$""".r
-    val regex(maxPlayers, lastMarble) = file.mkString.trim
+    val regex(maxPlayers, lastMarble) = file.mkString.trim: @unchecked
     (maxPlayers.toInt, lastMarble.toInt)
   }
 

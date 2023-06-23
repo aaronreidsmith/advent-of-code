@@ -13,7 +13,7 @@ object Day12 extends Solution {
   type O2 = Long
 
   case class Point3(x: Int = 0, y: Int = 0, z: Int = 0) {
-    def +(other: Point3): Point3 = this.copy(x = this.x + other.x, y = this.y + other.y, z = this.z + other.z)
+    infix def +(other: Point3): Point3 = this.copy(x = this.x + other.x, y = this.y + other.y, z = this.z + other.z)
     def compare(other: Point3): Point3 = {
       val xChange = other.x.compare(this.x)
       val yChange = other.y.compare(this.y)
@@ -62,10 +62,10 @@ object Day12 extends Solution {
     def cycleLength(moons: Vector[Moon])(toTuple: Moon => (Int, Int)): Int = {
       val memo = mutable.Map.empty[Vector[(Int, Int)], Vector[(Int, Int)]]
       Iterator
-        .iterate((moons, Vector())) { case (key, value) => (nextState(key), value) }
+        .iterate((moons, Vector()))((key, value) => (nextState(key), value))
         .zipWithIndex
         .map { case ((key, value), index) => (index, memo.put(key.map(toTuple), value.map(toTuple))) }
-        .dropWhile { case (_, maybeValue) => maybeValue.isEmpty }
+        .dropWhile((_, maybeValue) => maybeValue.isEmpty)
         .next()
         ._1
     }

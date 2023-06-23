@@ -4,7 +4,8 @@ import io.github.aaronreidsmith.Solution
 
 import scala.collection.mutable
 import scala.io.Source
-import scala.util.control.Breaks._
+import scala.util.boundary
+import scala.util.boundary.break
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/a86jgt/comment/ec8frrd
 object Day21 extends Solution {
@@ -32,7 +33,7 @@ object Day21 extends Solution {
 
       var C = originalC
       var D = 65536L
-      breakable {
+      boundary {
         while (true) {
           val E = D % 256
           C += E

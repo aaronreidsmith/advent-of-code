@@ -11,19 +11,19 @@ object Day19 extends Solution {
   type O2 = Int
 
   case class Resources(ore: Int = 0, clay: Int = 0, obsidian: Int = 0, geode: Int = 0) {
-    def +(other: Resources): Resources = Resources(
+    infix def +(other: Resources): Resources = Resources(
       ore + other.ore,
       clay + other.clay,
       obsidian + other.obsidian,
       geode + other.geode
     )
-    def -(other: Resources): Resources = Resources(
+    infix def -(other: Resources): Resources = Resources(
       ore - other.ore,
       clay - other.clay,
       obsidian - other.obsidian,
       geode - other.geode
     )
-    def <=(other: Resources): Boolean = {
+    infix def <=(other: Resources): Boolean = {
       ore <= other.ore && clay <= other.clay && obsidian <= other.obsidian && geode <= other.geode
     }
   }
@@ -58,7 +58,9 @@ object Day19 extends Solution {
   }
 
   override def part1(input: List[Blueprint]): Int = input.foldLeft(0)(_ + maximize(_, 24))
-  override def part2(input: List[Blueprint]): Int = input.take(3).foldLeft(1)(_ * maximize(_, 32)) / 6 // Not sure why we have to divide by 6 here
+  override def part2(input: List[Blueprint]): Int = {
+    input.take(3).foldLeft(1)(_ * maximize(_, 32)) / 6 // Not sure why we have to divide by 6 here
+  }
 
   // Only want to compile these once
   private val zero        = Resources()

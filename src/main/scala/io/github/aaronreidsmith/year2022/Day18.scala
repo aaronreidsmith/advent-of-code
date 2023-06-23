@@ -25,7 +25,7 @@ object Day18 extends Solution {
 
   override def parseInput(file: Source): Set[Cube] = {
     file.getLines().foldLeft(Set.empty[Cube]) { (acc, line) =>
-      val Array(x, y, z, _*) = line.split(',')
+      val Array(x, y, z, _*) = line.split(','): @unchecked
       acc + Cube(x.toInt, y.toInt, z.toInt)
     }
   }
