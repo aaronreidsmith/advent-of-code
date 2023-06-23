@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2022
 
-import io.github.aaronreidsmith.{Point, Solution}
 import io.github.aaronreidsmith.implicits.toGrid
+import io.github.aaronreidsmith.{Point, Solution}
 import org.jgrapht.alg.shortestpath.{BFSShortestPath, DijkstraShortestPath}
 import org.jgrapht.graph.{DefaultDirectedGraph, DefaultEdge}
 

@@ -13,7 +13,7 @@ object Day12 extends Solution {
   type O2 = Long
 
   case class Point3(x: Int = 0, y: Int = 0, z: Int = 0) {
-    def +(other: Point3): Point3 = this.copy(x = this.x + other.x, y = this.y + other.y, z = this.z + other.z)
+    infix def +(other: Point3): Point3 = this.copy(x = this.x + other.x, y = this.y + other.y, z = this.z + other.z)
     def compare(other: Point3): Point3 = {
       val xChange = other.x.compare(this.x)
       val yChange = other.y.compare(this.y)

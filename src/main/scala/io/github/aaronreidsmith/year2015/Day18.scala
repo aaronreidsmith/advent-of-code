@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.{Solution, Grid, Point}
 import io.github.aaronreidsmith.implicits.toGrid
+import io.github.aaronreidsmith.{Grid, Point, Solution}
 
 import scala.annotation.tailrec
 import scala.io.Source

@@ -4,7 +4,8 @@ import io.github.aaronreidsmith.Solution
 
 import scala.collection.mutable
 import scala.io.Source
-import util.boundary, boundary.break
+import scala.util.boundary
+import scala.util.boundary.break
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/a86jgt/comment/ec8frrd
 object Day21 extends Solution {

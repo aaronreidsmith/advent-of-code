@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2019
 
-import io.github.aaronreidsmith.{Grid, Point, Solution}
 import io.github.aaronreidsmith.implicits.toGrid
+import io.github.aaronreidsmith.{Grid, Point, Solution}
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath
 import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
 

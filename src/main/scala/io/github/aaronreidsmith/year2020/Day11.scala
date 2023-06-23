@@ -1,11 +1,12 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.{Grid, Point, Solution}
 import io.github.aaronreidsmith.implicits.toGrid
+import io.github.aaronreidsmith.{Grid, Point, Solution}
 
 import scala.annotation.tailrec
 import scala.io.Source
-import util.boundary, boundary.break
+import scala.util.boundary
+import scala.util.boundary.break
 
 // TODO: This is adapted from some Python code, so it is _not_ super idiomatic
 object Day11 extends Solution {

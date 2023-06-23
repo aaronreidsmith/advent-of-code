@@ -11,19 +11,19 @@ object Day19 extends Solution {
   type O2 = Int
 
   case class Resources(ore: Int = 0, clay: Int = 0, obsidian: Int = 0, geode: Int = 0) {
-    def +(other: Resources): Resources = Resources(
+    infix def +(other: Resources): Resources = Resources(
       ore + other.ore,
       clay + other.clay,
       obsidian + other.obsidian,
       geode + other.geode
     )
-    def -(other: Resources): Resources = Resources(
+    infix def -(other: Resources): Resources = Resources(
       ore - other.ore,
       clay - other.clay,
       obsidian - other.obsidian,
       geode - other.geode
     )
-    def <=(other: Resources): Boolean = {
+    infix def <=(other: Resources): Boolean = {
       ore <= other.ore && clay <= other.clay && obsidian <= other.obsidian && geode <= other.geode
     }
   }
