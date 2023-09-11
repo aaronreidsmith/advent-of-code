@@ -1,15 +1,13 @@
 package io.github.aaronreidsmith
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.tags.Slow
-import org.scalatest.{Ignore, ParallelTestExecution, Tag}
+import io.github.aaronreidsmith.tags.{IgnoreOnCI, Part1Slow, Part2, Part2Slow}
+import munit.FunSuite
 
 import scala.io.Source
 import scala.reflect.runtime.universe
 
 // TODO: This file is a mess. Clean it up
-trait BaseTest extends AnyFlatSpec with Matchers with ParallelTestExecution {
+trait BaseTest extends FunSuite {
   // Implemented by actual tests
   val suite: Suite
 
@@ -17,10 +15,6 @@ trait BaseTest extends AnyFlatSpec with Matchers with ParallelTestExecution {
   private val year          = getClass.getName.split("year")(1).take(4).toInt
   private val day           = getClass.getName.split("Day")(1).take(2).toInt
   private val runtimeMirror = universe.runtimeMirror(getClass.getClassLoader)
-  private val annotation    = Option(getClass.getAnnotation(classOf[annotations.Slow]))
-  private val part1Slow     = Tag(if (annotation.fold(false)(_.part1())) classOf[Slow].getName else "")
-  private val part2Slow     = Tag(if (annotation.fold(false)(_.part2())) classOf[Slow].getName else "")
-  private val has2Parts     = Tag(if (day < 25) "" else classOf[Ignore].getName)
 
   // This is protected so we can expose its internal types
   protected val mainInstance: Solution = {
@@ -103,15 +97,16 @@ trait BaseTest extends AnyFlatSpec with Matchers with ParallelTestExecution {
     }
   }
 
-  s"Year $year Day $day part 1" should "work" taggedAs part1Slow in {
+  // TODO: We *always* tag our tests with all tags and then filter them in the implementing classes. Is there a better way?
+  test(s"Year $year Day $day part 1".tag(Part1Slow).tag(IgnoreOnCI)) {
     suite.part1Input.zip(suite.part1Expected).foreach {
-      case (input, expected) => mainInstance.part1(input) shouldBe expected
+      case (input, expected) => assertEquals(mainInstance.part1(input), expected)
     }
   }
 
-  s"Year $year Day $day part 2" should "work" taggedAs (part2Slow, has2Parts) in {
+  test(s"Year $year Day $day part 2".tag(Part2).tag(Part2Slow).tag(IgnoreOnCI)) {
     suite.part2Input.zip(suite.part2Expected).foreach {
-      case (input, expected) => mainInstance.part2(input) shouldBe expected
+      case (input, expected) => assertEquals(mainInstance.part2(input), expected)
     }
   }
 }

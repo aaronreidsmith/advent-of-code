@@ -11,7 +11,7 @@ val settings = new {
     "org.scala-lang"          % "scala-compiler"             % scala2Version,
     "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.4",
     "org.scala-lang.modules" %% "scala-parser-combinators"   % "2.2.0",
-    "org.scalatest"          %% "scalatest"                  % "3.2.15" % Test
+    "org.scalameta"          %% "munit"                      % "0.7.29" % Test
   )
 }
 
@@ -32,10 +32,3 @@ run / outputStrategy := Some(StdoutOutput)
 Test / envVars            := Map("IS_TEST" -> "true")
 Test / fork               := true
 Test / testForkedParallel := true
-Test / testOptions += {
-  // Only run slow tests on CI
-  sys.env.get("CI") match {
-    case Some(_) => Tests.Argument(TestFrameworks.ScalaTest, "-l", "io.github.aaronreidsmith.IgnoreOnCI")
-    case None    => Tests.Argument(TestFrameworks.ScalaTest, "-l", "org.scalatest.tags.Slow")
-  }
-}

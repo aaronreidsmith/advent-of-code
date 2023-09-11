@@ -1,10 +1,10 @@
 package io.github.aaronreidsmith.year2017
 
-import io.github.aaronreidsmith.{BaseTest, IgnoreOnCI}
-import org.scalatest.tags.Slow
+import io.github.aaronreidsmith.BaseTest
 
-@Slow
-@IgnoreOnCI
 class Day15Test extends BaseTest {
+  // Slow tests that are also ignored on CI, so always skip (comment out if you want to run)
+  override def munitTests(): Seq[Test] = Seq()
+
   val suite: Suite = Suite(fileInput, 588, 285)
 }
