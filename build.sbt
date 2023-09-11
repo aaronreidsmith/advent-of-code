@@ -1,6 +1,6 @@
 val settings = new {
-  val scalaVersion  = "3.3.0"
-  val scala2Version = "2.13.10" // TODO: Switch reflection to Scala 3, if possible
+  val scalaVersion  = "3.3.1"
+  val scala2Version = "2.13.12" // TODO: Switch reflection to Scala 3, if possible
 
   val libraryDependencies = Seq(
     "com.lihaoyi"            %% "ujson"                      % "3.0.0",
