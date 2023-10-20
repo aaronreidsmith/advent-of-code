@@ -11,11 +11,9 @@ object Day22 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  sealed trait State
-  case object Clean    extends State
-  case object Weakened extends State
-  case object Flagged  extends State
-  case object Infected extends State
+  enum State {
+    case Clean, Weakened, Flagged, Infected
+  }
 
   object State {
     def apply(char: Char): State = char match {
@@ -30,9 +28,9 @@ object Day22 extends Solution {
   case class Node(position: Point, direction: Direction)
 
   override def parseInput(file: Source): (Node, Grid[State]) = {
-    val grid   = file.toGrid.view.mapValues(State(_)).toMap.withDefaultValue(Clean)
+    val grid   = file.toGrid.view.mapValues(State(_)).toMap.withDefaultValue(State.Clean)
     val middle = grid.keySet.map(_.x).size / 2
-    val start  = Node(Point(middle, middle), North)
+    val start  = Node(Point(middle, middle), Direction.North)
     (start, grid)
   }
 
@@ -46,11 +44,11 @@ object Day22 extends Solution {
       } else {
         val Node(position, direction) = node
         val state                     = grid(position)
-        val isInfected                = state == Infected
+        val isInfected                = state == State.Infected
         val nextDirection             = if (isInfected) direction.right else direction.left
         val nextPosition              = position.move(nextDirection)
-        val newState                  = if (isInfected) Clean else Infected
-        val newInfectionCount         = if (newState == Infected) 1 else 0
+        val newState                  = if (isInfected) State.Clean else State.Infected
+        val newInfectionCount         = if (newState == State.Infected) 1 else 0
         helper(
           Node(nextPosition, nextDirection),
           grid.updated(position, newState),
@@ -74,19 +72,19 @@ object Day22 extends Solution {
         val Node(position, direction) = node
         val state                     = grid(position)
         val nextDirection = state match {
-          case Clean    => direction.left
-          case Weakened => direction
-          case Infected => direction.right
-          case Flagged  => direction.opposite
+          case State.Clean    => direction.left
+          case State.Weakened => direction
+          case State.Infected => direction.right
+          case State.Flagged  => direction.opposite
         }
         val newState = state match {
-          case Clean    => Weakened
-          case Weakened => Infected
-          case Infected => Flagged
-          case Flagged  => Clean
+          case State.Clean    => State.Weakened
+          case State.Weakened => State.Infected
+          case State.Infected => State.Flagged
+          case State.Flagged  => State.Clean
         }
         val nextPosition      = position.move(nextDirection)
-        val newInfectionCount = if (newState == Infected) 1 else 0
+        val newInfectionCount = if (newState == State.Infected) 1 else 0
         helper(
           Node(nextPosition, nextDirection),
           grid.updated(position, newState),

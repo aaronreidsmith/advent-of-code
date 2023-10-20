@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2019
 
 import io.github.aaronreidsmith.*
-import io.github.aaronreidsmith.year2019.IntCode.Output
+import io.github.aaronreidsmith.year2019.IntCode.State
 
 import scala.annotation.tailrec
 import scala.io.Source
@@ -32,15 +32,15 @@ object Day11 extends Solution {
   private def paintHull(
       intCode: IntCode,
       position: Point = Point.zero,
-      direction: Direction = North,
+      direction: Direction = Direction.North,
       panels: Grid[Long] = Map(Point.zero -> 0L).withDefaultValue(0L)
   ): Grid[Long] = {
     val first = intCode.withInput(panels(position)).nextOutput
     first.result match {
-      case Output(color) =>
+      case State.Output(color) =>
         val second = first.nextOutput
         second.result match {
-          case Output(turn) =>
+          case State.Output(turn) =>
             val newDirection = if (turn == 0) direction.left else direction.right
             paintHull(second, position.move(newDirection), newDirection, panels.updated(position, color))
           case _ => throw new IllegalArgumentException

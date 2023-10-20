@@ -11,9 +11,14 @@ object Day24 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  sealed trait GroupType { def target: GroupType }
-  case object ImmuneSystem extends GroupType { def target: GroupType = Infection    }
-  case object Infection    extends GroupType { def target: GroupType = ImmuneSystem }
+  enum GroupType {
+    case ImmuneSystem, Infection
+
+    def target: GroupType = this match {
+      case ImmuneSystem => Infection
+      case Infection    => ImmuneSystem
+    }
+  }
 
   case class Group(
       i: Int,
@@ -77,7 +82,7 @@ object Day24 extends Solution {
     }
     def parseGroups(block: String): Seq[Group] = {
       val lines     = block.split('\n')
-      val groupType = if (lines.head == "Infection:") Infection else ImmuneSystem
+      val groupType = if (lines.head == "Infection:") GroupType.Infection else GroupType.ImmuneSystem
       lines.toSeq.zipWithIndex.tail.map {
         case (line, i) => parseGroup(i, line, groupType)
       }
@@ -94,8 +99,8 @@ object Day24 extends Solution {
   override def part2(initialGroups: List[Group]): Int = {
     def boostGroups(groups: Seq[Group], boost: Int): Seq[Group] = groups.map { group =>
       group.groupType match {
-        case ImmuneSystem => group.copy(attack = group.attack + boost)
-        case Infection    => group
+        case GroupType.ImmuneSystem => group.copy(attack = group.attack + boost)
+        case GroupType.Infection    => group
       }
     }
 
@@ -105,11 +110,11 @@ object Day24 extends Solution {
         val boostedGroups = boostGroups(initialGroups, boost)
         combat(boostedGroups) match {
           case Some((winner, units)) => (winner, units)
-          case _                     => (Infection, -1)
+          case _                     => (GroupType.Infection, -1)
         }
       }
       .collectFirst {
-        case (ImmuneSystem, units) => units
+        case (GroupType.ImmuneSystem, units) => units
       }
       .getOrElse(-1)
   }
@@ -117,7 +122,7 @@ object Day24 extends Solution {
   @tailrec
   private def combat(groups: Seq[Group]): Option[(GroupType, Int)] = {
     val remainingGroupTypes = groups.map(_.groupType)
-    if (remainingGroupTypes.contains(Infection) && remainingGroupTypes.contains(ImmuneSystem)) {
+    if (remainingGroupTypes.contains(GroupType.Infection) && remainingGroupTypes.contains(GroupType.ImmuneSystem)) {
       val targets   = targetSelectionPhase(groups)
       val newGroups = attackingPhase(groups, targets)
       if (newGroups == groups) {

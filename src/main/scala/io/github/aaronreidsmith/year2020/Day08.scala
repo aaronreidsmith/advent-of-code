@@ -10,9 +10,9 @@ object Day08 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  sealed trait RunType
-  case object Terminal extends RunType
-  case object Infinite extends RunType
+  enum RunType {
+    case Terminal, Infinite
+  }
 
   case class Cell(operation: String, value: Int, visited: Boolean = false)
 
@@ -34,7 +34,7 @@ object Day08 extends Solution {
           accumulate(input.updated(index, cell.copy(operation = "nop")), part2 = true)
       }
       .collectFirst {
-        case (accumulator, Terminal) => accumulator
+        case (accumulator, RunType.Terminal) => accumulator
       }
       .get
   }
@@ -43,9 +43,9 @@ object Day08 extends Solution {
     @tailrec
     def helper(instructions: Vector[Cell], pointer: Int = 0, accumulator: Int = 0): (Int, RunType) = {
       if (part2 && pointer == instructions.size - 1) {
-        (accumulator, Terminal)
+        (accumulator, RunType.Terminal)
       } else if (instructions(pointer).visited) {
-        (accumulator, Infinite)
+        (accumulator, RunType.Infinite)
       } else {
         val currentCell         = instructions(pointer)
         val updatedInstructions = instructions.updated(pointer, currentCell.copy(visited = true))

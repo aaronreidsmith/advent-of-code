@@ -14,34 +14,33 @@ object Day18 extends Solution {
 
   extension (grid: Grid[Square]) {
     def next: Grid[Square] = grid.foldLeft(grid) {
-      case (acc, (position, OpenGround)) =>
+      case (acc, (position, Square.OpenGround)) =>
         val adjacent = position.neighbors.flatMap(grid.get)
-        val next     = if (adjacent.count(_ == Trees) >= 3) Trees else OpenGround
+        val next     = if (adjacent.count(_ == Square.Trees) >= 3) Square.Trees else Square.OpenGround
         acc.updated(position, next)
-      case (acc, (position, Trees)) =>
+      case (acc, (position, Square.Trees)) =>
         val adjacent = position.neighbors.flatMap(grid.get)
-        val next     = if (adjacent.count(_ == Lumberyard) >= 3) Lumberyard else Trees
+        val next     = if (adjacent.count(_ == Square.Lumberyard) >= 3) Square.Lumberyard else Square.Trees
         acc.updated(position, next)
-      case (acc, (position, Lumberyard)) =>
+      case (acc, (position, Square.Lumberyard)) =>
         val adjacent = position.neighbors.flatMap(grid.get)
-        val next = if (adjacent.count(_ == Lumberyard) >= 1 && adjacent.count(_ == Trees) >= 1) {
-          Lumberyard
+        val next = if (adjacent.count(_ == Square.Lumberyard) >= 1 && adjacent.count(_ == Square.Trees) >= 1) {
+          Square.Lumberyard
         } else {
-          OpenGround
+          Square.OpenGround
         }
         acc.updated(position, next)
     }
   }
 
-  sealed trait Square
-  case object OpenGround extends Square
-  case object Trees      extends Square
-  case object Lumberyard extends Square
+  enum Square {
+    case OpenGround, Trees, Lumberyard
+  }
 
   override def parseInput(file: Source): Grid[Square] = file.toGrid.view.mapValues {
-    case '|' => Trees
-    case '#' => Lumberyard
-    case _   => OpenGround
+    case '|' => Square.Trees
+    case '#' => Square.Lumberyard
+    case _   => Square.OpenGround
   }.toMap
 
   override def part1(input: Grid[Square]): Int = simulate(input, 10)
@@ -76,6 +75,6 @@ object Day18 extends Solution {
 
   private def simulate(state: Grid[Square], iterations: Int): Int = {
     val finalState = Iterator.iterate(state)(_.next).take(iterations + 1).toSeq.last
-    finalState.values.count(_ == Trees) * finalState.values.count(_ == Lumberyard)
+    finalState.values.count(_ == Square.Trees) * finalState.values.count(_ == Square.Lumberyard)
   }
 }

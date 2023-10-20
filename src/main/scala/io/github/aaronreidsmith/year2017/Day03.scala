@@ -28,7 +28,7 @@ object Day03 extends Solution {
       part1: Boolean,
       pos: Point = Point(0, 1),
       acc: Int = 2,
-      direction: Direction = North
+      direction: Direction = Direction.North
   ): Int = {
     if (acc == target && part1) {
       pos.manhattanDistance(Point.zero)
@@ -36,20 +36,20 @@ object Day03 extends Solution {
       acc
     } else {
       val squareToLeft = direction match {
-        case North => pos.left
-        case East  => pos.up
-        case South => pos.right
-        case West  => pos.down
+        case Direction.North => pos.left
+        case Direction.East  => pos.up
+        case Direction.South => pos.right
+        case Direction.West  => pos.down
       }
       val newDirection = grid.get(squareToLeft) match {
         case Some(_) => direction      // If there is something to our left, keep going in same direction
         case None    => direction.left // Otherwise rotate counter clockwise
       }
       val newPos = newDirection match {
-        case North => pos.up
-        case East  => pos.right
-        case South => pos.down
-        case West  => pos.left
+        case Direction.North => pos.up
+        case Direction.East  => pos.right
+        case Direction.South => pos.down
+        case Direction.West  => pos.left
       }
       val newNum  = if (part1) acc + 1 else pos.neighbors.flatMap(grid.get).sum
       val newGrid = grid + (pos -> newNum)

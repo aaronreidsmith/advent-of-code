@@ -1,5 +1,6 @@
 package io.github.aaronreidsmith
 
+// Can't use an enum here because the implementing classes have different methods
 sealed trait AxialCoordinate {
   type Self <: AxialCoordinate
 

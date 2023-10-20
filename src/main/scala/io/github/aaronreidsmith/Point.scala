@@ -8,10 +8,10 @@ case class Point(x: Int, y: Int) {
   infix def -(other: Point): Point      = Point(x - other.x, y - other.y)
 
   def move(direction: Direction, steps: Int = 1): Point = direction match {
-    case North => this.copy(x = x - steps)
-    case East  => this.copy(y = y + steps)
-    case South => this.copy(x = x + steps)
-    case West  => this.copy(y = y - steps)
+    case Direction.North => this.copy(x = x - steps)
+    case Direction.East  => this.copy(y = y + steps)
+    case Direction.South => this.copy(x = x + steps)
+    case Direction.West  => this.copy(y = y - steps)
   }
 
   // This is different than a traditional graph to play nice with the Grid[T] type, which is based on indices

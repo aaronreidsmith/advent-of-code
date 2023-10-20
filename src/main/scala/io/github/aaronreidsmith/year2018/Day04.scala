@@ -12,10 +12,11 @@ object Day04 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  sealed trait Memo
-  case object FallsAsleep         extends Memo
-  case object WakesUp             extends Memo
-  case class BeginsShift(id: Int) extends Memo
+  enum Memo {
+    case FallsAsleep
+    case WakesUp
+    case BeginsShift(id: Int)
+  }
 
   case class Timestamp(year: Int, month: Int, day: Int, hour: Int, minute: Int) extends Ordered[Timestamp] {
     def compare(that: Timestamp): Int = {
@@ -34,9 +35,9 @@ object Day04 extends Solution {
       .collect {
         case entry(year, month, day, hour, minute, rawMemo) =>
           val memo = rawMemo match {
-            case beginsShift(id) => BeginsShift(id.toInt)
-            case "falls asleep"  => FallsAsleep
-            case "wakes up"      => WakesUp
+            case beginsShift(id) => Memo.BeginsShift(id.toInt)
+            case "falls asleep"  => Memo.FallsAsleep
+            case "wakes up"      => Memo.WakesUp
             case _               => throw new IllegalArgumentException
           }
           Entry(Timestamp(year.toInt, month.toInt, day.toInt, hour.toInt, minute.toInt), memo)
@@ -78,14 +79,14 @@ object Day04 extends Solution {
 
     memos.foreach { entry =>
       entry.memo match {
-        case BeginsShift(id) =>
+        case Memo.BeginsShift(id) =>
           currentGuard = Some(id)
           currentStart = None
           currentEnd = None
-        case FallsAsleep =>
+        case Memo.FallsAsleep =>
           currentStart = Some(entry.timestamp)
           currentEnd = None
-        case WakesUp =>
+        case Memo.WakesUp =>
           currentEnd = Some(entry.timestamp)
           val startMinute = currentStart.fold(0)(_.minute)
           val endMinute   = currentEnd.fold(0)(_.minute)

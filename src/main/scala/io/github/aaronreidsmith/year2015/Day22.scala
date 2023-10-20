@@ -22,7 +22,7 @@ object Day22 extends Solution {
       shield: Int = 0,
       poison: Int = 0,
       recharge: Int = 0,
-      turn: Turn = Player,
+      turn: Turn = Turn.Player,
       hardMode: Boolean = false
   ) {
     def applyPoison: GameState = if (poison > 0) {
@@ -60,27 +60,33 @@ object Day22 extends Solution {
         manaSpent = manaSpent + spell.manaCost
       )
       spell match {
-        case MagicMissile => partiallyUpdated.copy(bossHp = bossHp - 4)
-        case Drain        => partiallyUpdated.copy(bossHp = bossHp - 2, playerHp = playerHp + 2)
-        case Shield       => partiallyUpdated.copy(armor = 7, shield = 6)
-        case Poison       => partiallyUpdated.copy(poison = 6)
-        case Recharge     => partiallyUpdated.copy(recharge = 5)
+        case Spell.MagicMissile => partiallyUpdated.copy(bossHp = bossHp - 4)
+        case Spell.Drain        => partiallyUpdated.copy(bossHp = bossHp - 2, playerHp = playerHp + 2)
+        case Spell.Shield       => partiallyUpdated.copy(armor = 7, shield = 6)
+        case Spell.Poison       => partiallyUpdated.copy(poison = 6)
+        case Spell.Recharge     => partiallyUpdated.copy(recharge = 5)
       }
     }
 
     def nextTurn: GameState = this.copy(turn = turn.next)
   }
 
-  sealed trait Spell { val manaCost: Int }
-  case object MagicMissile extends Spell { val manaCost: Int = 53  }
-  case object Drain        extends Spell { val manaCost: Int = 73  }
-  case object Shield       extends Spell { val manaCost: Int = 113 }
-  case object Poison       extends Spell { val manaCost: Int = 173 }
-  case object Recharge     extends Spell { val manaCost: Int = 229 }
+  enum Spell(val manaCost: Int) {
+    case MagicMissile extends Spell(53)
+    case Drain        extends Spell(73)
+    case Shield       extends Spell(113)
+    case Poison       extends Spell(173)
+    case Recharge     extends Spell(229)
+  }
 
-  sealed trait Turn { val next: Turn }
-  case object Boss   extends Turn { val next: Turn = Player }
-  case object Player extends Turn { val next: Turn = Boss   }
+  enum Turn {
+    case Boss, Player
+
+    def next: Turn = this match {
+      case Boss   => Player
+      case Player => Boss
+    }
+  }
   type Winner = Turn
 
   override def parseInput(file: Source): GameState = {
@@ -98,13 +104,13 @@ object Day22 extends Solution {
     solution(hardMode, 100000)
   }
 
-  private def randomSpells(): Seq[Spell] = Random.shuffle(Seq(MagicMissile, Drain, Shield, Poison, Recharge))
+  private def randomSpells(): Seq[Spell] = Random.shuffle(Spell.values.toSeq)
 
   private def solution(gameState: GameState, n: Int): Int = (0 to n).foldLeft(Int.MaxValue) { (currentBest, _) =>
     val (winner, manaSpent) = fight(gameState)
     winner match {
-      case Player => currentBest.min(manaSpent)
-      case Boss   => currentBest
+      case Turn.Player => currentBest.min(manaSpent)
+      case Turn.Boss   => currentBest
     }
   }
 
@@ -113,14 +119,14 @@ object Day22 extends Solution {
     val updated = gameState.applyShield.applyPoison
 
     if (updated.bossHp <= 0) {
-      (Player, updated.manaSpent)
+      (Turn.Player, updated.manaSpent)
     } else {
       val recharged = updated.applyRecharge
       recharged.turn match {
-        case Player =>
+        case Turn.Player =>
           val withHardModeApplied = recharged.applyHardMode
           if (withHardModeApplied.playerHp <= 0) {
-            (Boss, withHardModeApplied.manaSpent)
+            (Turn.Boss, withHardModeApplied.manaSpent)
           } else {
             val spellToCast = {
               for {
@@ -128,10 +134,10 @@ object Day22 extends Solution {
                 if withHardModeApplied.playerMana >= spell.manaCost
               } yield {
                 spell match {
-                  case Shield if withHardModeApplied.shield > 0     => None
-                  case Poison if withHardModeApplied.poison > 0     => None
-                  case Recharge if withHardModeApplied.recharge > 0 => None
-                  case _                                            => Some(spell)
+                  case Spell.Shield if withHardModeApplied.shield > 0     => None
+                  case Spell.Poison if withHardModeApplied.poison > 0     => None
+                  case Spell.Recharge if withHardModeApplied.recharge > 0 => None
+                  case _                                                  => Some(spell)
                 }
               }
             }.flatten.headOption
@@ -140,17 +146,17 @@ object Day22 extends Solution {
               case Some(spell) =>
                 val withSpellCast = withHardModeApplied.cast(spell)
                 if (withSpellCast.bossHp <= 0) {
-                  (Player, withSpellCast.manaSpent)
+                  (Turn.Player, withSpellCast.manaSpent)
                 } else {
                   fight(withSpellCast.nextTurn)
                 }
-              case None => (Boss, withHardModeApplied.manaSpent)
+              case None => (Turn.Boss, withHardModeApplied.manaSpent)
             }
           }
-        case Boss =>
+        case Turn.Boss =>
           val withBossAttack = recharged.bossTurn
           if (withBossAttack.playerHp <= 0) {
-            (Boss, withBossAttack.manaSpent)
+            (Turn.Boss, withBossAttack.manaSpent)
           } else {
             fight(withBossAttack.nextTurn)
           }

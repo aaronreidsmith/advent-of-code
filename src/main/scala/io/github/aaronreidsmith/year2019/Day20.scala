@@ -13,10 +13,11 @@ object Day20 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  sealed trait Tile
-  case object Wall                                              extends Tile
-  case object Path                                              extends Tile
-  case class Portal(label: String, isInterior: Boolean = false) extends Tile
+  enum Tile {
+    case Wall
+    case Path
+    case Portal(label: String, isInterior: Boolean = false)
+  }
 
   override def parseInput(file: Source): Map[Point, Tile] = {
     val raw = file.toGrid.withDefaultValue('#')
@@ -24,7 +25,7 @@ object Day20 extends Solution {
       .map {
         case (point, char) =>
           char match {
-            case ' ' | '#' => point -> Wall
+            case ' ' | '#' => point -> Tile.Wall
             case '.'       =>
               // TODO: There has to be a better way...
               val charAbove  = raw(point.up)
@@ -41,35 +42,36 @@ object Day20 extends Solution {
               val threeLeft  = raw(point.left.left.left)
               if (charAbove.isLetter && twoAbove.isLetter) {
                 val isInterior = threeAbove == ' '
-                point -> Portal(s"$twoAbove$charAbove", isInterior)
+                point -> Tile.Portal(s"$twoAbove$charAbove", isInterior)
               } else if (charRight.isLetter && twoRight.isLetter) {
                 val isInterior = threeRight == ' '
-                point -> Portal(s"$charRight$twoRight", isInterior)
+                point -> Tile.Portal(s"$charRight$twoRight", isInterior)
               } else if (charBelow.isLetter && twoBelow.isLetter) {
                 val isInterior = threeBelow == ' '
-                point -> Portal(s"$charBelow$twoBelow", isInterior)
+                point -> Tile.Portal(s"$charBelow$twoBelow", isInterior)
               } else if (charLeft.isLetter && twoLeft.isLetter) {
                 val isInterior = threeLeft == ' '
-                point -> Portal(s"$twoLeft$charLeft", isInterior)
+                point -> Tile.Portal(s"$twoLeft$charLeft", isInterior)
               } else {
-                point -> Path
+                point -> Tile.Path
               }
-            case _ => point -> Wall
+            case _ => point -> Tile.Wall
           }
       }
-      .withDefaultValue(Wall)
+      .withDefaultValue(Tile.Wall)
   }
 
   override def part1(grid: Grid[Tile]): Int = {
     val graph = new DefaultUndirectedGraph[Point, DefaultEdge](classOf[DefaultEdge])
     grid.foreach {
-      case (_, Wall) => // Skip walls
+      case (_, Tile.Wall) => // Skip walls
       case (point, tile) =>
-        val possibleNeighbors = point.immediateNeighbors.filter(other => grid(other) != Wall) ++ {
+        val possibleNeighbors = point.immediateNeighbors.filter(other => grid(other) != Tile.Wall) ++ {
           tile match {
-            case Portal(label, _) if !Seq("AA", "ZZ").contains(label) =>
+            case Tile.Portal(label, _) if !Seq("AA", "ZZ").contains(label) =>
               val otherPortal = grid.collectFirst {
-                case (otherPoint, Portal(otherLabel, _)) if label == otherLabel && point != otherPoint => otherPoint
+                case (otherPoint, Tile.Portal(otherLabel, _)) if label == otherLabel && point != otherPoint =>
+                  otherPoint
               }.get
               Seq(otherPortal)
             case _ => Seq.empty[Point]
@@ -79,8 +81,8 @@ object Day20 extends Solution {
         possibleNeighbors.foreach(graph.addVertex)
         possibleNeighbors.foreach(graph.addEdge(point, _))
     }
-    val start = grid.collectFirst { case (point, Portal(label, _)) if label == "AA" => point }.get
-    val end   = grid.collectFirst { case (point, Portal(label, _)) if label == "ZZ" => point }.get
+    val start = grid.collectFirst { case (point, Tile.Portal(label, _)) if label == "AA" => point }.get
+    val end   = grid.collectFirst { case (point, Tile.Portal(label, _)) if label == "ZZ" => point }.get
     DijkstraShortestPath.findPathBetween(graph, start, end).getLength
   }
 
@@ -88,16 +90,16 @@ object Day20 extends Solution {
     val graph = new DefaultUndirectedGraph[(Int, Int, Int), DefaultEdge](classOf[DefaultEdge])
     (0 until 30).foreach { level =>
       grid.foreach {
-        case (_, Wall) => // Skip walls
+        case (_, Tile.Wall) => // Skip walls
         case (point, tile) =>
           val (x, y) = point.asPair
           val possibleNeighbors = point.immediateNeighbors.collect {
-            case neighbor if grid(neighbor) != Wall => (neighbor.x, neighbor.y, level)
+            case neighbor if grid(neighbor) != Tile.Wall => (neighbor.x, neighbor.y, level)
           } ++ {
             tile match {
-              case Portal(label, isInterior) if !Seq("AA", "ZZ").contains(label) =>
+              case Tile.Portal(label, isInterior) if !Seq("AA", "ZZ").contains(label) =>
                 val (x, y, otherLevel) = grid.collectFirst {
-                  case (otherPoint, Portal(otherLabel, _)) if label == otherLabel && point != otherPoint =>
+                  case (otherPoint, Tile.Portal(otherLabel, _)) if label == otherLabel && point != otherPoint =>
                     (otherPoint.x, otherPoint.y, if (isInterior) level + 1 else level - 1)
                 }.get
                 Seq((x, y, otherLevel)).filter(_._3 >= 0)
@@ -111,8 +113,9 @@ object Day20 extends Solution {
           }
       }
     }
-    val (startX, startY) = grid.collectFirst { case (point, Portal(label, _)) if label == "AA" => point }.get.asPair
-    val (endX, endY)     = grid.collectFirst { case (point, Portal(label, _)) if label == "ZZ" => point }.get.asPair
+    val (startX, startY) =
+      grid.collectFirst { case (point, Tile.Portal(label, _)) if label == "AA" => point }.get.asPair
+    val (endX, endY) = grid.collectFirst { case (point, Tile.Portal(label, _)) if label == "ZZ" => point }.get.asPair
     DijkstraShortestPath.findPathBetween(graph, (startX, startY, 0), (endX, endY, 0)).getLength
   }
 }

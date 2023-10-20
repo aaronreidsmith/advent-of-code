@@ -34,7 +34,7 @@ object Day15 extends Solution {
       val nextPoint    = point + delta
       val nextComputer = computer.withInput(command).nextOutput
       val status = nextComputer.result match {
-        case IntCode.Output(s) => s
+        case IntCode.State.Output(s) => s
         case _                 => 0L
       }
       (nextPoint, nextComputer, status)

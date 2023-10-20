@@ -12,10 +12,9 @@ object Day22 extends Solution {
   type O1 = Long
   type O2 = Long
 
-  sealed trait State
-  case object On        extends State
-  case object Off       extends State
-  case object Undefined extends State // Used when merging cubes
+  enum State {
+    case On, Off, Undefined // Undefined is used when merging cubes
+  }
   object State {
     def apply(str: String): State = str match {
       case "on"  => On
@@ -41,7 +40,7 @@ object Day22 extends Solution {
       actualZEnd   <- Some(this.zRange.end.min(other.zRange.end))
       if actualZStart <= actualZEnd
     } yield Cube(
-      Undefined,
+      State.Undefined,
       NumericRange.inclusive(actualXStart, actualXEnd, 1),
       NumericRange.inclusive(actualYStart, actualYEnd, 1),
       NumericRange.inclusive(actualZStart, actualZEnd, 1)
@@ -78,9 +77,9 @@ object Day22 extends Solution {
         } yield (x, y, z)
 
         instruction.state match {
-          case On  => acc ++ updated
-          case Off => acc -- updated
-          case _   => acc
+          case State.On  => acc ++ updated
+          case State.Off => acc -- updated
+          case _         => acc
         }
       }
       .size
@@ -91,7 +90,7 @@ object Day22 extends Solution {
       case Nil => 0
       case head :: tail =>
         head.state match {
-          case Off => count(tail)
+          case State.Off => count(tail)
           case _ =>
             val minus = tail.foldLeft(Set.empty[Cube]) { (acc, cube) =>
               val intersection = head.intersect(cube).map(Set(_)).getOrElse(Set())

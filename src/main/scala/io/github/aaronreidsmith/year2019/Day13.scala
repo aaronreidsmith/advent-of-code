@@ -22,7 +22,7 @@ object Day13 extends Solution {
   override def part2(input: IntCode): Long = {
     def take(intCode: IntCode, amount: Int): (IntCode, Seq[Long]) = {
       val raw    = Iterator.iterate(intCode)(_.nextOutput).slice(1, amount + 1).toSeq
-      val output = raw.map(_.result).collect { case IntCode.Output(value) => value }
+      val output = raw.map(_.result).collect { case IntCode.State.Output(value) => value }
       (raw.last, output)
     }
 

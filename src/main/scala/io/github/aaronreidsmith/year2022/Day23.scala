@@ -20,7 +20,7 @@ object Day23 extends Solution {
     def helper(
         grid: Grid[Char],
         previousGrid: Grid[Char] = Map.empty[Point, Char],
-        directions: Vector[Direction] = Vector(North, South, West, East),
+        directions: Vector[Direction] = Vector(Direction.North, Direction.South, Direction.West, Direction.East),
         iteration: Int = 0
     ): Int = if (part1 && iteration >= 10) {
       val (xs, ys)     = grid.keys.unzip(_.asPair)
@@ -54,10 +54,10 @@ object Day23 extends Solution {
           } else {
             directions
               .collectFirst {
-                case North if nEmpty && neEmpty && nwEmpty => point -> point.up
-                case East if eEmpty && neEmpty && seEmpty  => point -> point.right
-                case South if sEmpty && seEmpty && swEmpty => point -> point.down
-                case West if wEmpty && nwEmpty && swEmpty  => point -> point.left
+                case Direction.North if nEmpty && neEmpty && nwEmpty => point -> point.up
+                case Direction.East if eEmpty && neEmpty && seEmpty  => point -> point.right
+                case Direction.South if sEmpty && seEmpty && swEmpty => point -> point.down
+                case Direction.West if wEmpty && nwEmpty && swEmpty  => point -> point.left
               }
               .getOrElse(point -> point)
           }

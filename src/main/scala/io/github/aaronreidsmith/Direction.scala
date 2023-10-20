@@ -1,10 +1,30 @@
 package io.github.aaronreidsmith
 
-sealed trait Direction {
-  def left: Direction
-  def right: Direction
-  def opposite: Direction
+enum Direction {
+  case North, East, South, West
+
+  def left: Direction = this match {
+    case North => West
+    case East  => North
+    case South => East
+    case West  => South
+  }
+  
+  def right: Direction = this match {
+    case North => East
+    case East  => South
+    case South => West
+    case West  => North
+  }
+  
+  def opposite: Direction = this match {
+    case North => South
+    case East  => West
+    case South => North
+    case West  => East
+  }
 }
+
 object Direction {
   def fromChar(char: Char): Direction = char.toUpper match {
     case 'N' | '^' => North
@@ -13,25 +33,4 @@ object Direction {
     case 'W' | '<' => West
     case other     => throw new IllegalArgumentException(other.toString)
   }
-}
-
-case object North extends Direction {
-  def left: Direction     = West
-  def right: Direction    = East
-  def opposite: Direction = South
-}
-case object East extends Direction {
-  def left: Direction     = North
-  def right: Direction    = South
-  def opposite: Direction = West
-}
-case object South extends Direction {
-  def left: Direction     = East
-  def right: Direction    = West
-  def opposite: Direction = North
-}
-case object West extends Direction {
-  def left: Direction     = South
-  def right: Direction    = North
-  def opposite: Direction = East
 }
