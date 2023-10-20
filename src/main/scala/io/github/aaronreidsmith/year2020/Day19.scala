@@ -4,11 +4,12 @@ import io.github.aaronreidsmith.Solution
 
 import scala.io.Source
 
-// TODO: Don't really like all the `Either`s in here, but it works
 object Day19 extends Solution {
   type I  = (Map[Int, Rule], List[String])
   type O1 = Int
   type O2 = Int
+
+  opaque type Character = Int | Char
 
   enum Rule {
     case Letter(val value: Char)
@@ -48,12 +49,12 @@ object Day19 extends Solution {
     messages.count(message => isMatch(updatedRules, message, stack))
   }
 
-  private def getInitialStack(rules: Map[Int, Rule]): Vector[Either[Char, Int]] = rules(0) match {
-    case Rule.Letter(value)     => Vector(Left(value))
-    case Rule.SubRule(subrules) => subrules.head.map(Right(_))
+  private def getInitialStack(rules: Map[Int, Rule]): Vector[Character] = rules(0) match {
+    case Rule.Letter(value)     => Vector(value)
+    case Rule.SubRule(subrules) => subrules.head
   }
 
-  private def isMatch(rules: Map[Int, Rule], message: String, stack: Vector[Either[Char, Int]]): Boolean = {
+  private def isMatch(rules: Map[Int, Rule], message: String, stack: Vector[Character]): Boolean = {
     if (stack.length > message.length) {
       false
     } else if (stack.isEmpty || message.isEmpty) {
@@ -61,11 +62,11 @@ object Day19 extends Solution {
     } else {
       val entry +: remaining = stack: @unchecked
       entry match {
-        case Left(value) => value == message.head && isMatch(rules, message.tail, remaining)
-        case Right(ruleId) =>
+        case value: Char => value == message.head && isMatch(rules, message.tail, remaining)
+        case ruleId: Int =>
           rules(ruleId) match {
-            case Rule.Letter(value)     => isMatch(rules, message, Left(value) +: remaining)
-            case Rule.SubRule(subrules) => subrules.exists(rule => isMatch(rules, message, rule.map(Right(_)) ++ remaining))
+            case Rule.Letter(value)     => isMatch(rules, message, value +: remaining)
+            case Rule.SubRule(subrules) => subrules.exists(rule => isMatch(rules, message, rule ++ remaining))
           }
       }
     }
