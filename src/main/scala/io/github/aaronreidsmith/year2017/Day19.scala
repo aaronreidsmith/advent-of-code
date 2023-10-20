@@ -19,21 +19,21 @@ object Day19 extends Solution {
   private var solved = false
   private def solution(grid: Grid[Char]): (String, Int) = {
     def turn(currentDirection: Direction, pos: Point): (Direction, Point) = currentDirection match {
-      case North | South =>
+      case Direction.North | Direction.South =>
         grid.get(pos.left) match {
-          case Some(char) if char != ' ' => (West, pos.left)
+          case Some(char) if char != ' ' => (Direction.West, pos.left)
           case _ =>
             grid.get(pos.right) match {
-              case Some(char) if char != ' ' => (East, pos.right)
+              case Some(char) if char != ' ' => (Direction.East, pos.right)
               case _                         => throw new IllegalArgumentException
             }
         }
-      case East | West =>
+      case Direction.East | Direction.West =>
         grid.get(pos.up) match {
-          case Some(char) if char != ' ' => (North, pos.up)
+          case Some(char) if char != ' ' => (Direction.North, pos.up)
           case _ =>
             grid.get(pos.down) match {
-              case Some(char) if char != ' ' => (South, pos.down)
+              case Some(char) if char != ' ' => (Direction.South, pos.down)
               case _                         => throw new IllegalArgumentException
             }
         }
@@ -42,7 +42,7 @@ object Day19 extends Solution {
     @tailrec
     def helper(
         position: Point,
-        direction: Direction = South,
+        direction: Direction = Direction.South,
         lettersSeen: StringBuilder = new StringBuilder,
         stepCount: Int = 0
     ): (String, Int) = grid.get(position) match {
@@ -54,10 +54,10 @@ object Day19 extends Solution {
             helper(newPosition, newDirection, lettersSeen, stepCount + 1)
           case other =>
             val newPosition = direction match {
-              case North => position.up
-              case East  => position.right
-              case South => position.down
-              case West  => position.left
+              case Direction.North => position.up
+              case Direction.East  => position.right
+              case Direction.South => position.down
+              case Direction.West  => position.left
             }
             val addedLetter = if (other == '|' | other == '-') "" else other.toString
             helper(newPosition, direction, lettersSeen.addAll(addedLetter), stepCount + 1)

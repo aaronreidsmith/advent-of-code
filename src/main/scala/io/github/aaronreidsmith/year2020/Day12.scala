@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2020
 
-import io.github.aaronreidsmith.{Direction, East, Point, Solution}
+import io.github.aaronreidsmith.{Direction, Point, Solution}
 
 import scala.annotation.tailrec
 import scala.io.Source
@@ -75,7 +75,7 @@ object Day12 extends Solution {
   }
 
   object Ship {
-    def initial: Ship = Ship(Point.zero, East, Point(-1, 10))
+    def initial: Ship = Ship(Point.zero, Direction.East, Point(-1, 10))
   }
 
   override def parseInput(file: Source): List[String] = file.getLines().toList

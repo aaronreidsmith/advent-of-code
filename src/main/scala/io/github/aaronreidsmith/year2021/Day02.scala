@@ -18,9 +18,9 @@ object Day02 extends Solution {
 
   override def part1(input: List[String]): Int = {
     val finalPos = input.foldLeft(Point.zero) {
-      case (point, forward(x)) => point.move(East, x.toInt)
-      case (point, down(x))    => point.move(South, x.toInt)
-      case (point, up(x))      => point.move(North, x.toInt)
+      case (point, forward(x)) => point.move(Direction.East, x.toInt)
+      case (point, down(x))    => point.move(Direction.South, x.toInt)
+      case (point, up(x))      => point.move(Direction.North, x.toInt)
       case (point, _)          => point
     }
     finalPos.x * finalPos.y

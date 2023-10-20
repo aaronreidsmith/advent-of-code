@@ -95,20 +95,21 @@ object Day16 extends Solution {
     }
   }
 
-  sealed trait Packet { val version: Int }
-  case class Literal(version: Int, value: Long)                            extends Packet
-  case class Operator(version: Int, typeId: Int, subPackets: List[Packet]) extends Packet
+  enum Packet {
+    case Literal(version: Int, value: Long)
+    case Operator(version: Int, typeId: Int, subPackets: List[Packet])
+  }
 
   override def parseInput(file: Source): Packet = Packet(file.mkString.trim)
 
   override def part1(packet: Packet): Int = packet match {
-    case Literal(version, _)              => version
-    case Operator(version, _, subPackets) => version + subPackets.foldLeft(0)((acc, sub) => acc + part1(sub))
+    case Packet.Literal(version, _)              => version
+    case Packet.Operator(version, _, subPackets) => version + subPackets.foldLeft(0)((acc, sub) => acc + part1(sub))
   }
 
   override def part2(packet: Packet): Long = packet match {
-    case Literal(_, value) => value
-    case Operator(_, typeId, subPackets) =>
+    case Packet.Literal(_, value) => value
+    case Packet.Operator(_, typeId, subPackets) =>
       val subValues = subPackets.map(part2)
       typeId match {
         case 0 => subValues.sum

@@ -26,8 +26,8 @@ object Day25 extends Solution {
         } else {
           val nextComputer = computer.next
           val nextMessage = nextComputer.result match {
-            case IntCode.Output(value) => message + value.toChar
-            case _                     => message
+            case IntCode.State.Output(value) => message + value.toChar
+            case _                           => message
           }
           helper(nextComputer, nextMessage)
         }

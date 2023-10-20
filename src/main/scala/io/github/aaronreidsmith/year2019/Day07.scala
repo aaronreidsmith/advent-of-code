@@ -24,7 +24,7 @@ object Day07 extends Solution {
     def helper(amps: Seq[IntCode], previousOutput: Long = 0L): Long = {
       val nextAmp = amps.head.withAdditionalInput(previousOutput).nextOutput
       nextAmp.result match {
-        case IntCode.Output(nextOutput) => helper(amps.tail :+ nextAmp, nextOutput)
+        case IntCode.State.Output(nextOutput) => helper(amps.tail :+ nextAmp, nextOutput)
         case _                          => previousOutput
       }
     }

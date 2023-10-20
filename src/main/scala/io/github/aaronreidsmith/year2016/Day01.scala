@@ -16,19 +16,19 @@ object Day01 extends Solution {
     final def move(instruction: Instruction): State = instruction.direction match {
       case 'R' =>
         val (newPos, newVisited) = facing match {
-          case North =>
+          case Direction.North =>
             val newX       = position.x + instruction.steps
             val newVisited = (position.x until newX).map(Point(_, position.y))
             (position.copy(x = newX), visited ++ newVisited)
-          case East =>
+          case Direction.East =>
             val newY       = position.y - instruction.steps
             val newVisited = (position.y until newY by -1).map(Point(position.x, _))
             (position.copy(y = newY), visited ++ newVisited)
-          case South =>
+          case Direction.South =>
             val newX       = position.x - instruction.steps
             val newVisited = (position.x until newX by -1).map(Point(_, position.y))
             (position.copy(x = newX), visited ++ newVisited)
-          case West =>
+          case Direction.West =>
             val newY       = position.y + instruction.steps
             val newVisited = (position.y until newY).map(Point(position.x, _))
             (position.copy(y = newY), visited ++ newVisited)
@@ -42,7 +42,7 @@ object Day01 extends Solution {
   }
 
   private object State {
-    def origin: State = State(North, Point.zero)
+    def origin: State = State(Direction.North, Point.zero)
   }
 
   override def parseInput(file: Source): List[Instruction] = {

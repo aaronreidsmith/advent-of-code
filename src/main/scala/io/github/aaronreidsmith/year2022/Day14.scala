@@ -10,12 +10,11 @@ object Day14 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  sealed trait Tile
-  case object Air  extends Tile
-  case object Rock extends Tile
-  case object Sand extends Tile
+  enum Tile {
+    case Air, Rock, Sand
+  }
 
-  // We switch x and y to play nice with our Point class
+  // We switch x and y to play nice with our Point clTile.ass
   override def parseInput(file: Source): Grid[Tile] = {
     val point = """^(\d+),(\d+)$""".r
     file
@@ -30,35 +29,35 @@ object Day14 extends Solution {
             for {
               x <- minX to maxX
               y <- minY to maxY
-            } yield Point(y, x) -> Rock
+            } yield Point(y, x) -> Tile.Rock
           case _ => Nil
         }
         acc ++ segments
       }
-      .withDefaultValue(Air)
+      .withDefaultValue(Tile.Air)
   }
 
   override def part1(input: Grid[Tile]): Int = {
     val maxDepth = input.keys.map(_.x).max
-    settle(input, maxDepth).values.count(_ == Sand)
+    settle(input, maxDepth).values.count(_ == Tile.Sand)
   }
 
   override def part2(input: Grid[Tile]): Int = {
     val maxDepth = input.keys.map(_.x).max + 2
     // 0 to 1000 is arbitrary. Really only needs to be |maxDepth| in either direction from 500
-    val floor = (0 to 1000).map(Point(maxDepth, _) -> Rock)
-    settle(input ++ floor, maxDepth).values.count(_ == Sand)
+    val floor = (0 to 1000).map(Point(maxDepth, _) -> Tile.Rock)
+    settle(input ++ floor, maxDepth).values.count(_ == Tile.Sand)
   }
 
   private def settle(grid: Grid[Tile], maxDepth: Int, sandPosition: Point = Point(0, 500)): Grid[Tile] = {
     @tailrec
     def helper(tiles: Grid[Tile], moves: List[Point]): Grid[Tile] = moves match {
-      case Nil => tiles.updated(sandPosition, Sand)
+      case Nil => tiles.updated(sandPosition, Tile.Sand)
       case head :: tail =>
         val newTiles = settle(tiles, maxDepth, head)
         newTiles(head) match {
-          case Air         => newTiles
-          case Sand | Rock => helper(newTiles, tail)
+          case Tile.Air              => newTiles
+          case Tile.Sand | Tile.Rock => helper(newTiles, tail)
         }
     }
 
@@ -66,8 +65,8 @@ object Day14 extends Solution {
       grid
     } else {
       grid(sandPosition) match {
-        case Sand | Rock => grid
-        case Air         => helper(grid, List(sandPosition.down, sandPosition.down.left, sandPosition.down.right))
+        case Tile.Sand | Tile.Rock => grid
+        case Tile.Air => helper(grid, List(sandPosition.down, sandPosition.down.left, sandPosition.down.right))
       }
     }
   }

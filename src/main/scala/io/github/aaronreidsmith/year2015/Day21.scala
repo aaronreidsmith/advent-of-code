@@ -10,101 +10,32 @@ object Day21 extends Solution {
   type O1 = Int
   type O2 = Int
 
-  sealed trait Item {
-    val cost: Int
-    val damage: Int
-    val armor: Int
+  enum Weapon(val cost: Int, val damage: Int) {
+    case Dagger     extends Weapon(8, 4)
+    case ShortSword extends Weapon(10, 5)
+    case WarHammer  extends Weapon(25, 6)
+    case Longsword  extends Weapon(40, 7)
+    case GreatAxe   extends Weapon(74, 8)
   }
 
-  // Weapons
-  sealed trait Weapon extends Item
-  case object Dagger extends Weapon {
-    override val cost: Int   = 8
-    override val damage: Int = 4
-    override val armor: Int  = 0
-  }
-  case object Shortsword extends Weapon {
-    override val cost: Int   = 10
-    override val damage: Int = 5
-    override val armor: Int  = 0
-  }
-  case object Warhammer extends Weapon {
-    override val cost: Int   = 25
-    override val damage: Int = 6
-    override val armor: Int  = 0
-  }
-  case object Longsword extends Weapon {
-    override val cost: Int   = 40
-    override val damage: Int = 7
-    override val armor: Int  = 0
-  }
-  case object Greataxe extends Weapon {
-    override val cost: Int   = 74
-    override val damage: Int = 8
-    override val armor: Int  = 0
+  enum Armor(val cost: Int, val armor: Int) {
+    case Leather    extends Armor(13, 1)
+    case ChainMail  extends Armor(31, 2)
+    case SplintMail extends Armor(53, 3)
+    case BandedMail extends Armor(75, 4)
+    case PlateMail  extends Armor(102, 5)
   }
 
-  // Armor
-  sealed trait Armor extends Item
-  case object Leather extends Armor {
-    override val cost: Int   = 13
-    override val damage: Int = 0
-    override val armor: Int  = 1
-  }
-  case object Chainmail extends Armor {
-    override val cost: Int   = 31
-    override val damage: Int = 0
-    override val armor: Int  = 2
-  }
-  case object Splintmail extends Armor {
-    override val cost: Int   = 53
-    override val damage: Int = 0
-    override val armor: Int  = 3
-  }
-  case object Bandedmail extends Armor {
-    override val cost: Int   = 75
-    override val damage: Int = 0
-    override val armor: Int  = 4
-  }
-  case object Platemail extends Armor {
-    override val cost: Int   = 102
-    override val damage: Int = 0
-    override val armor: Int  = 5
+  enum Ring(val cost: Int, val damage: Int, val armor: Int) {
+    case DamagePlusOne   extends Ring(25, 1, 0)
+    case DamagePlusTwo   extends Ring(50, 2, 0)
+    case DamagePlusThree extends Ring(100, 3, 0)
+    case ArmorPlusOne    extends Ring(20, 0, 1)
+    case ArmorPlusTwo    extends Ring(40, 0, 2)
+    case ArmorPlusThree  extends Ring(80, 0, 3)
   }
 
-  // Rings
-  sealed trait Ring extends Item
-  case object DamagePlusOne extends Ring {
-    override val cost: Int   = 25
-    override val damage: Int = 1
-    override val armor: Int  = 0
-  }
-  case object DamagePlusTwo extends Ring {
-    override val cost: Int   = 50
-    override val damage: Int = 2
-    override val armor: Int  = 0
-  }
-  case object DamagePlusThree extends Ring {
-    override val cost: Int   = 100
-    override val damage: Int = 3
-    override val armor: Int  = 0
-  }
-  case object DefensePlusOne extends Ring {
-    override val cost: Int   = 20
-    override val damage: Int = 0
-    override val armor: Int  = 1
-  }
-  case object DefensePlusTwo extends Ring {
-    override val cost: Int   = 40
-    override val damage: Int = 0
-    override val armor: Int  = 2
-  }
-  case object DefensePlusThree extends Ring {
-    override val cost: Int   = 80
-    override val damage: Int = 0
-    override val armor: Int  = 3
-  }
-
+  // Can't use an enum here because the
   sealed trait Character {
     val armor: Int
     val attack: Int
@@ -116,36 +47,28 @@ object Day21 extends Solution {
 
     def attack(that: Character): Character = that.beAttacked(attack)
   }
-  case class Player(weapon: Weapon, maybeArmor: Option[Armor], rings: List[Ring], override val hp: Int = 100)
-      extends Character {
+
+  case class Player(
+      weapon: Weapon,
+      maybeArmor: Option[Armor],
+      rings: List[Ring],
+      override val hp: Int = 100
+  ) extends Character {
     override val attack: Int = weapon.damage + rings.foldLeft(0)(_ + _.damage)
-    override val armor: Int = {
-      val baseArmor = maybeArmor match {
-        case Some(a) => a.armor
-        case None    => 0
-      }
-      baseArmor + rings.foldLeft(0)(_ + _.armor)
-    }
+    override val armor: Int  = maybeArmor.fold(0)(_.armor) + rings.foldLeft(0)(_ + _.armor)
 
     override def beAttacked(damage: Int): Character = this.copy(hp = this.hp - math.max(1, damage - armor))
 
-    val itemCost: Int = {
-      val armorCost = maybeArmor match {
-        case Some(a) => a.cost
-        case None    => 0
-      }
-      weapon.cost + armorCost + rings.foldLeft(0)(_ + _.cost)
-    }
+    val itemCost: Int = weapon.cost + maybeArmor.fold(0)(_.cost) + rings.foldLeft(0)(_ + _.cost)
   }
 
   case class Boss(override val hp: Int, override val armor: Int, override val attack: Int) extends Character {
     override def beAttacked(damage: Int): Character = this.copy(hp = this.hp - math.max(1, damage - armor))
   }
 
-  private val weapons = List(Dagger, Shortsword, Warhammer, Longsword, Greataxe)
-  private val armors  = List(Some(Leather), Some(Chainmail), Some(Splintmail), Some(Bandedmail), Some(Platemail), None)
-  private val rings =
-    List(DamagePlusOne, DamagePlusTwo, DamagePlusThree, DefensePlusOne, DefensePlusTwo, DefensePlusThree)
+  private val weapons = Weapon.values.toList
+  private val armors  = Armor.values.toList.map(Option(_)) :+ None
+  private val rings   = Ring.values.toList
 
   override def parseInput(file: Source): Boss = {
     val Array(bossHp, bossDamage, bossArmor, _*) =

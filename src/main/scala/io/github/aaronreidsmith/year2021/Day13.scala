@@ -9,14 +9,14 @@ object Day13 extends Solution {
   type O1 = Int
   type O2 = String
 
-  sealed trait Axis
-  case object Vertical   extends Axis
-  case object Horizontal extends Axis
+  enum Axis {
+    case Vertical, Horizontal
+  }
 
   case class Fold(axis: Axis, value: Int) {
     def mirror(point: Point): Point = axis match {
-      case Vertical   => point.copy(x = value - (point.x - value).abs)
-      case Horizontal => point.copy(y = value - (point.y - value).abs)
+      case Axis.Vertical   => point.copy(x = value - (point.x - value).abs)
+      case Axis.Horizontal => point.copy(y = value - (point.y - value).abs)
     }
   }
 
@@ -35,8 +35,8 @@ object Day13 extends Solution {
     val folds = rawFolds
       .split('\n')
       .collect {
-        case verticalFold(value)   => Fold(Vertical, value.toInt)
-        case horizontalFold(value) => Fold(Horizontal, value.toInt)
+        case verticalFold(value)   => Fold(Axis.Vertical, value.toInt)
+        case horizontalFold(value) => Fold(Axis.Horizontal, value.toInt)
       }
       .toList
     (grid, folds)

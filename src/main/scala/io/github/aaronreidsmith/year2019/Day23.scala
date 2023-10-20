@@ -26,7 +26,7 @@ object Day23 extends Solution {
         }
         val nextInput = if (computer.input.nonEmpty) input else Vector()
         val nextOutput = nextComputer.result match {
-          case IntCode.Output(value) => output :+ value
+          case IntCode.State.Output(value) => output :+ value
           case _                     => output
         }
         State(nextComputer, nextInput, nextOutput)

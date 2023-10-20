@@ -10,6 +10,7 @@ object Day17 extends Solution {
   type O1 = Int
   type O2 = Int
 
+  // Can't use enum here because we need nested types
   sealed trait Tile
   sealed trait WaterTile extends Tile
 

@@ -10,22 +10,21 @@ object Day13 extends Solution {
   type O1 = String
   type O2 = String
 
-  sealed trait Turn
-  case object Left     extends Turn
-  case object Right    extends Turn
-  case object Straight extends Turn
+  enum Turn {
+    case Left, Right, Straight
+  }
 
   case class Cart(
       position: Point,
       direction: Direction,
-      currentTurn: Turn = Left,
+      currentTurn: Turn = Turn.Left,
       dead: Boolean = false
   ) {
     def move: Cart = this.copy(position = position.move(direction))
     def turn: Cart = currentTurn match {
-      case Left     => this.copy(direction = direction.left, currentTurn = Straight)
-      case Straight => this.copy(currentTurn = Right)
-      case Right    => this.copy(direction = direction.right, currentTurn = Left)
+      case Turn.Left     => this.copy(direction = direction.left, currentTurn = Turn.Straight)
+      case Turn.Straight => this.copy(currentTurn = Turn.Right)
+      case Turn.Right    => this.copy(direction = direction.right, currentTurn = Turn.Left)
     }
   }
 
@@ -52,17 +51,18 @@ object Day13 extends Solution {
         case None =>
           val currentCart = carts(pointer)
           val moved       = currentCart.move
-          val turned = track(moved.position.x)(moved.position.y) match {
-            case '+'                              => moved.turn
-            case '/' if moved.direction == North  => moved.copy(direction = East)
-            case '/' if moved.direction == East   => moved.copy(direction = North)
-            case '/' if moved.direction == South  => moved.copy(direction = West)
-            case '/' if moved.direction == West   => moved.copy(direction = South)
-            case '\\' if moved.direction == North => moved.copy(direction = West)
-            case '\\' if moved.direction == East  => moved.copy(direction = South)
-            case '\\' if moved.direction == South => moved.copy(direction = East)
-            case '\\' if moved.direction == West  => moved.copy(direction = North)
-            case _                                => moved
+
+          val turned = (track(moved.position.x)(moved.position.y), moved.direction) match {
+            case ('+', _)                => moved.turn
+            case ('/', Direction.North)  => moved.copy(direction = Direction.East)
+            case ('/', Direction.East)   => moved.copy(direction = Direction.North)
+            case ('/', Direction.South)  => moved.copy(direction = Direction.West)
+            case ('/', Direction.West)   => moved.copy(direction = Direction.South)
+            case ('\\', Direction.North) => moved.copy(direction = Direction.West)
+            case ('\\', Direction.East)  => moved.copy(direction = Direction.South)
+            case ('\\', Direction.South) => moved.copy(direction = Direction.East)
+            case ('\\', Direction.West)  => moved.copy(direction = Direction.North)
+            case _                       => moved
           }
           val nextPointer  = (pointer + 1) % carts.length
           val updatedCarts = carts.updated(pointer, turned)
@@ -86,17 +86,17 @@ object Day13 extends Solution {
           currentCart
         } else {
           val moved = currentCart.move
-          track(moved.position.x)(moved.position.y) match {
-            case '+'                              => moved.turn
-            case '/' if moved.direction == North  => moved.copy(direction = East)
-            case '/' if moved.direction == East   => moved.copy(direction = North)
-            case '/' if moved.direction == South  => moved.copy(direction = West)
-            case '/' if moved.direction == West   => moved.copy(direction = South)
-            case '\\' if moved.direction == North => moved.copy(direction = West)
-            case '\\' if moved.direction == East  => moved.copy(direction = South)
-            case '\\' if moved.direction == South => moved.copy(direction = East)
-            case '\\' if moved.direction == West  => moved.copy(direction = North)
-            case _                                => moved
+          (track(moved.position.x)(moved.position.y), moved.direction) match {
+            case ('+', _)                => moved.turn
+            case ('/', Direction.North)  => moved.copy(direction = Direction.East)
+            case ('/', Direction.East)   => moved.copy(direction = Direction.North)
+            case ('/', Direction.South)  => moved.copy(direction = Direction.West)
+            case ('/', Direction.West)   => moved.copy(direction = Direction.South)
+            case ('\\', Direction.North) => moved.copy(direction = Direction.West)
+            case ('\\', Direction.East)  => moved.copy(direction = Direction.South)
+            case ('\\', Direction.South) => moved.copy(direction = Direction.East)
+            case ('\\', Direction.West)  => moved.copy(direction = Direction.North)
+            case _                       => moved
           }
         }
         val updatedCarts = carts.updated(pointer, turned)

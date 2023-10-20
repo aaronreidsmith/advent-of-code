@@ -16,6 +16,7 @@ object Day15 extends Solution {
   type O1 = Int
   type O2 = Int
 
+  // Can't use enum here because we use copy on the case class
   sealed trait Square
   case class Creature(position: Point, isGoblin: Boolean, health: Int = 200) extends Square
   case object Empty                                                          extends Square

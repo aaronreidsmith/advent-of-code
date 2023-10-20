@@ -51,25 +51,25 @@ case class IntCode(
   }
 
   def next: IntCode = memory(ip) % 100 match {
-    case 1  => copy(ip = ip + 4, memory = write(3, read(1) + read(2)), result = Running)                // Add
-    case 2  => copy(ip = ip + 4, memory = write(3, read(1) * read(2)), result = Running)                // Multiply
-    case 3  => copy(ip = ip + 2, memory = write(1, input.head), input = input.tail, result = Running)   // Read
-    case 4  => copy(ip = ip + 2, result = Output(read(1)))                                              // Write
-    case 5  => copy(ip = if (read(1) != 0) read(2) else ip + 3, result = Running)                       // Jump if true
-    case 6  => copy(ip = if (read(1) == 0) read(2) else ip + 3, result = Running)                       // Jump if false
-    case 7  => copy(ip = ip + 4, memory = write(3, if (read(1) < read(2)) 1 else 0), result = Running)  // Less than
-    case 8  => copy(ip = ip + 4, memory = write(3, if (read(1) == read(2)) 1 else 0), result = Running) // Equals
-    case 9  => copy(ip = ip + 2, relativeBase = relativeBase + read(1), result = Running)               // Relative base
-    case 99 => copy(result = Halted)
+    case 1 => copy(ip = ip + 4, memory = write(3, read(1) + read(2)), result = State.Running)              // Add
+    case 2 => copy(ip = ip + 4, memory = write(3, read(1) * read(2)), result = State.Running)              // Multiply
+    case 3 => copy(ip = ip + 2, memory = write(1, input.head), input = input.tail, result = State.Running) // Read
+    case 4 => copy(ip = ip + 2, result = State.Output(read(1)))                                            // Write
+    case 5 => copy(ip = if (read(1) != 0) read(2) else ip + 3, result = State.Running) // Jump if true
+    case 6 => copy(ip = if (read(1) == 0) read(2) else ip + 3, result = State.Running) // Jump if false
+    case 7 => copy(ip = ip + 4, memory = write(3, if (read(1) < read(2)) 1 else 0), result = State.Running) // Less than
+    case 8 => copy(ip = ip + 4, memory = write(3, if (read(1) == read(2)) 1 else 0), result = State.Running) // Equals
+    case 9  => copy(ip = ip + 2, relativeBase = relativeBase + read(1), result = State.Running) // Relative base
+    case 99 => copy(result = State.Halted)
     case _  => throw new IllegalArgumentException
   }
 
   def withInput(next: Long*): IntCode           = copy(input = Queue.from(next))
   def withAdditionalInput(next: Long*): IntCode = copy(input = input ++ next)
-  def nextOutput: IntCode                       = Iterator.iterate(next)(_.next).dropWhile(_.result == Running).next()
+  def nextOutput: IntCode = Iterator.iterate(next)(_.next).dropWhile(_.result == State.Running).next()
   def allOutput: Seq[Long] = {
-    val output = Iterator.iterate(this)(_.nextOutput).takeWhile(_.result != Halted)
-    output.collect { case IntCode(_, _, _, _, Output(value)) => value }.toSeq
+    val output = Iterator.iterate(this)(_.nextOutput).takeWhile(_.result != State.Halted)
+    output.collect { case IntCode(_, _, _, _, State.Output(value)) => value }.toSeq
   }
 
 }
@@ -77,11 +77,12 @@ case class IntCode(
 object IntCode {
   private val powers = Map(1 -> 100, 2 -> 1000, 3 -> 10000)
 
-  sealed trait State
-  case object Initial            extends State
-  case object Running            extends State
-  case object Halted             extends State
-  case class Output(value: Long) extends State
+  enum State {
+    case Initial
+    case Running
+    case Halted
+    case Output(value: Long)
+  }
 
   def apply(file: Source): IntCode = {
     val memory = file.mkString.trim
@@ -90,6 +91,6 @@ object IntCode {
       .foldLeft(Map.empty[Long, Long]) {
         case (acc, (value, index)) => acc.updated(index.toLong, value.toLong)
       }
-    IntCode(0, 0, memory.withDefaultValue(0L), Queue.empty[Long], Initial)
+    IntCode(0, 0, memory.withDefaultValue(0L), Queue.empty[Long], State.Initial)
   }
 }

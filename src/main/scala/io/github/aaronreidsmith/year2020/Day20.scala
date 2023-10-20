@@ -11,11 +11,9 @@ object Day20 extends Solution {
   type O1 = Long
   type O2 = Int
 
-  // Using an enum instead of a sealed trait so we can call Orientation.values
   enum Orientation {
     case Normal, Normal90, Normal180, Normal270, Flipped, Flipped90, Flipped180, Flipped270
   }
-  import Orientation.*
 
   case class TileData(lines: Vector[String]) {
     def width: Int  = lines.head.length
@@ -35,14 +33,14 @@ object Day20 extends Solution {
     }
 
     def orient(orientation: Orientation): TileData = orientation match {
-      case Normal     => this
-      case Normal90   => rot90
-      case Normal180  => rot90.rot90
-      case Normal270  => rot90.rot90.rot90
-      case Flipped    => flipVertically
-      case Flipped90  => flipVertically.rot90
-      case Flipped180 => flipVertically.rot90.rot90
-      case Flipped270 => flipVertically.rot90.rot90.rot90
+      case Orientation.Normal     => this
+      case Orientation.Normal90   => rot90
+      case Orientation.Normal180  => rot90.rot90
+      case Orientation.Normal270  => rot90.rot90.rot90
+      case Orientation.Flipped    => flipVertically
+      case Orientation.Flipped90  => flipVertically.rot90
+      case Orientation.Flipped180 => flipVertically.rot90.rot90
+      case Orientation.Flipped270 => flipVertically.rot90.rot90.rot90
     }
 
     def rot90: TileData = {
@@ -144,7 +142,7 @@ object Day20 extends Solution {
       val allEdges = tiles.values.flatMap(_.allEdges)
       tiles.collectFirst {
         case (tileId, tileData) if allEdges.count(_ == tileData.top) == 1 && allEdges.count(_ == tileData.left) == 1 =>
-          OrientedTile(tileId, Normal)
+          OrientedTile(tileId, Orientation.Normal)
       }.get
     }
     val size = math.sqrt(tiles.size).round.toInt

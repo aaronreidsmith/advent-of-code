@@ -9,17 +9,16 @@ object Day16 extends Solution {
   type O1 = String
   type O2 = String
 
-  sealed trait Move {
-    def perform(state: String): String
-  }
-  case class Spin(x: Int) extends Move {
-    def perform(state: String): String = state.takeRight(x) ++: state.dropRight(x)
-  }
-  case class Exchange(a: Int, b: Int) extends Move {
-    def perform(state: String): String = state.updated(a, state(b)).updated(b, state(a))
-  }
-  case class Partner(a: Char, b: Char) extends Move {
-    def perform(state: String): String = Exchange(state.indexOf(a), state.indexOf(b)).perform(state)
+  enum Move {
+    case Spin(x: Int)
+    case Exchange(a: Int, b: Int)
+    case Partner(a: Char, b: Char)
+
+    def perform(state: String): String = this match {
+      case Spin(x)        => state.takeRight(x) ++: state.dropRight(x)
+      case Exchange(a, b) => state.updated(a, state(b)).updated(b, state(a))
+      case Partner(a, b)  => Exchange(state.indexOf(a), state.indexOf(b)).perform(state)
+    }
   }
 
   override def parseInput(file: Source): List[Move] = {
@@ -27,9 +26,9 @@ object Day16 extends Solution {
     val exchange = """^x(\d+)/(\d+)$""".r
     val partner  = """^p(.*)/(.*)$""".r
     file.mkString.trim.split(',').toList.collect {
-      case spin(amount)                   => Spin(amount.toInt)
-      case exchange(position1, position2) => Exchange(position1.toInt, position2.toInt)
-      case partner(char1, char2)          => Partner(char1.charAt(0), char2.charAt(0))
+      case spin(amount)                   => Move.Spin(amount.toInt)
+      case exchange(position1, position2) => Move.Exchange(position1.toInt, position2.toInt)
+      case partner(char1, char2)          => Move.Partner(char1.charAt(0), char2.charAt(0))
     }
   }
 
