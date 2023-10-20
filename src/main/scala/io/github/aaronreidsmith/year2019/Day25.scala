@@ -12,17 +12,19 @@ object Day25 extends Solution {
   type O1 = Int
   type O2 = Nothing
 
+  opaque type Output = Int | IntCode
+
   extension (intCode: IntCode) {
-    def describeSurroundings(printOutput: Boolean): Either[Int, IntCode] = {
+    def describeSurroundings(printOutput: Boolean): Output = {
       @tailrec
-      def helper(computer: IntCode, message: String): Either[Int, IntCode] = {
+      def helper(computer: IntCode, message: String): Output = {
         if (message.endsWith("airlock.\"")) {
-          Left(message.filter(_.isDigit).toInt)
+          message.filter(_.isDigit).toInt
         } else if (message.endsWith("Command?\n") || message.endsWith("!\n\n") || message.endsWith("\"\n")) {
           if (printOutput) {
             print(message)
           }
-          Right(computer)
+          computer
         } else {
           val nextComputer = computer.next
           val nextMessage = nextComputer.result match {
@@ -77,8 +79,8 @@ object Day25 extends Solution {
       if (command != "exit") {
         val input = (command :+ '\n').map(_.toLong)
         computer.withInput(input: _*).describeSurroundings(!autoSolve) match {
-          case Left(password) => password
-          case Right(nextComputer) =>
+          case password: Int => password
+          case nextComputer: IntCode =>
             val nextCommand = if (autoSolve) Try(commands.dequeue()).getOrElse("") else Console.in.readLine()
             helper(nextComputer, nextCommand, autoSolve)
         }
