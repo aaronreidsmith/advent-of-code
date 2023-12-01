@@ -19,26 +19,28 @@ object Day01 extends Solution {
   }
 
   override def part2(input: List[String]): Int = {
+    def toDigit(str: String): Int = {
+      val valueMapping = Map(
+        "one"   -> 1,
+        "two"   -> 2,
+        "three" -> 3,
+        "four"  -> 4,
+        "five"  -> 5,
+        "six"   -> 6,
+        "seven" -> 7,
+        "eight" -> 8,
+        "nine"  -> 9
+      )
+      if (str.forall(_.isDigit)) str.toInt else valueMapping.getOrElse(str, 0)
+    }
+
     // Digits may overlap (e.g. 'sevenine'), so we need the lookahead
     val regex = "(?=([1-9]|one|two|three|four|five|six|seven|eight|nine))".r
-    val valueMapping = Map(
-      "one"   -> 1,
-      "two"   -> 2,
-      "three" -> 3,
-      "four"  -> 4,
-      "five"  -> 5,
-      "six"   -> 6,
-      "seven" -> 7,
-      "eight" -> 8,
-      "nine"  -> 9
-    )
     input.foldLeft(0) { (acc, line) =>
-      val matches    = regex.findAllIn(line).matchData.map(_.group(1)).toList
-      val first      = matches.head
-      val firstValue = if (first.forall(_.isDigit)) first.toInt else valueMapping.getOrElse(first, 0)
-      val last       = matches.last
-      val lastValue  = if (last.forall(_.isDigit)) last.toInt else valueMapping.getOrElse(last, 0)
-      acc + s"$firstValue$lastValue".toInt
+      val matches = regex.findAllIn(line).matchData.map(_.group(1)).toList
+      val first   = matches.head
+      val last    = matches.last
+      acc + s"${toDigit(first)}${toDigit(last)}".toInt
     }
   }
 }
