@@ -3,7 +3,6 @@ package io.github.aaronreidsmith.year2023
 import io.github.aaronreidsmith.implicits.toGrid
 import io.github.aaronreidsmith.{Grid, Point, Solution}
 
-import scala.collection.mutable
 import scala.io.Source
 
 // Adapted from https://www.reddit.com/r/adventofcode/comments/189m3qw/comment/kbswe8o
@@ -12,10 +11,12 @@ object Day03 extends Solution {
   type O1 = Int
   type O2 = Int
 
+  private case class Part(number: Int, positions: Vector[Point])
+
   override def parseInput(file: Source): Grid[Char] = file.toGrid
 
   override def part1(input: Grid[Char]): Int = {
-    getParts(input).foldLeft(0)(_ + _._1)
+    getParts(input).foldLeft(0)(_ + _.number)
   }
 
   override def part2(input: Grid[Char]): Int = {
@@ -23,9 +24,9 @@ object Day03 extends Solution {
     val parts = getParts(input)
     stars.foldLeft(0) { (acc, star) =>
       val partsAdjacentToStars = parts.foldLeft(List.empty[Int]) {
-        case (partsAcc, (num, positions)) =>
-          if (positions.toSet.intersect(star.neighbors.toSet).nonEmpty) {
-            num :: partsAcc
+        case (partsAcc, part) =>
+          if (part.positions.toSet.intersect(star.neighbors.toSet).nonEmpty) {
+            part.number :: partsAcc
           } else {
             partsAcc
           }
@@ -39,27 +40,21 @@ object Day03 extends Solution {
     }
   }
 
-  private def getParts(input: Grid[Char]): List[(Int, List[Point])] = {
+  private def getParts(input: Grid[Char]): Vector[Part] = {
     def isSymbol(point: Point): Boolean = {
       val char = input.getOrElse(point, '.')
       char != '.' && !char.isDigit
     }
 
-    // TODO: Make more functional
-    val numbers = mutable.ListBuffer.empty[(Int, List[Point])]
-    var acc = 0
-    val points = mutable.ListBuffer.empty[Point]
-    input.toSeq.sortBy(_._1).foreach { (pos, char) =>
-      if (char.isDigit) {
-        points.append(pos)
-        acc = 10 * acc + char.asDigit
-      } else {
-        numbers.append((acc, points.toList))
-        acc = 0
-        points.clear()
-      }
+    val (parts, _, _) = input.toSeq.sortBy(_._1).foldLeft((Vector.empty[Part], 0, Vector.empty[Point])) {
+      case ((partAcc, numAcc, posAcc), (pos, char)) =>
+        if (char.isDigit) {
+          (partAcc, 10 * numAcc + char.asDigit, posAcc :+ pos)
+        } else {
+          (partAcc :+ Part(numAcc, posAcc), 0, Vector.empty)
+        }
     }
 
-    numbers.toList.filter((_, positions) => positions.flatMap(_.neighbors).exists(isSymbol))
+    parts.filter(_.positions.flatMap(_.neighbors).exists(isSymbol))
   }
 }
