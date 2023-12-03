@@ -28,6 +28,7 @@ object Day02 extends Solution {
     }
     Game(id, outcomes)
   }
+  
   override def part1(input: List[Game]): Int = input.foldLeft(0) { (acc, game) =>
     if (game.outcomes.forall(outcome => outcome.red <= 12 && outcome.green <= 13 && outcome.blue <= 14)) {
       acc + game.id
@@ -35,6 +36,7 @@ object Day02 extends Solution {
       acc
     }
   }
+  
   override def part2(input: List[Game]): Int = input.foldLeft(0) { (acc, game) =>
     val minRed   = game.outcomes.map(_.red).max
     val minGreen = game.outcomes.map(_.green).max
