@@ -6,8 +6,8 @@ import scala.io.Source
 
 object Day06 extends Solution {
   type I  = String
-  type O1 = Long
-  type O2 = Long
+  type O1 = Int
+  type O2 = Int
 
   extension (s: String) {
     private def asRaces(part2: Boolean): List[Race] = {
@@ -28,7 +28,7 @@ object Day06 extends Solution {
   }
 
   private case class Race(time: Long, record: Long) {
-    def waysToWin: Long = (0L to time).count { buttonHeldTime =>
+    def waysToWin: Int = (0L to time).count { buttonHeldTime =>
       val raceTime         = time - buttonHeldTime
       val distanceTraveled = buttonHeldTime * raceTime
       distanceTraveled > record
@@ -36,6 +36,6 @@ object Day06 extends Solution {
   }
 
   override def parseInput(file: Source): String = file.mkString.trim
-  override def part1(input: String): Long       = input.asRaces(false).foldLeft(1L)(_ * _.waysToWin)
-  override def part2(input: String): Long       = input.asRaces(true).head.waysToWin
+  override def part1(input: String): Int        = input.asRaces(false).foldLeft(1)(_ * _.waysToWin)
+  override def part2(input: String): Int        = input.asRaces(true).head.waysToWin
 }
