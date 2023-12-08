@@ -50,7 +50,13 @@ object Day07 extends Solution {
   case class Hand(cards: List[Card], bet: Int) {
     def handType: HandType = {
       val cardCount = if (cards.contains(Card.Joker)) {
-        val highCard = if (cards.forall(_ == Card.Joker)) Card.Joker else cards.occurrences.maxBy(_._2)._1
+        val highCard = if (cards.forall(_ == Card.Joker)) {
+          Card.Joker
+        } else if (cards.occurrences.values.forall(_ == 1)) {
+          cards.max
+        } else {
+          cards.filterNot(_ == Card.Joker).occurrences.maxBy(_._2)._1
+        }
         cards.map {
           case Card.Joker => highCard
           case other      => other
