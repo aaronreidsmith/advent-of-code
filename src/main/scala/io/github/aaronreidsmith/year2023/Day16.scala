@@ -1,6 +1,5 @@
 package io.github.aaronreidsmith.year2023
 
-import io.github.aaronreidsmith.Direction.North
 import io.github.aaronreidsmith.implicits.toGrid
 import io.github.aaronreidsmith.{Direction, Grid, Point, Solution}
 
@@ -29,7 +28,7 @@ object Day16 extends Solution {
   override def part2(input: Grid[Char]): Int = {
     val Point(maxX, maxY) = input.keys.max
     val (topEdge, bottomEdge) =
-      (0 to maxY).map(i => (Beam(Point(0, i), Direction.South), Beam(Point(maxX, i), North))).unzip
+      (0 to maxY).map(i => (Beam(Point(0, i), Direction.South), Beam(Point(maxX, i), Direction.North))).unzip
     val (leftEdge, rightEdge) =
       (0 to maxX).map(i => (Beam(Point(i, 0), Direction.East), Beam(Point(i, maxY), Direction.West))).unzip
     (topEdge ++ leftEdge ++ rightEdge ++ bottomEdge).foldLeft(Int.MinValue) { (acc, beam) =>
