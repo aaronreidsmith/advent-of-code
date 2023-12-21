@@ -1,6 +1,7 @@
 package io.github.aaronreidsmith.year2022
 
 import io.github.aaronreidsmith.Solution
+import io.github.aaronreidsmith.implicits.mod
 
 import scala.collection.mutable
 import scala.io.Source
@@ -10,13 +11,6 @@ object Day24 extends Solution {
   type I  = (Int, Int, Set[Blizzard], Set[Wall])
   type O1 = Int
   type O2 = Int
-
-  // Took a long time to track down this bug...
-  // Java/Scala's modulo is different than Python's (where this solution was adapted from).
-  // See: https://dreamix.eu/blog/java/modulo-problem-in-java
-  extension (n: Int) {
-    def mod(m: Int): Int = ((n % m) + m) % m
-  }
 
   case class Blizzard(x: Int, y: Int, dx: Int, dy: Int)
   opaque type Wall = (Int, Int) // Would prefer a case class, but this works nicer elsewhere

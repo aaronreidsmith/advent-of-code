@@ -35,3 +35,9 @@ extension (string: String) {
   def letterOccurrences: Map[Char, Int] = string.toSeq.occurrences
   def toGrid: Grid[Char]                = Source.fromString(string).toGrid
 }
+
+// Java/Scala's modulo is different than other languages (mainly python).
+// So this is a helper if we ever need that behavior
+extension (n: Int) {
+  def mod(m: Int): Int = ((n % m) + m) % m
+}
