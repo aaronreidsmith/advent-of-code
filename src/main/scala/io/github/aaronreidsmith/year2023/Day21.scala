@@ -62,6 +62,6 @@ object Day21 extends Solution {
     val b0                   = a0
     val b1                   = a1 - a0
     val b2                   = a2 - a1
-    b0 + b1 * n + (n * (n - 2) / 2) * (b2 - b1)
+    b0 + b1 * n + (n * (n - 1) / 2) * (b2 - b1)
   }
 }
