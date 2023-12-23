@@ -22,7 +22,7 @@ object Day22 extends Solution {
 
     def drop(tallest: Map[Point, Int]): Brick = {
       val peak = this.points2D.foldLeft(0)((acc, point) => acc.max(tallest.getOrElse(point, 0)))
-      val dz   = 0.max(this.start.z - peak - 1)
+      val dz   = this.start.z - peak - 1
       this.copy(start = this.start.drop(dz), end = this.end.drop(dz))
     }
   }
