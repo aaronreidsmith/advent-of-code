@@ -126,7 +126,6 @@ object Day20 extends Solution {
             cycles.update(signal.source, totalPresses)
           }
       }
-      println(cycles)
       cycles.values.reduceLeft((a, b) => ArithmeticUtils.lcm(a, b))
     }
   }
