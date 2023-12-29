@@ -45,7 +45,7 @@ object Day24 extends Solution {
   }
 
   override def parseInput(file: Source): List[Hailstone] = {
-    val regex = """^(\d+), (\d+), (\d+) @ (-?\d+), (-?\d+), (-?\d+)$""".r
+    val regex = """^(\d+), (\d+), (\d+) @ (-?\d+),\s+(-?\d+),\s+(-?\d+)$""".r
     file.getLines().toList.collect {
       case regex(x, y, z, dx, dy, dz) => Hailstone(x.toLong, y.toLong, z.toLong, dx.toInt, dy.toInt, dz.toInt)
     }
