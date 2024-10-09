@@ -23,6 +23,7 @@ scalaVersion := settings.scalaVersion
 
 // Compile options
 Compile / mainClass := Some("io.github.aaronreidsmith.AdventOfCode")
+Compile / compileOrder := CompileOrder.JavaThenScala
 
 // Run options
 run / fork           := true
