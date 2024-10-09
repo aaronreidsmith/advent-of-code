@@ -1,13 +1,14 @@
 package io.github.aaronreidsmith
 
-import io.github.aaronreidsmith.tags.{IgnoreOnCI, Part1Slow, Part2, Part2Slow}
-import munit.FunSuite
+import org.scalatest.Inspectors.forAll
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import scala.io.Source
 import scala.reflect.runtime.universe
 
 // TODO: This file is a mess. Clean it up
-trait BaseTest extends FunSuite {
+trait BaseTest extends AnyFlatSpec with Matchers {
   // Implemented by actual tests
   val suite: Suite
 
@@ -15,6 +16,11 @@ trait BaseTest extends FunSuite {
   private val year          = getClass.getName.split("year")(1).take(4).toInt
   private val day           = getClass.getName.split("Day")(1).take(2).toInt
   private val runtimeMirror = universe.runtimeMirror(getClass.getClassLoader)
+
+  protected val runPart1: Boolean = true
+  protected val runPart2: Boolean = true
+
+  protected lazy val isCI: Boolean = System.getenv("CI") == "true"
 
   // This is protected so we can expose its internal types
   protected val mainInstance: Solution = {
@@ -25,11 +31,11 @@ trait BaseTest extends FunSuite {
   // Lazy because not all tests use the input from files
   protected lazy val fileInput: mainInstance.I = usingFile(f"$year/day$day%02d.txt")(mainInstance.parseInput)
 
-  protected implicit class TestStringOps(str: String) {
+  extension (str: String) {
     def parsed: mainInstance.I = mainInstance.parseInput(Source.fromString(str))
   }
 
-  protected implicit class TestSeqOps(seq: Seq[String]) {
+  extension (seq: Seq[String]) {
     def parsed: Seq[mainInstance.I] = seq.map(_.parsed)
   }
 
@@ -97,16 +103,17 @@ trait BaseTest extends FunSuite {
     }
   }
 
-  // TODO: We *always* tag our tests with all tags and then filter them in the implementing classes. Is there a better way?
-  test(s"Year $year Day $day part 1".tag(Part1Slow).tag(IgnoreOnCI)) {
-    suite.part1Input.zip(suite.part1Expected).foreach {
-      case (input, expected) => assertEquals(mainInstance.part1(input), expected)
+  s"Year $year Day $day part 1" should "work" in {
+    assume(runPart1)
+    forAll(suite.part1Input.zip(suite.part1Expected)) { (input, expected) =>
+      mainInstance.part1(input) shouldBe expected
     }
   }
 
-  test(s"Year $year Day $day part 2".tag(Part2).tag(Part2Slow).tag(IgnoreOnCI)) {
-    suite.part2Input.zip(suite.part2Expected).foreach {
-      case (input, expected) => assertEquals(mainInstance.part2(input), expected)
+  s"Year $year Day $day part 2" should "work" in {
+    assume(day < 25 && runPart2)
+    forAll(suite.part2Input.zip(suite.part2Expected)) { (input, expected) =>
+      mainInstance.part2(input) shouldBe expected
     }
   }
 }

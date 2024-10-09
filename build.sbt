@@ -11,7 +11,7 @@ val settings = new {
     "org.scala-lang"          % "scala-compiler"             % scala2Version,
     "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.4",
     "org.scala-lang.modules" %% "scala-parser-combinators"   % "2.4.0",
-    "org.scalameta"          %% "munit"                      % "1.0.0" % Test,
+    "org.scalatest"          %% "scalatest"                  % "3.2.19" % Test,
     "tools.aqua"              % "z3-turnkey"                 % "4.13.0" // Pulls in com.microsoft.z3
   )
 }
