@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2018
 
 import io.github.aaronreidsmith.Solution
-import io.github.aaronreidsmith.implicits.letterOccurrences
+import io.github.aaronreidsmith.extensions.letterOccurrences
 
 import scala.io.Source
 

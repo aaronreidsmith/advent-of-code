@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2017
 
 import io.github.aaronreidsmith.Solution
-import io.github.aaronreidsmith.implicits.toMutable
+import io.github.aaronreidsmith.extensions.toMutable
 
 import scala.collection.mutable
 import scala.io.Source

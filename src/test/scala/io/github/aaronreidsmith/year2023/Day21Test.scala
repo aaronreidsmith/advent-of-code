@@ -1,13 +1,9 @@
 package io.github.aaronreidsmith.year2023
 
 import io.github.aaronreidsmith.BaseTest
-import io.github.aaronreidsmith.tags.Part2Slow
 
 class Day21Test extends BaseTest {
-  override def munitTests(): Seq[Test] = {
-    val default = super.munitTests()
-    if (isCI) default else default.filterNot(_.tags.contains(Part2Slow))
-  }
+  override val runPart2: Boolean = isCI
 
   val suite: Suite = Suite(
     fileInput,

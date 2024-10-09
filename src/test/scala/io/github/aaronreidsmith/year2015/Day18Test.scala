@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2015
 
 import io.github.aaronreidsmith.BaseTest
-import io.github.aaronreidsmith.implicits.toGrid
+import io.github.aaronreidsmith.extensions.toGrid
 
 class Day18Test extends BaseTest {
   val suite: Suite = Suite(

@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2023
 
 import io.github.aaronreidsmith.annotations.Slow
-import io.github.aaronreidsmith.implicits.toGrid
+import io.github.aaronreidsmith.extensions.toGrid
 import io.github.aaronreidsmith.{Grid, Point, Solution}
 import org.jgrapht.alg.shortestpath.AllDirectedPaths
 import org.jgrapht.graph.{DefaultDirectedGraph, DefaultEdge}

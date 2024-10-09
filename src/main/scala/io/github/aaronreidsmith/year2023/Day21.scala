@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2023
 
 import io.github.aaronreidsmith.annotations.Slow
-import io.github.aaronreidsmith.implicits.{mod, toGrid}
+import io.github.aaronreidsmith.extensions.{mod, toGrid}
 import io.github.aaronreidsmith.{Grid, Point, Solution}
 
 import scala.annotation.tailrec
