@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2015
 
-import io.github.aaronreidsmith.implicits.toGrid
+import io.github.aaronreidsmith.extensions.toGrid
 import io.github.aaronreidsmith.{Grid, Point, Solution}
 
 import scala.annotation.tailrec

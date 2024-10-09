@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2023
 
 import io.github.aaronreidsmith.Solution
-import io.github.aaronreidsmith.implicits.occurrences
+import io.github.aaronreidsmith.extensions.occurrences
 import io.github.aaronreidsmith.year2023.Day07.HandType.HighCard
 
 import scala.io.Source

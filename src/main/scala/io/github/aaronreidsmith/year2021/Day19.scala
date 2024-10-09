@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2021
 
 import io.github.aaronreidsmith.Solution
-import io.github.aaronreidsmith.implicits.{headOption, occurrences}
+import io.github.aaronreidsmith.extensions.{headOption, occurrences}
 
 import scala.annotation.tailrec
 import scala.io.Source

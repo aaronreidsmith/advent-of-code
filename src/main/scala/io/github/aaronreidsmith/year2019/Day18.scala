@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2019
 
 import io.github.aaronreidsmith.annotations.Slow
-import io.github.aaronreidsmith.implicits.toGrid
+import io.github.aaronreidsmith.extensions.toGrid
 import io.github.aaronreidsmith.{Grid, Point, Solution}
 
 import scala.collection.mutable

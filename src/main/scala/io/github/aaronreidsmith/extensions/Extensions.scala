@@ -1,4 +1,4 @@
-package io.github.aaronreidsmith.implicits
+package io.github.aaronreidsmith.extensions
 
 import io.github.aaronreidsmith.{Grid, Point}
 

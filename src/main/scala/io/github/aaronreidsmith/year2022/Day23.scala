@@ -1,7 +1,7 @@
 package io.github.aaronreidsmith.year2022
 
 import io.github.aaronreidsmith.*
-import io.github.aaronreidsmith.implicits.{occurrences, toGrid}
+import io.github.aaronreidsmith.extensions.{occurrences, toGrid}
 
 import scala.annotation.tailrec
 import scala.io.Source

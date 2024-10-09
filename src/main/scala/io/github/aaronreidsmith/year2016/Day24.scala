@@ -1,6 +1,6 @@
 package io.github.aaronreidsmith.year2016
 
-import io.github.aaronreidsmith.implicits.toGrid
+import io.github.aaronreidsmith.extensions.toGrid
 import io.github.aaronreidsmith.{Point, Solution}
 import org.jgrapht.alg.shortestpath.BFSShortestPath
 import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
