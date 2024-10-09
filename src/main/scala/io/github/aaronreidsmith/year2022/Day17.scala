@@ -42,7 +42,7 @@ object Day17 extends Solution {
   override def part2(input: State): Long = {
     val guess       = 1000
     val height      = tetris(input).slice(1, 10 * guess + 1).map(_.height).toSeq
-    val delta       = height.sliding(2).map { case Seq(a, b) => b - a }.toSeq
+    val delta       = height.sliding(2).map(_.reduceRight(_ - _)).toSeq
     val index       = delta.lastIndexOfSlice(delta.takeRight(guess), delta.size - guess - 1)
     val cycleHeight = height(delta.size - guess) - height(index)
     val cycleWidth  = delta.size - guess - index
