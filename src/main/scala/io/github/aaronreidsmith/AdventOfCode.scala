@@ -6,7 +6,7 @@ import scala.util.{Failure, Success, Try}
 
 object AdventOfCode {
   private val runtimeMirror = universe.runtimeMirror(getClass.getClassLoader)
-  private val years         = 2015 to 2023
+  private val years         = 2015 to 2024
   private val days          = 1 to 25
 
   def main(args: Array[String]): Unit = {
@@ -54,9 +54,6 @@ object AdventOfCode {
     runtimeMirror.reflect(runtimeMirror.reflectModule(solution).instance).reflectMethod(runMethod)()
   } match {
     case Success(_) => // Do nothing
-    case Failure(_) =>
-      println(
-        f"Year $year day $day has not been converted to a sub-type of Solution. Run it directly like so: sbt \"runMain io.github.aaronreidsmith.year$year.Day$day%02d\"\n"
-      )
+    case Failure(_) => println(s"Year $year day $day is not implemented")
   }
 }
