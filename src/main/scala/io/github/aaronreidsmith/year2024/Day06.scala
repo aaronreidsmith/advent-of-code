@@ -61,10 +61,10 @@ object Day06 extends Solution {
         case Some(char) =>
           val (newPos, newDirection, newVisited) = if (char == '.') {
             val moved = pos.move(direction)
-            (moved, direction, visited + ((moved, direction)))
+            (moved, direction, visited + (moved -> direction))
           } else {
             val turned = direction.right
-            (pos, turned, visited + ((pos, turned)))
+            (pos, turned, visited + (pos -> turned))
           }
           newVisited == visited || helper(newPos, newDirection, newVisited)
       }
