@@ -36,8 +36,10 @@ extension (string: String) {
   def toGrid: Grid[Char]                = Source.fromString(string).toGrid
 }
 
-// Java/Scala's modulo is different than other languages (mainly python).
-// So this is a helper if we ever need that behavior
 extension (n: Int) {
+  // Java/Scala's modulo is different than other languages (mainly python).
+  // So this is a helper if we ever need that behavior
   def mod(m: Int): Int = ((n % m) + m) % m
+  // Allows us to do 'n * point' as well as 'point * n' (defined in Point)
+  infix def *(p: Point): Point = p * n
 }

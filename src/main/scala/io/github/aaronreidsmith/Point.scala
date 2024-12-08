@@ -7,6 +7,8 @@ case class Point(x: Int, y: Int) {
   infix def -(other: (Int, Int)): Point = Point(x - other._1, y - other._2)
   infix def -(other: Point): Point      = Point(x - other.x, y - other.y)
 
+  infix def *(n: Int): Point = Point(x * n, y * n)
+
   def move(direction: Direction, steps: Int = 1): Point = direction match {
     case Direction.North => this.copy(x = x - steps)
     case Direction.East  => this.copy(y = y + steps)
