@@ -52,9 +52,27 @@ object Day14 extends Solution {
   }
 
   override def part2(input: List[Robot]): Int = {
+    // Enable if you want to see the printed tree
+    val printGrid = false
+
     @tailrec
     def helper(state: List[Robot], i: Int = 0): Int = {
-      if (i > 0 && state.distinctBy(_.position).length == input.length) {
+      if (state.distinctBy(_.position).length == input.length) {
+        if (printGrid) {
+          var row = 0
+          val grid = state.map(r => r.position -> '#').toMap
+          for {
+            x <- 0 until width
+            y <- 0 until height
+          } {
+            if (x != row) {
+              println()
+              row += 1
+            }
+            print(grid.getOrElse(Point(y, x), ' '))
+          }
+          println()
+        }
         i
       } else {
         helper(state.map(_.move), i + 1)
