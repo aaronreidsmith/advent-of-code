@@ -41,7 +41,7 @@ object Day18 extends Solution {
   }
 
   private def buildGraph(blocked: Set[Point]): DefaultUndirectedGraph[Point, DefaultEdge] = {
-    val graph = new DefaultUndirectedGraph[Point, DefaultEdge](classOf[DefaultEdge])
+    val graph = DefaultUndirectedGraph[Point, DefaultEdge](classOf[DefaultEdge])
 
     for {
       x <- 0 to target.x
