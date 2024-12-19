@@ -1,11 +1,13 @@
 package io.github.aaronreidsmith.year2024
 
+import io.github.aaronreidsmith.annotations.Slow
 import io.github.aaronreidsmith.{Point, Solution}
 import org.jgrapht.alg.shortestpath.BFSShortestPath
 import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
 
 import scala.io.Source
 
+@Slow(part2 = true)
 object Day18 extends Solution {
   type I  = List[Point]
   type O1 = Int
