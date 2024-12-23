@@ -24,12 +24,10 @@ object Day23 extends Solution {
   }
 
   override def part1(input: DefaultUndirectedGraph[String, DefaultEdge]): Int = {
-    val cliqueFinder = BronKerboschCliqueFinder(input)
-    cliqueFinder.asScala
-      .foldLeft(Set.empty[Set[String]]) { (acc, jClique) =>
-        val clique = jClique.asScala
-        if (clique.size >= 3) {
-          acc ++ clique.toSeq.combinations(3).collect {
+    BronKerboschCliqueFinder(input).asScala
+      .foldLeft(Set.empty[Set[String]]) { (acc, clique) =>
+        if (clique.size() >= 3) {
+          acc ++ clique.asScala.toSeq.combinations(3).collect {
             case triple if triple.exists(_.startsWith("t")) => triple.toSet
           }
         } else {
@@ -40,7 +38,6 @@ object Day23 extends Solution {
   }
 
   override def part2(input: DefaultUndirectedGraph[String, DefaultEdge]): String = {
-    val cliqueFinder = BronKerboschCliqueFinder(input)
-    cliqueFinder.asScala.maxBy(_.size()).asScala.toSeq.sorted.mkString(",")
+    BronKerboschCliqueFinder(input).asScala.maxBy(_.size()).asScala.toSeq.sorted.mkString(",")
   }
 }
