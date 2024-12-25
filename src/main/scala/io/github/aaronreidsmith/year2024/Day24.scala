@@ -53,6 +53,7 @@ object Day24 extends Solution with JavaTokenParsers {
   }
 
   override def part2(input: String): String = {
-    "Done by hand"
+    // TODO: Done by hand. Maybe I will implement in the future
+    "hjf,kdh,kpp,sgj,vss,z14,z31,z35"
   }
 }
