@@ -26,8 +26,8 @@ Compile / mainClass    := Some("io.github.aaronreidsmith.AdventOfCode")
 Compile / compileOrder := CompileOrder.JavaThenScala
 
 // Run options
-run / fork := true
-run / javaOptions := Seq("-Xms1G", "-Xmx8G")
+run / fork           := true
+run / javaOptions    := Seq("-Xms1G", "-Xmx8G")
 run / outputStrategy := Some(StdoutOutput)
 
 // Test options
