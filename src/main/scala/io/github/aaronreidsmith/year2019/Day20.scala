@@ -92,7 +92,7 @@ object Day20 extends Solution {
       grid.foreach {
         case (_, Tile.Wall) => // Skip walls
         case (point, tile) =>
-          val (x, y) = point.asPair
+          val Point(x, y) = point
           val possibleNeighbors = point.immediateNeighbors.collect {
             case neighbor if grid(neighbor) != Tile.Wall => (neighbor.x, neighbor.y, level)
           } ++ {
@@ -113,9 +113,8 @@ object Day20 extends Solution {
           }
       }
     }
-    val (startX, startY) =
-      grid.collectFirst { case (point, Tile.Portal(label, _)) if label == "AA" => point }.get.asPair
-    val (endX, endY) = grid.collectFirst { case (point, Tile.Portal(label, _)) if label == "ZZ" => point }.get.asPair
+    val Point(startX, startY) = grid.collectFirst { case (point, Tile.Portal(label, _)) if label == "AA" => point }.get
+    val Point(endX, endY)     = grid.collectFirst { case (point, Tile.Portal(label, _)) if label == "ZZ" => point }.get
     DijkstraShortestPath.findPathBetween(graph, (startX, startY, 0), (endX, endY, 0)).getLength
   }
 }

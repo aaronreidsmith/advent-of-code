@@ -50,7 +50,7 @@ object Day13 extends Solution {
   override def part2(input: (Set[Point], List[Fold])): String = {
     val (grid, folds) = input
     val folded        = folds.foldLeft(grid)((acc, fold) => acc.map(fold.mirror))
-    val (xs, ys)      = folded.unzip(point => (point.x, point.y))
+    val (xs, ys)      = folded.unzip
     val output        = new StringBuilder("\n")
     (0 to ys.max).foreach { y =>
       (0 to xs.max).foreach { x =>

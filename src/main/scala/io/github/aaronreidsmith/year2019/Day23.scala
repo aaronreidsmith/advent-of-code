@@ -20,7 +20,7 @@ object Day23 extends Solution {
         val nextComputer = if (computer.input.nonEmpty) {
           computer.next
         } else if (input.nonEmpty) {
-          computer.withInput(input: _*).next
+          computer.withInput(input*).next
         } else {
           computer.withInput(-1).next
         }

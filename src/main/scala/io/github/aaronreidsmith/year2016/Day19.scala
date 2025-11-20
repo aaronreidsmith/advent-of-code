@@ -1,8 +1,10 @@
 package io.github.aaronreidsmith.year2016
 
+import java.util
+
 import io.github.aaronreidsmith.Solution
 
-import java.util
+import scala.compiletime.uninitialized
 import scala.io.Source
 
 // This a very Java way to do this, but it works 🤷
@@ -12,12 +14,12 @@ object Day19 extends Solution {
   type O2 = Int
 
   private class Elf {
-    var number: Int = _
+    var number: Int = uninitialized
     var gifts: Int  = 1
-    var prev: Elf   = _
-    var next: Elf   = _
+    var prev: Elf   = uninitialized
+    var next: Elf   = uninitialized
   }
-  private var start: Elf = _
+  private var start: Elf = uninitialized
 
   override def parseInput(file: Source): Int = file.mkString.trim.toInt
 

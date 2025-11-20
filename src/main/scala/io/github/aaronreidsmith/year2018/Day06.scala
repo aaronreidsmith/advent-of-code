@@ -12,6 +12,10 @@ object Day06 extends Solution {
 
   case class Coordinate(position: Point, var area: Int = 0, var edge: Boolean = false)
 
+  given Conversion[Coordinate, (Int, Int)] with {
+    def apply(coordinate: Coordinate): (Int, Int) = (coordinate.position.x, coordinate.position.y)
+  }
+
   override def parseInput(file: Source): List[Coordinate] = file.getLines().toList.map { line =>
     val Array(x, y, _*) = line.split(", "): @unchecked
     Coordinate(Point(x.toInt, y.toInt))
@@ -27,7 +31,7 @@ object Day06 extends Solution {
       val coordinates       = initialCoordinates.toBuffer
       val maxRegionDistance = if (isTest) 32 else 10_000
 
-      val (xs, ys) = initialCoordinates.unzip(coordinate => coordinate.position.asPair)
+      val (xs, ys) = initialCoordinates.unzip
       val xMin     = xs.min
       val xMax     = xs.max
       val yMin     = ys.min

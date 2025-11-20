@@ -78,7 +78,7 @@ object Day25 extends Solution {
     def helper(computer: IntCode, command: String, autoSolve: Boolean = true): Int = {
       if (command != "exit") {
         val input = (command :+ '\n').map(_.toLong)
-        computer.withInput(input: _*).describeSurroundings(!autoSolve) match {
+        computer.withInput(input*).describeSurroundings(!autoSolve) match {
           case password: Int => password
           case nextComputer: IntCode =>
             val nextCommand = if (autoSolve) Try(commands.dequeue()).getOrElse("") else Console.in.readLine()

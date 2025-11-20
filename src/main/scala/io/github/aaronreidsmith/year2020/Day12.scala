@@ -45,7 +45,7 @@ object Day12 extends Solution {
 
     @tailrec
     final def rotateWaypoint(direction: Char, degrees: Int): Ship = {
-      val (x, y) = waypoint.asPair
+      val Point(x, y) = waypoint
       if (degrees == 0) {
         this
       } else {
@@ -65,8 +65,8 @@ object Day12 extends Solution {
     }
 
     def moveAroundWaypoint(numberOfMoves: Int): Ship = {
-      val (x, y) = position.asPair
-      val (i, j) = waypoint.asPair
+      val Point(x, y) = position
+      val Point(i, j) = waypoint
 
       val newX = x + (numberOfMoves * i)
       val newY = y + (numberOfMoves * j)

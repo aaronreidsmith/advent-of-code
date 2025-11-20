@@ -21,7 +21,7 @@ object Day17 extends Solution {
 
   private def solution(grid: Grid[Int], minStep: Int, maxStep: Int): Int = {
     val end     = grid.keys.max
-    val queue   = mutable.PriorityQueue((0, 0, 0, 0, 0))(implicitly[Ordering[(Int, Int, Int, Int, Int)]].reverse)
+    val queue   = mutable.PriorityQueue((0, 0, 0, 0, 0))(using Ordering[(Int, Int, Int, Int, Int)].reverse)
     val seen    = mutable.Set.empty[(Int, Int, Int, Int)]
     var minHeat = 0
     breakable {

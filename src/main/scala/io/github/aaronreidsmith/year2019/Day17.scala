@@ -56,7 +56,7 @@ object Day17 extends Solution {
                       |n
                       |""".stripMargin.map(_.toLong)
     val updated = input.copy(memory = input.memory.updated(0L, 2L))
-    updated.withInput(userInput: _*).allOutput.last
+    updated.withInput(userInput*).allOutput.last
   }
 
   @nowarn

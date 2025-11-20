@@ -66,7 +66,7 @@ object Day24 extends Solution {
       while (goals.nonEmpty) {
         t += 1
         val b = blizzards.map { blizzard =>
-          ((blizzard.x + t * blizzard.dx) mod maxX, (blizzard.y + t * blizzard.dy) mod maxY)
+          ((blizzard.x + t * blizzard.dx) `mod` maxX, (blizzard.y + t * blizzard.dy) `mod` maxY)
         }
         val n = {
           for {

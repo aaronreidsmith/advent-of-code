@@ -20,7 +20,7 @@ object Day24 extends Solution {
     val initial = initialFlip(instructions)
     (0 until 100)
       .foldLeft(initial) { (flipped, _) =>
-        val (qs, rs)           = flipped.unzip(point => (point.q, point.r))
+        val (qs, rs)           = flipped.unzip
         val qMin               = qs.min
         val qMax               = qs.max
         val rMin               = rs.min

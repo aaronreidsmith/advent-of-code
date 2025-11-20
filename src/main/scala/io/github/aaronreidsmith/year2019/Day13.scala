@@ -30,7 +30,7 @@ object Day13 extends Solution {
         score: Long,
         paddle: Long,
         ball: Long,
-        tiles: Map[Point, Long] = Map.empty[Point, Long],
+        tiles: Map[Point, Long],
         output: Seq[Long]
     ): (Long, Long, Long, Map[Point, Long]) = {
       output.grouped(3).foldLeft((score, paddle, ball, tiles)) {

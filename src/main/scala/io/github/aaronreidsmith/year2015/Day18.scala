@@ -17,7 +17,7 @@ object Day18 extends Solution {
   override def parseInput(file: Source): Grid[Char] = file.toGrid
   override def part1(grid: Grid[Char]): Int         = solution(grid, part1Iterations, Seq(), 0)
   override def part2(grid: Grid[Char]): Int = {
-    val (rows, cols) = grid.keys.unzip(_.asPair)
+    val (rows, cols) = grid.keys.unzip
     val corners = for {
       row <- Seq(rows.min, rows.max)
       col <- Seq(cols.min, cols.max)
