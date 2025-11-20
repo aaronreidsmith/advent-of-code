@@ -1,18 +1,18 @@
 val settings = new {
-  val scalaVersion  = "3.3.4"
-  val scala2Version = "2.13.14" // TODO: Switch reflection to Scala 3, if possible
+  val scalaVersion  = "3.7.4"
+  val scala2Version = "2.13.18" // TODO: Switch reflection to Scala 3, if possible
 
   val libraryDependencies = Seq(
-    "com.lihaoyi"            %% "ujson"                      % "4.0.2",
+    "com.lihaoyi"            %% "ujson"                      % "4.4.1",
     "org.apache.commons"      % "commons-math3"              % "3.6.1",
-    "org.apache.commons"      % "commons-text"               % "1.11.0",
+    "org.apache.commons"      % "commons-text"               % "1.14.0",
     "org.jgrapht"             % "jgrapht-core"               % "1.5.2",
     "org.scala-lang"          % "scala-reflect"              % scala2Version,
     "org.scala-lang"          % "scala-compiler"             % scala2Version,
-    "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.4",
+    "org.scala-lang.modules" %% "scala-parallel-collections" % "1.2.0",
     "org.scala-lang.modules" %% "scala-parser-combinators"   % "2.4.0",
     "org.scalatest"          %% "scalatest"                  % "3.2.19" % Test,
-    "tools.aqua"              % "z3-turnkey"                 % "4.13.0" // Pulls in com.microsoft.z3
+    "tools.aqua"              % "z3-turnkey"                 % "4.14.1" // Pulls in com.microsoft.z3
   )
 }
 

@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest # Have to use Linux since the "decrypt" step uses a container, which is only supported on Linux
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Decrypt input
         uses: sliteteam/github-action-git-crypt-unlock@1.3.0
@@ -26,12 +26,12 @@ jobs:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
       - name: Setup Cache
-        uses: coursier/cache-action@v6
+        uses: coursier/cache-action@v7
 
       - name: Setup
         uses: coursier/setup-action@v1
         with:
-          jvm: corretto:21.0.4.7.1
+          jvm: corretto:25.0.1.8.1
 
       - name: Run Test Suite
         run: sbt test

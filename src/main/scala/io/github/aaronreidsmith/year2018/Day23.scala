@@ -33,7 +33,7 @@ object Day23 extends Solution {
 
   // Adapted from https://www.reddit.com/r/adventofcode/comments/a8s17l/comment/ecdqzdg
   override def part2(input: List[NanoBot]): Int = {
-    val queue = mutable.PriorityQueue.empty[(Int, Int)](Ordering.by(pair => -pair._1))
+    val queue = mutable.PriorityQueue.empty[(Int, Int)](using Ordering.by(pair => -pair._1))
     input.foreach { bot =>
       queue.enqueue((Seq(0, bot.distanceFromOrigin - bot.radius).max, 1))
       queue.enqueue((bot.distanceFromOrigin + bot.radius + 1, -1))

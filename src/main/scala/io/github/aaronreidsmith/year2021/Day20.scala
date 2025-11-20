@@ -30,7 +30,7 @@ object Day20 extends Solution {
     def helper(grid: Grid[Char], default: Char = '0', iteration: Int = 0): Int = if (iteration >= times) {
       grid.values.count(_ == '1')
     } else {
-      val (rows, cols) = grid.keys.unzip(_.asPair)
+      val (rows, cols) = grid.keys.unzip
       val minimumRow   = rows.min - 1
       val maximumRow   = rows.max + 1
       val minimumCol   = cols.min - 1

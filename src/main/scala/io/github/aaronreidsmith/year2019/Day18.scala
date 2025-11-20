@@ -43,7 +43,7 @@ object Day18 extends Solution {
   private def dijkstra(tunnels: Grid[Char], start: Point): Seq[Move] = {
     val cost       = mutable.Map(start -> 0)
     val keysNeeded = mutable.Map(start -> Set.empty[Char])
-    val todo       = mutable.PriorityQueue(start)(Ordering.by(cost))
+    val todo       = mutable.PriorityQueue(start)(using Ordering.by(cost))
 
     while (todo.nonEmpty) {
       val point = todo.dequeue()

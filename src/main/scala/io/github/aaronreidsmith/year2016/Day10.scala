@@ -48,7 +48,7 @@ object Day10 extends Solution {
       pipeline: Map[Int, ((String, Int), (String, Int))]
   ): (Int, Int) = {
     if (!solved) {
-      val bots        = mutable.Map(initialBots.toSeq: _*).withDefaultValue(Vector())
+      val bots        = mutable.Map(initialBots.toSeq*).withDefaultValue(Vector())
       val output      = mutable.Map.empty[Int, Vector[Int]].withDefaultValue(Vector())
       var part1Answer = -1
       while (bots.nonEmpty) {

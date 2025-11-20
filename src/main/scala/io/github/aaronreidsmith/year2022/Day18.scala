@@ -23,6 +23,10 @@ object Day18 extends Solution {
     )
   }
 
+  given Conversion[Cube, (Int, Int, Int)] with {
+    def apply(cube: Cube): (Int, Int, Int) = (cube.x, cube.y, cube.z)
+  }
+
   override def parseInput(file: Source): Set[Cube] = {
     file.getLines().foldLeft(Set.empty[Cube]) { (acc, line) =>
       val Array(x, y, z, _*) = line.split(','): @unchecked
@@ -36,7 +40,7 @@ object Day18 extends Solution {
 
   // Adapted from https://old.reddit.com/r/adventofcode/comments/zoqhvy/2022_day_18_solutions/j0oul0u/
   override def part2(input: Set[Cube]): Int = {
-    val (xs, ys, zs) = input.unzip3(cube => (cube.x, cube.y, cube.z))
+    val (xs, ys, zs) = input.unzip3
     // Have to pad our ranges for movement
     val xRange = -1 to xs.max + 1
     val yRange = -1 to ys.max + 1

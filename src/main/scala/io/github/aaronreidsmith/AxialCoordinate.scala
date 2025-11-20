@@ -15,6 +15,12 @@ sealed trait AxialCoordinate {
   }
 }
 
+object AxialCoordinate {
+  given Conversion[AxialCoordinate, (Int, Int)] with {
+    def apply(coordinate: AxialCoordinate): (Int, Int) = (coordinate.q, coordinate.r)
+  }
+}
+
 case class FlatCoordinate(q: Int, r: Int) extends AxialCoordinate {
   type Self = FlatCoordinate
 

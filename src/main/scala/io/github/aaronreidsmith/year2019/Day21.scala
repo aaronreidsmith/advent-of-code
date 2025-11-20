@@ -40,6 +40,6 @@ object Day21 extends Solution {
   )
 
   private def solution(intCode: IntCode, script: String): Long = {
-    intCode.withInput(script.map(_.toLong): _*).allOutput.last
+    intCode.withInput(script.map(_.toLong)*).allOutput.last
   }
 }

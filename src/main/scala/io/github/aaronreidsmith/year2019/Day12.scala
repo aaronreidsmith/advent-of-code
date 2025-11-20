@@ -70,7 +70,7 @@ object Day12 extends Solution {
         ._1
     }
 
-    val baseFunction = cycleLength(moons) _
+    val baseFunction = cycleLength(moons)
     val xCycle       = baseFunction(moon => (moon.position.x, moon.velocity.x))
     val yCycle       = baseFunction(moon => (moon.position.y, moon.velocity.y))
     val zCycle       = baseFunction(moon => (moon.position.z, moon.velocity.z))

@@ -41,16 +41,17 @@ case class Point(x: Int, y: Int) {
   } yield Point(x + dx, y + dy)
 
   def manhattanDistance(that: Point): Int = (this.x - that.x).abs + (this.y - that.y).abs
-
-  def asPair: (Int, Int) = (x, y)
 }
 
 object Point {
-  given ordering: Ordering[Point] with {
+  given Ordering[Point] with {
     override def compare(left: Point, right: Point): Int = left.x.compareTo(right.x) match {
       case 0     => left.y.compareTo(right.y)
       case other => other
     }
+  }
+  given Conversion[Point, (Int, Int)] with {
+    override def apply(point: Point): (Int, Int) = (point.x, point.y)
   }
 
   def zero: Point = Point(0, 0)
