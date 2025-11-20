@@ -31,7 +31,7 @@ jobs:
       - name: Setup
         uses: coursier/setup-action@v1
         with:
-          jvm: corretto:25.0.1.8.1
+          jvm: corretto:17.0.17.10.1
           apps: sbt
 
       - name: Run Test Suite
