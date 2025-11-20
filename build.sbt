@@ -22,12 +22,19 @@ scalacOptions ++= Seq("-deprecation", "-no-indent", "-Wunused:imports", "-Wunuse
 scalaVersion := settings.scalaVersion
 
 // Compile options
-Compile / mainClass := Some("io.github.aaronreidsmith.AdventOfCode")
+Compile / mainClass    := Some("io.github.aaronreidsmith.AdventOfCode")
 Compile / compileOrder := CompileOrder.JavaThenScala
 
 // Run options
-run / fork           := true
-run / javaOptions    := Seq("-Xms1G", "-Xmx8G")
+run / fork := true
+run / javaOptions := Seq(
+  "-Xms1G",
+  "-Xmx8G",
+  // Needed until Scala 3.8: https://www.scala-lang.org/blog/next-scala-lts.html
+  "--sun-misc-unsafe-memory-access=allow",
+  // 'A restricted method in java.lang.System has been called by tools.aqua.turnkey.support.TurnKey'
+  "--enable-native-access=ALL-UNNAMED"
+)
 run / outputStrategy := Some(StdoutOutput)
 
 // Test options
