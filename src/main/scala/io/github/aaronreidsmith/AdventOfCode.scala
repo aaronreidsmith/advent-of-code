@@ -6,7 +6,7 @@ import scala.util.{Failure, Success, Try}
 
 object AdventOfCode {
   private val runtimeMirror = universe.runtimeMirror(getClass.getClassLoader)
-  private val years         = 2015 to 2024
+  private val years         = 2015 to 2025
   private val days          = 1 to 25
 
   def main(args: Array[String]): Unit = {
