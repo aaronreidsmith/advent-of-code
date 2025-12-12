@@ -28,11 +28,10 @@ object Day02 extends Solution {
   override def part2(input: Seq[NumericRange[Long]]): Long = {
     solution(input) { num =>
       val str = num.toString
-      val isInvalid = (1 to str.length / 2).exists { i =>
+      (1 to str.length / 2).exists { i =>
         val grouped = str.grouped(i).toSeq
         grouped.forall(_.length == i) && grouped.count(_ == str.take(i)) == str.length / i
       }
-      isInvalid
     }
   }
 
