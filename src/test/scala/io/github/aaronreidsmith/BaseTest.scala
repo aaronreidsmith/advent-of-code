@@ -111,7 +111,7 @@ trait BaseTest extends AnyFlatSpec with Matchers {
   }
 
   s"Year $year Day $day part 2" should "work" in {
-    assume(day < 25 && runPart2)
+    assume(((year < 2025 && day < 25) || (year >= 2025 && day < 12)) && runPart2)
     forAll(suite.part2Input.zip(suite.part2Expected)) { (input, expected) =>
       mainInstance.part2(input) shouldBe expected
     }

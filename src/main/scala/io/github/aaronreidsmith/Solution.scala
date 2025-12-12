@@ -48,7 +48,7 @@ trait Solution extends Runnable {
     val input = usingFile(f"$year/day$day%02d.txt")(parseInput)
     println(s"Part 1: ${part1(input)}")
 
-    if (day < 25) {
+    if ((year < 2025 && day < 25) || (year >= 2025 && day < 12)) {
       annotation.foreach { a =>
         if (!a.part1() && a.part2()) {
           println("Part 2 of this solution has been marked as slow; please be patient!")
