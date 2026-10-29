@@ -1,13 +1,11 @@
 package io.github.aaronreidsmith
 
 import scala.annotation.tailrec
-import scala.reflect.runtime.universe
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 
 object AdventOfCode {
-  private val runtimeMirror = universe.runtimeMirror(getClass.getClassLoader)
-  private val years         = 2015 to 2025
-  private val days          = 1 to 25
+  private val years = 2015 to 2025
+  private val days  = 1 to 25
 
   def main(args: Array[String]): Unit = {
     val parsedArgs = parseArgs(args.toList)
@@ -49,11 +47,7 @@ object AdventOfCode {
 
   // Dynamically load and run a solution class
   private def runSolution(year: Int, day: Int): Unit = Try {
-    val solution  = runtimeMirror.moduleSymbol(Class.forName(f"io.github.aaronreidsmith.year$year.Day$day%02d$$"))
-    val runMethod = solution.typeSignature.members.filter(_.name.toString == "run").head.asMethod
-    runtimeMirror.reflect(runtimeMirror.reflectModule(solution).instance).reflectMethod(runMethod)()
-  } match {
-    case Success(_) => // Do nothing
-    case Failure(_) => println(s"Year $year day $day is not implemented")
-  }
+    val solution = Class.forName(f"io.github.aaronreidsmith.year$year.Day$day%02d$$")
+    solution.getField("MODULE$").get(null).asInstanceOf[Solution].run()
+  }.failed.foreach(_ => println(s"Year $year day $day is not implemented"))
 }
