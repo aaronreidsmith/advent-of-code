@@ -2,48 +2,47 @@ package io.github.aaronreidsmith.year2015
 
 import io.github.aaronreidsmith.Solution
 
+import scala.collection.mutable
 import scala.io.Source
-import scala.reflect.runtime.universe
-import scala.tools.reflect.ToolBox
 import scala.util.parsing.combinator.JavaTokenParsers
 
 object Day07 extends Solution with JavaTokenParsers {
-  type I  = String
-  type O1 = String
-  type O2 = String
+  type I  = Map[String, Gate]
+  type O1 = Int
+  type O2 = Int
 
-  private def quotedIdent: Parser[String] = ident ^^ (i => s"`$i`")
-  private def operation: Parser[String] = {
-    def expression = quotedIdent | wholeNumber
-    def and        = (expression <~ "AND") ~ expression ^^ { case left ~ right => s"$left & $right" }
-    def or         = (expression <~ "OR") ~ expression ^^ { case left ~ right => s"$left | $right" }
-    def lshift     = (expression <~ "LSHIFT") ~ expression ^^ { case wire ~ bits => s"$wire << $bits" }
-    def rshift     = (expression <~ "RSHIFT") ~ expression ^^ { case wire ~ bits => s"$wire >> $bits" }
-    def not        = "NOT" ~> expression ^^ (i => s"~$i")
+  // Given a way to look up the signal on any wire, produce the signal for this gate
+  type Gate = (String => Int) => Int
+
+  private def operation: Parser[Gate] = {
+    def wire: Parser[Gate]       = ident ^^ (name => signal => signal(name))
+    def number: Parser[Gate]     = wholeNumber ^^ (value => _ => value.toInt)
+    def expression: Parser[Gate] = wire | number
+    def binary(op: String)(f: (Int, Int) => Int): Parser[Gate] = (expression <~ op) ~ expression ^^ {
+      case left ~ right => signal => f(left(signal), right(signal))
+    }
+    def and              = binary("AND")(_ & _)
+    def or               = binary("OR")(_ | _)
+    def lshift           = binary("LSHIFT")((wire, bits) => (wire << bits) & 0xffff)
+    def rshift           = binary("RSHIFT")(_ >> _)
+    def not: Parser[Gate] = "NOT" ~> expression ^^ (wire => signal => ~wire(signal) & 0xffff)
     and | or | lshift | rshift | not | expression
   }
 
-  private def line: Parser[String] = (operation <~ "->") ~ quotedIdent ^^ {
-    case source ~ target => s"lazy val $target = $source"
+  private def line: Parser[(String, Gate)] = (operation <~ "->") ~ ident ^^ { case source ~ target => target -> source }
+
+  override def parseInput(file: Source): Map[String, Gate] = parse(rep(line), file.mkString).get.toMap
+
+  override def part1(input: Map[String, Gate]): Int = evaluate(input)("a")
+
+  override def part2(input: Map[String, Gate]): Int = {
+    val a = part1(input)
+    evaluate(input.updated("b", _ => a))("a")
   }
 
-  private val toolBox = universe.runtimeMirror(getClass.getClassLoader).mkToolBox()
-
-  private def wires(input: String): String = parse(rep(line), input).get.mkString("; ")
-
-  override def parseInput(file: Source): String = file.getLines().mkString("\n")
-
-  override def part1(input: String): String = {
-    val tree = s"object Part1 { ${wires(input)} }; Part1.a"
-    toolBox.eval(toolBox.parse(tree)).toString
-  }
-
-  override def part2(input: String): String = {
-    val tree =
-      s"""trait Base { ${wires(input)} }
-         |object Part1 extends Base
-         |object Part2 extends Base { override lazy val b = Part1.a }
-         |Part2.a""".stripMargin
-    toolBox.eval(toolBox.parse(tree)).toString
+  private def evaluate(circuit: Map[String, Gate]): String => Int = {
+    val cache = mutable.Map.empty[String, Int]
+    def signal(wire: String): Int = cache.getOrElseUpdate(wire, circuit(wire)(signal))
+    signal
   }
 }

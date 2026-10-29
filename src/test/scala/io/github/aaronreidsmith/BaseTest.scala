@@ -5,7 +5,6 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 import scala.io.Source
-import scala.reflect.runtime.universe
 
 // TODO: This file is a mess. Clean it up
 trait BaseTest extends AnyFlatSpec with Matchers {
@@ -13,9 +12,8 @@ trait BaseTest extends AnyFlatSpec with Matchers {
   val suite: Suite
 
   // TODO: A lot of this is also in 'Solution'. Can we refactor?
-  private val year          = getClass.getName.split("year")(1).take(4).toInt
-  private val day           = getClass.getName.split("Day")(1).take(2).toInt
-  private val runtimeMirror = universe.runtimeMirror(getClass.getClassLoader)
+  private val year = getClass.getName.split("year")(1).take(4).toInt
+  private val day  = getClass.getName.split("Day")(1).take(2).toInt
 
   protected val runPart1: Boolean = true
   protected val runPart2: Boolean = true
@@ -24,8 +22,8 @@ trait BaseTest extends AnyFlatSpec with Matchers {
 
   // This is protected so we can expose its internal types
   protected val mainInstance: Solution = {
-    val solution = runtimeMirror.moduleSymbol(Class.forName(f"io.github.aaronreidsmith.year$year.Day$day%02d$$"))
-    runtimeMirror.reflectModule(solution).instance.asInstanceOf[Solution]
+    val solution = Class.forName(f"io.github.aaronreidsmith.year$year.Day$day%02d$$")
+    solution.getField("MODULE$").get(null).asInstanceOf[Solution]
   }
 
   // Lazy because not all tests use the input from files
